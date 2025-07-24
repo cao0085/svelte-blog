@@ -20,8 +20,6 @@
   aside {
     width: 250px;
     padding: 1rem;
-    border-right: 1px solid #ddd;
-    background-color: #f9f9f9;
   }
 
   main {

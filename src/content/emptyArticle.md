@@ -1,12 +1,14 @@
 ---
-title: "如何用 Svelte 架部落格"
-category: "software"
-subCategory: "test"
+title: "CSS Render 範本"
 date: "2025-06-22"
+category:
+subCategory:
 tags: ["svelte", "blog", "markdown"]
-slug: "svelte-blog"
+slug: "example"
 ---
+這是第一篇文章，用來展示部落格如何從 markdown 載入內容。
 
+---
 
 # 這是 H1 標題
 
@@ -14,6 +16,13 @@ slug: "svelte-blog"
 
 ### 這是 H3 標題
 
+---
+
+段落文字：這是一段普通的段落內容，展示預設的段落文字樣式。
+
+強調文字：**粗體**、_斜體_、~~刪除線~~。
+
+---
 
 ### 清單測試
 
@@ -38,7 +47,7 @@ slug: "svelte-blog"
 #### 區塊程式碼
 
 ```js
-    function greet(name) {
-    return `Hello, ${name}!`;
-    }
+function greet(name) {
+  return `Hello, ${name}!`;
+}
 ```

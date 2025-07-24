@@ -9,7 +9,7 @@
 
   const CATEGORY_LABELS: Record<Category, string> = {
     software: "軟體工程",
-    music: "音樂筆記",
+    music: "測試",
     read: "閱讀心得",
   };
   let openSections: Record<string, boolean> = {};
