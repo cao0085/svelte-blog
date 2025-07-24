@@ -1,8 +1,8 @@
 ---
-title: "Domain-Driven Design - Mediator in C#"
+title: "Mediator"
 date: "2025-06-22"
 category: "software"
-subCategory: "Backend"
+subCategory: "Domain-Driven Design"
 tags: ["DDD", "backend", "design"]
 slug: "ddd_mediator"
 ---

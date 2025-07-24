@@ -8,7 +8,7 @@
   };
 
   const CATEGORY_LABELS: Record<Category, string> = {
-    software: "軟體工程",
+    software: "Software",
     music: "測試",
     read: "閱讀心得",
   };
@@ -42,7 +42,9 @@
 </script>
 
 <nav>
-  <h2>文章列表</h2>
+  <h2>
+    <a href="/blog" class="nav-heading-link">文章列表</a>
+  </h2>
 
   {#each Object.entries(grouped) as [category, subGroups]}
     <section>
