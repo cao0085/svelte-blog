@@ -6,7 +6,7 @@ subCategory: "Database"
 tags: ["database", "leetcode", "sql"]
 slug: "db_leetcode50"
 ---
-練習練習練習
+###### 練習練習練習
 
 ---
 

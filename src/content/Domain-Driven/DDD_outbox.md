@@ -6,25 +6,27 @@ subCategory: "Backend"
 tags: ["DDD", "backend", "design"]
 slug: "ddd_outbox"
 ---
-這是第一篇文章，用來展示部落格如何從 markdown 載入內容。
+###### 拆分主副邏輯，同時保持資料同步性
 
 ---
 
-## OutBox Message
+## SideEffect
 
+若把 DDD 流程中的主副行為拆分：
 
-## with SideEffect
+- 創建員工帳戶的時候  `<TABLE_Employee>` 新增一筆資料
+- 幫對應到的 `<TABLE_Department>_Headcount` 總人數加一
 
-把 DDD 流程中的主副行為拆分, 例如有一個需求是創建員工帳戶的時候,需要輸入TABLE_Employee 新增一筆資料
-另外還需幫對應到的 TABLE_Department 總人數新增一筆, 若是以依照 MVC 架構會是
+<br>
 
+若是以依照 MVC 架構會是
 ```csharp
 db_Employee.Add(data);
 db_Department.AddOrUpdate(x => x.Id == data.DepartmentId, dept => dept.HandCount += 1);
 db.Commit();
 ```
 
-那若用 DDD 寫則變成是
+用 DDD 寫則變成是
 
 ``` csharp
 // Application Layer
@@ -57,16 +59,17 @@ public class EmployeeCreatedHandler : INotificationHandler<EmployeeCreatedDomain
 }
 ```
 
-一個行為還好,但假設創建員工帳號會需要更新 5-10 張表單,這時候如果都集中會越來越巨大、複雜且難以測試與維護。且透過 DDD 的 Domain Event 拆解副作用邏輯可異步處理，減少主流程延遲。
+假設創建員工帳號變為須更新 5-10 張表單,函式會越來越巨大、複雜且難以測試與維護。透過 DDD 的 Domain Event 拆解副作用邏輯可異步處理，減少主流程延遲。
 
 ## ASIO 原子性（Atomicity of Side-Effect & IO）
 
-剛剛提到的行為中，主邏輯（例如新增員工）成功時，無法保證所有副作用（如更新部門、發送通知等）也一定成功執行。
-這違反了分散系統中常見的 資料一致性與原子性要求。
+剛剛提到的行為，主邏輯成功時無法保證所有副作用（如更新部門、發送通知等）都成功執行，這違反了分散系統中常見的 資料一致性與原子性要求。
 
-所以可以設計一張資料庫新表 DB_Outbox_Message，在與主邏輯同一個交易中**一起 Commit**，把事件訊息(哪個事件、Payload、Time ...)寫入這張表，且可以設計失敗時的 Retry 機制，這樣就算執行失敗也會有紀錄可以查驗。
+解決方法是設計一張資料庫新表`<DB_Outbox_Message>`，在一筆交易中提交主邏輯與事件，且把事件訊息`(Event、Payload、Time)`寫入這張表。這樣執行失敗也有紀錄可以查驗，也可設計失敗的 Retry 機制。
 
-主要實踐方法是用背景重複執行，訪問執行 DB_Outbox_Message
+<br>
+
+主要實踐方法是用背景應用重複執行，訪問 DB_Outbox_Message 執行該事件
 
 ```csharp
 public class OutboxDispatcherBackgroundService : BackgroundService

@@ -1,16 +1,17 @@
 ---
-title: "Database Normalization 筆記"
+title: "資料庫正規化"
 date: "2025-07-24"
 category: "software"
 subCategory: "Database"
 tags: ["database", "normalization", "sql"]
 slug: "db_normalization"
 ---
-關聯式資料庫中的正規化（Normalization）是用來消除資料重複與異常的設計原則，主要透過將資料拆分成不同表格、建立正確的鍵與相依關係來達成。
+
+###### 透過拆分、建立正確的鍵與相依關係來消除資料重複與異常的設計原則
 
 ---
 
-## 正規化等級對照表
+## 正規化等級
 
 1NF 每個欄位都必須是原子值（不可包含多值，例如逗號分隔或陣列）
 

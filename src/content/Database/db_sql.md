@@ -6,11 +6,8 @@ subCategory: "Database"
 tags: ["database", "db", "sql"]
 slug: "db_sql"
 ---
-複習 SQL 指令
 
----
 
-## SQL Command
 
 - **同步執行**：必須有結果才會繼續，報錯會停止。
 - **四大分類**：`SELECT` / `INSERT` / `UPDATE` / `DELETE`
