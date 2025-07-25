@@ -84,3 +84,62 @@ WHERE (customer_id, order_date) IN (
   GROUP BY customer_id
 );
 ```
+
+### [1978. Employees Whose Manager Left the Company](https://leetcode.com/problems/employees-whose-manager-left-the-company/?envType=study-plan-v2&envId=top-sql-50)
+
+利用 left join 會填補 null 的特性去篩選出欄位
+
+```sql
+select e1.employee_id
+from (
+    select *
+    from Employees
+    where salary < 30000 AND manager_id is not null
+    order by employee_id
+) as e1
+left join Employees as e2
+on e1.manager_id = e2.employee_id
+where e2.employee_id is null
+order by employee_id asc
+```
+
+### [1341. Movie Rating](https://leetcode.com/problems/movie-rating/description/?envType=study-plan-v2&envId=top-sql-50)
+
+取同一個變數名稱 results + 練習 LIMIT + 雙排序
+
+```sql
+(
+  SELECT name AS results
+  FROM Users u
+  JOIN MovieRating r ON u.user_id = r.user_id
+  GROUP BY u.user_id
+  ORDER BY COUNT(*) DESC, name ASC
+  LIMIT 1
+)
+UNION ALL
+(
+  SELECT title AS results
+  FROM Movies m
+  JOIN MovieRating r ON m.movie_id = r.movie_id
+  WHERE r.created_at BETWEEN '2020-02-01' AND '2020-02-29'
+  GROUP BY m.movie_id, m.title
+  ORDER BY AVG(r.rating) DESC, m.title ASC
+  LIMIT 1
+);
+```
+
+### [602. Friend Requests II: Who Has the Most Friends](https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/description/?envType=study-plan-v2&envId=top-sql-50)
+
+總數可直接用 requester_id + accepter_id 加總來處理，所以先用 UNION ALL 攤平就好處理了
+
+```sql
+SELECT id, COUNT(*) AS num
+FROM (
+  SELECT requester_id AS id FROM RequestAccepted
+  UNION ALL
+  SELECT accepter_id AS id FROM RequestAccepted
+) AS all_ids
+GROUP BY id
+ORDER BY num DESC
+LIMIT 1;
+```
