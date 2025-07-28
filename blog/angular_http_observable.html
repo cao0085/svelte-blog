@@ -8,24 +8,24 @@
 		<link href="../_app/immutable/assets/0.CZsgKNMF.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CTG3EflP.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BsUQS2nU.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/UtEx3fR1.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.6hXx8OXb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Il4PVuKI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CX9Gwrfj.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DK5zR4CQ.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Cz88dpJ2.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cn45NL2E.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cj296wHD.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.Bp51swIb.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.C5P-pZnx.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CoAyLVH3.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0BP-6TFY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B-RvVA6v.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Bzx_H5h9.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.Co8lS_T6.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.B28aEOd0.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CZzLNGhg.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C7QYm84w.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CsfHxVTT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/136FMeJk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DLWHcrUa.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/_bzESNuN.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Di4srW5m.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.QyhbaE-A.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.C6kBonCu.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="blog-layout svelte-1clyl0w"><aside class="svelte-1clyl0w"><nav><h2><a href="../blog" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-1clyl0w"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Http Observable</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>RxJS Observable</h6> <hr/> <p>在 Angular 裡，HttpClient 的每個方法都會回傳一個 RxJS Observable，這些 Observable 屬於 cold 類型 —— 在訂閱（subscribe）時才真正發送請求。</p> <p>多次訂閱同一個 Observable 會觸發多次獨立的後端呼叫；若在請求途中解除訂閱，Angular 會直接 中止（abort）尚未完成的 HTTP 連線。</p> <pre class="language-js"><!----><code class="language-js"><span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'/api/getExportData'</span><span class="token punctuation">)</span>
@@ -101,7 +101,7 @@
 			
 			<script>
 				{
-					__sveltekit_12ooh2x = {
+					__sveltekit_q4e8gm = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -109,8 +109,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BsUQS2nU.js"),
-						import("../_app/immutable/entry/app.Bp51swIb.js")
+						import("../_app/immutable/entry/start.6hXx8OXb.js"),
+						import("../_app/immutable/entry/app.C5P-pZnx.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
