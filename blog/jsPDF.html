@@ -8,24 +8,24 @@
 		<link href="../_app/immutable/assets/0.CZsgKNMF.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CTG3EflP.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.Tp0XjgBP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CG8LubYs.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.O9Eg6qj6.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CF-mjsPK.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CX9Gwrfj.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DK5zR4CQ.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CUsHad5e.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BRQ_F4sK.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cj296wHD.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BD0Dt6Fo.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B76jPhXV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CoAyLVH3.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0BP-6TFY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B-RvVA6v.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Bzx_H5h9.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DSKMMGLZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.CtQ8Al_H.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CZzLNGhg.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BIlG553y.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.DGSEOSfT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/tCRvidHZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.ywrlVpxM.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/_bzESNuN.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Di4srW5m.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.B3mylhfQ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.kX2U-bXq.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="blog-layout svelte-1clyl0w"><aside class="svelte-1clyl0w"><nav><h2><a href="../blog" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-1clyl0w"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Download PDF</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>紀錄下載影像相關處理</h6> <hr/> <h3>畫面截圖（html2canvas、dom-to-image…）</h3> <p>原理大多是用<code>document.query(ID / class)</code>抓取指定的<code>DOM</code>，在套件內<strong>模擬</strong>JS排版樣式引擎(所以可能會跑版)，繪圖在 HTML<code>&lt;canvas></code>Element 後再轉成 base64/Blob 格式輸出。</p> <p>要注意的是瀏覽器對於能當作繪製<code>&lt;canvas></code>的來源控管較為嚴格，例如在瀏覽器渲染的 img 來源可以使用，套件內被擋下來的問題，再來就是錯誤是發生在套件內部不好除錯。</p> <h3>向量型（jsPDF、pdf-lib…）</h3> <p>用程式碼直接描述格線、文字 ，也可以插入圖片當作背景。要注意的一樣是外部來源的合法(圖片、字體)，圖片可先在.js 轉換成 base64 當作來源給套件使用，減少套件內轉換失敗的風險。</p> <h3>jsPDF</h3> <p>添加字體方式有兩種方式讀取.ttf和.js，一樣讓套件讀取處理過的資源部屬比較穩定</p> <p>網站下載 .ttf 字體向量檔案</p> <pre class="language-js"><!----><code class="language-js"><span class="token comment">// var pdfDoc = 建立一個 jsPDF 提供的物件(&#123; unit: 'mm', format: 'a4' &#125;)</span>
@@ -71,7 +71,7 @@ pdfDoc<span class="token punctuation">.</span><span class="token function">save<
 			
 			<script>
 				{
-					__sveltekit_1hi2jy3 = {
+					__sveltekit_eatz03 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -79,8 +79,8 @@ pdfDoc<span class="token punctuation">.</span><span class="token function">save<
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.Tp0XjgBP.js"),
-						import("../_app/immutable/entry/app.BD0Dt6Fo.js")
+						import("../_app/immutable/entry/start.O9Eg6qj6.js"),
+						import("../_app/immutable/entry/app.B76jPhXV.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
