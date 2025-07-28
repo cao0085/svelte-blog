@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write  # ⬅️ 加上這行，否則會 403 push error
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
