@@ -1,5 +1,6 @@
 <script lang="ts">
   import { articles } from "$lib/stores/articles";
+  import { base } from '$app/paths';
   import type { Article, Category } from "$lib/types";
   type GroupedArticles = {
     [K in Category]?: {
@@ -43,7 +44,7 @@
 
 <nav>
   <h2>
-    <a href="/blog" class="nav-heading-link">文章列表</a>
+    <a href="{base}/blog" class="nav-heading-link">文章列表</a>
   </h2>
 
   {#each Object.entries(grouped) as [category, subGroups]}
