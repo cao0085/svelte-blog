@@ -9,7 +9,7 @@ export const prerender = true;
  */
 export async function entries() {
   // 路徑請依你的內容資料夾調整
-  const files = import.meta.glob('../../../content/blog/*.md', { eager: true });
+  const files = import.meta.glob('/src/content/**/*.md', { eager: true });
 
 //   return Object.values(files).map(
 //     // 假設每篇 md 的 front-matter 有 `slug`
