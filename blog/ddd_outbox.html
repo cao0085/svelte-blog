@@ -8,24 +8,24 @@
 		<link href="../_app/immutable/assets/0.CZsgKNMF.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CTG3EflP.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.nO7q4Jdo.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/XPz0-BVR.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BMATaX8Q.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CUmunC8v.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CX9Gwrfj.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DK5zR4CQ.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B_QKxQdp.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/4SwWjBeO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cj296wHD.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.8a-tKR0T.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CzZ0JYMN.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CoAyLVH3.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0BP-6TFY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B-RvVA6v.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Bzx_H5h9.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.knOBgfBB.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BWZxhN5V.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CZzLNGhg.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/_9U9ksTl.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.BVNlWohx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DlG8Uxfu.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.McoYecku.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/_bzESNuN.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Di4srW5m.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.Do_B9cLp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.B5drr8OA.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="blog-layout svelte-1clyl0w"><aside class="svelte-1clyl0w"><nav><h2><a href="../blog" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-1clyl0w"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Outbox Message</h1> <p class="svelte-1l2p5et">2025-06-23</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>拆分主副邏輯，同時保持資料同步性</h6> <hr/> <h2>SideEffect</h2> <p>若把 DDD 流程中的主副行為拆分：</p> <ul><li>創建員工帳戶的時候 <code>&lt;TABLE_Employee></code> 新增一筆資料</li> <li>幫對應到的 <code>&lt;TABLE_Department>_Headcount</code> 總人數加一</li></ul> <br/> <p>若是以依照 MVC 架構會是</p> <pre class="language-csharp"><!----><code class="language-csharp">db_Employee<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -143,7 +143,7 @@ db<span class="token punctuation">.</span><span class="token function">Commit</s
 			
 			<script>
 				{
-					__sveltekit_grdm2c = {
+					__sveltekit_1beiis6 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -151,8 +151,8 @@ db<span class="token punctuation">.</span><span class="token function">Commit</s
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.nO7q4Jdo.js"),
-						import("../_app/immutable/entry/app.8a-tKR0T.js")
+						import("../_app/immutable/entry/start.BMATaX8Q.js"),
+						import("../_app/immutable/entry/app.CzZ0JYMN.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
