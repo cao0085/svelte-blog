@@ -71,7 +71,7 @@
               <summary>{sub}</summary>
               <ul>
                 {#each items as article}
-                  <li><a href={`/blog/${article.slug}`}>{article.title}</a></li>
+                  <li><a href={`${base}/blog/${article.slug}`}>{article.title}</a></li>
                 {/each}
               </ul>
             </details>
