@@ -44,7 +44,7 @@
 
 <nav>
   <h2>
-    <a href="{base}/blog" class="nav-heading-link">文章列表</a>
+    <a href={`${base}/blog`} class="nav-heading-link">文章列表</a>
   </h2>
 
   {#each Object.entries(grouped) as [category, subGroups]}
