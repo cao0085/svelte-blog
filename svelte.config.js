@@ -22,7 +22,7 @@ const config = {
 			$content: path.resolve('./src/content')
 		},
 		paths: {
-			base: process.env.NODE_ENV === 'production' ? '/svelte-blog' : ''
+			base: process.env.NODE_ENV === 'production' ? '/svelte-blog' : '/base'
 		},
 		// 預先產出路由
 		prerender: {

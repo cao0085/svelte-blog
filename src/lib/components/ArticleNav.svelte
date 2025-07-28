@@ -2,6 +2,7 @@
   import { articles } from "$lib/stores/articles";
   import { base } from '$app/paths';
   import type { Article, Category } from "$lib/types";
+  console.log(base);
   type GroupedArticles = {
     [K in Category]?: {
       [subCategory: string]: Article[];
