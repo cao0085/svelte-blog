@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.CZsgKNMF.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CTG3EflP.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BsUQS2nU.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/UtEx3fR1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CX9Gwrfj.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DK5zR4CQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cz88dpJ2.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cj296wHD.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.Bp51swIb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CoAyLVH3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0BP-6TFY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B-RvVA6v.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bzx_H5h9.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.Co8lS_T6.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CZzLNGhg.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C7QYm84w.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CsfHxVTT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/_bzESNuN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Di4srW5m.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.QyhbaE-A.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="blog-layout svelte-1clyl0w"><aside class="svelte-1clyl0w"><nav><h2><a href="../blog" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-1clyl0w"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Basic</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>事件目的為核心設計模式 Domain-Driven Design</h6> <hr/> <h3>網路層 (Web / Controller)</h3> <p>接收 HTTP Request 入口和 <strong>實例轉發(消息)控制器</strong> 的層面，僅作為轉發者（Request Dispatcher）指定事件指令&amp;回傳格式，不做商業邏輯處理。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">HttpPost</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"register"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>IActionResult<span class="token punctuation">></span></span> <span class="token function">Register</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">FromBody</span></span><span class="token punctuation">]</span> <span class="token class-name">RegisterUserCommand</span> command<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> result <span class="token operator">=</span> <span class="token keyword">await</span> _mediator<span class="token punctuation">.</span><span class="token function">Send</span><span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">Ok</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>應用層 (Application / Logic)</h3> <p>主要負責實作 Command / Query / Handler 等指令消息物件，處理商業邏輯。</p> <p><strong>Handler 主要負責</strong></p> <ul><li>取得並操作 Domain 層定義的 Aggregate / Value Object</li> <li>結合外部輸入（如 Request Body DTO），執行業務流程與驗證邏輯</li> <li>將驗證後的資料傳遞至 Infrastructure ，進行資料存取(Repository)或第三方(AuthService)互動</li></ul> <p><strong>實作讀寫分離（CQRS）</strong></p> <ul><li>讀取邏輯（Query + Handler） 可透過 IReadRepository / ReadModel / ViewModel</li> <li>將 Read 專用 Repository Interface 也放置在 Application 層，避免對 Domain 汙染</li></ul> <p><strong>資料物件模型（Data Transfer Object）</strong></p> <ul><li>與 Domain Model（Aggregate / ValueObject）分離，不承擔任何商業規則驗證</li> <li>可搭配 FluentValidation 先進行格式驗證</li> <li>也可作為 Request body/Response 輸出格式 Mapping 對象</li></ul> <h3>事件核心層 (Domain)</h3> <p>DDD 架構的核心，必須完全獨立、不依賴其他層（如 Application / Infrastructure），所有核心邏輯、商業規則、狀態控制都應封裝在這一層。</p> <p><strong>Aggregate Root（聚合根）</strong></p> <ul><li>代表一組關聯物件的 一致性邊界（Consistency Boundary）</li> <li>定義資料規格與唯一性規則（如 ID）</li> <li>驗證狀態轉移是否合理</li> <li>維護領域不變式（Invariant）</li></ul> <p><strong>Value Object（值物件）</strong></p> <ul><li>沒有識別性（ID），補強 Aggregate 的欄位定義，確保欄位規則（格式、範圍）正確性</li> <li>通常不可變（Immutable），常用於輸入驗證與例外處理</li></ul> <p><strong>Factory</strong></p> <ul><li>專責建立 新的 Aggregate 實體，將複雜的初始化規則封裝起來</li> <li>集中初始化的邏輯、避免外部自行 new 對象產生違規狀態</li></ul> <p><strong>Domain Event</strong></p> <ul><li>Aggregate 發出、由 Application Layer 的 Handler 處理後續流程（例如通知、同步、儲存等）</li> <li>保持單向依賴（Domain 發出事件，不處理後續）</li></ul> <p><strong>Interface</strong></p> <ul><li>在 Domain 中定義對外依賴的介面（如 IUserRepository、INotificationService）</li> <li>實作則由 Infrastructure 層提供，以支援 依賴反轉（DIP）原則，讓 Domain 不耦合具體技術細節</li></ul> <h3>基礎層（Infrastructure）</h3> <p>基礎設施 DI Injection &amp; DBContext &amp; Repositroy &amp; Service(JWT) &amp; Outbox …等
+同時負責實作 Domain 定義的介面，並將應用程式所需的各類依賴透過 依賴注入（DI） 註冊進容器中。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_12ooh2x = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BsUQS2nU.js"),
+						import("../_app/immutable/entry/app.Bp51swIb.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

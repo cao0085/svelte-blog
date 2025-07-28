@@ -1,0 +1,1 @@
+import{f as r,a}from"../chunks/0BP-6TFY.js";import"../chunks/CZzLNGhg.js";const t=!0,c=Object.freeze(Object.defineProperty({__proto__:null,prerender:t},Symbol.toStringTag,{value:"Module"}));var n=r('<div class="fancy-background svelte-4kt3aa"></div>');function i(e){var o=n();a(e,o)}export{i as component,c as universal};
