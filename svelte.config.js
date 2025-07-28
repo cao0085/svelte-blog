@@ -31,7 +31,8 @@ const config = {
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
-			fallback: null
+			fallback: null,
+			strict: true
 		}),
 		alias: {
 			$lib: path.resolve('./src/lib'),
@@ -39,6 +40,9 @@ const config = {
 		},
 		paths: {
 			base: process.env.NODE_ENV === 'production' ? '/svelte-blog' : ''
+		},
+		  prerender: {
+			entries: ['*'] 
 		}
 	}
 };
