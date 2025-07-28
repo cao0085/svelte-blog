@@ -1,5 +1,6 @@
 // src/lib/stores/articles.ts
 import { writable } from 'svelte/store';
+import { readable } from 'svelte/store';
 import type { Article } from '$lib/types';
 
 
@@ -23,4 +24,9 @@ for (const srcPath in processedArticles) {
   });
 }
 
-export const articles = writable(parsed.sort((a, b) => b.date.localeCompare(a.date)));
+// export const articles = writable(parsed.sort((a, b) => b.date.localeCompare(a.date)));
+
+// 日期排序（新 → 舊）
+parsed.sort((a, b) => b.date.localeCompare(a.date));
+
+export const articles = readable(parsed);
