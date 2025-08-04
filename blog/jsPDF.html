@@ -5,30 +5,30 @@
 		<link rel="icon" href="../favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		
-		<link href="../_app/immutable/assets/0.CZsgKNMF.css" rel="stylesheet">
-		<link href="../_app/immutable/assets/2.CTG3EflP.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/0.BKcuGzEh.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.BGVmKpng.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DF0JOa8L.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/mdPAFLRK.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CX9Gwrfj.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DK5zR4CQ.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D3_iSQNn.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Cj296wHD.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.Dk0eM6TR.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CoAyLVH3.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/0BP-6TFY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B-RvVA6v.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bzx_H5h9.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.Co383Lkz.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CZzLNGhg.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BEntvt9n.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CY-hEUam.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/_bzESNuN.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/VEIU3VZ2.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.CEeDNaVL.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DV0BcT0z.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DIt8YUh6.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bo_Srvyo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BL7QfRpO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BS4WPNyi.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/RHWACfDR.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CHTVEAjY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C1AWVHPy.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DAoYP5Yv.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="blog-layout svelte-1clyl0w"><aside class="svelte-1clyl0w"><nav><h2><a href="../blog" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-1clyl0w"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Download PDF</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>紀錄下載影像相關處理</h6> <hr/> <h3>畫面截圖（html2canvas、dom-to-image…）</h3> <p>原理大多是用<code>document.query(ID / class)</code>抓取指定的<code>DOM</code>，在套件內<strong>模擬</strong>JS排版樣式引擎(所以可能會跑版)，繪圖在 HTML<code>&lt;canvas></code>Element 後再轉成 base64/Blob 格式輸出。</p> <p>要注意的是瀏覽器對於能當作繪製<code>&lt;canvas></code>的來源控管較為嚴格，例如在瀏覽器渲染的 img 來源可以使用，套件內被擋下來的問題，再來就是錯誤是發生在套件內部不好除錯。</p> <h3>向量型（jsPDF、pdf-lib…）</h3> <p>用程式碼直接描述格線、文字 ，也可以插入圖片當作背景。要注意的一樣是外部來源的合法(圖片、字體)，圖片可先在.js 轉換成 base64 當作來源給套件使用，減少套件內轉換失敗的風險。</p> <h3>jsPDF</h3> <p>添加字體方式有兩種方式讀取.ttf和.js，一樣讓套件讀取處理過的資源部屬比較穩定</p> <p>網站下載 .ttf 字體向量檔案</p> <pre class="language-js"><!----><code class="language-js"><span class="token comment">// var pdfDoc = 建立一個 jsPDF 提供的物件(&#123; unit: 'mm', format: 'a4' &#125;)</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="blog-layout svelte-1clyl0w"><aside class="svelte-1clyl0w"><nav class="svelte-s6ldni"><h2><a href="../blog" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-1clyl0w"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Download PDF</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>紀錄下載影像相關處理</h6> <hr/> <h3>畫面截圖（html2canvas、dom-to-image…）</h3> <p>原理大多是用<code>document.query(ID / class)</code>抓取指定的<code>DOM</code>，在套件內<strong>模擬</strong>JS排版樣式引擎(所以可能會跑版)，繪圖在 HTML<code>&lt;canvas></code>Element 後再轉成 base64/Blob 格式輸出。</p> <p>要注意的是瀏覽器對於能當作繪製<code>&lt;canvas></code>的來源控管較為嚴格，例如在瀏覽器渲染的 img 來源可以使用，套件內被擋下來的問題，再來就是錯誤是發生在套件內部不好除錯。</p> <h3>向量型（jsPDF、pdf-lib…）</h3> <p>用程式碼直接描述格線、文字 ，也可以插入圖片當作背景。要注意的一樣是外部來源的合法(圖片、字體)，圖片可先在.js 轉換成 base64 當作來源給套件使用，減少套件內轉換失敗的風險。</p> <h3>jsPDF</h3> <p>添加字體方式有兩種方式讀取.ttf和.js，一樣讓套件讀取處理過的資源部屬比較穩定</p> <p>網站下載 .ttf 字體向量檔案</p> <pre class="language-js"><!----><code class="language-js"><span class="token comment">// var pdfDoc = 建立一個 jsPDF 提供的物件(&#123; unit: 'mm', format: 'a4' &#125;)</span>
 pdfDoc<span class="token punctuation">.</span><span class="token function">addFont</span><span class="token punctuation">(</span><span class="token string">'./eduSong_Unicode.ttf'</span><span class="token punctuation">,</span> <span class="token string">'eduSong_Unicode'</span><span class="token punctuation">,</span> <span class="token string">'normal'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 pdfDoc<span class="token punctuation">.</span><span class="token function">setFont</span><span class="token punctuation">(</span><span class="token string">'eduSong_Unicode'</span><span class="token punctuation">,</span> <span class="token string">'normal'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>把 .ttf 轉成.js 再import到模組，因為字型檔案很大要用到再載入就好</p> <pre class="language-js"><!----><code class="language-js"><span class="token comment">// 有呼叫函式再import</span>
 <span class="token keyword">async</span> <span class="token function">ensurePdfLib</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -71,7 +71,7 @@ pdfDoc<span class="token punctuation">.</span><span class="token function">save<
 			
 			<script>
 				{
-					__sveltekit_1uhu0c1 = {
+					__sveltekit_15w6qra = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -79,8 +79,8 @@ pdfDoc<span class="token punctuation">.</span><span class="token function">save<
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DF0JOa8L.js"),
-						import("../_app/immutable/entry/app.Dk0eM6TR.js")
+						import("../_app/immutable/entry/start.DV0BcT0z.js"),
+						import("../_app/immutable/entry/app.BL7QfRpO.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
