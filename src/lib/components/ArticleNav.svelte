@@ -81,3 +81,37 @@
     </section>
   {/each}
 </nav>
+
+
+<style>
+
+nav ul {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  padding-left: 1.25em; /* 保留縮排，視覺層級清楚 */
+}
+
+/* 調整 li 間距更緊湊，減少垂直空白 */
+nav li {
+  margin-bottom: 0.4em;
+  line-height: 1.5;
+  --color-text-subtle: rgba(0, 0, 0, 0.5);
+}
+
+/* 可選：讓 link 更符合清單樣式 */
+nav li a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+nav li a:hover {
+  color: var(--color-theme-1);
+  text-decoration: underline;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 0.75em;
+}
+</style>

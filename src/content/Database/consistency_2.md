@@ -1,6 +1,6 @@
 ---
 title: "Database Consistency 2"
-date: "2025-06-22"
+date: "2025-07-28"
 category: "software"
 subCategory: "Database"
 tags: ["consistency", "system", "design","database"]
