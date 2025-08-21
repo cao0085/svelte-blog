@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BKcuGzEh.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.R79SLmil.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B0dxyVk9.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DTGSGz5l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DNIhW5ob.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BvLbvDHa.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oklgaEXm.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DeAlguyA.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BOlNsIVV.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DjVYe_Fu.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">關聯式資料庫</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><pre class="language-pgsql"><!----><code class="language-pgsql">SQL Server Instance
+├── Database
+│   ├── Schema
+│   │   ├── Table
+│   │   ├── View
+│   │   ├── Stored Procedure
+│   │   ├── Function
+│   │   ├── Synonym
+│   │   └── Permissions / Roles
+│   └── Security Settings
+└── System Databases (master, msdb, model, tempdb)</code><!----></pre> <p>連接 SQL Server 時是透過 TDS（Tabular Data Stream）的通訊協定來交換資料。</p> <ul><li>TDS 是 SQL Server 專用的底層通訊協定，負責在用戶端與資料庫伺服器之間傳遞</li> <li>通常透過 TCP/IP 傳輸，預設使用的連接埠為 1433。</li> <li>用戶端要連接資料庫時，會使用一段 Connection String（連線字串）</li></ul> <pre class="language-pgsql"><!----><code class="language-pgsql">Server=127.0.0.1,1433;Database=MyDb;User Id=sa;Password=MyPassword;TrustServerCertificate=True;</code><!----></pre> <h3>Table（資料表）</h3> <p>資料表是資料的儲存核心，每個表由「列（row）」與「欄（column）」構成。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Users <span class="token punctuation">(</span>
+    Id <span class="token keyword">INT</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+    UserName NVARCHAR<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    Email NVARCHAR<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span> <span class="token keyword">UNIQUE</span><span class="token punctuation">,</span>
+    CreatedAt <span class="token keyword">DATETIME</span> <span class="token keyword">DEFAULT</span> GETDATE<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Primary Key（主鍵）</h3> <p>能唯一標識每一筆資料，一張表只能有一個主鍵，可以是單一欄位或多欄位組成（複合主鍵）。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> Users
+<span class="token keyword">ADD</span> <span class="token keyword">CONSTRAINT</span> PK_Users <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>Id<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Unique Constraint（唯一約束）</h3> <p>限制欄位值不能重複，一張表可以有多個唯一欄位。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Products <span class="token punctuation">(</span>
+    ProductId <span class="token keyword">INT</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+    SKU NVARCHAR<span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token keyword">UNIQUE</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Foreign Key（外鍵）</h3> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Orders <span class="token punctuation">(</span>
+    OrderId <span class="token keyword">INT</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+    UserId <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>UserId<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> Users<span class="token punctuation">(</span>Id<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Index（索引）</h3> <p>加速查詢效率，類似書本的目錄，索引可以建立在單一欄位或多個欄位上。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> IDX_Users_UserName <span class="token keyword">ON</span> Users<span class="token punctuation">(</span>UserName<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_10l11n6 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.R79SLmil.js"),
+						import("../_app/immutable/entry/app.DNIhW5ob.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

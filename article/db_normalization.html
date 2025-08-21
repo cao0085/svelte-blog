@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BKcuGzEh.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.R79SLmil.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B0dxyVk9.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DTGSGz5l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DNIhW5ob.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BvLbvDHa.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oklgaEXm.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DeAlguyA.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BOlNsIVV.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DjVYe_Fu.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">資料庫正規化</h1> <p class="svelte-1l2p5et">2025-07-24</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>透過拆分、建立正確的鍵與相依關係來消除資料重複與異常的設計原則</h6> <hr/> <h2>正規化等級</h2> <p>1NF 每個欄位都必須是原子值（不可包含多值，例如逗號分隔或陣列）</p> <pre class="language-text"><!----><code class="language-text">錯誤
+UserId | Hobby
+-------|--------
+1      | &quot;reading, swimming, coding&quot;
+
+正確
+UserId | Hobby
+-------|--------
+1      | reading
+1      | swimming
+1      | coding</code><!----></pre> <p>2NF 滿足 1NF，所有非主鍵欄位必須完全依賴主鍵，不能只依賴主鍵的一部分（常發生在複合主鍵情況）</p> <p>錯誤 (複合主鍵 OrderID + ProductID，但 OrderDate 只依賴 OrderID)</p> <pre class="language-text"><!----><code class="language-text">OrderID | ProductID | OrderDate
+--------|-----------|------------
+1001    | A1        | 2025-07-01
+1001    | A2        | 2025-07-01</code><!----></pre> <p>因為 OrderDate 只依賴 OrderID，所以應該從明細表中拆出來，存放在訂單主檔中。</p> <pre class="language-text"><!----><code class="language-text">-- 訂單主檔（Order）
+OrderID | OrderDate
+--------|------------
+1001    | 2025-07-01
+
+-- 訂單明細檔（OrderDetail）
+OrderID | ProductID
+--------|-----------
+1001    | A1
+1001    | A2</code><!----></pre> <p>3NF 滿足 2NF 非主鍵欄位不能依賴其他非主鍵欄位（即無傳遞依賴）</p> <p>錯誤：這裡 DeptName 是依賴 DeptID，但 DeptID 不是主鍵 → 傳遞依賴</p> <pre class="language-text"><!----><code class="language-text">StudentID | DeptID | DeptName
+----------|--------|----------
+1001      | D01    | Computer Science</code><!----></pre> <p>正確做法：將 DeptID → DeptName 拆到 Department 表</p> <pre class="language-text"><!----><code class="language-text">StudentID | DeptID
+----------|--------
+1001      | D01
+1002      | D02
+
+DeptID | DeptName
+-------|--------------------
+D01    | Computer Science
+D02    | Electrical Engineering</code><!----></pre> <p>BCNF（Boyce-Codd Normal Form / 3.5NF）滿足 3NF，所有函數依賴的左側必須是超鍵（Super Key）</p> <p>錯誤 (Course → Room、Instructor → Room 同時存在，但都不是超鍵，則違反 BCNF。)</p> <pre class="language-text"><!----><code class="language-text">Course | Instructor | Room
+-------|------------|-----
+DB     | Smith      | R1
+DB     | Jones      | R2</code><!----></pre> <p>拆成兩張表，每個依賴的左側都變成主鍵（超鍵）：</p> <pre class="language-text"><!----><code class="language-text">-- 課程與教室（CourseRoom）
+Course | Room
+-------|-----
+DB     | R1
+
+-- 講師與教室（InstructorRoom）
+Instructor | Room
+-----------|-----
+Smith      | R1</code><!----></pre> <p>4NF 無多值依賴（Multivalued Dependency），若一欄對應多值且彼此無關，應拆表避免組合膨脹</p> <p>錯誤 Crust 與 Area 無關，造成笛卡兒組合</p> <pre class="language-text"><!----><code class="language-text">錯誤
+Restaurant | Crust   | Area
+-----------|---------|--------
+X Pizza    | Thick   | Downtown
+X Pizza    | Stuffed | Downtown
+X Pizza    | Thick   | Uptown
+X Pizza    | Stuffed | Uptown</code><!----></pre> <p>正確 拆成兩張表</p> <pre class="language-text"><!----><code class="language-text">Restaurant | Crust
+Restaurant | Area</code><!----></pre> <p>5NF 滿足 4NF，並確保將資料拆成多個子關係後，再重新 join 回來時不會產生多餘資料（避免 join loss）。
+常見於 三元以上關聯（例如三欄組合關係）。</p> <p>假設你用以下三張表建構資料：</p> <pre class="language-text"><!----><code class="language-text">-- Supplier-Part
+S1 | P1
+
+-- Supplier-Project
+S1 | J1
+
+-- Part-Project
+P1 | J1
+
+-- 拼出來的關聯（有可能是錯的）
+Supplier | Part | Project
+---------|------|---------
+S1       | P1   | J1  （合理）
+S1       | P1   | J2  （若 J2 並不屬於 P1）</code><!----></pre> <p>在滿足 5NF 的設計中，會保留一張三元關聯表來表達實際的資料：</p> <pre class="language-text"><!----><code class="language-text">-- Supplier-Part-Project
+Supplier | Part | Project
+---------|------|---------
+S1       | P1   | J1</code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_10l11n6 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.R79SLmil.js"),
+						import("../_app/immutable/entry/app.DNIhW5ob.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

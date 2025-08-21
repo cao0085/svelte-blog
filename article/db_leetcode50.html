@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BKcuGzEh.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.R79SLmil.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B0dxyVk9.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DTGSGz5l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DNIhW5ob.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BvLbvDHa.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oklgaEXm.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DeAlguyA.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BOlNsIVV.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DjVYe_Fu.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">LeetCode SQL 50</h1> <p class="svelte-1l2p5et">2025-07-24</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>練習練習練習</h6> <hr/> <h3><a href="https://leetcode.com/problems/managers-with-at-least-5-direct-reports/description/?envType=study-plan-v2&amp;envId=top-sql-50" rel="nofollow">570. Manager…</a></h3> <p>GROUP BY + HAVING 選出符合條件值當作 where 條件</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">SELECT</span> name
+<span class="token keyword">FROM</span> Employee
+<span class="token keyword">WHERE</span> id <span class="token operator">IN</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> managerId
+    <span class="token keyword">FROM</span> Employee
+    <span class="token keyword">WHERE</span> managerId <span class="token operator">IS</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> managerId
+    <span class="token keyword">HAVING</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token operator">>=</span> <span class="token number">5</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3><a href="https://leetcode.com/problems/confirmation-rate/description/?envType=study-plan-v2&amp;envId=top-sql-50" rel="nofollow">1934. Confirmation Rate</a></h3> <p>用 GROUP BY + function 做出一張暫時表單 join 到主表，再處理 IFNULL 的邏輯</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">SELECT</span> s<span class="token punctuation">.</span>user_id<span class="token punctuation">,</span> 
+       IFNULL<span class="token punctuation">(</span>aa<span class="token punctuation">.</span>confirmation_rate<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> confirmation_rate
+<span class="token keyword">FROM</span> Signups <span class="token keyword">AS</span> s
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> <span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span>
+      user_id<span class="token punctuation">,</span>
+      <span class="token function">ROUND</span><span class="token punctuation">(</span>
+        <span class="token function">SUM</span><span class="token punctuation">(</span><span class="token keyword">CASE</span> <span class="token keyword">WHEN</span> <span class="token keyword">action</span> <span class="token operator">=</span> <span class="token string">'confirmed'</span> <span class="token keyword">THEN</span> <span class="token number">1</span> <span class="token keyword">ELSE</span> <span class="token number">0</span> <span class="token keyword">END</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">1.0</span> <span class="token operator">/</span>
+        <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token number">2</span>
+      <span class="token punctuation">)</span> <span class="token keyword">AS</span> confirmation_rate
+    <span class="token keyword">FROM</span> Confirmations
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> user_id
+<span class="token punctuation">)</span> <span class="token keyword">AS</span> aa
+<span class="token keyword">ON</span> s<span class="token punctuation">.</span>user_id <span class="token operator">=</span> aa<span class="token punctuation">.</span>user_id<span class="token punctuation">;</span></code><!----></pre> <h3><a href="https://leetcode.com/problems/monthly-transactions-i/description/?envType=study-plan-v2&amp;envId=top-sql-50" rel="nofollow">1193. Monthly Transactions I</a></h3> <p>熟悉在SELECT欄位可一起使用到的語法</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">SELECT</span> 
+    DATE_FORMAT<span class="token punctuation">(</span>trans_date<span class="token punctuation">,</span> <span class="token string">'%Y-%m'</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token keyword">month</span><span class="token punctuation">,</span>
+    country<span class="token punctuation">,</span>
+    <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> trans_count<span class="token punctuation">,</span>
+    <span class="token function">SUM</span><span class="token punctuation">(</span><span class="token keyword">CASE</span> <span class="token keyword">WHEN</span> state <span class="token operator">=</span> <span class="token string">'approved'</span> <span class="token keyword">THEN</span> <span class="token number">1</span> <span class="token keyword">ELSE</span> <span class="token number">0</span> <span class="token keyword">END</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> approved_count<span class="token punctuation">,</span>
+    <span class="token function">SUM</span><span class="token punctuation">(</span>amount<span class="token punctuation">)</span> <span class="token keyword">AS</span> trans_total_amount<span class="token punctuation">,</span>
+    <span class="token function">SUM</span><span class="token punctuation">(</span><span class="token keyword">CASE</span> <span class="token keyword">WHEN</span> state <span class="token operator">=</span> <span class="token string">'approved'</span> <span class="token keyword">THEN</span> amount <span class="token keyword">ELSE</span> <span class="token number">0</span> <span class="token keyword">END</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> approved_total_amount
+<span class="token keyword">FROM</span> 
+    <span class="token keyword">Transactions</span>
+<span class="token keyword">GROUP</span> <span class="token keyword">BY</span> 
+    DATE_FORMAT<span class="token punctuation">(</span>trans_date<span class="token punctuation">,</span> <span class="token string">'%Y-%m'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    country<span class="token punctuation">;</span></code><!----></pre> <h3><a href="https://leetcode.com/problems/immediate-food-delivery-ii/?envType=study-plan-v2&amp;envId=top-sql-50" rel="nofollow">1174. Immediate Food Delivery II</a></h3> <p>先用 GROUPBY + MIN(DATE) 找到顧客的首筆訂單，但因為是聚合函數，無法直接帶出該筆訂單的 delivery_id ，再用 Duplicate ID key 找出該對應的原始表欄位。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">SELECT</span>
+  <span class="token function">ROUND</span><span class="token punctuation">(</span>
+    <span class="token function">SUM</span><span class="token punctuation">(</span>order_date <span class="token operator">=</span> customer_pref_delivery_date<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100.0</span> <span class="token operator">/</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token number">2</span>
+  <span class="token punctuation">)</span> <span class="token keyword">AS</span> immediate_percentage
+<span class="token keyword">FROM</span> Delivery
+<span class="token keyword">WHERE</span> <span class="token punctuation">(</span>customer_id<span class="token punctuation">,</span> order_date<span class="token punctuation">)</span> <span class="token operator">IN</span> <span class="token punctuation">(</span>
+  <span class="token keyword">SELECT</span> customer_id<span class="token punctuation">,</span> <span class="token function">MIN</span><span class="token punctuation">(</span>order_date<span class="token punctuation">)</span>
+  <span class="token keyword">FROM</span> Delivery
+  <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> customer_id
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3><a href="https://leetcode.com/problems/employees-whose-manager-left-the-company/?envType=study-plan-v2&amp;envId=top-sql-50" rel="nofollow">1978. Employees Whose Manager Left the Company</a></h3> <p>利用 left join 會填補 null 的特性去篩選出欄位</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">select</span> e1<span class="token punctuation">.</span>employee_id
+<span class="token keyword">from</span> <span class="token punctuation">(</span>
+    <span class="token keyword">select</span> <span class="token operator">*</span>
+    <span class="token keyword">from</span> Employees
+    <span class="token keyword">where</span> salary <span class="token operator">&lt;</span> <span class="token number">30000</span> <span class="token operator">AND</span> manager_id <span class="token operator">is</span> <span class="token operator">not</span> <span class="token boolean">null</span>
+    <span class="token keyword">order</span> <span class="token keyword">by</span> employee_id
+<span class="token punctuation">)</span> <span class="token keyword">as</span> e1
+<span class="token keyword">left</span> <span class="token keyword">join</span> Employees <span class="token keyword">as</span> e2
+<span class="token keyword">on</span> e1<span class="token punctuation">.</span>manager_id <span class="token operator">=</span> e2<span class="token punctuation">.</span>employee_id
+<span class="token keyword">where</span> e2<span class="token punctuation">.</span>employee_id <span class="token operator">is</span> <span class="token boolean">null</span>
+<span class="token keyword">order</span> <span class="token keyword">by</span> employee_id <span class="token keyword">asc</span></code><!----></pre> <h3><a href="https://leetcode.com/problems/movie-rating/description/?envType=study-plan-v2&amp;envId=top-sql-50" rel="nofollow">1341. Movie Rating</a></h3> <p>取同一個變數名稱 results + 練習 LIMIT + 雙排序</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token punctuation">(</span>
+  <span class="token keyword">SELECT</span> name <span class="token keyword">AS</span> results
+  <span class="token keyword">FROM</span> Users u
+  <span class="token keyword">JOIN</span> MovieRating r <span class="token keyword">ON</span> u<span class="token punctuation">.</span>user_id <span class="token operator">=</span> r<span class="token punctuation">.</span>user_id
+  <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> u<span class="token punctuation">.</span>user_id
+  <span class="token keyword">ORDER</span> <span class="token keyword">BY</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">DESC</span><span class="token punctuation">,</span> name <span class="token keyword">ASC</span>
+  <span class="token keyword">LIMIT</span> <span class="token number">1</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">UNION</span> <span class="token keyword">ALL</span>
+<span class="token punctuation">(</span>
+  <span class="token keyword">SELECT</span> title <span class="token keyword">AS</span> results
+  <span class="token keyword">FROM</span> Movies m
+  <span class="token keyword">JOIN</span> MovieRating r <span class="token keyword">ON</span> m<span class="token punctuation">.</span>movie_id <span class="token operator">=</span> r<span class="token punctuation">.</span>movie_id
+  <span class="token keyword">WHERE</span> r<span class="token punctuation">.</span>created_at <span class="token operator">BETWEEN</span> <span class="token string">'2020-02-01'</span> <span class="token operator">AND</span> <span class="token string">'2020-02-29'</span>
+  <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> m<span class="token punctuation">.</span>movie_id<span class="token punctuation">,</span> m<span class="token punctuation">.</span>title
+  <span class="token keyword">ORDER</span> <span class="token keyword">BY</span> <span class="token function">AVG</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>rating<span class="token punctuation">)</span> <span class="token keyword">DESC</span><span class="token punctuation">,</span> m<span class="token punctuation">.</span>title <span class="token keyword">ASC</span>
+  <span class="token keyword">LIMIT</span> <span class="token number">1</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3><a href="https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/description/?envType=study-plan-v2&amp;envId=top-sql-50" rel="nofollow">602. Friend Requests II: Who Has the Most Friends</a></h3> <p>總數可直接用 requester_id + accepter_id 加總來處理，所以先用 UNION ALL 攤平就好處理了</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">SELECT</span> id<span class="token punctuation">,</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> num
+<span class="token keyword">FROM</span> <span class="token punctuation">(</span>
+  <span class="token keyword">SELECT</span> requester_id <span class="token keyword">AS</span> id <span class="token keyword">FROM</span> RequestAccepted
+  <span class="token keyword">UNION</span> <span class="token keyword">ALL</span>
+  <span class="token keyword">SELECT</span> accepter_id <span class="token keyword">AS</span> id <span class="token keyword">FROM</span> RequestAccepted
+<span class="token punctuation">)</span> <span class="token keyword">AS</span> all_ids
+<span class="token keyword">GROUP</span> <span class="token keyword">BY</span> id
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> num <span class="token keyword">DESC</span>
+<span class="token keyword">LIMIT</span> <span class="token number">1</span><span class="token punctuation">;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_10l11n6 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.R79SLmil.js"),
+						import("../_app/immutable/entry/app.DNIhW5ob.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

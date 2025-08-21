@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BKcuGzEh.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.R79SLmil.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B0dxyVk9.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DTGSGz5l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DNIhW5ob.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BvLbvDHa.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oklgaEXm.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DeAlguyA.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BOlNsIVV.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DjVYe_Fu.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Structurizr C4Model</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><h6><a href="https://structurizr.com/" rel="nofollow">Structurizr</a></h6> <hr/> <p><a href="https://github.com/cao0085/code-pattern/tree/main/structurizr" rel="nofollow">File</a></p> <br/> <h3>docker-compose.yml</h3> <p>初次建立和執行會生成基本的專案檔</p> <pre class="language-yml"><!----><code class="language-yml">// docker<span class="token punctuation">-</span>compose.yml
+<span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'3.8'</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">structurizr</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> structurizr/lite
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"8080:8080"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> .<span class="token punctuation">:</span>/usr/local/structurizr</code><!----></pre> <h3>workspace.dsl</h3> <pre class="language-text"><!----><code class="language-text">workspace &quot;YourProjectName&quot; &#123;
+
+    // **
+    !identifiers hierarchical
+
+    model &#123;
+        // Include your model files here
+        // folderName_xxx/FileName_xxx
+
+        !include index-model.dsl
+    &#125;
+
+    views &#123;
+        styles &#123;
+            element &quot;Component&quot; &#123;
+                width  520
+                height 500
+            &#125;
+            element &quot;tall-Element&quot;&#123;
+                width  600
+                height 700             
+            &#125;
+        &#125;
+        // Include your views files here
+        // folderName_xxx/FileName_xxx
+
+        !include index-view.dsl
+    &#125;
+&#125;</code><!----></pre> <h3>index-model.dsl</h3> <p>依序層級，每一層都可以渲染出一張圖</p> <p><code>Variable = softwareSystem "英文字名稱" => Variable = container "文字"  => Variable = component "文字"</code></p> <pre class="language-text"><!----><code class="language-text">YourSystem = softwareSystem &quot;Name&quot; &#123;
+    InitPage_1 = container &quot;data&quot; &#123;
+        description &quot;&quot;&quot;
+            描述該區域
+        &quot;&quot;&quot;
+        Content1 = component &quot;Content&quot; &#123;
+            tags &quot;tall-Element&quot;
+            description &quot;&quot;&quot;
+            描述該區域
+            &quot;&quot;&quot;
+        &#125;
+
+        Content2 = component &quot;Content2&quot; &#123;
+            description &quot;&quot;&quot;
+            描述該區域
+            &quot;&quot;&quot;
+        &#125;
+
+        InitPage_1.Content1 -&gt; InitPage_1.Content2 &quot;connection&quot;
+    &#125;
+
+    InitPage_2 = container &quot;data2&quot; &#123;
+        description &quot;&quot;&quot;
+            描述該區域
+        &quot;&quot;&quot;
+        component Content &#123;
+            description &quot;&quot;&quot;
+            描述該區域
+            &quot;&quot;&quot;
+        &#125;
+    &#125;
+&#125;
+
+
+YourSystem.InitPage_1 -&gt; YourSystem.InitPage_2 &quot;connection&quot;</code><!----></pre> <h3>index-model.dsl</h3> <p>指定要渲染哪些 index-model.dsl 裡的 model，且需要降一階處理</p> <p><code>index-model.dsl 裡的 YourSystem = softwareSystem</code></p> <p><code>index-model.dsl 要改成 container YourSystem 來指定</code></p> <pre class="language-text"><!----><code class="language-text">container YourSystem &quot;Name&quot; &#123;
+    include *
+&#125;
+
+
+component YourSystem.InitPage_1 &quot;InitData&quot; &#123;
+    include *
+&#125;</code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_10l11n6 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.R79SLmil.js"),
+						import("../_app/immutable/entry/app.DNIhW5ob.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
