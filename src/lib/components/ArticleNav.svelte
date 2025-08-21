@@ -45,7 +45,7 @@
 
 <nav>
   <h2>
-    <a href={`${base}/blog`} class="nav-heading-link">文章列表</a>
+    <a href={`${base}/article`} class="nav-heading-link">文章列表</a>
   </h2>
 
   {#each Object.entries(grouped) as [category, subGroups]}
@@ -63,7 +63,7 @@
           {#if sub === "__uncategorized__"}
             <ul>
               {#each items as article}
-                <li><a href={`${base}/blog/${article.slug}`}>{article.title}</a></li>
+                <li><a href={`${base}/article/${article.slug}`}>{article.title}</a></li>
               {/each}
             </ul>
           {:else}
@@ -71,7 +71,7 @@
               <summary>{sub}</summary>
               <ul>
                 {#each items as article}
-                  <li><a href={`${base}/blog/${article.slug}`}>{article.title}</a></li>
+                  <li><a href={`${base}/article/${article.slug}`}>{article.title}</a></li>
                 {/each}
               </ul>
             </details>
@@ -84,6 +84,11 @@
 
 
 <style>
+
+nav h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
 
 nav ul {
   margin-top: 0.5em;
@@ -106,12 +111,10 @@ nav li a {
 
 nav li a:hover {
   color: var(--color-theme-1);
-  text-decoration: underline;
 }
 
 details summary {
   cursor: pointer;
-  font-weight: 600;
   margin-top: 0.75em;
 }
 </style>

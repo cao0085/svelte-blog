@@ -1,2 +1,2 @@
-// src/routes/blog/+page.ts
+// src/routes/article/+page.ts
 export const prerender = true;

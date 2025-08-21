@@ -2,7 +2,7 @@
   import ArticleNav from "$lib/components/ArticleNav.svelte";
 </script>
 
-<div class="blog-layout">
+<div class="article-layout">
   <aside>
     <ArticleNav />
   </aside>
@@ -12,7 +12,7 @@
 </div>
 
 <style>
-  .blog-layout {
+  .article-layout {
     display: flex;
     min-height: 100vh;
   }
@@ -29,7 +29,7 @@
   }
 
   @media (max-width: 768px) {
-    .blog-layout {
+    .article-layout {
       flex-direction: column;
     }
 

@@ -9,7 +9,7 @@
     <ul class="list-disc pl-5">
       {#each items as item}
         <li>
-          <a href="/blog/{item.slug}" class="text-blue-600 hover:underline">
+          <a href="/article/{item.slug}" class="text-blue-600 hover:underline">
             {item.title}
           </a>
         </li>

@@ -1,4 +1,4 @@
-// src/routes/blog/[slug]/+page.ts
+// src/routes/article/[slug]/+page.ts
 /** 這個檔案只負責告訴 SvelteKit 如何列舉網址，畫面邏輯仍放在 +page.svelte */
 
 export const prerender = true;
