@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BKcuGzEh.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D7Wp9PR9.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DKG5KHQM.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgnxPeT2.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DzsvIE62.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.Bc3paOtU.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CJDXIhF0.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CpNB_gCK.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D3FEhtjy.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BbXUbaJx.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Paxon with Golang</h1> <p class="svelte-1l2p5et">2025-09-02</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>基本概念如下，當然實務上要如何分發ID、定義節點的生命週期會更複雜</h6> <hr/> <p>型別</p> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">type</span> Proposer <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+    Name  <span class="token builtin">string</span>
+    ID    <span class="token builtin">int</span>
+    Value <span class="token builtin">int</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">type</span> Acceptor <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+    Name        <span class="token builtin">string</span>
+    HandleID    <span class="token builtin">int</span>
+    HandleValue <span class="token builtin">int</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>第一階段 - 獲取提案許可</p> <pre class="language-go"><!----><code class="language-go">
+<span class="token keyword">func</span> <span class="token function">getProposal</span><span class="token punctuation">(</span>proposer Proposer<span class="token punctuation">,</span> acceptors <span class="token punctuation">[</span><span class="token punctuation">]</span>Acceptor<span class="token punctuation">)</span> <span class="token builtin">bool</span><span class="token punctuation">&#123;</span>
+
+    promiseCount <span class="token operator">:=</span> <span class="token number">0</span>
+    maxID <span class="token operator">:=</span> <span class="token number">0</span>
+
+    <span class="token comment">// 檢查有沒有參與者持有 > 的編號</span>
+    <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> value <span class="token operator">:=</span> <span class="token keyword">range</span> acceptors <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> value<span class="token punctuation">.</span>HandleID <span class="token operator">></span> maxID <span class="token punctuation">&#123;</span>
+            maxID <span class="token operator">=</span> value<span class="token punctuation">.</span>HandleID
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            promiseCount <span class="token operator">++</span> <span class="token comment">// 模擬網路傳遞失敗 有回應才 ++ </span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">if</span> maxID <span class="token operator">>=</span> proposer<span class="token punctuation">.</span>ID <span class="token punctuation">&#123;</span>
+        newProposerID <span class="token operator">:=</span> maxID <span class="token operator">+</span> <span class="token number">1</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">"提案 ID %d 順位太低，請使用新的 proposer ID: %d 再次提案&#92;n"</span><span class="token punctuation">,</span> proposer<span class="token punctuation">.</span>ID<span class="token punctuation">,</span> newProposerID<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> promiseCount <span class="token operator">></span> <span class="token function">len</span><span class="token punctuation">(</span>acceptors<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span> <span class="token punctuation">&#123;</span>
+            fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"✓ 獲得多數承諾，可以進入 Accept 階段"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"✗ 未獲得多數承諾，提案失敗"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+</code><!----></pre> <p>第二階段 - 承諾提案內容有共識</p> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">func</span> <span class="token function">getAcceptorInfo</span><span class="token punctuation">(</span>proposer Proposer<span class="token punctuation">,</span> acceptors <span class="token punctuation">[</span><span class="token punctuation">]</span>Acceptor<span class="token punctuation">)</span> <span class="token builtin">bool</span><span class="token punctuation">&#123;</span>
+
+    acceptorCount <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> acceptor <span class="token operator">:=</span> <span class="token keyword">range</span> acceptors <span class="token punctuation">&#123;</span>
+        acceptorCount <span class="token operator">++</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">"接受者: %s (ID: %d, 值: %d)&#92;n"</span><span class="token punctuation">,</span> 
+                   acceptor<span class="token punctuation">.</span>Name<span class="token punctuation">,</span> acceptor<span class="token punctuation">.</span>HandleID<span class="token punctuation">,</span> acceptor<span class="token punctuation">.</span>HandleValue<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">if</span> acceptorCount <span class="token operator">></span> <span class="token function">len</span><span class="token punctuation">(</span>acceptors<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">2</span> <span class="token punctuation">&#123;</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"獲得多數承諾，可以廣播"</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"無得到多數回應，提案失敗"</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-golang"><!----><code class="language-golang">
+package main
+
+import &quot;fmt&quot;
+
+type Proposer struct &#123;
+    Name  string
+    ID    int
+    Value int
+&#125;
+
+type Acceptor struct &#123;
+    Name        string
+    HandleID    int
+    HandleValue int
+&#125;
+
+func main() &#123;
+    // 建立一個提案者
+    proposer := Proposer&#123;
+        Name:  &quot;Alice&quot;,
+        ID:    1,
+        Value: 100, // 改成 Value
+    &#125;
+
+    // 建立三個接受者 (模擬不同的狀態)
+    acceptor1 := Acceptor&#123;
+        Name:        &quot;Server-A&quot;,
+        HandleID:    0, // 還沒處理過任何提案
+        HandleValue: 0,
+    &#125;
+
+    acceptor2 := Acceptor&#123;
+        Name:        &quot;Server-B&quot;, 
+        HandleID:    2, // 之前處理過 ID=2 的提案
+        HandleValue: 50,
+    &#125;
+
+    acceptor3 := Acceptor&#123;
+        Name:        &quot;Server-C&quot;,
+        HandleID:    1, // 之前處理過 ID=1 的提案
+        HandleValue: 75,
+    &#125;
+
+    acceptors := []Acceptor&#123;acceptor1, acceptor2, acceptor3&#125;
+
+    // 執行 Paxos
+    if getProposalInfo(proposer, acceptors) &#123;
+        if getAcceptorInfo(proposer, acceptors) &#123;
+          fmt.Println(proposer.ID, proposer.Value)
+        &#125;
+    &#125;
+
+    fmt.Println(&quot;&#92;n=== 測試案例 2: 提案者 ID 更高 ===&quot;)
+    proposer2 := Proposer&#123;
+        Name:  &quot;Bob&quot;,
+        ID:    5, // 比所有 acceptor 的 HandleID 都高
+        Value: 200, // 改成 Value
+    &#125;
+    
+    if getProposalInfo(proposer2, acceptors) &#123;
+        if getAcceptorInfo(proposer2, acceptors) &#123;
+          fmt.Println(proposer2.ID, proposer2.Value)
+        &#125;
+    &#125;
+&#125;
+
+func getProposalInfo(proposer Proposer, acceptors []Acceptor) bool&#123;
+
+    promiseCount := 0
+    maxID := 0
+
+    fmt.Printf(&quot;開始 Paxos 流程 - 提案者: %s&#92;n&quot;, proposer.Name)
+
+    // 先處理提案編號
+    for _, value := range acceptors &#123;
+        if value.HandleID &gt; maxID &#123;
+            maxID = value.HandleID
+        &#125; else &#123;
+            promiseCount ++ // 因若是網路傳遞，會需要紀錄回傳次數結果
+        &#125;
+    &#125;
+
+    if maxID &gt;= proposer.ID &#123; // 修正條件：應該是 &gt;= 而不是 &gt; 0
+        newProposerID := maxID + 1
+        fmt.Printf(&quot;提案 ID %d 太低，請使用新的 proposer ID: %d 再次提案&#92;n&quot;, proposer.ID, newProposerID)
+        return false
+    &#125; else &#123;
+        if promiseCount &gt; len(acceptors)/2 &#123;
+            fmt.Println(&quot;✓ 獲得多數承諾，可以進入 Accept 階段&quot;)
+            return true
+        &#125; else &#123;
+            fmt.Println(&quot;✗ 未獲得多數承諾，提案失敗&quot;)
+            return false
+        &#125;
+    &#125;
+&#125;
+
+func getAcceptorInfo(proposer Proposer, acceptors []Acceptor) bool&#123;
+
+    acceptorCount := 0;
+    for _, acceptor := range acceptors &#123;
+        acceptorCount ++
+        fmt.Printf(&quot;接受者: %s (ID: %d, 值: %d)&#92;n&quot;, 
+                   acceptor.Name, acceptor.HandleID, acceptor.HandleValue)
+    &#125;
+
+    if acceptorCount &gt; len(acceptors)/2 &#123;
+        fmt.Println(&quot;獲得多數承諾，可以廣播&quot;)
+        return true
+    &#125; else &#123;
+        fmt.Println(&quot;無得到多數回應，提案失敗&quot;)
+        return false
+    &#125;
+&#125;
+</code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1y84ys7 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.D7Wp9PR9.js"),
+						import("../_app/immutable/entry/app.DzsvIE62.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
