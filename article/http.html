@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BKcuGzEh.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CP5NppYg.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dkydxx7J.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CcmieR1N.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.mgR6X3-b.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.fbrvFc-j.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D3UtGqPH.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dq_Wc00d.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C30YA8uX.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.QeIccHAC.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Http Server</h1> <p class="svelte-1l2p5et">2025-09-03</p></div> <section class="article-body svelte-1l2p5et"><!----><h3>TCP 連線的運作機制</h3> <ol><li><p>伺服器主機主動開啟 Port <code>net.Listen("tcp", ":4000")</code></p></li> <li><p>同時 <code>conn, err := listener.Accept()</code> 等待連接</p></li> <li><p>客戶端發送請求 <code>server_ip:4000</code> OS 背後做 TCP 三次握手驗證</p></li> <li><p>資料會傳送到 <code>OS緩衝區</code>，程式則會定期去緩衝區讀取資料處理</p></li></ol> <h3>Server 的核心特性</h3> <ul><li>持續運行（Long-running Process）</li> <li>對外提供通訊介面</li></ul> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"net"</span>
+    <span class="token string">"fmt"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+    listener<span class="token punctuation">,</span> err <span class="token operator">:=</span> net<span class="token punctuation">.</span><span class="token function">Listen</span><span class="token punctuation">(</span><span class="token string">"tcp"</span><span class="token punctuation">,</span> <span class="token string">":8080"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"Error:"</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">defer</span> listener<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+    fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"Server listening on :8080"</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">for</span> <span class="token punctuation">&#123;</span>
+        conn<span class="token punctuation">,</span> err <span class="token operator">:=</span> listener<span class="token punctuation">.</span><span class="token function">Accept</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+            fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"Accept error:"</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+            <span class="token keyword">continue</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">handleConnection</span><span class="token punctuation">(</span>conn<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">func</span> <span class="token function">handleConnection</span><span class="token punctuation">(</span>conn net<span class="token punctuation">.</span>Conn<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">defer</span> conn<span class="token punctuation">.</span><span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+    <span class="token comment">// 創建緩衝區讀取資料</span>
+    buffer <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> <span class="token number">4096</span><span class="token punctuation">)</span>
+    n<span class="token punctuation">,</span> err <span class="token operator">:=</span> conn<span class="token punctuation">.</span><span class="token function">Read</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"Read error:"</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    <span class="token punctuation">&#125;</span>
+    
+    <span class="token comment">// 將接收到的資料轉為字串</span>
+    request <span class="token operator">:=</span> <span class="token function">string</span><span class="token punctuation">(</span>buffer<span class="token punctuation">[</span><span class="token punctuation">:</span>n<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"Received request:"</span><span class="token punctuation">)</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+
+	<span class="token comment">// 解析 request 裡面的 path 去拿對應的 Method </span>
+
+	<span class="token comment">// 定義 Response</span>
+    response <span class="token operator">:=</span> <span class="token string">"HTTP/1.1 200 OK&#92;r&#92;n"</span> <span class="token operator">+</span>
+                <span class="token string">"Content-Type: text/html&#92;r&#92;n"</span> <span class="token operator">+</span>
+                <span class="token string">"Content-Length: 13&#92;r&#92;n"</span> <span class="token operator">+</span>
+                <span class="token string">"&#92;r&#92;n"</span> <span class="token operator">+</span>
+                <span class="token string">"Hello, World!"</span>
+    
+    <span class="token comment">// 發送回應</span>
+    conn<span class="token punctuation">.</span><span class="token function">Write</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>HTTP 本身是個字串，會需要嚴格的解析流程，可以導入狀態機的概念去處理如:</p> <ul><li>解析請求行 → 提取方法、路徑、版本</li> <li>解析標頭   → 逐行讀取 key: value</li> <li>解析請求體 → 根據 Content-Length 讀取</li></ul> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">type</span> HTTPRequest <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+    Method  <span class="token builtin">string</span>              <span class="token comment">// "GET", "POST"</span>
+    Path    <span class="token builtin">string</span>              <span class="token comment">// "/users/123"</span>
+    Query   <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token builtin">string</span>   <span class="token comment">// &#123;"id": "123", "name": "john"&#125;</span>
+    Headers <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token builtin">string</span>   <span class="token comment">// &#123;"Host": "localhost", ...&#125;</span>
+    Body    <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span>              <span class="token comment">// 請求體內容</span>
+    Version <span class="token builtin">string</span>              <span class="token comment">// "HTTP/1.1"</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 概念化的解析器</span>
+<span class="token keyword">func</span> <span class="token function">parseHTTPRequest</span><span class="token punctuation">(</span>raw <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>HTTPRequest<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    lines <span class="token operator">:=</span> strings<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span>raw<span class="token punctuation">,</span> <span class="token string">"&#92;r&#92;n"</span><span class="token punctuation">)</span>
+    
+    <span class="token comment">// 1. 解析請求行</span>
+    requestLine <span class="token operator">:=</span> strings<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span>lines<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">" "</span><span class="token punctuation">)</span>
+    method <span class="token operator">:=</span> requestLine<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    fullPath <span class="token operator">:=</span> requestLine<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> 
+    version <span class="token operator">:=</span> requestLine<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
+    
+    <span class="token comment">// 2. 分離路徑和查詢參數</span>
+    pathParts <span class="token operator">:=</span> strings<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span>fullPath<span class="token punctuation">,</span> <span class="token string">"?"</span><span class="token punctuation">)</span>
+    path <span class="token operator">:=</span> pathParts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    query <span class="token operator">:=</span> <span class="token function">parseQuery</span><span class="token punctuation">(</span>pathParts<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">// ?name=john&amp;age=25</span>
+    
+    <span class="token comment">// 3. 解析標頭</span>
+    headers <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token builtin">string</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>lines<span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> lines<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">""</span> <span class="token punctuation">&#123;</span> <span class="token keyword">break</span> <span class="token punctuation">&#125;</span> <span class="token comment">// 遇到空行停止</span>
+        header <span class="token operator">:=</span> strings<span class="token punctuation">.</span><span class="token function">SplitN</span><span class="token punctuation">(</span>lines<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">": "</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+        headers<span class="token punctuation">[</span>header<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> header<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span>
+    
+    <span class="token comment">// 4. 根據 Content-Length 讀取 body</span>
+    <span class="token comment">// ...</span>
+    
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>HTTPRequest<span class="token punctuation">&#123;</span><span class="token operator">...</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1lxcomx = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CP5NppYg.js"),
+						import("../_app/immutable/entry/app.mgR6X3-b.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
