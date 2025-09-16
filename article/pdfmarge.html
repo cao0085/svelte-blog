@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BduBPsYz.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DBdlFfyR.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DzW2QMY6.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/tge4Biuy.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BlevnmoH.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BttZmlHZ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/jeFALkjA.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BUD6BkDA.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/iETF5ozv.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BwSS27YE.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">多個 PDF 檔案合併</h1> <p class="svelte-1l2p5et">2025-09-16</p></div> <section class="article-body svelte-1l2p5et"><!----><h6><a href="https://github.com/cao0085/pdfMerger" rel="nofollow">Repository</a> ，Python 執行相容性比較好，C# UI方便友善</h6> <hr/> <h3>C#</h3> <pre class="language-csharp"><!----><code class="language-csharp">  <span class="token comment">// .csproj</span>
+<span class="token operator">&lt;</span>ItemGroup<span class="token operator">></span>
+  <span class="token operator">&lt;</span><span class="token class-name">PackageReference</span> Include<span class="token operator">=</span><span class="token string">"itext7"</span> Version<span class="token operator">=</span><span class="token string">"8.0.5"</span> <span class="token operator">/</span><span class="token operator">></span>
+  <span class="token operator">&lt;</span><span class="token class-name">PackageReference</span> Include<span class="token operator">=</span><span class="token string">"itext7.bouncy-castle-adapter"</span> Version<span class="token operator">=</span><span class="token string">"8.0.5"</span> <span class="token operator">/</span><span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>ItemGroup<span class="token operator">></span></code><!----></pre> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>IO</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Linq</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>Generic</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">iText<span class="token punctuation">.</span>Kernel<span class="token punctuation">.</span>Pdf</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">iText<span class="token punctuation">.</span>Kernel<span class="token punctuation">.</span>Utils</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">iText<span class="token punctuation">.</span>Kernel<span class="token punctuation">.</span>Exceptions</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Reflection<span class="token punctuation">.</span>PortableExecutable</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Net<span class="token punctuation">.</span>Sockets</span><span class="token punctuation">;</span>
+
+<span class="token keyword">using</span> <span class="token namespace">PDF_Merger<span class="token punctuation">.</span>PasswordHelper</span><span class="token punctuation">;</span> <span class="token comment">// 自定義</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Program</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> args<span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span> 
+    <span class="token comment">// 讀檔案...</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> pdfFiles <span class="token operator">=</span> Directory<span class="token punctuation">.</span><span class="token function">GetFiles</span><span class="token punctuation">(</span>folderPath<span class="token punctuation">,</span> <span class="token string">"*.pdf"</span><span class="token punctuation">,</span> SearchOption<span class="token punctuation">.</span>TopDirectoryOnly<span class="token punctuation">)</span>
+                          <span class="token punctuation">.</span><span class="token function">OrderBy</span><span class="token punctuation">(</span>f <span class="token operator">=></span> f<span class="token punctuation">)</span>
+                          <span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 處理檔案路徑和名稱...</span>
+    <span class="token class-name"><span class="token keyword">string</span></span> defaultPath <span class="token operator">=</span> Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span><span class="token string">"資料夾名稱"</span><span class="token punctuation">,</span> <span class="token string">"檔案名稱"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 主邏輯</span>
+    <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> pdfWriter <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PdfWriter</span><span class="token punctuation">(</span>destinationPdfPath<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> pdfDocument <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PdfDocument</span><span class="token punctuation">(</span>pdfWriter<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token class-name"><span class="token keyword">var</span></span> merger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PdfMerger</span><span class="token punctuation">(</span>pdfDocument<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token class-name"><span class="token keyword">int</span></span> totalPages <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      <span class="token class-name"><span class="token keyword">int</span></span> successCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      <span class="token class-name"><span class="token keyword">int</span></span> skipCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+      <span class="token comment">// 檔案路徑</span>
+      <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> sourcePdfPaths<span class="token punctuation">.</span>Length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+          <span class="token class-name"><span class="token keyword">string</span></span> sourcePath <span class="token operator">=</span> sourcePdfPaths<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+          <span class="token keyword">try</span>
+          <span class="token punctuation">&#123;</span>
+              <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PdfReader</span><span class="token punctuation">(</span>sourcePath<span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> sourceDoc <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PdfDocument</span><span class="token punctuation">(</span>reader<span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token punctuation">&#123;</span>
+                  <span class="token class-name"><span class="token keyword">int</span></span> pageCount <span class="token operator">=</span> sourceDoc<span class="token punctuation">.</span><span class="token function">GetNumberOfPages</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  merger<span class="token punctuation">.</span><span class="token function">Merge</span><span class="token punctuation">(</span>sourceDoc<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pageCount<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">&#125;</span>
+              <span class="token keyword">else</span>
+              <span class="token punctuation">&#123;</span>
+                  skipCount<span class="token operator">++</span><span class="token punctuation">;</span>
+              <span class="token punctuation">&#125;</span>
+          <span class="token punctuation">&#125;</span>
+          <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> fileEx<span class="token punctuation">)</span>
+          <span class="token punctuation">&#123;</span> 
+            <span class="token comment">// 若是讀取權限問題 嘗試 SetUnethicalReading</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PdfReader</span><span class="token punctuation">(</span>sourcePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            reader<span class="token punctuation">.</span><span class="token function">SetUnethicalReading</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 重點</span>
+
+            <span class="token keyword">using</span> <span class="token punctuation">(</span>reader<span class="token punctuation">)</span>
+            <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> sourceDoc <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PdfDocument</span><span class="token punctuation">(</span>reader<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#123;</span>
+              merger<span class="token punctuation">.</span><span class="token function">Merge</span><span class="token punctuation">(</span>sourceDoc<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> pageCount<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//...</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">continue</span><span class="token punctuation">;</span>
+          <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>Python3</h3> <pre class="language-bash"><!----><code class="language-bash">pip <span class="token function">install</span> pypdf
+pip <span class="token function">install</span> cryptography</code><!----></pre> <pre class="language-python"><!----><code class="language-python"><span class="token comment">#!/usr/bin/env python3</span>
+<span class="token comment"># -*- coding: utf-8 -*-</span>
+
+<span class="token keyword">import</span> os
+<span class="token keyword">from</span> pypdf <span class="token keyword">import</span> PdfWriter
+<span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+
+<span class="token keyword">def</span> <span class="token function">merge_pdfs</span><span class="token punctuation">(</span>input_folder<span class="token operator">=</span><span class="token string">"test"</span><span class="token punctuation">,</span> output_folder<span class="token operator">=</span><span class="token string">"output"</span><span class="token punctuation">,</span> output_filename<span class="token operator">=</span><span class="token string">"merged.pdf"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    合併指定資料夾內的所有 PDF 文件
+    
+    Args:
+        input_folder: 輸入 PDF 文件的資料夾路徑
+        output_folder: 輸出資料夾路徑
+        output_filename: 合併後的文件名
+    """</span>
+    
+    <span class="token comment"># 確保輸出資料夾存在</span>
+    Path<span class="token punctuation">(</span>output_folder<span class="token punctuation">)</span><span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    
+    <span class="token comment"># 取得所有 PDF 文件</span>
+    pdf_files <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> <span class="token builtin">file</span> <span class="token keyword">in</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span>input_folder<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> <span class="token builtin">file</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>endswith<span class="token punctuation">(</span><span class="token string">'.pdf'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            pdf_files<span class="token punctuation">.</span>append<span class="token punctuation">(</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>input_folder<span class="token punctuation">,</span> <span class="token builtin">file</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    
+    <span class="token comment"># 按文件名排序</span>
+    pdf_files<span class="token punctuation">.</span>sort<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">if</span> <span class="token keyword">not</span> pdf_files<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"在 </span><span class="token interpolation"><span class="token punctuation">&#123;</span>input_folder<span class="token punctuation">&#125;</span></span><span class="token string"> 資料夾中沒有找到 PDF 文件"</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"找到 </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">len</span><span class="token punctuation">(</span>pdf_files<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string"> 個 PDF 文件:"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> <span class="token builtin">file</span> <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>pdf_files<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>i<span class="token punctuation">&#125;</span></span><span class="token string">. </span><span class="token interpolation"><span class="token punctuation">&#123;</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>basename<span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    
+    <span class="token comment"># 創建 PDF 合併器</span>
+    merger <span class="token operator">=</span> PdfWriter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token comment"># 逐個添加 PDF 文件</span>
+        <span class="token keyword">for</span> pdf_file <span class="token keyword">in</span> pdf_files<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"正在處理: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>basename<span class="token punctuation">(</span>pdf_file<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+            merger<span class="token punctuation">.</span>append<span class="token punctuation">(</span>pdf_file<span class="token punctuation">)</span>
+        
+        <span class="token comment"># 輸出合併後的文件</span>
+        output_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>output_folder<span class="token punctuation">,</span> output_filename<span class="token punctuation">)</span>
+        <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>output_path<span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> output_file<span class="token punctuation">:</span>
+            merger<span class="token punctuation">.</span>write<span class="token punctuation">(</span>output_file<span class="token punctuation">)</span>
+        
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"&#92;n合併完成！"</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"輸出文件: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>output_path<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"總頁數: </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">len</span><span class="token punctuation">(</span>merger<span class="token punctuation">.</span>pages<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+        
+    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"合併過程中發生錯誤: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>e<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">finally</span><span class="token punctuation">:</span>
+        merger<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">list_pdfs</span><span class="token punctuation">(</span>folder<span class="token operator">=</span><span class="token string">"pdfs"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""列出資料夾內的所有 PDF 文件"""</span>
+    pdf_files <span class="token operator">=</span> <span class="token punctuation">[</span>f <span class="token keyword">for</span> f <span class="token keyword">in</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span>folder<span class="token punctuation">)</span> <span class="token keyword">if</span> f<span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>endswith<span class="token punctuation">(</span><span class="token string">'.pdf'</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    
+    <span class="token keyword">if</span> <span class="token keyword">not</span> pdf_files<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"在 </span><span class="token interpolation"><span class="token punctuation">&#123;</span>folder<span class="token punctuation">&#125;</span></span><span class="token string"> 資料夾中沒有找到 PDF 文件"</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"找到 </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">len</span><span class="token punctuation">(</span>pdf_files<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string"> 個 PDF 文件:"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> <span class="token builtin">file</span> <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span><span class="token builtin">sorted</span><span class="token punctuation">(</span>pdf_files<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        file_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>folder<span class="token punctuation">,</span> <span class="token builtin">file</span><span class="token punctuation">)</span>
+        file_size <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>getsize<span class="token punctuation">(</span>file_path<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">1024</span>  <span class="token comment"># KB</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>i<span class="token punctuation">&#125;</span></span><span class="token string">. </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">file</span><span class="token punctuation">&#125;</span></span><span class="token string"> (</span><span class="token interpolation"><span class="token punctuation">&#123;</span>file_size<span class="token punctuation">:</span><span class="token format-spec">.1f</span><span class="token punctuation">&#125;</span></span><span class="token string"> KB)"</span></span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"=== PDF 合併工具 ===&#92;n"</span><span class="token punctuation">)</span>
+    
+    <span class="token comment"># 先列出所有 PDF 文件</span>
+    list_pdfs<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"&#92;n"</span> <span class="token operator">+</span> <span class="token string">"="</span><span class="token operator">*</span><span class="token number">50</span><span class="token punctuation">)</span>
+    
+    <span class="token comment"># 執行合併</span>
+    merge_pdfs<span class="token punctuation">(</span><span class="token punctuation">)</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_16lg6fu = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DBdlFfyR.js"),
+						import("../_app/immutable/entry/app.BlevnmoH.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

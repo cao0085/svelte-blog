@@ -5,27 +5,27 @@
 		<link rel="icon" href="../favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		
-		<link href="../_app/immutable/assets/0.BKcuGzEh.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/0.BduBPsYz.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.CP5NppYg.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Dkydxx7J.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DBdlFfyR.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DzW2QMY6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CcmieR1N.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/tge4Biuy.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.mgR6X3-b.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BlevnmoH.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.fbrvFc-j.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BttZmlHZ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D3UtGqPH.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dq_Wc00d.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/jeFALkjA.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BUD6BkDA.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C30YA8uX.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.QeIccHAC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/iETF5ozv.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BwSS27YE.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Http Server</h1> <p class="svelte-1l2p5et">2025-09-03</p></div> <section class="article-body svelte-1l2p5et"><!----><h3>TCP 連線的運作機制</h3> <ol><li><p>伺服器主機主動開啟 Port <code>net.Listen("tcp", ":4000")</code></p></li> <li><p>同時 <code>conn, err := listener.Accept()</code> 等待連接</p></li> <li><p>客戶端發送請求 <code>server_ip:4000</code> OS 背後做 TCP 三次握手驗證</p></li> <li><p>資料會傳送到 <code>OS緩衝區</code>，程式則會定期去緩衝區讀取資料處理</p></li></ol> <h3>Server 的核心特性</h3> <ul><li>持續運行（Long-running Process）</li> <li>對外提供通訊介面</li></ul> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">package</span> main
@@ -123,7 +123,7 @@
 			
 			<script>
 				{
-					__sveltekit_1lxcomx = {
+					__sveltekit_16lg6fu = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -131,8 +131,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.CP5NppYg.js"),
-						import("../_app/immutable/entry/app.mgR6X3-b.js")
+						import("../_app/immutable/entry/start.DBdlFfyR.js"),
+						import("../_app/immutable/entry/app.BlevnmoH.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

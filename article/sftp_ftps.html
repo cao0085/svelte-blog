@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BduBPsYz.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DBdlFfyR.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DzW2QMY6.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/tge4Biuy.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BlevnmoH.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BttZmlHZ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/jeFALkjA.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BUD6BkDA.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/iETF5ozv.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BwSS27YE.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">SFTP、FTPS C# 連線測試</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>紀錄本地端測試方法</h6> <hr/> <h3>SFTP</h3> <p>docker-compose.yml</p> <pre class="language-yml"><!----><code class="language-yml"><span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">sftp</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> atmoz/sftp
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> sftp<span class="token punctuation">-</span>server
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"7070:22"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> ./sftp<span class="token punctuation">-</span>data<span class="token punctuation">:</span>/home/user01/upload  <span class="token comment"># 本地資料夾同步掛載</span>
+      <span class="token punctuation">-</span> ./sftp<span class="token punctuation">-</span>config<span class="token punctuation">:</span>/etc/sftp.d
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> user01<span class="token punctuation">:</span>password01<span class="token punctuation">:</span><span class="token number">1001</span>  <span class="token comment"># 用戶名:密碼:UID</span>
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> unless<span class="token punctuation">-</span>stopped
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> SFTP_USERS=user01<span class="token punctuation">:</span>password01<span class="token punctuation">:</span><span class="token number">1001</span>  <span class="token comment"># 設置 SFTP 用戶</span></code><!----></pre> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">Renci<span class="token punctuation">.</span>SshNet</span><span class="token punctuation">;</span>
+
+<span class="token comment">/// _sftpIP = localhost</span>
+<span class="token comment">/// _sftpPort = 7070</span>
+<span class="token comment">/// _sftpAccount = user01</span>
+<span class="token comment">/// _sftpPassword = password01</span>
+<span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> sftpClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">SftpClient</span><span class="token punctuation">(</span>_sftpIP<span class="token punctuation">,</span> _sftpPort<span class="token punctuation">,</span> _sftpAccount<span class="token punctuation">,</span> _sftpPassword<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 套件</span>
+<span class="token keyword">await</span> <span class="token function">EnsureStftConnectedAsync</span><span class="token punctuation">(</span>sftpClient<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Retries</span>
+
+<span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">EnsureStftConnectedAsync</span><span class="token punctuation">(</span><span class="token class-name">SftpClient</span> client<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">int</span></span> maxRetries <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> attempt <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> attempt <span class="token operator">&lt;=</span> maxRetries<span class="token punctuation">;</span> attempt<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> client<span class="token punctuation">.</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>client<span class="token punctuation">.</span>IsConnected<span class="token punctuation">)</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>attempt <span class="token operator">==</span> maxRetries<span class="token punctuation">)</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Exception</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"SFTP 連線失敗，已重試 </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">maxRetries</span><span class="token punctuation">&#125;</span></span><span class="token string"> 次: </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">ex<span class="token punctuation">.</span>Message</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Delay</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>FTPS</h3> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> ftpsClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">FtpClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span>Host <span class="token operator">=</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span>Port <span class="token operator">=</span> <span class="token number">9090</span><span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span>Credentials <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">NetworkCredential</span><span class="token punctuation">(</span><span class="token string">"user01"</span><span class="token punctuation">,</span> <span class="token string">"password01"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span>Config<span class="token punctuation">.</span>EncryptionMode <span class="token operator">=</span> FtpEncryptionMode<span class="token punctuation">.</span>None<span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span>Config<span class="token punctuation">.</span>DataConnectionType <span class="token operator">=</span> FtpDataConnectionType<span class="token punctuation">.</span>PASV<span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span>Config<span class="token punctuation">.</span>ConnectTimeout <span class="token operator">=</span> <span class="token number">30000</span><span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span>Config<span class="token punctuation">.</span>ReadTimeout <span class="token operator">=</span> <span class="token number">30000</span><span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span>Config<span class="token punctuation">.</span>LogToConsole <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+ftpsClient<span class="token punctuation">.</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>docker-compose.yml</p> <pre class="language-yml"><!----><code class="language-yml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'3.8'</span>
+
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">ftps</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> fauria/vsftpd
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> ftps<span class="token punctuation">-</span>server
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"9090:21"</span>
+      <span class="token punctuation">-</span> <span class="token string">"21100-21110:21100-21110"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> ./ftps<span class="token punctuation">-</span>data<span class="token punctuation">:</span>/home/vsftpd/user01
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> FTP_USER=user01
+      <span class="token punctuation">-</span> FTP_PASS=password01
+      <span class="token punctuation">-</span> PASV_MIN_PORT=21100
+      <span class="token punctuation">-</span> PASV_MAX_PORT=21110
+      <span class="token punctuation">-</span> SSL_ENABLE=NO
+      <span class="token punctuation">-</span> LOG_STDOUT=YES
+      <span class="token punctuation">-</span> WRITE_ENABLE=YES
+      <span class="token punctuation">-</span> CHROOT_LOCAL_USER=YES
+      <span class="token punctuation">-</span> REVERSE_LOOKUP_ENABLE=NO
+      <span class="token punctuation">-</span> PASV_ENABLE=YES           <span class="token comment"># 明確啟用 PASV</span>
+      <span class="token punctuation">-</span> PORT_ENABLE=YES           <span class="token comment"># 也啟用 PORT 模式</span>
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> unless<span class="token punctuation">-</span>stopped</code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_16lg6fu = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DBdlFfyR.js"),
+						import("../_app/immutable/entry/app.BlevnmoH.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
