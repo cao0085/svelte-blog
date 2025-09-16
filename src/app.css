@@ -1,7 +1,7 @@
 @import '@fontsource/fira-mono';
 
 :root {
-	--font-body: "Source Sans Pro", "Lato", "PingFang TC", "微軟正黑體", sans-serif;
+	--font-body: "sans-serif-font","PingFang TC", "微軟正黑體", sans-serif;
 	--font-mono: 'Fira Mono', monospace;
 	--color-bg-0: rgb(202, 216, 228);
 	--color-bg-1: hsl(209, 36%, 86%);
