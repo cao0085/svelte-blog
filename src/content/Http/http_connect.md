@@ -1,10 +1,10 @@
 ---
-title: "Http Server"
+title: "Http Connect"
 date: "2025-09-03"
 category: "software"
 subCategory: "Http"
 tags: ["Http", "tcp", "backend"]
-slug: "http"
+slug: "http_connect"
 ---
 
 ### TCP 連線的運作機制
