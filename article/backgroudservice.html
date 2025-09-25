@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BduBPsYz.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.EwUjS_sf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cwisamc5.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CZACWngs.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.Bz0Amwnm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.WvBEohMD.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CD718onY.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.8Obbqntv.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BHuhVocu.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BdPDI5gZ.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Base Backgroud Service</h1> <p class="svelte-1l2p5et">2025-09-25</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>C#實作</h6> <hr/> <h3>使用背景</h3> <p>當主程式的 DI 註冊週期是以 HTTP lifecycle 為主時，可藉由 Background Service 提供長期運行的服務容器。</p> <ol><li>非阻塞式處理：可由外部 API 觸發某些動作，立即回應用戶端而不等待處理完成</li> <li>解耦合設計：將耗時的業務邏輯從 HTTP 請求週期中分離出來</li> <li>簡易事件模式：作為一個輕量級的 Event pattern 實現，處理非即時性任務</li> <li>資源管理：避免長時間佔用 HTTP 連線資源，提升系統整體效能</li></ol> <h3>Channel 基礎原理</h3> <p>Channel 是 .NET Core 提供的 thread-safe 生產者-消費者模式實作，基於 System.Threading.Channels 命名空間。它解決了多執行緒環境下的資料傳遞問題。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> channel <span class="token operator">=</span> Channel<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">CreateUnbounded</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>YourRequestType<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Channel 包含兩個部分</span>
+channel<span class="token punctuation">.</span>Writer <span class="token comment">// 用於寫入資料 (生產者) => Controller 需要寫入能力</span>
+channel<span class="token punctuation">.</span>Reader <span class="token comment">// 用於讀取資料 (消費者) => Background 需要讀取能力</span>
+
+┌─────────────────────┐    寫入    ┌──────────────┐    讀取    ┌──────────────────────┐
+│   Controller        │ ─────────<span class="token operator">></span> │   Channel    │ ─────────<span class="token operator">></span> │  Background Service  │
+│  <span class="token punctuation">(</span>ChannelWriter<span class="token punctuation">)</span>    │           │   <span class="token punctuation">(</span>Queue<span class="token punctuation">)</span>    │            │  <span class="token punctuation">(</span>ChannelReader<span class="token punctuation">)</span>     │
+└─────────────────────┘           └──────────────┘            └──────────────────────┘
+<span class="token comment">// FIFO 先進先出的順序處理</span></code><!----></pre> <h3>Channel 的監聽機制</h3> <p>寫入機制 (Producer)</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// 非同步寫入 - 不會阻塞，立即將資料放入佇列</span>
+<span class="token keyword">await</span> channelWriter<span class="token punctuation">.</span><span class="token function">WriteAsync</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 同步寫入 - 立即返回 bool</span>
+<span class="token class-name"><span class="token keyword">bool</span></span> success <span class="token operator">=</span> channelWriter<span class="token punctuation">.</span><span class="token function">TryWrite</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 標記寫入完成 (關閉 Writer)</span>
+channelWriter<span class="token punctuation">.</span><span class="token function">Complete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>讀取監聽機制 (Consumer)</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// ReadAllAsync</span>
+<span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">ExecuteAsync</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> stoppingToken<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 持續監聽，有資料時立即處理</span>
+    <span class="token keyword">await</span> <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> item <span class="token keyword">in</span> _reader<span class="token punctuation">.</span><span class="token function">ReadAllAsync</span><span class="token punctuation">(</span>stoppingToken<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 立即處理接收到的資料</span>
+        <span class="token keyword">await</span> <span class="token function">ProcessItem</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// WaitToReadAsync + TryRead</span>
+<span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">ExecuteAsync</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> stoppingToken<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// while 持續監聽</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token keyword">await</span> _reader<span class="token punctuation">.</span><span class="token function">WaitToReadAsync</span><span class="token punctuation">(</span>stoppingToken<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 一次處理所有可用的資料</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>_reader<span class="token punctuation">.</span><span class="token function">TryRead</span><span class="token punctuation">(</span><span class="token keyword">out</span> <span class="token class-name"><span class="token keyword">var</span></span> item<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token keyword">await</span> <span class="token function">ProcessItem</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>基本架構</h3> <p>DI註冊</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// 註冊 Channel 用於背景服務通訊</span>
+<span class="token class-name"><span class="token keyword">var</span></span> channel <span class="token operator">=</span> Channel<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">CreateUnbounded</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>YourRequestType<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>channel<span class="token punctuation">.</span>Reader<span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>channel<span class="token punctuation">.</span>Writer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 註冊背景服務</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">AddHostedService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>YourBackgroundService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>Controller</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">HttpPost</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token string">"trigger-action"</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>IActionResult<span class="token punctuation">></span></span> <span class="token function">TriggerAction</span><span class="token punctuation">(</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">FromBody</span></span><span class="token punctuation">]</span> <span class="token class-name">YourRequest</span> requestBody<span class="token punctuation">,</span>
+    <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">FromServices</span></span><span class="token punctuation">]</span> <span class="token class-name">ChannelWriter<span class="token punctuation">&lt;</span>YourRequestType<span class="token punctuation">></span></span> queue<span class="token punctuation">)</span> <span class="token comment">// 也可放在 Controller constructor</span>
+<span class="token punctuation">&#123;</span>
+
+    <span class="token comment">// 建立內部請求物件</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> request <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">YourRequestType</span>
+    <span class="token punctuation">&#123;</span>
+        Data <span class="token operator">=</span> requestBody<span class="token punctuation">.</span>Data<span class="token punctuation">,</span>
+        RequestTime <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>Now<span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">try</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">await</span> queue<span class="token punctuation">.</span><span class="token function">WriteAsync</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"Action queued successfully"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">Ok</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token punctuation">&#123;</span> Message <span class="token operator">=</span> <span class="token string">"Action queued for processing"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InvalidOperationException</span> ex<span class="token punctuation">)</span> <span class="token keyword">when</span> <span class="token punctuation">(</span>ex<span class="token punctuation">.</span>Message<span class="token punctuation">.</span><span class="token function">Contains</span><span class="token punctuation">(</span><span class="token string">"closed"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        _logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"Background service unavailable"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">StatusCode</span><span class="token punctuation">(</span><span class="token number">503</span><span class="token punctuation">,</span> <span class="token string">"Service temporarily unavailable"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        _logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"Failed to queue action"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">StatusCode</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">,</span> <span class="token string">"Internal server error"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>服務內部</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">YourBackgroundService</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BackgroundService</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">ChannelReader<span class="token punctuation">&lt;</span>YourRequestType<span class="token punctuation">></span></span> _reader<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">ILogger<span class="token punctuation">&lt;</span>YourBackgroundService<span class="token punctuation">></span></span> _logger<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">IServiceProvider</span> _serviceProvider<span class="token punctuation">;</span> <span class="token comment">// 用來創造一個 scope 正確管理 DI Lifecycle </span>
+
+    <span class="token keyword">public</span> <span class="token function">YourBackgroundService</span><span class="token punctuation">(</span>
+        <span class="token class-name">ChannelReader<span class="token punctuation">&lt;</span>YourRequestType<span class="token punctuation">></span></span> reader<span class="token punctuation">,</span>
+        <span class="token class-name">ILogger<span class="token punctuation">&lt;</span>YourBackgroundService<span class="token punctuation">></span></span> logger<span class="token punctuation">,</span>
+        <span class="token class-name">IServiceProvider</span> serviceProvider<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        _reader <span class="token operator">=</span> reader<span class="token punctuation">;</span>
+        _logger <span class="token operator">=</span> logger<span class="token punctuation">;</span>
+        _serviceProvider <span class="token operator">=</span> serviceProvider<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">ExecuteAsync</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> stoppingToken<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">await</span> <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> request <span class="token keyword">in</span> _reader<span class="token punctuation">.</span><span class="token function">ReadAllAsync</span><span class="token punctuation">(</span>stoppingToken<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token keyword">try</span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> scope <span class="token operator">=</span> _serviceProvider<span class="token punctuation">.</span><span class="token function">CreateScope</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token class-name"><span class="token keyword">var</span></span> logic <span class="token operator">=</span> scope<span class="token punctuation">.</span>ServiceProvider<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetRequiredService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>YourLogic<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                
+                <span class="token keyword">await</span> logic<span class="token punctuation">.</span><span class="token function">ProcessAsync</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                _logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"Request processed successfully"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+            <span class="token punctuation">&#123;</span>
+                _logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"Failed to process request"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_mt374p = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.EwUjS_sf.js"),
+						import("../_app/immutable/entry/app.Bz0Amwnm.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
