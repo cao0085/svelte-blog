@@ -8,24 +8,24 @@
 		<link href="../_app/immutable/assets/0.BduBPsYz.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.sXxb7SLu.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C0kkeqQU.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CUs5uOrv.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CFKP5AuV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/b7dfew7z.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DPZw7otN.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.Cd99QNyr.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CHM63435.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.CpBTnz9D.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.C3WNKgW3.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Dpk3puWt.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.DbQhRdPM.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BfGJlTXR.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.UHzd3g3b.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BbgI-SiG.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.fjA5v5We.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dk8H7CzH.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.QFqr4hJ1.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">金流對帳檔案處理</h1> <p class="svelte-1l2p5et">2025-09-30</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>金流商通常會在N工作日後，提供一份撥款檔案視為實際銀行帳務核實依據</h6> <hr/> <p>一般來說是每日定時觸發該任務，所以難點是當系統異常或金流商未提供檔案時，人工介入後可以怎麼處理、減少重試的成本。</p> <h3>取得金流商靜態檔案</h3> <p>從邏輯異常的話表示沒有寫入本地端，重試就從 ERROR LOG 去找參數直接重試可以了。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">/// &lt;summary></span>
@@ -211,7 +211,7 @@ FileName <span class="token operator">=</span> <span class="token keyword">null<
 			
 			<script>
 				{
-					__sveltekit_vs528t = {
+					__sveltekit_12c48rh = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -219,8 +219,8 @@ FileName <span class="token operator">=</span> <span class="token keyword">null<
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.sXxb7SLu.js"),
-						import("../_app/immutable/entry/app.Cd99QNyr.js")
+						import("../_app/immutable/entry/start.CUs5uOrv.js"),
+						import("../_app/immutable/entry/app.CHM63435.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
