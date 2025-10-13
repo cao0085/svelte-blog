@@ -8,24 +8,24 @@
 		<link href="../_app/immutable/assets/0.BduBPsYz.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DD8_YKRa.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CHael4ay.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DiPnB_qN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BXWSWQRs.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CFEsOToc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CvglCWzG.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.CuBurHkz.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BbNBF6SZ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BZPFsQbJ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BC4v0G_p.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DrRNiSOJ.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CsABuZHl.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DXo1hHlF.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BvU4E_nS.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/7WtjWsq0.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.BYmb6NAh.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/jJSjd42w.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.EkWhoR-U.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">Database Consistency 1</h1> <p class="svelte-1l2p5et">2025-07-28</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>維持多台 Server 資料唯一性的幾種選擇，<a href="https://ithelp.ithome.com.tw/articles/10217086" rel="nofollow">建議閱讀這裡</a></h6> <hr/> <p>當需要維持多台DB Server，因為建置成本的關係，可依據需求去選擇不同強度的Model去實作</p> <h3>Consistency Model</h3> <ul><li><p>Strong Consistency: 在保證最新和正確的情況下才回傳，否則就回報錯誤</p></li> <li><p>Read My Writes: 只讀取保證有最新寫入的資料庫</p></li> <li><p>Bounded Staleness: 可參數化這個 bounded值，在可允許範圍內確定資料的正確性</p></li> <li><p>Consistent Prefix: 保證資料是正確的，但是不一定是最新</p></li> <li><p>Monotonic Reads: 第一次拿取不保證正確性，但之後都會向同一台Server拿取資料</p></li> <li><p>Eventual Consistency: 只保證最後執行完畢的資料會是正確的</p></li></ul> <h3>Quorum System</h3> <p>實例情境</p> <ul><li>商城限量開賣一款筆電限購「100台」</li> <li>客戶很多（C1、C2、C3…Cn）在同一時間湧進來搶購</li> <li>為了快速處理，商城把這個「庫存數量」存在於 <strong>3 個伺服器（R1、R2、R3）</strong> 上，形成一個「分散式系統」</li></ul> <br/> <h3>DB Lock</h3> <p>每次有人要搶購時，先「鎖住所有伺服器」，等操作結束後再開放。能保證正確（強一致性）但是非常慢、任一台伺服器壞掉，整個系統卡死。</p> <ul><li>客戶 A 說我要買 → 鎖住 R1、R2、R3 → 扣庫存 → 解鎖</li> <li>客戶 B 必須等待 A 的操作完</li></ul> <h3>Quorum</h3> <ul><li>寫入：只要成功寫入 <strong>2 台（W = 2）</strong> 就算成功</li> <li>讀取：也從 <strong>2 台讀取（R = 2）</strong></li> <li>且滿足 R + W > 3，就能保證「交集」裡一定有最新的資訊</li></ul> <br/> <p>對應實際流程：</p> <ol><li><p>客戶 A 要買向 R1、R2 發出購買請求（扣除庫存 -1），系統只要有 2 台回應成功就算成功。</p></li> <li><p>客戶 B 要買向 R2、R3 發出購買請求，就算不同人問到不同伺服器，只要 <strong>總是至少問 2 台（R）</strong>，系統就可以找出正確的庫存數，避免「同時兩人都以為還有庫存」。</p></li></ol> <pre class="language-text"><!----><code class="language-text">庫存初始值：100
@@ -68,7 +68,7 @@ R5: 99</code><!----></pre> <h3>Anti-Entropy</h3> <p>或是用背景 process 會�
 			
 			<script>
 				{
-					__sveltekit_1s9ojq5 = {
+					__sveltekit_9luata = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -76,8 +76,8 @@ R5: 99</code><!----></pre> <h3>Anti-Entropy</h3> <p>或是用背景 process 會�
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DD8_YKRa.js"),
-						import("../_app/immutable/entry/app.CuBurHkz.js")
+						import("../_app/immutable/entry/start.DiPnB_qN.js"),
+						import("../_app/immutable/entry/app.BbNBF6SZ.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
