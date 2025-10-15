@@ -113,8 +113,8 @@ p{
 ul,
 ol {
 	text-align: left;
-	margin-top: 1.5em; /* 預設上方距離 */
-	margin-bottom: 0.75em; /* 下方較小 */
+	margin-top: 0.625em; /* 預設上方距離 */
+	margin-bottom: 3em;
 }
 
 h1 {
