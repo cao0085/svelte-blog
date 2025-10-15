@@ -6,13 +6,9 @@ subCategory: "開發筆記"
 tags: ["model", "UML", "ERD"]
 slug: "structurizr"
 ---
-###### [Structurizr](https://structurizr.com/)
+###### 請改用Figma桌面版本太好用了(2025/10/15更新)，[Example](https://github.com/cao0085/code-pattern/tree/main/structurizr)，[Structurizr](https://structurizr.com/)
 
 ---
-
-[File](https://github.com/cao0085/code-pattern/tree/main/structurizr)
-<br>
-
 
 ### docker-compose.yml
 

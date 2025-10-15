@@ -6,21 +6,24 @@ subCategory: "開發筆記"
 tags: ["pdf", "js", "dom"]
 slug: "jsPDF"
 ---
-###### 紀錄下載影像相關處理
+###### 紀錄下載影像相關處理 [相關程式碼](https://github.com/cao0085/code-pattern/tree/main/fronted-pdf-download)
+
 
 ---
 
-### 畫面截圖（html2canvas、dom-to-image…）
+### 畫面截圖類型（html2canvas、dom-to-image…）
 
 原理大多是用`document.query(ID / class)`抓取指定的`DOM`，在套件內**模擬**JS排版樣式引擎(所以可能會跑版)，繪圖在 HTML` <canvas> `Element 後再轉成 base64/Blob 格式輸出。
 
 要注意的是瀏覽器對於能當作繪製`<canvas>`的來源控管較為嚴格，例如在瀏覽器渲染的 img 來源可以使用，套件內被擋下來的問題，再來就是錯誤是發生在套件內部不好除錯。
 
+<br>
+
 ### 向量型（jsPDF、pdf-lib…）
 
 用程式碼直接描述格線、文字 ，也可以插入圖片當作背景。要注意的一樣是外部來源的合法(圖片、字體)，圖片可先在.js 轉換成 base64 當作來源給套件使用，減少套件內轉換失敗的風險。
 
-### jsPDF
+#### jsPDF
 
 添加字體方式有兩種方式讀取.ttf和.js，一樣讓套件讀取處理過的資源部屬比較穩定
 
@@ -87,4 +90,3 @@ const pdfUrl = URL.createObjectURL(blob); // 可插入 DOM
 pdfDoc.save("fileName.pdf")
 ```
 
-[相關程式碼](https://github.com/cao0085/code-pattern/tree/main/fronted-pdf-download)

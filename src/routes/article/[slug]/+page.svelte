@@ -45,36 +45,49 @@
   }
 
   .article-body {
-    font-family: "Roboto", "Arial", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+    line-height: 1.8;
   }
 
   :global(.article-body hr) {
-    border-color: rgb(148, 148, 148);
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 10px 0 20px 0;
   }
+
   :global(.article-body h2) {
-    font-size: 1.75rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 2.5em 0 1.25em 0;
+    padding-bottom: 0.625em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   :global(.article-body h6) {
-    font-size: 1rem;
-    color: rgb(61, 61, 60);
-    margin-top: 0.75rem;
-    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #666;
+    margin: 10px 0;
   }
 
   :global(.article-body p) {
-    margin: 8px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.8;
+    margin-bottom: 15px;
   }
 
-  :global(.article-body ul) {
-    margin: 8px;
+  :global(.article-body ul),
+  :global(.article-body ol) {
+    margin: 15px 0 15px 25px;
+    font-weight: 400;
   }
 
   :global(.article-body li) {
-    font-size: 0.95rem;
-    margin: 8px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.8;
+    margin-bottom: 10px;
   }
 
   :global(.article-body pre) {

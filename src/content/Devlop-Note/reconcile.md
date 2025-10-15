@@ -1,5 +1,5 @@
 ---
-title: "金流對帳檔案處理"
+title: "會計對帳檔案處理"
 date: "2025-09-30"
 category: "software"
 subCategory: "開發筆記"
@@ -10,12 +10,18 @@ slug: "reconcile"
 
 ---
 
-一般來說是每日定時觸發該任務，所以難點是當系統異常或金流商未提供檔案時，人工介入後可以怎麼處理、減少重試的成本。
+通常為每日定時執行的自動化流程,但實務上常面臨以下異常狀況:
+- 系統異常(網路中斷、伺服器故障)
+- 金流商未按時提供檔案
+- 資料格式錯誤或不完整
 
-### 取得金流商靜態檔案
+若每次異常都從頭重跑整個流程,會造成大量的資源浪費。因此需要設計重試節點(Checkpoint),讓人工介入後可以從中斷點繼續執行,而非全部重來。
 
-從邏輯異常的話表示沒有寫入本地端，重試就從 ERROR LOG 去找參數直接重試可以了。
+<br>
 
+### 1. 取得金流商靜態檔案
+
+發生異常的話表示沒有寫入本地端，重試點就從 ERROR LOG 去找該參數直接重試可以了。
 ```csharp
 /// <summary>
 /// 取得遠端檔案
@@ -82,10 +88,9 @@ public async Task<List<string>> DownloadRemoteFileAsync(string connectionJsonStr
 }
 ```
 
-### 下載資料取得有效資料
+### 2. 寫入資料到記憶體暫存
 
-很單純直接檢查該路徑檔案+重試
-
+很單純直接檢查該路徑檔案存在與否+重試
 ```csharp
 public async Task<List<string>> ReadFileAndGetValidLines(string path)
 {
@@ -96,7 +101,7 @@ public async Task<List<string>> ReadFileAndGetValidLines(string path)
 }
 ```
 
-### 解析檔案 & 儲存
+### 3. 解析檔案 & 儲存
 
 主要是解析、分類檔案，其中出現異常就Catch住保留原始資料，等待人工檢閱
 重試的斷點就是把這批資料回丟這個 function 去處理
@@ -166,7 +171,7 @@ public async Task SaveRawDataToFile(string savedPath, string fileName, string []
 }
 ```
 
-### 提供檢閱好的靜態檔案給外部
+### 4. 若還須提供靜態檔案給外部
 
 在記錄對帳的表單欄位添加以下屬性，把資料庫當作SSOT
 並且把 產出檔案 => 資料更新 包在同一個 Transaction

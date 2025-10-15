@@ -1,12 +1,12 @@
 ---
-title: "XLSL Excel"
+title: "XLSL Excel 套件"
 date: "2025-06-22"
 category: "software"
 subCategory: "開發筆記"
 tags: ["XLSL", "js", "Excel"]
 slug: "xlsx_excel"
 ---
-###### [xlsx 0.14.1](https://www.npmjs.com/package/xlsx/v/0.14.1?activeTab=readme)
+###### 紀錄一下套件用法和邏輯，[xlsx 0.14.1](https://www.npmjs.com/package/xlsx/v/0.14.1?activeTab=readme)
 
 ---
 
@@ -80,8 +80,6 @@ XLSX.utils.decode_range('A1:A3')
 
 - 假設有一筆一對多的資料列
 - 分割/合併儲存格的方式在EXCEL上呈現
-
-<br>
 
 先處理資料結構
 

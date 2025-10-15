@@ -1,39 +1,31 @@
 ---
-title: "POS機金流處理"
+title: "POS機台金流串接處理"
 date: "2025-06-22"
 category: "software"
 subCategory: "開發筆記"
 tags: ["金流", "backend", "payment"]
 slug: "cashflow"
 ---
-###### POS機金流商串接流程
+###### [相關程式碼範例](https://github.com/cao0085/code-pattern/tree/main/cashflow)
 
 ---
 
-[相關程式碼](https://github.com/cao0085/code-pattern/tree/main/cashflow)
-
 ### 實踐重點
 
-- **交易一致性**：更新多張表時務必使用 Transaction。  
-- **完整留痕**：Request/Response 原文（或至少摘要＋關鍵欄位）存檔，方便日後對帳與疑難排解。  
-- **Idempotency**：以自家訂單編號（orderId）做遞送重試時的唯一索引，避免重複請款/退款。  
-- **錯誤碼映射表**：將 PP 的 ReturnCode 對應到自家錯誤碼與訊息，集中管理。  
-- **人工介入流程**：人工處理的狀況，要有後台工具或警示流程。  
-- **查詢補償機制**：定時 Job/手動工具執行 Query，同步漏單、退款差額。
+- 交易一致性：更新多張表時務必使用 Transaction
+- 完整留痕：Request/Response 重要欄位存檔，方便日後錯誤處理
+- 編號唯一：重試時的唯一索引，避免重複請款/退款。  
+- 錯誤碼映射表：將各家金流商的 ReturnCode Mapping 集中管理。  
+- 人工介入流程：定義特殊處理的狀況，要有後台工具或警示流程。  
+- 查詢補償機制：定時 Job/手動工具執行 Query，同步漏單、退款差額。
 
-### 主要流程
-
-`Request => Pre-commit / record original state => Response Logging => State Machine => Commit`
-
-`*** pp = Payment Provider`
-
-### 發送交易 / 退款
+` 主要流程: Request => Pre-commit / record original state => Response Logging => State Machine => Commit`
 
 ### HTTP Request Skeleton
 
 - 依 PP 文件將必要 Header（例如 ChannelId / Secret…）與 Body JSON 組起來。  
 - 這層邏輯最好抽成共用：`GenerateProviderRequest(method, url, envConfig)`。  
-- 若有簽章/加密，放在這層集中處理（本案沒有，就預留 Hook）。
+- 若有簽章/加密，放在這層集中處理
 
 ```csharp
 var req = new HttpRequestMessage(HttpMethod.Post, fullUrl);
@@ -78,11 +70,9 @@ return Response;
 
 <br>
 
-### 查詢交易狀態
+### 補查詢交易狀態
 
-若在發送請求時遇到網路異常、非預期回應，通常會用查詢確認金流商最新狀態，把金流商回應的狀態和自家資料庫比對/修改。
-
-這邊可以根據自己的需求定義成純查詢/查詢必定同步更新等等。
+若在發送請求時遇到網路異常、非預期回應，通常會用查詢確認金流商最新狀態，把金流商回應的狀態和自家資料庫比對/修改。這邊可以根據需求定義成純查詢/查詢後必定同步更新等等。
 
 <br>
 
@@ -98,4 +88,4 @@ return Response;
     -可變成: 退款、退款失敗
     -不可變成: 付款待確認、付款失敗、付款取消
 
-...
+等等...
