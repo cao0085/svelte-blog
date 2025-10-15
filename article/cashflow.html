@@ -5,30 +5,30 @@
 		<link rel="icon" href="../favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		
-		<link href="../_app/immutable/assets/0.BduBPsYz.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
-		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.C90_pPfV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DmKrRu43.js">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.B-mVn9nx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COWFa-wQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CaC1Krpq.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DN4g3216.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.Bg7HXQff.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BmiGZ8-K.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DmQb1gwr.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.sxIeJ5RO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BFQL34oP.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CqSAoTFj.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BiFzZ6BT.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Bd846Nh9.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DPMIOPX_.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.CtBbnhLD.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D4VDoLV7.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BymuK4UM.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">POS機金流處理</h1> <p class="svelte-1l2p5et">2025-06-22</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>POS機金流商串接流程</h6> <hr/> <p><a href="https://github.com/cao0085/code-pattern/tree/main/cashflow" rel="nofollow">相關程式碼</a></p> <h3>實踐重點</h3> <ul><li><strong>交易一致性</strong>：更新多張表時務必使用 Transaction。</li> <li><strong>完整留痕</strong>：Request/Response 原文（或至少摘要＋關鍵欄位）存檔，方便日後對帳與疑難排解。</li> <li><strong>Idempotency</strong>：以自家訂單編號（orderId）做遞送重試時的唯一索引，避免重複請款/退款。</li> <li><strong>錯誤碼映射表</strong>：將 PP 的 ReturnCode 對應到自家錯誤碼與訊息，集中管理。</li> <li><strong>人工介入流程</strong>：人工處理的狀況，要有後台工具或警示流程。</li> <li><strong>查詢補償機制</strong>：定時 Job/手動工具執行 Query，同步漏單、退款差額。</li></ul> <h3>主要流程</h3> <p><code>Request => Pre-commit / record original state => Response Logging => State Machine => Commit</code></p> <p><code>*** pp = Payment Provider</code></p> <h3>發送交易 / 退款</h3> <h3>HTTP Request Skeleton</h3> <ul><li>依 PP 文件將必要 Header（例如 ChannelId / Secret…）與 Body JSON 組起來。</li> <li>這層邏輯最好抽成共用：<code>GenerateProviderRequest(method, url, envConfig)</code>。</li> <li>若有簽章/加密，放在這層集中處理（本案沒有，就預留 Hook）。</li></ul> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> req <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">HttpRequestMessage</span><span class="token punctuation">(</span>HttpMethod<span class="token punctuation">.</span>Post<span class="token punctuation">,</span> fullUrl<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">POS機台金流串接處理</h1> <p class="svelte-mdkbyj">2025-06-22</p></div> <section class="article-body svelte-mdkbyj"><!----><h6><a href="https://github.com/cao0085/code-pattern/tree/main/cashflow" rel="nofollow">相關程式碼範例</a></h6> <hr/> <h3>實踐重點</h3> <ul><li>交易一致性：更新多張表時務必使用 Transaction</li> <li>完整留痕：Request/Response 重要欄位存檔，方便日後錯誤處理</li> <li>編號唯一：重試時的唯一索引，避免重複請款/退款。</li> <li>錯誤碼映射表：將各家金流商的 ReturnCode Mapping 集中管理。</li> <li>人工介入流程：定義特殊處理的狀況，要有後台工具或警示流程。</li> <li>查詢補償機制：定時 Job/手動工具執行 Query，同步漏單、退款差額。</li></ul> <p><code>主要流程: Request => Pre-commit / record original state => Response Logging => State Machine => Commit</code></p> <h3>HTTP Request Skeleton</h3> <ul><li>依 PP 文件將必要 Header（例如 ChannelId / Secret…）與 Body JSON 組起來。</li> <li>這層邏輯最好抽成共用：<code>GenerateProviderRequest(method, url, envConfig)</code>。</li> <li>若有簽章/加密，放在這層集中處理</li></ul> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> req <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">HttpRequestMessage</span><span class="token punctuation">(</span>HttpMethod<span class="token punctuation">.</span>Post<span class="token punctuation">,</span> fullUrl<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token operator">></span> req<span class="token punctuation">.</span>Headers<span class="token punctuation">.</span><span class="token function">TryAddWithoutValidation</span><span class="token punctuation">(</span><span class="token string">"X-Provider-Id"</span><span class="token punctuation">,</span> env<span class="token punctuation">.</span>ChannelId<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token operator">></span> req<span class="token punctuation">.</span>Headers<span class="token punctuation">.</span><span class="token function">TryAddWithoutValidation</span><span class="token punctuation">(</span><span class="token string">"X-Provider-Secret"</span><span class="token punctuation">,</span> env<span class="token punctuation">.</span>Secret<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token operator">></span> req<span class="token punctuation">.</span>Content <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StringContent</span><span class="token punctuation">(</span>bodyJson<span class="token punctuation">,</span> Encoding<span class="token punctuation">.</span>UTF8<span class="token punctuation">,</span> <span class="token string">"application/json"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Pre-commit</h3> <p>先在自家 DB 建立一筆「金流交易主檔（含交易序號、金額、初始狀態等），<code>Commit()</code> 後再呼叫 PP，若網路或對方故障，你仍有一筆記錄可查，方便後續查詢/補單/人工處理。</p> <pre class="language-csharp"><!----><code class="language-csharp">db<span class="token punctuation">.</span><span class="token function">SaveChanges</span><span class="token punctuation">(</span>payInfo<span class="token punctuation">)</span></code><!----></pre> <h3>SendRequest</h3> <p><code>SendRequestAsync(req)</code> 後，先檢查是否為預期內的回應(成功/失敗…)，記錄 Log（含狀態碼與錯誤訊息）</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">HttpClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -41,15 +41,15 @@
 <span class="token punctuation">&#125;</span>
 <span class="token keyword">await</span> db<span class="token punctuation">.</span><span class="token function">SaveChangesAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">await</span> transaction<span class="token punctuation">.</span><span class="token function">CommitAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">return</span> Response<span class="token punctuation">;</span></code><!----></pre> <br/> <h3>查詢交易狀態</h3> <p>若在發送請求時遇到網路異常、非預期回應，通常會用查詢確認金流商最新狀態，把金流商回應的狀態和自家資料庫比對/修改。</p> <p>這邊可以根據自己的需求定義成純查詢/查詢必定同步更新等等。</p> <br/> <h3>Finite State Machine</h3> <p>金流處理也適合導入有限狀態機的概念，因為資料變更會是有條件的例如</p> <ul><li><p>付款待確認
+<span class="token keyword">return</span> Response<span class="token punctuation">;</span></code><!----></pre> <br/> <h3>補查詢交易狀態</h3> <p>若在發送請求時遇到網路異常、非預期回應，通常會用查詢確認金流商最新狀態，把金流商回應的狀態和自家資料庫比對/修改。這邊可以根據需求定義成純查詢/查詢後必定同步更新等等。</p> <br/> <h3>Finite State Machine</h3> <p>金流處理也適合導入有限狀態機的概念，因為資料變更會是有條件的例如</p> <ul><li><p>付款待確認
 -可變成: 付款成功、付款失敗、付款取消
 -不可變成: 退款、退款失敗</p></li> <li><p>付款成功
 -可變成: 退款、退款失敗
--不可變成: 付款待確認、付款失敗、付款取消</p></li></ul> <p>…</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+-不可變成: 付款待確認、付款失敗、付款取消</p></li></ul> <p>等等…</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_1ctgvvj = {
+					__sveltekit_lm2tf5 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -57,8 +57,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.C90_pPfV.js"),
-						import("../_app/immutable/entry/app.Bg7HXQff.js")
+						import("../_app/immutable/entry/start.B-mVn9nx.js"),
+						import("../_app/immutable/entry/app.BmiGZ8-K.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

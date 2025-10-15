@@ -5,34 +5,34 @@
 		<link rel="icon" href="../favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		
-		<link href="../_app/immutable/assets/0.BduBPsYz.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
-		<link href="../_app/immutable/assets/4.DwwtVzUN.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.C90_pPfV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DmKrRu43.js">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.B-mVn9nx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COWFa-wQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CaC1Krpq.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DN4g3216.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.Bg7HXQff.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BmiGZ8-K.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DmQb1gwr.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.sxIeJ5RO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BFQL34oP.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CqSAoTFj.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BiFzZ6BT.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Bd846Nh9.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DPMIOPX_.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.CtBbnhLD.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D4VDoLV7.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BymuK4UM.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-1l2p5et"><h1 class="svelte-1l2p5et">2025 軟體開發小結</h1> <p class="svelte-1l2p5et">2025-10-30</p></div> <section class="article-body svelte-1l2p5et"><!----><h6>小結一下今年所學</h6> <hr/> <h3>虛/實物件&amp;事件</h3> <p>這是在閱讀 Domain-Driven Design 後被啟發的，DDD 內強調真實事件、模型設計與邊界的重要性。</p> <p>拿發票當作範例，從財政部角度來看發票只有【未開立】【已開立】【已作廢】，這時資料紀錄很單純。</p> <p>接著延伸到【發票作廢】，在紙本發票時代，必需拿回該張 <strong>實體發票</strong> 並在時限內繳回才算作廢成功，流程會是【消費者繳回 - 申報表註記 - 財政部接收】同時也可以敘述成:</p> <ol><li>消費者繳回 = 雙方同意取消這筆交易</li> <li>申報表內作廢 = 公司內部皆同意此流程</li> <li>財政部接收 = 流程結束</li></ol> <p>若要數位化流程，就會有新問題需要解決：</p> <ul><li>雙方無法拿 <strong>實體發票</strong> 當做 <strong>同意作廢</strong> 的契約依據</li> <li>客服作業疏失，公司內部電子設備異常 (伺服器、網路…)</li> <li>財政部接收到資料，還需核可成功與否等等</li></ul> <br/> <p>為了讓我們知道處理進度，狀態設計變複雜了：</p> <ul><li><p>消費者層(產出作廢證明 → 消費者簽名同意)</p></li> <li><p>公司內部層(客服確認 → 會計人員確認 → 報表註記)</p></li> <li><p>政府層(上傳財政部平台 → 財政部檢查 → 核可作廢)</p></li></ul> <br/> <p>這時有些人會在同一張表單去紀錄狀態，但維持主表的原狀態（未開立/已開立/已作廢），再延伸一張 <strong>子表</strong> 用來記錄流程狀態也是一個方案，因為對財政部來說還是只有「未開立/發票已開立(可兌獎)/發票已作廢」(實)，其餘都是行政作業流程(虛)。</p> <p><code>例如:狀態編碼（State1~9），例如當 State = 9（財政部核可完成）時去同步更新主表狀態為「已作廢」。</code></p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">2025 軟體開發</h1> <p class="svelte-mdkbyj">2025-10-30</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>寫業務邏輯為重的情況下，只要關鍵字抓對有 AI 幫忙技術上都不會有問題，這邊小結一下今年所學概念。</h6> <hr/> <h3>虛實物件與事件</h3> <p>拿發票當作舉例，它應只有【未開立】【已開立】【已折讓】【已作廢】四種狀態可以描述，再延伸到【發票作廢】這件事，在紙本發票時代流程是需拿著 <strong>實體發票</strong> ，並在時限內繳回給政府；另一個視角是可以根據 <strong>實體發票</strong> 在各單位間的流轉狀態來追蹤進度:</p> <ol><li>發票在買方手上 = 交易尚未取消</li> <li>發票已繳回賣方 = 雙方同意作廢,賣方可進行申報</li> <li>發票隨申報表送出 = 已向稅務機關申報作廢</li> <li>稅務機關已收存 = 作廢流程完成</li></ol> <p>若要電子化流程就失去了 <strong>實體流轉</strong>，且會衍伸出以下狀態節點：</p> <ol><li>取得作廢同意 : 客服受理 → 買方線上簽名 → 系統記錄同意時間</li> <li>內部審核流程 : 客服定時確認 → 會計核對 → 系統註記審核結果</li> <li>政府申報追蹤 : 上傳平台 → 系統驗證 → 定期查詢核准狀態</li> <li>政府與否核可 : 流程結束 → 系統紀錄</li></ol> <p>狀態設計會變得複雜許多，且系統必須明確記錄當前進度。這時若能清楚分離「實體狀態」與「流程狀態」，就可以在系統上實踐成:</p> <ul><li>主表: 記錄發票的實體狀態(未開立/已開立/已折讓/已作廢) ← 對應稅務規定</li> <li>子表: 記錄作廢流程狀態(State 1~9) ← 對應流程 <ul><li>State 1~4: 內部審核流程(受理、簽名、核對…)</li> <li>State 5~8: 與財政部往來(上傳、驗證、查詢…)</li> <li>State 9: 財政部核准完成 → 觸發同步,更新主表為「已作廢」</li></ul></li></ul> <p>這樣能保持主表的簡潔性，且在不影響其他現有流程下；又能完整追蹤內部進度，這是在閱讀 Domain-Driven Design 後得到的啟發，在任何需要業務邏輯的系統應該都用得上。</p> <br/> <h3>彈性與異常處理</h3> <p>當新項目開發到一半時，發現必須更改舊有程式碼，否則資料吃進來會有 0.02% 內重複紀錄，那我是要:</p> <ol><li>花費一個月，更改舊有程式碼符合讓資料記錄完全正確</li> <li>花費五個工作天，額外寫流程去定時處理資料去做重</li></ol> <p>在市場上品質好、價格低與供貨穩定性是不可能同時兼具，在軟體工程上也是如此，所以寫程式碼時必須放下想要面面俱到的歹念，舉例來說不同情境可能會是:</p> <ul><li><p>金流系統 - 消費者付款</p> <ul><li>牽連到商譽(金流商、顧客) 採第一種方法犧牲效能，確保三方資料一致姓</li></ul></li> <li><p>記帳系統 - 比對外部與內部帳務</p> <ul><li>採第二種犧牲即時性，但開發起來比較快、可讀/變性高、減少測試成本</li></ul></li></ul> <p>所以只要能明確定位「異常」和如何後續處理，那它就成為可控的預期行為而非實務錯誤，再根據風險等級來設計容錯策略，不必都追求零錯誤的系統設計。</p> <br/> <h3>效能提升</h3> <p>初寫程式都會被效能兩個字阻礙，會想要用最適合的語法和資料結構，像是糾結<code>Array vs Set</code> 誰查找更快、React 元件要不要包<code>memo()</code>、<code>state &amp; debounce</code> 等等。</p> <p>但其實因為是寫高階語言甚至框架，這些優化是讓程式從 80 分到 88 分沒很痛癢的提升，維護性和可讀性往往會更重要。像是我宣告用 <code>Array</code> 不用 <code>List</code> 是防止不小心添加元素；資料整理成 <code>Map</code> 而不寫 <code>list.find().container</code> 是為了好閱讀，選擇這些語法的考量點變成是「清楚表達意圖」。</p> <p>而想實際上有感的提升效能,該思考的是架構與資源分配</p> <ul><li>後端伺服器、資料庫整理這批資料，誰更有效率?</li> <li>現代瀏覽器性能好，資料暫存就由客戶端保留</li> <li>直接找更適合的套件使用</li> <li>花兩個月優化程式碼效能,是不是買張卡插在伺服器主機上</li></ul> <p>以上感想來自這部影片<a href="https://youtu.be/HnwJZjEhrf8" rel="nofollow">細節不決定成敗</a>，以及幾次自己瞎忙的經驗。簡單來說我們是<strong>工程人員</strong>而非研發人員，職責是選擇並善用現有的成熟工具，而不是糾結3ms的效能提升。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_1ctgvvj = {
+					__sveltekit_lm2tf5 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -40,8 +40,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.C90_pPfV.js"),
-						import("../_app/immutable/entry/app.Bg7HXQff.js")
+						import("../_app/immutable/entry/start.B-mVn9nx.js"),
+						import("../_app/immutable/entry/app.BmiGZ8-K.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
