@@ -2,7 +2,7 @@
 title: "Http 加密"
 date: "2025-09-23"
 category: "software"
-subCategory: "Http"
+subCategory: "Internet"
 tags: ["Http", "tcp", "backend"]
 slug: "http_secretKey"
 ---

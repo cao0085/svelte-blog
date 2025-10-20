@@ -1,15 +1,15 @@
 ---
-title: "Basic"
+title: "Angular Basic"
 date: "2025-06-22"
 category: "software"
-subCategory: "Angular18"
+subCategory: "Frontend"
 tags: ["fronted", "angular", "layout"]
 slug: "angular_basic"
 ---
-###### 參考這個[專案範本](https://github.com/mbejda/AngularFire-Starter-Template)、官方文件學習
+###### 參考這個[專案範本](https://github.com/mbejda/AngularFire-Starter-Template) 、[練習Repository](https://github.com/cao0085/angular-18)、官方文件學習
 
 ---
-[練習Repository](https://github.com/cao0085/angular-18)
+
 
 ```shell
 ng generate component hello-world

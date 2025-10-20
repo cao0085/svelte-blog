@@ -1,18 +1,20 @@
 ---
 title: "Finite-State Machine"
-date: "2025-06-22"
+date: "2025-06-30"
 category: "software"
 subCategory: "Backend"
 tags: ["FSM", "backend", "markdown"]
 slug: "FSM"
 ---
-###### 導入類比電路的概念來實作，用金流串接當作範例
+###### FSM 這是一種類比電路常見的概念，用金流常見的狀態模擬看看。
 
 ---
 
 ### 核心概念
 
-狀態是封閉集合：Pending / Paid / Failed / RefundPending / Refunded。事件（Trigger）是唯一入口：只有明確的事件才能讓狀態改變。
+狀態是封閉集合其一：Pending / Paid / Failed / RefundPending / Refunded。
+
+事件是唯一入口：只有明確的事件才能讓狀態改變。
 
 ```csharp
 // 狀態（State）

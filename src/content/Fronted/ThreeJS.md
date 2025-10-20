@@ -4,7 +4,7 @@ date: "2025-08-13"
 category: "software"
 subCategory: "Frontend"
 tags: ["css", "fronted", "web"]
-slug: "css"
+slug: "threeJs"
 ---
 ###### [U.S. Web Design System](https://designsystem.digital.gov/)
 

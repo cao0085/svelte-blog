@@ -1,8 +1,8 @@
 ---
-title: "Value Control"
+title: "Angular Value Control"
 date: "2025-06-22"
 category: "software"
-subCategory: "Angular18"
+subCategory: "Frontend"
 tags: ["fronted", "angular", "value"]
 slug: "angular_value"
 ---

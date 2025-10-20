@@ -1,8 +1,8 @@
 ---
-title: "Basic"
-date: "2025-06-22"
+title: "Domain-Driven - Basic"
+date: "2025-06-21"
 category: "software"
-subCategory: "Domain-Driven Design"
+subCategory: "Backend"
 tags: ["DDD", "backend", "design"]
 slug: "ddd_layer"
 ---

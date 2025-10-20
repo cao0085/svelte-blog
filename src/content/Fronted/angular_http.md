@@ -1,8 +1,8 @@
 ---
-title: "Http Observable"
+title: "Angular Http Observable"
 date: "2025-06-22"
 category: "software"
-subCategory: "Angular18"
+subCategory: "Frontend"
 tags: ["http", "angular", "api"]
 slug: "angular_http_observable"
 ---

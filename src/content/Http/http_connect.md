@@ -2,7 +2,7 @@
 title: "Http Connect"
 date: "2025-09-03"
 category: "software"
-subCategory: "Http"
+subCategory: "Internet"
 tags: ["Http", "tcp", "backend"]
 slug: "http_connect"
 ---

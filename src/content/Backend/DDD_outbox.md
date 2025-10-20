@@ -1,8 +1,8 @@
 ---
-title: "Outbox Message"
+title: "Domain-Driven - Outbox Message"
 date: "2025-06-23"
 category: "software"
-subCategory: "Domain-Driven Design"
+subCategory: "Backend"
 tags: ["DDD", "backend", "design"]
 slug: "ddd_outbox"
 ---

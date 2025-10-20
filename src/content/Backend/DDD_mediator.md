@@ -1,8 +1,8 @@
 ---
-title: "Mediator"
+title: "Domain-Driven - Mediator"
 date: "2025-06-22"
 category: "software"
-subCategory: "Domain-Driven Design"
+subCategory: "Backend"
 tags: ["DDD", "backend", "design"]
 slug: "ddd_mediator"
 ---

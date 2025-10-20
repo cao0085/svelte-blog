@@ -6,7 +6,7 @@ subCategory: "Backend"
 tags: ["Backgroud", "backend", "markdown"]
 slug: "backgroudservice"
 ---
-###### C#實作
+###### C#實作非立即性的服務排序
 
 ---
 
