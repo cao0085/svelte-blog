@@ -8,27 +8,27 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.B-mVn9nx.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/COWFa-wQ.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.Bd1-C6zb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BDgcA7-7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DN4g3216.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/smy7oK8t.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BmiGZ8-K.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CCiVQQWt.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.sxIeJ5RO.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BRYCuTr9.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BiFzZ6BT.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.Bd846Nh9.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xmhPVyN0.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.uqY18p7g.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D4VDoLV7.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.BymuK4UM.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/E12KXTb-.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.B-vq05xQ.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Base Backgroud Service</h1> <p class="svelte-mdkbyj">2025-09-25</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>C#實作</h6> <hr/> <h3>使用背景</h3> <p>當主程式的 DI 註冊週期是以 HTTP lifecycle 為主時，可藉由 Background Service 提供長期運行的服務容器。</p> <ol><li>非阻塞式處理：可由外部 API 觸發某些動作，立即回應用戶端而不等待處理完成</li> <li>解耦合設計：將耗時的業務邏輯從 HTTP 請求週期中分離出來</li> <li>簡易事件模式：作為一個輕量級的 Event pattern 實現，處理非即時性任務</li> <li>資源管理：避免長時間佔用 HTTP 連線資源，提升系統整體效能</li></ol> <h3>Channel 基礎原理</h3> <p>Channel 是 .NET Core 提供的 thread-safe 生產者-消費者模式實作，基於 System.Threading.Channels 命名空間。它解決了多執行緒環境下的資料傳遞問題。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> channel <span class="token operator">=</span> Channel<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">CreateUnbounded</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>YourRequestType<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Channel 包含兩個部分</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Base Backgroud Service</h1> <p class="svelte-mdkbyj">2025-09-25</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>C#實作非立即性的服務排序</h6> <hr/> <h3>使用背景</h3> <p>當主程式的 DI 註冊週期是以 HTTP lifecycle 為主時，可藉由 Background Service 提供長期運行的服務容器。</p> <ol><li>非阻塞式處理：可由外部 API 觸發某些動作，立即回應用戶端而不等待處理完成</li> <li>解耦合設計：將耗時的業務邏輯從 HTTP 請求週期中分離出來</li> <li>簡易事件模式：作為一個輕量級的 Event pattern 實現，處理非即時性任務</li> <li>資源管理：避免長時間佔用 HTTP 連線資源，提升系統整體效能</li></ol> <h3>Channel 基礎原理</h3> <p>Channel 是 .NET Core 提供的 thread-safe 生產者-消費者模式實作，基於 System.Threading.Channels 命名空間。它解決了多執行緒環境下的資料傳遞問題。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> channel <span class="token operator">=</span> Channel<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">CreateUnbounded</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>YourRequestType<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Channel 包含兩個部分</span>
 channel<span class="token punctuation">.</span>Writer <span class="token comment">// 用於寫入資料 (生產者) => Controller 需要寫入能力</span>
 channel<span class="token punctuation">.</span>Reader <span class="token comment">// 用於讀取資料 (消費者) => Background 需要讀取能力</span>
 
@@ -139,7 +139,7 @@ builder<span class="token punctuation">.</span>Services<span class="token punctu
 			
 			<script>
 				{
-					__sveltekit_lm2tf5 = {
+					__sveltekit_81d9q7 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -147,8 +147,8 @@ builder<span class="token punctuation">.</span>Services<span class="token punctu
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.B-mVn9nx.js"),
-						import("../_app/immutable/entry/app.BmiGZ8-K.js")
+						import("../_app/immutable/entry/start.Bd1-C6zb.js"),
+						import("../_app/immutable/entry/app.CCiVQQWt.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
