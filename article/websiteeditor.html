@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DIuYeOqr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DnIo0uY3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWT8ooJ1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BcjUnWKu.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.mjQKlQ16.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DzojXCdk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.suJF0LLN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B_7QhNcC.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.TpQz7o_H.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Website Editor</h1> <p class="svelte-mdkbyj">2025-10-30</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>基於 Electron 框架開發支援跨平台，實作一個本地端網站編輯器，解決靜態網站修改的問題</h6> <hr/> <p>當客戶想對靜態網站微調時，如果沒有維護雲端伺服器和資料庫，就無法提供後台系統給客戶使用，雖然在本地 Run Server + 修改文字檔案技術上不難，但對非技術人員來說心理門檻很高，所以往往還是會陷入「無法即時預覽 → 來回修改 → 直到一方妥協」，。</p> <p>以前覺得對免費仔來說是無解的問題，但有天上班開發 Windows C# 小程式突然想到：好像提供一套本地端應用程式模擬雲端後台，讓客戶可以在自己電腦上編輯和預覽網站也是個做法？</p> <h3>專案架構</h3> <p>用 Electron 他基於 Chromium 引擎和 Node.js 又可以跨平台，可以簡單理解為：</p> <ul><li>內建瀏覽器（Chromium）：負責渲染 UI 和即時預覽</li> <li>內建伺服器（Node.js）：處理檔案讀寫和本地服務</li></ul> <p>這個專案的核心目標是把使用門檻降低，目前編輯的部份用這樣設計：</p> <ol><li>資料層：所有可編輯的內容都存放在 <code>data.json</code> 中</li> <li>載入方式：專案就採用類似 i18n 多語系的方式，Import 載入.json文字</li> <li>編輯介面：提供視覺化的編輯頁面，讓客戶透過表單修改內容，而非直接編輯 JSON 檔案</li></ol> <p>簡單理解就是 <code>.json = Database</code> / <code>Import = Query Db API</code> / <code>編輯 = Update Db API</code></p> <h4>核心組件</h4> <p>專案用 Electron - WebContentsView + IPC 實踐多進程管理，技術有點複雜可以問 AI 比較好，但大概會如下</p> <pre class="language-text"><!----><code class="language-text">┌─────────────────────────────────────┐
+│         Main Window (BrowserWindow) │
+├──────────┬──────────┬───────────────┤
+│ Sidebar  │  Editor  │   Previewer   │
+│          │          │               │
+│ • 檔案樹 │ • 編輯器 │  • 即時預覽    │
+│ • 切換   │ • 內容   │  • 內建伺服器  │
+└──────────┴──────────┴───────────────┘</code><!----></pre> <p>然後我們的目標是讓，毫無相關的專案與此 Electron Editor 共用一份 data.json，這樣才可以修改、即時預覽和打包，所以將構建好的靜態網站專案放入指定目錄 <code>/Website</code> ，再去設定專案路徑和資料路徑
+，決定 Editor 的資料來源，這邊就要考慮備份返回機制，看是要 APP Run 時直接 COPY 一份靜態檔案等等…。</p> <pre class="language-json"><!----><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"webProject"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"projectPath"</span><span class="token operator">:</span> <span class="token string">"./webProject/xxxxx"</span><span class="token punctuation">,</span>
+    <span class="token property">"source"</span><span class="token operator">:</span> <span class="token string">"./webProject/xxxxx/public"</span><span class="token punctuation">,</span>
+    <span class="token property">"source2"</span><span class="token operator">:</span> <span class="token string">"./xxxxx"</span> <span class="token comment">//</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token property">"serverSettings"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"port"</span><span class="token operator">:</span> <span class="token number">3000</span><span class="token punctuation">,</span>
+    <span class="token property">"hotReload"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>再來就是根據客戶內的需求，寫出各個小應用，例如</p> <ul><li>A 客戶網站內有一張圖片當初是 800px*600px，那就寫一個裁切小工具讓他符合原始尺寸不跑版面</li> <li>B 客戶有音樂播放器的需求，需要轉檔或切片，那也就寫一套自動化幫他產出</li></ul> <p>總之就是去減少他們爆破網站的機率…，所以隨著時間可能會變成一個超級工具箱，根據不同客戶需求，來去決定打包輸出時的項目。</p> <pre class="language-javascript"><!----><code class="language-javascript"><span class="token keyword">const</span> <span class="token constant">WCV_DEFAULT_SETTING</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  panels<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">'sidebar'</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> type<span class="token operator">:</span> <span class="token string">'SIDEBAR'</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">'側邊欄'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token string">'editor-1'</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> type<span class="token operator">:</span> <span class="token string">'EDITOR'</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">'編輯器'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token string">'previewer-1'</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> type<span class="token operator">:</span> <span class="token string">'PREVIEWER'</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">'預覽1'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token comment">// 'image-1': &#123; type: 'uitity', name: '照片編輯' &#125;,</span>
+    <span class="token comment">// 'audio-1': &#123; type: 'uitity', name: '音樂檔編輯' &#125;,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  defaultView<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    layoutMode<span class="token operator">:</span> <span class="token string">'sidebar_with_main'</span><span class="token punctuation">,</span>
+    sidebar<span class="token operator">:</span> <span class="token string">'sidebar'</span><span class="token punctuation">,</span>
+    main<span class="token operator">:</span> <span class="token string">'editor-1'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>打包與部署</h3> <p>當編輯完成後，目前有想到二種</p> <ul><li>寫一個檔案匯出壓縮功能，請使用者回傳整包靜態檔案</li> <li>直接把 KEY 寫死在 APP，客戶端觸發自動化部屬</li></ul> <h3>小心得</h3> <p>因為未來是要 Mapping 給個專案使用，所以要保留很多可變動配置，整體開發下來滿複雜的，等實際上開始使用再過一次流程更新文章。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_b93i50 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DIuYeOqr.js"),
+						import("../_app/immutable/entry/app.BcjUnWKu.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DIuYeOqr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DnIo0uY3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWT8ooJ1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BcjUnWKu.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.mjQKlQ16.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DzojXCdk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.suJF0LLN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B_7QhNcC.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.TpQz7o_H.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Svelte Blog</h1> <p class="svelte-mdkbyj">2025-09-09</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>用 Svelte 做一個類似 Jekyll 的 Markdown 語法生成網站 (你正在閱讀的)，提供 <a href="https://github.com/cao0085/svelte-blog" rel="nofollow">Repository</a> 參考</h6> <hr/> <p>我第一個專案就是套 Jekyll + GitHub Pages 來部屬網站，這次有朋友推薦可以玩玩看 Svelte，決定拿來就架一個文章模板網站，也順手把 Blog 搬過來。</p> <h3>專案架構評估</h3> <p>有傳說搜尋引擎對於 HTML 文字和標記佔比較高的權重，所以推薦文字為主的網站使用靜態網站的形式，但傳統靜態網站的缺點是每次切換頁面都需要發送 HTTP 請求並重新渲染,浪費時間。</p> <p>而另一種主流 SPA (Single Page Application) 的優勢是首次載入後，後續切換頁面完全由 JavaScript 在記憶體中處理，缺點就是搜尋引擎可能只看到空白的 HTML 殼。</p> <p>要結合上述的優點就是要</p> <ul><li>首次訪問返回完整 HTML (SEO 友善 + 快速顯示)</li> <li>後續在站內切換文章，由使用端觸發 JavaScript 操作 (SPA 體驗)</li></ul> <p>需求聽起來矛盾，但是基本上就是預先準備好 N 份 JavaScript 一樣 + 不同文字的 HTML (SPA) 當作入口被訪問，常見名稱叫做【混合式渲染】<code>SSG（Static Site Generation）+ CSR（Client-Side Rendering）</code>。</p> <p>你現在可以打開開發者面板觀察，在站內切換文章是不會向外部發送網路請求的。</p> <h3>混合式渲染</h3> <p>在 Svelte 可以用 mdsvex 套件來實踐，他提供 run build 時把你指定的 模板 + .md 輸出成 HTML。整體流程如下:</p> <ol><li>構建時: 為<strong>每篇</strong>文章生成獨立的靜態 HTML，內含 Markdown 完整的文字內容</li> <li>首次訪問: 伺服器返回該路由的 HTML</li> <li>Hydration: Svelte runtime 載入後接管頁面</li> <li>文章切換: 用 JS 做虛擬路由切換，後續點擊文章連結變成客戶端導航</li></ol> <p>程式碼架構</p> <pre class="language-markdown"><!----><code class="language-markdown">src/routes/
+├── +layout.svelte              # 全局布局（Header）
+└── article/                    # 子路由目錄
+    ├── +layout.svelte          # 文章專用布局（側邊欄 + 內容區）
+    ├── +page.svelte            # /article 列表頁
+    └── [slug]/                 # 動態路由段落
+        ├── +page.svelte        # 文章內容頁（渲染組件）
+        └── +page.ts            # 預渲染配置</code><!----></pre> <p>.md 檔案根據程式邏輯寫一些變數屬性</p> <pre class="language-markdown"><!----><code class="language-markdown"><span class="token front-matter-block"><span class="token punctuation">---</span>
+<span class="token front-matter yaml language-yaml"><span class="token key atrule">title</span><span class="token punctuation">:</span> <span class="token string">"Render 範本"</span>
+<span class="token key atrule">date</span><span class="token punctuation">:</span> <span class="token string">"2025-06-22"</span>
+<span class="token key atrule">category</span><span class="token punctuation">:</span>
+<span class="token key atrule">subCategory</span><span class="token punctuation">:</span>
+<span class="token key atrule">tags</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"svelte"</span><span class="token punctuation">,</span> <span class="token string">"blog"</span><span class="token punctuation">,</span> <span class="token string">"markdown"</span><span class="token punctuation">]</span>
+<span class="token key atrule">slug</span><span class="token punctuation">:</span> <span class="token string">"example"</span></span>
+<span class="token punctuation">---</span></span>
+<span class="token title important">... ... ... ... 文章內容
+<span class="token punctuation">---</span></span></code><!----></pre> <pre class="language-markdown"><!----><code class="language-markdown">構建階段 (npm run build)
+  ↓
+掃描 src/content/*<span class="token italic"><span class="token punctuation">*</span><span class="token content">/</span><span class="token punctuation">*</span></span>.md
+  ↓
+提取每個 Markdown 的 metadata.slug
+  ↓
+生成對應的靜態 HTML 頁面
+  ↓
+輸出到 build/blog/&#123;slug&#125;.html</code><!----></pre> <p>也就是說構建(打包)時會：</p> <ol><li>從 <code>+page.ts</code> 的 <code>entries()</code> 函數取得所有文章的 slug 列表</li> <li>為每個 slug 預渲染一個靜態 HTML 檔案（例如：<code>build/blog/db_sql.html</code>）</li> <li>這些檔案路徑會要與 URL 路徑完全對應（<code>/article/db_sql</code> → <code>blog/db_sql.html</code>）</li></ol> <p>需要注意的就是路徑配置， run build 時的靜態檔案路徑；虛擬路由的路徑和攔截；部屬正式環境的 Domain 有沒有替換正確。</p> <h3>自動化流程</h3> <p>因為網站目前是單純的文字紀錄，所以設計成每次 Push 到 Master 就可以用 Github Action 自動執行程式碼，然後輸出檔案放在另一個分支。原理是推上 RP 時候會自動檢查 /.github/workflows 有無檔案並自動執行。</p> <ul><li>master (主程式碼)</li> <li>gh-pages (打包檔案)</li></ul> <p>根目錄配置 /.github/workflows/deploy.yml</p> <pre class="language-yml"><!----><code class="language-yml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy to GitHub Pages
+
+<span class="token key atrule">on</span><span class="token punctuation">:</span>
+  <span class="token key atrule">push</span><span class="token punctuation">:</span>
+    <span class="token key atrule">branches</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> master
+
+<span class="token key atrule">permissions</span><span class="token punctuation">:</span>
+  <span class="token key atrule">contents</span><span class="token punctuation">:</span> write  <span class="token comment"># ⬅加上這行，否則會 403 push error?</span>
+
+<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+  <span class="token key atrule">build-and-deploy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
+
+    <span class="token key atrule">steps</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Checkout repo
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/checkout@v3
+
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Setup Node
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> actions/setup<span class="token punctuation">-</span>node@v3
+        <span class="token key atrule">with</span><span class="token punctuation">:</span>
+          <span class="token key atrule">node-version</span><span class="token punctuation">:</span> <span class="token number">20</span>
+
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Install dependencies
+        <span class="token key atrule">run</span><span class="token punctuation">:</span> npm ci
+
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Build the site
+        <span class="token key atrule">run</span><span class="token punctuation">:</span>  npm run build
+        <span class="token key atrule">env</span><span class="token punctuation">:</span>
+          <span class="token key atrule">NODE_ENV</span><span class="token punctuation">:</span> production
+
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy to GitHub Pages
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> peaceiris/actions<span class="token punctuation">-</span>gh<span class="token punctuation">-</span>pages@v4
+        <span class="token key atrule">with</span><span class="token punctuation">:</span>
+          <span class="token key atrule">github_token</span><span class="token punctuation">:</span> $<span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> secrets.GITHUB_TOKEN <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span>
+          <span class="token key atrule">publish_dir</span><span class="token punctuation">:</span> ./build
+          <span class="token key atrule">publish_branch</span><span class="token punctuation">:</span> gh<span class="token punctuation">-</span>pages
+          <span class="token key atrule">cname</span><span class="token punctuation">:</span> blog.yoshikagehub.com</code><!----></pre> <h3>部屬</h3> <p>這邊就是設定 Github Pages 檔案來源指向分支 gh-pages ，然後去 Cloudflare 買好 Domain 在 Pages Setting 替換訪問路徑。</p> <p>還有另一個做法是在 Cloudflare 開一個入口，而資源指向 Repository 指定分支，Cloudflare 就會去讀取該檔案來源部屬，好處是 github rp 就不用公開了。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_b93i50 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DIuYeOqr.js"),
+						import("../_app/immutable/entry/app.BcjUnWKu.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

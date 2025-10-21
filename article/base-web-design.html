@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DIuYeOqr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DnIo0uY3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWT8ooJ1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BcjUnWKu.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.mjQKlQ16.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DzojXCdk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.suJF0LLN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B_7QhNcC.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.TpQz7o_H.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Website Previewer</h1> <p class="svelte-mdkbyj">2025-10-21</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>用 React + TypeScript + Vite 建立自己習慣的專案架構</h6> <hr/> <p>主要是每次要做新網站，都要重複安裝一些套件和狀態管理設計，所以決定設計成一個整合型範本專案。好處是這個專案可以一直留著當作母版範本持續優化，同時當需要正式部屬時開時，複製一份範本再刪掉不需要的 views 就能脫鉤成為全新的獨立專案。</p> <h3>專案架構</h3> <pre class="language-markdown"><!----><code class="language-markdown">src/
+├── App.tsx                      # 應用程式主入口
+├── routes.tsx                   # 路由配置
+├── main.tsx                     # React DOM 渲染入口
+├── components/                  # 共用元件
+│   └── MainLayout.tsx          # 主要布局元件
+├── views/                       # 頁面元件
+│   ├── index.tsx               # 首頁
+│   ├── category_1/             # 分類頁面 1
+│   ├── category_2/             # 分類頁面 2
+│   └── BrandPage/              # 品牌頁面
+│       ├── index.tsx           # 主頁面
+│       └── css/                # CSS 設計預覽
+│           └── design-preview.tsx
+├── store/                       # Redux 狀態管理
+│   ├── store.tsx               # Store 配置
+│   └── slices/                 # State Slices
+│       ├── userSlice.ts        # 使用者狀態
+│       ├── viewsSlice.ts       # 視圖狀態（主題等）
+│       ├── languageSlice.ts    # 語言狀態
+│       └── playerSlice.ts      # 播放器狀態
+├── i18n/                        # 國際化配置
+│   └── index.ts                # i18next 初始化
+├── api/                         # API 層
+│   └── baseAPI.ts              # 基礎 API 配置
+├── assets/                      # 靜態資源
+│   ├── svgIcon/                # SVG 圖標元件
+│   │   ├── Earth.tsx           # 地球圖標
+│   │   └── Pause.tsx           # 暫停圖標
+│   └── react.svg
+├── css/                         # 樣式檔案
+│   ├── theme.module.css        # 主題樣式（Design Tokens）
+│   └── views/                  # 頁面專用樣式
+│       └── HomePage.module.css
+└── constants/                   # 常數配置
+    └── env.ts                  # 環境變數</code><!----></pre> <p>簡單來說就是一套自己慣用的 Template 類似 <code>npm create xxxxx</code>，然後每個 view/page 視為一個專案有自己的 index + css + 共用靜態資源與 JS 程式碼。</p> <h3>程式碼實踐</h3> <p>紀錄一下套件使用</p> <p>Redux Toolkit 進行狀態管理</p> <pre class="language-typescript"><!----><code class="language-typescript"><span class="token comment">// store 配置範例</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token function">configureStore</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  reducer<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    user<span class="token operator">:</span> userReducer<span class="token punctuation">,</span>
+    views<span class="token operator">:</span> viewsReducer<span class="token punctuation">,</span>
+    language<span class="token operator">:</span> languageReducer<span class="token punctuation">,</span>
+    player<span class="token operator">:</span> playerReducer<span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>React Router v6 的巢狀路由結構，所有頁面都包裹在 <code>MainLayout</code> 中：</p> <pre class="language-markdown"><!----><code class="language-markdown">/                           # 首頁
+├── category_1              # 分類頁面 1（Mix）
+├── category_2              # 分類頁面 2
+├── BrandPage               # 品牌頁面
+├── BrandPage/css           # CSS 設計預覽頁面
+└── *                       # 404 導向首頁</code><!----></pre> <p>路由配置使用 <code>useRoutes</code> hook，提供更靈活的路由管理：</p> <pre class="language-typescript"><!----><code class="language-typescript"><span class="token keyword">const</span> element <span class="token operator">=</span> <span class="token function">useRoutes</span><span class="token punctuation">(</span>routes<span class="token punctuation">)</span></code><!----></pre> <p>實作動態主題切換功能，支援 light、dark 和 system 模式：</p> <ul><li>主題狀態儲存在 Redux store 的 <code>viewsSlice</code> 中</li> <li>使用 CSS Custom Properties（Design Tokens）管理主題變數</li> <li>透過 <code>data-theme</code> 屬性動態切換主題</li></ul> <pre class="language-typescript"><!----><code class="language-typescript"><span class="token comment">// 主題切換實作</span>
+<span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  document<span class="token punctuation">.</span>documentElement<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">'data-theme'</span><span class="token punctuation">,</span> theme<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>theme<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>整合 i18next 提供完整的國際化支援：</p> <ul><li>語系檔案放在 <code>public/language/</code> 目錄</li> <li>支援 <code>en</code>（英文）和 <code>zh</code>（中文）</li> <li>使用 <code>i18next-http-backend</code> 動態載入語系檔案</li> <li>透過 Redux 管理語系狀態</li></ul> <p>語系檔案結構：</p> <pre class="language-markdown"><!----><code class="language-markdown">public/language/
+├── en/
+│   └── translation.json
+└── zh/
+    └── translation.json</code><!----></pre> <p>使用 Axios 進行 API 請求：</p> <ul><li>基礎配置在 <code>src/api/baseAPI.ts</code></li> <li>支援環境變數配置（<code>src/constants/env.ts</code>）</li> <li>可擴展的 API 架構設計</li></ul> <p>使用 Vite 作為建置工具，提供以下指令：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token function">npm</span> run dev      <span class="token comment"># 啟動開發伺服器（HMR 支援）</span>
+<span class="token function">npm</span> run build    <span class="token comment"># TypeScript 編譯檢查 + 打包生產版本</span>
+<span class="token function">npm</span> run lint     <span class="token comment"># ESLint 程式碼檢查</span>
+<span class="token function">npm</span> run preview  <span class="token comment"># 預覽打包後的結果</span>
+<span class="token function">npm</span> run deploy   <span class="token comment"># 執行建置並部署（需要 deploy.sh）</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_b93i50 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DIuYeOqr.js"),
+						import("../_app/immutable/entry/app.BcjUnWKu.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
