@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.iPUO_Gfk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BW19KWoh.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cp8o8bXz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.S_sCbjV3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DgBpHZ8-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CfWrlAk8.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.C7HROjKx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/2BhAeOwA.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CGW8hvFA.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Nginx</h1> <p class="svelte-mdkbyj">2025-11-27</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>公司內部開發的時候用看看Nginx，就不用搬筆電跑來跑去</h6> <hr/> <p>可以這樣配置測試環境</p> <ol><li>本地先 run 一個要被訪問的 Server</li> <li>配置 nginx.conf，因為 nginx Server 是部屬在 docker，所以要使用 host.docker.internal</li> <li>docker run 一個 nginx container</li> <li>先測看看 localhost 不帶後贅是否可以連到預設的 nginx page</li> <li>再看不同裝置區網內連線可不可以(—ipConfig IPv4 位址)，能否連接到上述預設 page</li> <li>再測試反向代理是否轉發正確</li></ol> <pre class="language-dockerfile"><!----><code class="language-dockerfile"><span class="token comment"># Use the specific Ubuntu 22.04 image</span>
+<span class="token instruction"><span class="token keyword">FROM</span> ubuntu:22.04</span>
+<span class="token instruction"><span class="token keyword">RUN</span> apt-get update &amp;&amp; apt-get install -y nginx</span>
+<span class="token instruction"><span class="token keyword">EXPOSE</span> 80</span>
+<span class="token instruction"><span class="token keyword">COPY</span> nginx.conf /etc/nginx/nginx.conf</span>
+<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">"nginx"</span>, <span class="token string">"-g"</span>, <span class="token string">"daemon off;"</span>]</span></code><!----></pre> <pre class="language-bash"><!----><code class="language-bash"><span class="token function">docker</span> stop my-proxy
+<span class="token function">docker</span> <span class="token function">rm</span> my-proxy
+<span class="token function">docker</span> build <span class="token parameter variable">-t</span> my-nginx-proxy <span class="token builtin class-name">.</span>
+<span class="token function">docker</span> run <span class="token parameter variable">-d</span> <span class="token parameter variable">-p</span> <span class="token number">80</span>:80 <span class="token parameter variable">--name</span> my-proxy my-nginx-proxy</code><!----></pre> <p>nginx.conf (假設 Server 部署在 local4041 )</p> <pre class="language-conf"><!----><code class="language-conf">events &#123;
+    worker_connections 1024;
+&#125;
+
+http &#123;
+    server &#123;
+        listen 80;
+        server_name localhost;
+
+        # 1. 預設路徑：顯示 Nginx 歡迎頁面 (確認 Nginx 有在運作)
+        location / &#123;
+            root /var/www/html;
+            index index.html;
+            try_files $uri $uri/ =404;
+        &#125;
+
+        # 2. 反向代理：將 /services/tsg/ 的請求轉發到你本機的 4041 port
+        location /services/tsg/ &#123;
+            # host.docker.internal 是 Docker for Windows 專用的 DNS
+            proxy_pass http://host.docker.internal:4041/services/tsg/;
+            
+            # 設定一些 header 讓後端 server 知道請求的來源
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        &#125;
+    &#125;
+&#125;</code><!----></pre> <p>上面大概就是基礎的轉發功能，剩下的就是看專案當初的環境配置了，nginx 本身也可以 subdomain 配置，可以用來解決 cors 的問題。</p> <p>其餘可進階的配置</p> <ul><li>SPA (單頁應用) 路由設定</li> <li>靜態資源快取 (Browser Caching)</li> <li>Gzip 壓縮</li> <li>限制存取 (Access Control)</li> <li>SSL/TLS (https)</li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1dv1lw5 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.iPUO_Gfk.js"),
+						import("../_app/immutable/entry/app.S_sCbjV3.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
