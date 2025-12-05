@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DPVlgyPf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C9dELT_4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DimUOtpk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DrNMsNyx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.CDBoRajM.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DBze5YnY.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.7OnaU4Sl.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CISL6NAv.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.1c_pFEFO.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Android with Kotlin2.0</h1> <p class="svelte-mdkbyj">2025-10-12</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>第一次寫 Android APP : Kotlin2.0 + Jetpack Compose</h6> <hr/> <h3>環境配置</h3> <p>build.gradle.kts</p> <pre class="language-kotlin"><!----><code class="language-kotlin">    plugins <span class="token punctuation">&#123;</span>
+        <span class="token function">alias</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span>android<span class="token punctuation">.</span>application<span class="token punctuation">)</span>
+        <span class="token function">alias</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>plugins<span class="token punctuation">.</span>kotlin<span class="token punctuation">.</span>android<span class="token punctuation">)</span>
+        <span class="token function">id</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"org.jetbrains.kotlin.plugin.compose"</span></span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    android <span class="token punctuation">&#123;</span>
+        namespace <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"com.example.test_android"</span></span>
+        compileSdk <span class="token punctuation">&#123;</span>
+            version <span class="token operator">=</span> <span class="token function">release</span><span class="token punctuation">(</span><span class="token number">36</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span>
+
+        defaultConfig <span class="token punctuation">&#123;</span>
+            applicationId <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"com.example.test_android"</span></span>
+            minSdk <span class="token operator">=</span> <span class="token number">24</span>
+            targetSdk <span class="token operator">=</span> <span class="token number">36</span>
+            versionCode <span class="token operator">=</span> <span class="token number">1</span>
+            versionName <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"1.0"</span></span>
+
+            testInstrumentationRunner <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"androidx.test.runner.AndroidJUnitRunner"</span></span>
+        <span class="token punctuation">&#125;</span>
+
+        buildTypes <span class="token punctuation">&#123;</span>
+            release <span class="token punctuation">&#123;</span>
+                isMinifyEnabled <span class="token operator">=</span> <span class="token boolean">false</span>
+                <span class="token function">proguardFiles</span><span class="token punctuation">(</span>
+                    <span class="token function">getDefaultProguardFile</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"proguard-android-optimize.txt"</span></span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                    <span class="token string-literal singleline"><span class="token string">"proguard-rules.pro"</span></span>
+                <span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        compileOptions <span class="token punctuation">&#123;</span>
+            sourceCompatibility <span class="token operator">=</span> JavaVersion<span class="token punctuation">.</span>VERSION_11
+            targetCompatibility <span class="token operator">=</span> JavaVersion<span class="token punctuation">.</span>VERSION_11
+        <span class="token punctuation">&#125;</span>
+        kotlinOptions <span class="token punctuation">&#123;</span>
+            jvmTarget <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"11"</span></span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">//</span>
+        buildFeatures <span class="token punctuation">&#123;</span>
+            compose <span class="token operator">=</span> <span class="token boolean">true</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    dependencies <span class="token punctuation">&#123;</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>core<span class="token punctuation">.</span>ktx<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>appcompat<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>material<span class="token punctuation">)</span>
+
+        <span class="token function">implementation</span><span class="token punctuation">(</span><span class="token function">platform</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>bom<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>ui<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>graphics<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>tooling<span class="token punctuation">.</span>preview<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>material3<span class="token punctuation">)</span>
+        <span class="token function">debugImplementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>tooling<span class="token punctuation">)</span>
+        <span class="token function">debugImplementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>test<span class="token punctuation">.</span>manifest<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>activity<span class="token punctuation">.</span>compose<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>lifecycle<span class="token punctuation">.</span>viewmodel<span class="token punctuation">.</span>compose<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>lifecycle<span class="token punctuation">.</span>runtime<span class="token punctuation">.</span>ktx<span class="token punctuation">)</span>
+        <span class="token function">implementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>navigation<span class="token punctuation">.</span>compose<span class="token punctuation">)</span>
+
+        <span class="token function">testImplementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>junit<span class="token punctuation">)</span>
+        <span class="token function">androidTestImplementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>junit<span class="token punctuation">)</span>
+        <span class="token function">androidTestImplementation</span><span class="token punctuation">(</span>libs<span class="token punctuation">.</span>androidx<span class="token punctuation">.</span>espresso<span class="token punctuation">.</span>core<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-.toml"><!----><code class="language-.toml">[versions]
+agp = &quot;8.13.1&quot;
+kotlin = &quot;2.0.21&quot;
+coreKtx = &quot;1.10.1&quot;
+junit = &quot;4.13.2&quot;
+junitVersion = &quot;1.1.5&quot;
+espressoCore = &quot;3.5.1&quot;
+appcompat = &quot;1.6.1&quot;
+material = &quot;1.10.0&quot;
+
+# Jetpack Compose
+composeBom = &quot;2024.12.01&quot;
+activityCompose = &quot;1.9.3&quot;
+lifecycleViewmodelCompose = &quot;2.8.7&quot;
+lifecycleRuntimeKtx = &quot;2.8.7&quot;
+navigationCompose = &quot;2.8.6&quot;
+</code><!----></pre> <h3>入口設定</h3> <p>Android 會自己抓，AndroidManifest.xml 裡面的 Activity LAUNCHER 相關當作 APP 啟動的入口，然後根據開發模式設計成</p> <ul><li>Activity + Navigation 一個主視窗管理分頁</li> <li>多個 Activity</li></ul> <pre class="language-xml"><!----><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="utf-8"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>manifest</span> <span class="token attr-name"><span class="token namespace">xmlns:</span>android</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://schemas.android.com/apk/res/android<span class="token punctuation">"</span></span>
+    <span class="token attr-name"><span class="token namespace">xmlns:</span>tools</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://schemas.android.com/tools<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+
+    <span class="token comment">&lt;!-- 主執行緒 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>application</span> 
+        <span class="token attr-name"><span class="token namespace">android:</span>allowBackup</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">android:</span>dataExtractionRules</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>@xml/data_extraction_rules<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">android:</span>fullBackupContent</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>@xml/backup_rules<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">android:</span>icon</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>@mipmap/ic_launcher<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">android:</span>label</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>@string/app_name<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">android:</span>roundIcon</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>@mipmap/ic_launcher_round<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">android:</span>supportsRtl</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+        <span class="token attr-name"><span class="token namespace">android:</span>theme</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>@style/Theme.TEST_Android<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token comment">&lt;!-- activity = 單個主視窗，類似 Electron Windows --></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>activity</span>
+            <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>.MainActivity<span class="token punctuation">"</span></span>
+            <span class="token attr-name"><span class="token namespace">android:</span>exported</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>intent-filter</span><span class="token punctuation">></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>action</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>android.intent.action.MAIN<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>category</span> <span class="token attr-name"><span class="token namespace">android:</span>name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>android.intent.category.LAUNCHER<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>intent-filter</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>activity</span><span class="token punctuation">></span></span>
+        <span class="token comment">&lt;!-- activity...--></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>application</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>manifest</span><span class="token punctuation">></span></span></code><!----></pre> <p>Activity.kt</p> <pre class="language-kt"><!----><code class="language-kt"><span class="token keyword">package</span> com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>test_android
+
+<span class="token keyword">import</span> android<span class="token punctuation">.</span>os<span class="token punctuation">.</span>Bundle
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>activity<span class="token punctuation">.</span>ComponentActivity
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>activity<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>setContent
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>foundation<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>fillMaxSize
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>material3<span class="token punctuation">.</span>MaterialTheme
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>material3<span class="token punctuation">.</span>Surface
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>material3<span class="token punctuation">.</span>Text
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>runtime<span class="token punctuation">.</span>Composable
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>Modifier
+<span class="token keyword">import</span> androidx<span class="token punctuation">.</span>compose<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>tooling<span class="token punctuation">.</span>preview<span class="token punctuation">.</span>Preview
+
+<span class="token comment">// 1. 繼承 ComponentActivity</span>
+<span class="token keyword">class</span> MainActivity <span class="token operator">:</span> <span class="token function">ComponentActivity</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token operator">:</span> Bundle<span class="token operator">?</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1. 初始化邏輯 savedInstanceState 系統自己儲存的參數</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token punctuation">)</span>
+
+        <span class="token comment">// 檢查是否有之前儲存的狀態</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>savedInstanceState <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">val</span> userName <span class="token operator">=</span> savedInstanceState<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"user_name"</span></span><span class="token punctuation">)</span>
+            <span class="token keyword">val</span> score <span class="token operator">=</span> savedInstanceState<span class="token punctuation">.</span><span class="token function">getInt</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"score"</span></span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 第一次啟動,使用預設值</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// From Jetpack Compose fun setContent(content: @Composable () -> Unit)</span>
+        <span class="token function">setContent</span><span class="token punctuation">(</span>content <span class="token operator">=</span> <span class="token punctuation">&#123;</span> <span class="token function">MyAPP</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">onSaveInstanceState</span><span class="token punctuation">(</span>outState<span class="token operator">:</span> Bundle<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onSaveInstanceState</span><span class="token punctuation">(</span>outState<span class="token punctuation">)</span>
+        outState<span class="token punctuation">.</span><span class="token function">putString</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"user_name"</span></span><span class="token punctuation">,</span> <span class="token string-literal singleline"><span class="token string">"Tony"</span></span><span class="token punctuation">)</span>
+        outState<span class="token punctuation">.</span><span class="token function">putInt</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"score"</span></span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token annotation builtin">@Preview</span><span class="token punctuation">(</span>showBackground <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+<span class="token annotation builtin">@Composable</span>
+<span class="token keyword">fun</span> <span class="token function">MyAPP</span><span class="token punctuation">(</span>modifier<span class="token operator">:</span> Modifier <span class="token operator">=</span> Modifier<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    MaterialTheme <span class="token punctuation">&#123;</span>
+        <span class="token function">Surface</span><span class="token punctuation">(</span>
+            modifier <span class="token operator">=</span> Modifier<span class="token punctuation">.</span><span class="token function">fillMaxSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            color <span class="token operator">=</span> MaterialTheme<span class="token punctuation">.</span>colorScheme<span class="token punctuation">.</span>background
+        <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">Text</span><span class="token punctuation">(</span>
+                text <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"Hello Android!"</span></span><span class="token punctuation">,</span>
+                modifier <span class="token operator">=</span> modifier
+            <span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>執行緒</h3> <p>Android 系統有 Application Not Responding 機制，主執行緒卡住超過一定時間，Android 系統就會判定你的 App 沒反應，然後跳出系統層級的「關閉 App」的對話框。</p> <p>實務上可以理解 主執行緒(單) = UI Thread 和背景處理執行緒(多) = Background Threads，每條獨立的 Background Thread 內部會自動堵塞，而 Coroutine 則使用 launch()、 withContext() 來決定需不需要等待結果。</p> <h4>發文</h4> <p>切換執行緒前先卡一個 isLoading 遮罩，等待背景執行緒的回應結果
+讓主執行緒”持續”跑【載入中】的畫面和 APP 不會被 ANR &amp;&amp; 觸發新的事件</p> <pre class="language-kotlin"><!----><code class="language-kotlin"><span class="token keyword">class</span> CreatePostViewModel <span class="token operator">:</span> <span class="token function">ViewModel</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    
+    <span class="token keyword">private</span> <span class="token keyword">val</span> _isPosting <span class="token operator">=</span> <span class="token function">MutableStateFlow</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> isPosting<span class="token operator">:</span> StateFlow<span class="token operator">&lt;</span>Boolean<span class="token operator">></span> <span class="token operator">=</span> _isPosting
+    
+    <span class="token keyword">fun</span> <span class="token function">publishPost</span><span class="token punctuation">(</span>text<span class="token operator">:</span> String<span class="token punctuation">,</span> images<span class="token operator">:</span> List<span class="token operator">&lt;</span>Uri<span class="token operator">></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        viewModelScope<span class="token punctuation">.</span><span class="token function">launch</span> <span class="token punctuation">&#123;</span>
+            
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            <span class="token comment">// 執行緒 1: UI Thread</span>
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            _isPosting<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token boolean">true</span>  <span class="token comment">// 顯示 Loading 卡住畫面</span>
+            
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            <span class="token comment">// 執行緒 2: Background Thread + withContext 等待回應</span>
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            <span class="token keyword">val</span> success <span class="token operator">=</span> <span class="token function">withContext</span><span class="token punctuation">(</span>Dispatchers<span class="token punctuation">.</span>IO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                    <span class="token comment">// 1. 上傳圖片</span>
+                    <span class="token keyword">val</span> imageUrls <span class="token operator">=</span> images<span class="token punctuation">.</span><span class="token function">map</span> <span class="token punctuation">&#123;</span> uri <span class="token operator">-></span>
+                        <span class="token function">uploadImage</span><span class="token punctuation">(</span>uri<span class="token punctuation">)</span>  <span class="token comment">// 網路請求</span>
+                    <span class="token punctuation">&#125;</span>
+                    
+                    <span class="token comment">// 2. 發送貼文</span>
+                    api<span class="token punctuation">.</span><span class="token function">createPost</span><span class="token punctuation">(</span>
+                        text <span class="token operator">=</span> text<span class="token punctuation">,</span>
+                        images <span class="token operator">=</span> imageUrls
+                    <span class="token punctuation">)</span>
+                    
+                    <span class="token comment">// 3. 儲存到本地資料庫</span>
+                    database<span class="token punctuation">.</span><span class="token function">insertPost</span><span class="token punctuation">(</span><span class="token operator">..</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
+                    
+                    <span class="token boolean">true</span>
+                <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Exception<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token boolean">false</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+            
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            <span class="token comment">// 執行緒 1: UI Thread (自動切回)</span>
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            _isPosting<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token boolean">false</span>  <span class="token comment">// 隱藏 Loading</span>
+            
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>success<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 顯示成功訊息,導航回首頁</span>
+                _navigationEvent<span class="token punctuation">.</span>value <span class="token operator">=</span> NavigateToHome
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 顯示錯誤訊息</span>
+                _errorMessage<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"發文失敗"</span></span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h4>取得當前文章瀏覽數</h4> <p>主執行緒可以持續使用不影響，只要在開背景執行緒拿到結果後更新到該 UI 的值就可以了</p> <pre class="language-kotlin"><!----><code class="language-kotlin"><span class="token keyword">class</span> ArticleViewModel <span class="token operator">:</span> <span class="token function">ViewModel</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    
+    <span class="token keyword">private</span> <span class="token keyword">val</span> _viewCount <span class="token operator">=</span> <span class="token function">MutableStateFlow</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> viewCount<span class="token operator">:</span> StateFlow<span class="token operator">&lt;</span>Int<span class="token operator">></span> <span class="token operator">=</span> _viewCount
+    
+    <span class="token keyword">fun</span> <span class="token function">fetchViewCount</span><span class="token punctuation">(</span>articleId<span class="token operator">:</span> String<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        viewModelScope<span class="token punctuation">.</span><span class="token function">launch</span> <span class="token punctuation">&#123;</span>
+            
+            <span class="token comment">// （直接切換執行緒，不需要 loading 遮罩）</span>
+
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            <span class="token comment">// 執行緒 2: Background Thread + 等待回應</span>
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            <span class="token keyword">val</span> count <span class="token operator">=</span> <span class="token function">withContext</span><span class="token punctuation">(</span>Dispatchers<span class="token punctuation">.</span>IO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                    api<span class="token punctuation">.</span><span class="token function">getViewCount</span><span class="token punctuation">(</span>articleId<span class="token punctuation">)</span>  <span class="token comment">// 網路請求</span>
+                <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Exception<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token number">0</span>  <span class="token comment">// 失敗預設值</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+            
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            <span class="token comment">// 執行緒 1: UI Thread (自動切回)</span>
+            <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            _viewCount<span class="token punctuation">.</span>value <span class="token operator">=</span> count  <span class="token comment">// 更新 UI 值</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h4>瀏覽紀錄給伺服器 (純發送)</h4> <p>開發商紀錄用的，所以不管有無成功都不應該影響使用者 UI</p> <pre class="language-kotlin"><!----><code class="language-kotlin"><span class="token keyword">class</span> ArticleViewModel <span class="token operator">:</span> <span class="token function">ViewModel</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    
+    <span class="token keyword">fun</span> <span class="token function">recordPageView</span><span class="token punctuation">(</span>articleId<span class="token operator">:</span> String<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+        <span class="token comment">// launch(Dispatchers.IO) 切到 Background Thread（發射並忘記 fire-and-forget）</span>
+        <span class="token comment">// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+        viewModelScope<span class="token punctuation">.</span><span class="token function">launch</span><span class="token punctuation">(</span>Dispatchers<span class="token punctuation">.</span>IO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                api<span class="token punctuation">.</span><span class="token function">recordPageView</span><span class="token punctuation">(</span>articleId<span class="token punctuation">)</span>  <span class="token comment">// 發送請求</span>
+                <span class="token comment">// 上傳完就結束，不等待，也不需要回傳結果</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Exception<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 失敗也不用處理，靜默忽略</span>
+                Log<span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"PageView"</span></span><span class="token punctuation">,</span> <span class="token string-literal singleline"><span class="token string">"Failed to record"</span></span><span class="token punctuation">,</span> e<span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>剩下還有輪詢通知(launch + while)、並行載入(async + await)和即時監聽(Flow.collect)等等</p> <h3>錯誤處理</h3> <p>UI 執行緒上不應牽涉外部邏輯，錯誤等同程式設計上有漏洞，應該直接特殊處理或崩潰</p> <p>例如 APP 在未登入的情況下，被進入到某個分頁</p> <pre class="language-kotlin"><!----><code class="language-kotlin"><span class="token comment">// 這種錯誤應該 Crash,讓開發者知道有 Bug</span>
+<span class="token keyword">val</span> userId <span class="token operator">=</span> intent<span class="token punctuation">.</span><span class="token function">getIntExtra</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"user_id"</span></span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>userId <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">throw</span> <span class="token function">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"user_id is required!"</span></span><span class="token punctuation">)</span>  <span class="token comment">// 應該 Crash</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>而 Background Thread 則是需要去處理每個錯誤，防 APP 因為外力而崩潰</p> <pre class="language-kotlin"><!----><code class="language-kotlin">
+<span class="token comment">// 可以先設計預期內錯誤的 error type</span>
+
+<span class="token comment">// RetrofitClient.kt (全域設定)</span>
+<span class="token keyword">object</span> RetrofitClient <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">val</span> okHttpClient <span class="token operator">=</span> OkHttpClient<span class="token punctuation">.</span><span class="token function">Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">connectTimeout</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">readTimeout</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">writeTimeout</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">val</span> api<span class="token operator">:</span> ApiService <span class="token operator">=</span> Retrofit<span class="token punctuation">.</span><span class="token function">Builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">baseUrl</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"https://api.threads.net"</span></span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">client</span><span class="token punctuation">(</span>okHttpClient<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>ApiService<span class="token operator">::</span><span class="token keyword">class</span><span class="token punctuation">.</span>java<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+ 
+
+<span class="token comment">// ViewModel.kt (再加 Timeout catch)</span>
+<span class="token keyword">fun</span> <span class="token function">loadPosts</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    viewModelScope<span class="token punctuation">.</span><span class="token function">launch</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 額外的 Timeout 保護 (可選)</span>
+            <span class="token function">withTimeout</span><span class="token punctuation">(</span><span class="token number">10000</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">val</span> posts <span class="token operator">=</span> <span class="token function">withContext</span><span class="token punctuation">(</span>Dispatchers<span class="token punctuation">.</span>IO<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    repository<span class="token punctuation">.</span><span class="token function">getPosts</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment">// 已經有 HTTP Timeout</span>
+                <span class="token punctuation">&#125;</span>
+                _posts<span class="token punctuation">.</span>value <span class="token operator">=</span> posts
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> TimeoutCancellationException<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            _error<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"載入超時"</span></span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Exception<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            _error<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token string-literal singleline"><span class="token string">"載入失敗"</span></span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_aq9pyy = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DPVlgyPf.js"),
+						import("../_app/immutable/entry/app.DrNMsNyx.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

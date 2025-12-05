@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DPVlgyPf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C9dELT_4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DimUOtpk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DrNMsNyx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.CDBoRajM.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DBze5YnY.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.7OnaU4Sl.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CISL6NAv.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.1c_pFEFO.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 RxJS TabService</h1> <p class="svelte-mdkbyj">2025-12-05</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>企業內部系統常用到的分頁顯示管理</h6> <hr/> <p>分頁管理器，主要功能會是需要可以</p> <ol><li>存放(已Instance)當前的分頁(Component)</li> <li>選擇該分頁替換內容</li> <li>銷毀分頁</li></ol> <p>至少要建立兩個資料模型</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// 每個目錄的基本資料結構，用 id 當作唯一識別</span>
+<span class="token keyword">interface</span> <span class="token class-name">MenuItem</span> <span class="token punctuation">&#123;</span>
+    id<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    label<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    route<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    icon<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    children<span class="token operator">?</span><span class="token operator">:</span> MenuItem<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    expanded<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// new() 時參數拿做 MenuItem.id + MenuItem.route</span>
+<span class="token comment">// MenuItem.id 當作識別 &amp;&amp; MenuItem.route 當作 click(() => route)</span>
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">Tab</span> <span class="token punctuation">&#123;</span>
+    id<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    title<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    route<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    closable<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>BehaviorSubject</h3> <p>RxJS庫提供一個可觀察物件 (Observable) BehaviorSubject。它主要用於宣告和管理一個帶有初始值的狀態變數。它同時具備「觀察者 (Observer)」和「可觀察物件 (Observable)」的特性。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">TabService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> tabs <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BehaviorSubject<span class="token operator">&lt;</span>Tab<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> activeTabId <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BehaviorSubject<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 提供給外部使用的變數，會自動監聽值(tabs,activeTabId)</span>
+    tabs$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    activeTabId$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>activeTabId<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span> router<span class="token operator">:</span> Router<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 開啟新分頁
+     */</span>
+    <span class="token function">openTab</span><span class="token punctuation">(</span>tab<span class="token operator">:</span> Tab<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> currentTabs <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+        <span class="token keyword">const</span> existingTab <span class="token operator">=</span> currentTabs<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>t <span class="token operator">=></span> t<span class="token punctuation">.</span>id <span class="token operator">===</span> tab<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>existingTab<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 如果分頁已存在，切換到該分頁</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setActiveTab</span><span class="token punctuation">(</span>tab<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>router<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token punctuation">[</span>tab<span class="token punctuation">.</span>route<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 新增分頁</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">...</span>currentTabs<span class="token punctuation">,</span> tab<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 替換整個陣列才會觸發事件通知(rerender)</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setActiveTab</span><span class="token punctuation">(</span>tab<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>router<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token punctuation">[</span>tab<span class="token punctuation">.</span>route<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>Signal</h3> <p>新版 Angular(16+) 提供框架內部語法 Signal 來雙向監聽</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Injectable<span class="token punctuation">,</span> signal<span class="token punctuation">,</span> computed<span class="token punctuation">,</span> effect<span class="token punctuation">,</span> Signal <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Signal 方式</span>
+<span class="token comment">// 宣告可寫入的 Signal</span>
+<span class="token keyword">private</span> tabsSignal <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span>Tab<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> activeTabIdSignal <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">readonly</span> tabs <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabsSignal<span class="token punctuation">.</span><span class="token function">asReadonly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">readonly</span> activeTabId <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>activeTabIdSignal<span class="token punctuation">.</span><span class="token function">asReadonly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+</code><!----></pre> <p>整體概念和 React18 useState 用法很像</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">function</span> <span class="token function">TabServiceComponent</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">[</span>tabs<span class="token punctuation">,</span> setTabs<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">const</span> <span class="token punctuation">[</span>activeTabId<span class="token punctuation">,</span> setActiveTabId<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> <span class="token function-variable function">addTab</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> newTab<span class="token operator">:</span> Tab <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+            id<span class="token operator">:</span> nextId<span class="token punctuation">,</span>
+            title<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">新分頁 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>nextId<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        
+        <span class="token function">setTabs</span><span class="token punctuation">(</span>currentTabs <span class="token operator">=></span> <span class="token punctuation">[</span><span class="token operator">...</span>currentTabs<span class="token punctuation">,</span> newTab<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token function">setActiveTabId</span><span class="token punctuation">(</span>nextId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> <span class="token function-variable function">switchTab</span> <span class="token operator">=</span> <span class="token punctuation">(</span>id<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token function">setActiveTabId</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>邏輯層 tab.service.ts</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Injectable <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> BehaviorSubject <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Router <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/router'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">Tab</span> <span class="token punctuation">&#123;</span>
+    id<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    title<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    route<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    closable<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    providedIn<span class="token operator">:</span> <span class="token string">'root'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">TabService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> tabs <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BehaviorSubject<span class="token operator">&lt;</span>Tab<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> activeTabId <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BehaviorSubject<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    tabs$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    activeTabId$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>activeTabId<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span> router<span class="token operator">:</span> Router<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 開啟新分頁
+     */</span>
+    <span class="token function">openTab</span><span class="token punctuation">(</span>tab<span class="token operator">:</span> Tab<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> currentTabs <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+        <span class="token keyword">const</span> existingTab <span class="token operator">=</span> currentTabs<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>t <span class="token operator">=></span> t<span class="token punctuation">.</span>id <span class="token operator">===</span> tab<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>existingTab<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 如果分頁已存在，切換到該分頁</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setActiveTab</span><span class="token punctuation">(</span>tab<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>router<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token punctuation">[</span>tab<span class="token punctuation">.</span>route<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 新增分頁</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">...</span>currentTabs<span class="token punctuation">,</span> tab<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setActiveTab</span><span class="token punctuation">(</span>tab<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>router<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token punctuation">[</span>tab<span class="token punctuation">.</span>route<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 關閉分頁
+     */</span>
+    <span class="token function">closeTab</span><span class="token punctuation">(</span>tabId<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> currentTabs <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+        <span class="token keyword">const</span> index <span class="token operator">=</span> currentTabs<span class="token punctuation">.</span><span class="token function">findIndex</span><span class="token punctuation">(</span>t <span class="token operator">=></span> t<span class="token punctuation">.</span>id <span class="token operator">===</span> tabId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>index <span class="token operator">===</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">const</span> newTabs <span class="token operator">=</span> currentTabs<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>t <span class="token operator">=></span> t<span class="token punctuation">.</span>id <span class="token operator">!==</span> tabId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span>newTabs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 如果關閉的是當前分頁，切換到前一個或後一個</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>activeTabId<span class="token punctuation">.</span>value <span class="token operator">===</span> tabId <span class="token operator">&amp;&amp;</span> newTabs<span class="token punctuation">.</span>length <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">const</span> newActiveIndex <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setActiveTab</span><span class="token punctuation">(</span>newTabs<span class="token punctuation">[</span>newActiveIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>router<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token punctuation">[</span>newTabs<span class="token punctuation">[</span>newActiveIndex<span class="token punctuation">]</span><span class="token punctuation">.</span>route<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>newTabs<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>activeTabId<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 設定當前分頁
+     */</span>
+    <span class="token function">setActiveTab</span><span class="token punctuation">(</span>tabId<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>activeTabId<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span>tabId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 關閉所有分頁
+     */</span>
+    <span class="token function">closeAllTabs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>activeTabId<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 關閉其他分頁
+     */</span>
+    <span class="token function">closeOtherTabs</span><span class="token punctuation">(</span>tabId<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> currentTabs <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+        <span class="token keyword">const</span> keepTab <span class="token operator">=</span> currentTabs<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>t <span class="token operator">=></span> t<span class="token punctuation">.</span>id <span class="token operator">===</span> tabId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>keepTab<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>tabs<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">[</span>keepTab<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setActiveTab</span><span class="token punctuation">(</span>tabId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>UI層 tab-container.ts</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token decorator"><span class="token at operator">@</span><span class="token function">Component</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  selector<span class="token operator">:</span> <span class="token string">'app-tab-container'</span><span class="token punctuation">,</span>
+  standalone<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  imports<span class="token operator">:</span> <span class="token punctuation">[</span>CommonModule<span class="token punctuation">,</span> RouterOutlet<span class="token punctuation">]</span><span class="token punctuation">,</span>
+  template<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">
+    &lt;div class="tab-container">
+      &lt;!-- 分頁標籤列 -->
+      &lt;div class="tab-bar" *ngIf="(tabs$ | async)?.length">
+        &lt;div *ngFor="let tab of tabs$ | async" 
+             class="tab"
+             [class.active]="tab.id === (activeTabId$ | async)"
+             (click)="switchTab(tab)">
+          &lt;span class="tab-title">&#123;&#123; tab.title &#125;&#125;&lt;/span>
+          &lt;button *ngIf="tab.closable" 
+                  class="close-btn"
+                  (click)="closeTab($event, tab.id)">
+            ✕
+          &lt;/button>
+        &lt;/div>
+      &lt;/div>
+
+      &lt;!-- 分頁內容區 -->
+      &lt;div class="tab-content">
+        &lt;router-outlet>&lt;/router-outlet>
+      &lt;/div>
+    &lt;/div>
+  </span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">,</span>
+  styles<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">...省略
+  </span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">TabContainerComponent</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">private</span> tabService <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>TabService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  tabs$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabService<span class="token punctuation">.</span>tabs$<span class="token punctuation">;</span>
+  activeTabId$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>tabService<span class="token punctuation">.</span>activeTabId$<span class="token punctuation">;</span>
+
+  <span class="token function">switchTab</span><span class="token punctuation">(</span>tab<span class="token operator">:</span> Tab<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>tabService<span class="token punctuation">.</span><span class="token function">setActiveTab</span><span class="token punctuation">(</span>tab<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">closeTab</span><span class="token punctuation">(</span>event<span class="token operator">:</span> Event<span class="token punctuation">,</span> tabId<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    event<span class="token punctuation">.</span><span class="token function">stopPropagation</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>tabService<span class="token punctuation">.</span><span class="token function">closeTab</span><span class="token punctuation">(</span>tabId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_aq9pyy = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DPVlgyPf.js"),
+						import("../_app/immutable/entry/app.DrNMsNyx.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
