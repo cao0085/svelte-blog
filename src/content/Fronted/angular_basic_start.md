@@ -1,5 +1,5 @@
 ---
-title: "Angular Basic"
+title: "Angular Basic _ Start"
 date: "2025-06-22"
 category: "software"
 subCategory: "Frontend"

@@ -1,10 +1,10 @@
 ---
-title: "Angular Value Control"
+title: "Angular Basic _ Value"
 date: "2025-06-22"
 category: "software"
 subCategory: "Frontend"
 tags: ["fronted", "angular", "value"]
-slug: "angular_value"
+slug: "angular_value02"
 ---
 ###### 應用中傳遞值的方法
 

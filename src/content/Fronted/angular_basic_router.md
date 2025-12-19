@@ -1,5 +1,5 @@
 ---
-title: "Angular Router"
+title: "Angular Basic _ Route"
 date: "2025-06-22"
 category: "software"
 subCategory: "Frontend"
