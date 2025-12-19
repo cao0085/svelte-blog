@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DZKSC-9B.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BVcywvEB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAYMW7KN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B2K8D4qi.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DLOfgsCD.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWH5SXhd.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.6hO-De83.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dOlALUcd.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.TxbabtXn.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular Basic _ Value02</h1> <p class="svelte-mdkbyj">2025-06-22</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>應用中維護值的一些關鍵字</h6> <hr/> <h3>Component 層級的單向綁定( logic update -> dom rerender )</h3> <p><strong>普通變數 + Change Detection :</strong> Angular 的 Zone.js 會自動觸發變更檢測</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">&#123;</span>
+  count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">// 普通變數</span>
+  
+  <span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>count<span class="token operator">++</span><span class="token punctuation">;</span> <span class="token comment">// Angular 自動觸發變更檢測</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-html"><!----><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>&#123;&#123; count &#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">(click)</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>increment()<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>+1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span></code><!----></pre> <p><strong>Signals :</strong> 響應式更新性能更好，需要新版 Angular 16+</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> signal <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">&#123;</span>
+  count <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 創建 Signal</span>
+  
+  <span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>count<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 或 this.count.update(v => v + 1)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-html"><!----><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>&#123;&#123; count() &#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span> <span class="token comment">&lt;!-- 需要加 () 讀取值 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">(click)</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>increment()<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>+1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span></code><!----></pre> <p><strong>RxJS Observable + async pipe:</strong> 套件內有提供的一種監聽，概念是定義兩個變數值，一個可被調整的值 BehaviorSubject，另一個 Observable 限讀和 html 語法下 <code>{{ count$ | async }}</code>，值被更新時就會 rerender 了。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> BehaviorSubject <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">private</span> countSubject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BehaviorSubject</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  count$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>countSubject<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+  <span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>countSubject<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>countSubject<span class="token punctuation">.</span>value <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-html"><!----><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>&#123;&#123; count$ | async &#125;&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">(click)</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>increment()<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>+1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span></code><!----></pre> <h3>響應式組件和雙向綁定</h3> <p>一樣是 Signals( 同步、自動追蹤依賴、更輕量 ) &amp; RxJS Observables ( 異步、需手動訂閱 )</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> signal<span class="token punctuation">,</span> computed<span class="token punctuation">,</span> effect <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">UserComponent</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 創建可寫信號</span>
+  count <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  name <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token string">'John'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+  <span class="token comment">// 派生狀態 - 自動追蹤依賴</span>
+  doubleCount <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  greeting <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">Hello, </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">!</span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+  <span class="token comment">// 副作用 - 當依賴變化時自動執行</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">effect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+      <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">Count changed: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment">// 自動追蹤 count 的變化</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  
+  <span class="token comment">// 更新信號</span>
+  <span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>count<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>val <span class="token operator">=></span> val <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  
+  <span class="token function">setName</span><span class="token punctuation">(</span>newName<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>newName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Observable<span class="token punctuation">,</span> Subject<span class="token punctuation">,</span> BehaviorSubject <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> map<span class="token punctuation">,</span> filter<span class="token punctuation">,</span> debounceTime <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs/operators'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 基本 Observable</span>
+<span class="token keyword">const</span> data$ <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Observable</span><span class="token punctuation">(</span>observer <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  observer<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  observer<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  observer<span class="token punctuation">.</span><span class="token function">complete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Subject: 可以主動發送值</span>
+<span class="token keyword">const</span> subject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject<span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+subject<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+subject<span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span>val <span class="token operator">=></span> <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>val<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// BehaviorSubject: 有初始值,新訂閱者會立即收到最新值</span>
+<span class="token keyword">const</span> behaviorSubject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BehaviorSubject<span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+behaviorSubject<span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span>val <span class="token operator">=></span> <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>val<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 立即輸出 0</span></code><!----></pre> <p>還有提供表單模組 FormsModule &amp; ReactiveFormsModule 可以配合 ngModel 使用，Service.ts 也用上述方式維護值和狀態</p> <h3>APP Singleton</h3> <h6>RxJS Observable 套件物件內建很多方法補充一下</h6> <ul><li>Subject: 沒有初始值、value，是用來即時發送事件通知</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Subject <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">private</span> clickSubject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Subject<span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+click$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>clickSubject<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">onClick</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>clickSubject<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 推送事件</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <ul><li>BehaviorSubject: 可推送新值（next( )）、記住最新的值（value）、新訂閱者會立即收到當前值</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> BehaviorSubject <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">private</span> countSubject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BehaviorSubject</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+count$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>countSubject<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <ul><li>ReplaySubject: 記住 N 個歷史值、新訂閱者會收到過去的 N 個值</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> ReplaySubject <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">private</span> logSubject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReplaySubject<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 記住最近 3 個值</span>
+log$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>logSubject<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">addLog</span><span class="token punctuation">(</span>message<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>logSubject<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <ul><li>AsyncSubject:  只發送最後一個值、只關心最終結果的場景</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> AsyncSubject <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">private</span> resultSubject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AsyncSubject<span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+result$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>resultSubject<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">compute</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 進行計算...</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>resultSubject<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>resultSubject<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>resultSubject<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>resultSubject<span class="token punctuation">.</span><span class="token function">complete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 完成時才發送</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <ul><li>Observable: Subject 轉成 asObservable 後就會有 subscribe、pipe、filter…等功能</li></ul> <pre class="language-ts"><!----><code class="language-ts">data$<span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span>value <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'收到資料:'</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+data$<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
+  <span class="token function">map</span><span class="token punctuation">(</span>value <span class="token operator">=></span> value <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>      <span class="token comment">// 轉換資料</span>
+  <span class="token function">filter</span><span class="token punctuation">(</span>value <span class="token operator">=></span> value <span class="token operator">></span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment">// 過濾資料</span>
+  <span class="token function">debounceTime</span><span class="token punctuation">(</span><span class="token number">300</span><span class="token punctuation">)</span>             <span class="token comment">// 防抖</span>
+<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span>result <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_13t0p20 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DZKSC-9B.js"),
+						import("../_app/immutable/entry/app.B2K8D4qi.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

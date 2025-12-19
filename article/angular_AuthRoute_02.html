@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DZKSC-9B.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BVcywvEB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAYMW7KN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B2K8D4qi.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DLOfgsCD.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWH5SXhd.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.6hO-De83.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dOlALUcd.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.TxbabtXn.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 Auth &amp; Route 02</h1> <p class="svelte-mdkbyj">2025-12-09</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>基於 RBAC 實作權限控管和畫面渲染，這篇處理前端架構 Service 、 Route 、 Guard</h6> <hr/> <h3>Service</h3> <p>Angular 會使用 DI Service 的方式維護狀態管理與函數調用，通常會是 Singleton</p> <p>先簡單實作 auth.service.ts 讓 APP 可以判定登入狀態</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Injectable<span class="token punctuation">,</span> signal <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Router <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/router'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> userPermissionData <span class="token keyword">from</span> <span class="token string">'../../../mockDB/userPermission.json'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">User</span> <span class="token punctuation">&#123;</span>
+    id<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+    username<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    email<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    providedIn<span class="token operator">:</span> <span class="token string">'root'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">AuthService</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 使用 signal 管理登入狀態</span>
+    <span class="token keyword">private</span> currentUser <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span>User <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> token <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span> <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 公開的唯讀 signal</span>
+    <span class="token keyword">readonly</span> user$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>currentUser<span class="token punctuation">.</span><span class="token function">asReadonly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">readonly</span> isLoggedIn$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>currentUser<span class="token punctuation">.</span><span class="token function">asReadonly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span> router<span class="token operator">:</span> Router<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 從 localStorage 恢復登入狀態</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">restoreSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 檢查是否已登入
+     */</span>
+    <span class="token function">isAuthenticated</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">currentUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">token</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!==</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 登入
+     * @returns &#123; success: boolean, message?: string &#125;
+     */</span>
+    <span class="token function">login</span><span class="token punctuation">(</span>username<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> password<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> success<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span> message<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 從 userPermission.json 中查找使用者</span>
+        <span class="token keyword">const</span> foundUser <span class="token operator">=</span> userPermissionData<span class="token punctuation">.</span>users<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>
+            u <span class="token operator">=></span> u<span class="token punctuation">.</span>username <span class="token operator">===</span> username <span class="token operator">&amp;&amp;</span> u<span class="token punctuation">.</span>password <span class="token operator">===</span> password
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>foundUser<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+                success<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+                message<span class="token operator">:</span> <span class="token string">'帳號或密碼錯誤'</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">const</span> user<span class="token operator">:</span> User <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+            id<span class="token operator">:</span> foundUser<span class="token punctuation">.</span>id<span class="token punctuation">,</span>
+            username<span class="token operator">:</span> foundUser<span class="token punctuation">.</span>username<span class="token punctuation">,</span>
+            email<span class="token operator">:</span> foundUser<span class="token punctuation">.</span>email
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">const</span> token <span class="token operator">=</span> foundUser<span class="token punctuation">.</span>token<span class="token punctuation">;</span>
+
+        <span class="token comment">// 更新狀態</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>currentUser<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>token<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>token<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 儲存到 localStorage</span>
+        localStorage<span class="token punctuation">.</span><span class="token function">setItem</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        localStorage<span class="token punctuation">.</span><span class="token function">setItem</span><span class="token punctuation">(</span><span class="token string">'token'</span><span class="token punctuation">,</span> token<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+            success<span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 登出
+     */</span>
+    <span class="token function">logout</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>currentUser<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>token<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 清除 localStorage</span>
+        localStorage<span class="token punctuation">.</span><span class="token function">removeItem</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        localStorage<span class="token punctuation">.</span><span class="token function">removeItem</span><span class="token punctuation">(</span><span class="token string">'token'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 導向登入頁</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>router<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'/login'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 從 localStorage 恢復登入狀態
+     */</span>
+    <span class="token keyword">private</span> <span class="token function">restoreSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> userJson <span class="token operator">=</span> localStorage<span class="token punctuation">.</span><span class="token function">getItem</span><span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">const</span> token <span class="token operator">=</span> localStorage<span class="token punctuation">.</span><span class="token function">getItem</span><span class="token punctuation">(</span><span class="token string">'token'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>userJson <span class="token operator">&amp;&amp;</span> token<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>userJson<span class="token punctuation">)</span> <span class="token keyword">as</span> User<span class="token punctuation">;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>currentUser<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>token<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>token<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'恢復登入狀態失敗'</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">logout</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 取得當前使用者
+     */</span>
+    <span class="token function">getCurrentUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> User <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">currentUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 取得 Token
+     */</span>
+    <span class="token function">getToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">token</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>permission.service.ts 用來處理權限相關，目前功能定義成</p> <ol><li>存放使用者的權限 Singleton 在前端</li> <li>全部的權限列表，因為不是機密資料可以回傳，方便整理狀態</li> <li>業務邏輯處理</li></ol> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Injectable<span class="token punctuation">,</span> signal<span class="token punctuation">,</span> computed <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> AuthService <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'./auth.service'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> userPermissionData <span class="token keyword">from</span> <span class="token string">'../../../mockDB/userPermission.json'</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 權限類型
+ */</span>
+<span class="token keyword">export</span> <span class="token keyword">enum</span> ClaimType <span class="token punctuation">&#123;</span>
+    <span class="token constant">ROUTE</span> <span class="token operator">=</span> <span class="token string">'ROUTE'</span><span class="token punctuation">,</span>    <span class="token comment">// 路由權限（頁面訪問）</span>
+    <span class="token constant">ACTION</span> <span class="token operator">=</span> <span class="token string">'ACTION'</span>   <span class="token comment">// 操作權限（功能按鈕）</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * 權限聲明介面
+ */</span>
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">Claim</span> <span class="token punctuation">&#123;</span>
+    id<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+    code<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    type<span class="token operator">:</span> ClaimType<span class="token punctuation">;</span>
+    module<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+    parentId<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">|</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * 使用者權限關聯介面
+ */</span>
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">UserClaim</span> <span class="token punctuation">&#123;</span>
+    userId<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+    claimId<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * 權限樹節點（用於建立階層結構）
+ */</span>
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">ClaimTreeNode</span> <span class="token keyword">extends</span> <span class="token class-name">Claim</span> <span class="token punctuation">&#123;</span>
+    children<span class="token operator">:</span> ClaimTreeNode<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    providedIn<span class="token operator">:</span> <span class="token string">'root'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">PermissionService</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 所有權限定義</span>
+    <span class="token keyword">private</span> allClaims <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span>Claim<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 當前使用者的權限 ID 列表</span>
+    <span class="token keyword">private</span> userClaimIds <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 當前使用者的權限物件列表(List)（computed）</span>
+    <span class="token keyword">readonly</span> userClaims <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> claimIds <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">userClaimIds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">allClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>claim <span class="token operator">=></span> claimIds<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>claim<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 當前使用者的權限樹狀結構（computed, 僅包含使用者擁有的權限）</span>
+    <span class="token keyword">readonly</span> userClaimTree <span class="token operator">=</span> <span class="token generic-function"><span class="token function">computed</span><span class="token generic class-name"><span class="token operator">&lt;</span>ClaimTreeNode<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 取得使用者擁有的權限列表</span>
+        <span class="token keyword">const</span> userClaimList <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">userClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 用 Map 儲存節點，方便透過 ID 查找父節點</span>
+        <span class="token keyword">const</span> claimMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map<span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token punctuation">,</span> ClaimTreeNode<span class="token operator">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 1. 初始化使用者擁有的節點</span>
+        userClaimList<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>claim <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 使用展開運算子 (...) 建立一個新的物件，符合 ClaimTreeNode 介面</span>
+            claimMap<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>claim<span class="token punctuation">.</span>id<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token operator">...</span>claim<span class="token punctuation">,</span> children<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 2. 建立樹狀結構並過濾</span>
+        <span class="token keyword">const</span> rootNodes<span class="token operator">:</span> ClaimTreeNode<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        claimMap<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>node <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>node<span class="token punctuation">.</span>parentId <span class="token operator">===</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 根節點 (ParentId 為 null) 直接加入根列表</span>
+                rootNodes<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">// 嘗試從 claimMap 中取得父節點</span>
+                <span class="token keyword">const</span> parent <span class="token operator">=</span> claimMap<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>parentId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token comment">// 確保父節點存在 (因為我們只處理使用者擁有的節點，所以 parentId 必須在 claimMap 內)</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>parent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    parent<span class="token punctuation">.</span>children<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 3. 回傳樹的根節點列表</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'userClaimTree'</span><span class="token punctuation">,</span> rootNodes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> rootNodes<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 權限是否已載入</span>
+    <span class="token keyword">private</span> isLoaded <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">boolean</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span> authService<span class="token operator">:</span> AuthService<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 載入所有權限定義</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">loadClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 監聽登入狀態，自動載入使用者權限</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>authService<span class="token punctuation">.</span><span class="token function">user$</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">loadUserClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 載入所有權限定義
+     */</span>
+    <span class="token keyword">private</span> <span class="token function">loadClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> claims <span class="token operator">=</span> userPermissionData<span class="token punctuation">.</span>claims<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>claim <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+            id<span class="token operator">:</span> claim<span class="token punctuation">.</span>id<span class="token punctuation">,</span>
+            code<span class="token operator">:</span> claim<span class="token punctuation">.</span>code<span class="token punctuation">,</span>
+            name<span class="token operator">:</span> claim<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+            type<span class="token operator">:</span> claim<span class="token punctuation">.</span><span class="token keyword">type</span> <span class="token class-name"><span class="token keyword">as</span></span> ClaimType<span class="token punctuation">,</span>
+            module<span class="token operator">:</span> claim<span class="token punctuation">.</span>module<span class="token punctuation">,</span>
+            parentId<span class="token operator">:</span> claim<span class="token punctuation">.</span>parentId
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">this</span><span class="token punctuation">.</span>allClaims<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>claims<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 載入當前使用者的權限
+     */</span>
+    <span class="token function">loadUserClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>authService<span class="token punctuation">.</span><span class="token function">getCurrentUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>user<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>userClaimIds<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>isLoaded<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 從 userPermission.json 中查找該使用者的權限</span>
+        <span class="token keyword">const</span> userClaimRelations <span class="token operator">=</span> userPermissionData<span class="token punctuation">.</span>userClaims<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>
+            uc <span class="token operator">=></span> uc<span class="token punctuation">.</span>userId <span class="token operator">===</span> user<span class="token punctuation">.</span>id
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">const</span> claimIds <span class="token operator">=</span> userClaimRelations<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>uc <span class="token operator">=></span> uc<span class="token punctuation">.</span>claimId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>userClaimIds<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>claimIds<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>isLoaded<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 核心方法：檢查是否有指定的權限
+     * @param claimCode 權限代碼，例如 'BASIC_SYSTEM_LOG_VIEW'
+     */</span>
+    <span class="token function">hasClaim</span><span class="token punctuation">(</span>claimCode<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> claim <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">allClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>c <span class="token operator">=></span> c<span class="token punctuation">.</span>code <span class="token operator">===</span> claimCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>claim<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">權限代碼 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>claimCode<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> 不存在</span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">userClaimIds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>claim<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 檢查權限是否已載入
+     */</span>
+    <span class="token function">isPermissionLoaded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">isLoaded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 清除使用者權限（登出時使用）
+     */</span>
+    <span class="token function">clearUserClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>userClaimIds<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>isLoaded<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * Debug 用：印出當前使用者的所有權限
+     */</span>
+    <span class="token function">debugPrintUserClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">group</span><span class="token punctuation">(</span><span class="token string">'🔐 使用者權限列表'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'使用者:'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>authService<span class="token punctuation">.</span><span class="token function">getCurrentUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'權限數量:'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">userClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">table</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">userClaims</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">groupEnd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>Service 處理完後，就應該要拿到所有 Auth &amp; Route 需要使用到的資料了</p> <h3>Route</h3> <p>再來處理 route 的部分，angular 套件有提供 canActivate 屬性當作路由守衛</p> <p>app.routes.ts</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Routes <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/router'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Login <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'./pages/login/login'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> MainLayoutComponent <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'./core/layout/main-layout.component'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> authGuard <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'./core/guards/auth.guard'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Unauthorized <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'./pages/unauthorized/unauthorized'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> <span class="token constant">ROUTE_CONFIGS</span><span class="token punctuation">,</span> convertToRoutes <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'./core/config/route.config'</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> routes<span class="token operator">:</span> Routes <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+        path<span class="token operator">:</span> <span class="token string">'login'</span><span class="token punctuation">,</span>
+        component<span class="token operator">:</span> Login
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+        path<span class="token operator">:</span> <span class="token string">'unauthorized'</span><span class="token punctuation">,</span>
+        component<span class="token operator">:</span> Unauthorized
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+        path<span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+        component<span class="token operator">:</span> MainLayoutComponent<span class="token punctuation">,</span>
+        canActivate<span class="token operator">:</span> <span class="token punctuation">[</span>authGuard<span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment">// 需要登入才能訪問</span>
+        children<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">&#123;</span>
+                path<span class="token operator">:</span> <span class="token string">'basic-system/log'</span><span class="token punctuation">,</span>
+                requiredClaim<span class="token operator">:</span> ClaimCode<span class="token punctuation">.</span><span class="token constant">BASIC_SYSTEM_LOG</span><span class="token punctuation">,</span>
+                <span class="token function-variable function">loadComponent</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'../../features/basic-system/system-log.component'</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>m <span class="token operator">=></span> m<span class="token punctuation">.</span>SystemLogComponent<span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token punctuation">&#123;</span>
+                path<span class="token operator">:</span> <span class="token string">'external-system/vendor-data'</span><span class="token punctuation">,</span>
+                canActivate<span class="token operator">:</span> <span class="token punctuation">[</span>permissionGuard<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment">// 需要有權限才能訪問</span>
+                requiredClaim<span class="token operator">:</span> ClaimCode<span class="token punctuation">.</span><span class="token constant">EXTERNAL_SYSTEM_VENDOR_DATA</span><span class="token punctuation">,</span>
+                <span class="token function-variable function">loadComponent</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'../../features/external-system/vendor-data.component'</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>m <span class="token operator">=></span> m<span class="token punctuation">.</span>VendorDataComponent<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                reuseRoute<span class="token operator">:</span> <span class="token boolean">true</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+        path<span class="token operator">:</span> <span class="token string">'**'</span><span class="token punctuation">,</span>
+        redirectTo<span class="token operator">:</span> <span class="token string">'/login'</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span></code><!----></pre> <h3>Guard</h3> <p>注入 Service 檢查登入 &amp; 權限狀態來實作二個守衛， authGuard 失敗跳轉到登入頁面、permissionGuard 失敗跳轉到未授權畫面。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> inject <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Router<span class="token punctuation">,</span> CanActivateFn <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/router'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> AuthService <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'../services/auth.service'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> PermissionService <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'../services/permission.service'</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 路由守衛 - 檢查使用者是否已登入
+ */</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> authGuard<span class="token operator">:</span> <span class="token function-variable function">CanActivateFn</span> <span class="token operator">=</span> <span class="token punctuation">(</span>route<span class="token punctuation">,</span> state<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> authService <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>AuthService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>Router<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 檢查是否已登入</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>authService<span class="token punctuation">.</span><span class="token function">isAuthenticated</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>  <span class="token comment">// 允許訪問</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 未登入，導向登入頁</span>
+    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'未登入，導向登入頁'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> router<span class="token punctuation">.</span><span class="token function">createUrlTree</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'/login'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+        queryParams<span class="token operator">:</span> <span class="token punctuation">&#123;</span> returnUrl<span class="token operator">:</span> state<span class="token punctuation">.</span>url <span class="token punctuation">&#125;</span>  <span class="token comment">// 記住原本要去的頁面</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 權限守衛 - 檢查使用者
+ */</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> permissionGuard<span class="token operator">:</span> <span class="token function-variable function">CanActivateFn</span> <span class="token operator">=</span> <span class="token punctuation">(</span>route<span class="token punctuation">,</span> state<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> permissionService <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>PermissionService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>Router<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 從 route data 取得所需的權限代碼</span>
+    <span class="token comment">// children: [</span>
+    <span class="token comment">// &#123;</span>
+    <span class="token comment">//     path: 'basic-system/log',</span>
+    <span class="token comment">//     requiredClaim: ClaimCode.BASIC_SYSTEM_LOG,</span>
+    <span class="token comment">// &#125;,</span>
+    <span class="token keyword">const</span> requiredClaim <span class="token operator">=</span> route<span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token string">'requiredClaim'</span><span class="token punctuation">]</span> <span class="token keyword">as</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 檢查使用者是否有所需權限</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>permissionService<span class="token punctuation">.</span><span class="token function">hasClaim</span><span class="token punctuation">(</span>requiredClaim<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 沒有權限，導向未授權頁面</span>
+    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">沒有權限訪問此頁面，需要權限: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>requiredClaim<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> router<span class="token punctuation">.</span><span class="token function">createUrlTree</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'/unauthorized'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+</code><!----></pre> <p>這邊做好可以先純輸入 URL 測試 route 功能，剩下就是看要怎麼整理數據，集中管理轉給 Component render</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_13t0p20 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DZKSC-9B.js"),
+						import("../_app/immutable/entry/app.B2K8D4qi.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

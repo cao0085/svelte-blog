@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DZKSC-9B.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BVcywvEB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAYMW7KN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B2K8D4qi.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DLOfgsCD.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWH5SXhd.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.6hO-De83.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dOlALUcd.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.TxbabtXn.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 Http</h1> <p class="svelte-mdkbyj">2025-12-12</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>Angular 有包好 HttpClient &amp; HttpResource 可以直接拿來用</h6> <hr/> <p><strong><em>HttpClient</em></strong></p> <p>基於 RxJS Observable 所以可以使用物件提供的一套方法，錯誤自動透過 Observable 的 error channel 處理 2XX 外的都會拋出，需要手動 subscribe() 或搭配 async pipe 使用</p> <p><strong><em>HttpResource</em></strong></p> <p>基於 Signal 新推出 API，當依賴的 Signal 變化時自動重新請求，回傳的是 Resource 物件，包含 value()、status()、error() 等 Signal</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// HttpClient 傳統寫法</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'/api/users'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
+  <span class="token function">catchError</span><span class="token punctuation">(</span>err <span class="token operator">=></span> <span class="token keyword">of</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span>data <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span>users <span class="token operator">=</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// HttpResource 寫法</span>
+searchQuery <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+results <span class="token operator">=</span> <span class="token function">httpResource</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">/api/search?q=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">searchQuery</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// searchQuery 變化時自動觸發新請求</span></code><!----></pre> <p>這邊的配置功能上</p> <ol><li>HttpResource 只做 Get( ) 用來處理 Service 類型的資料(權限表、個人資料等)</li> <li>HttpClient 、 error 做最基本，業務邏輯外部處理</li> <li>用繼承的方式處理不同 Domain 的使用場景</li></ol> <p>其餘有特殊需求就直接在該元件拿 BaseApiService + 額外實作就好</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Injectable<span class="token punctuation">,</span> resource<span class="token punctuation">,</span> Signal <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> HttpClient<span class="token punctuation">,</span> HttpParams<span class="token punctuation">,</span> HttpErrorResponse <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/common/http'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Observable<span class="token punctuation">,</span> throwError <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> catchError <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'rxjs/operators'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> environment <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'../../../environments/environment'</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 基礎 API Service
+ * 可直接使用（需要完整 URL）或繼承使用（自動帶 base URL）
+ */</span>
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    providedIn<span class="token operator">:</span> <span class="token string">'root'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">BaseApiService</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 子類可以覆蓋這個屬性來設定預設的 base URL</span>
+    <span class="token keyword">protected</span> baseUrl <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
+
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token keyword">protected</span> http<span class="token operator">:</span> HttpClient<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 構建完整 URL
+     * 如果有 baseUrl 則自動拼接，否則直接使用傳入的 url
+     */</span>
+    <span class="token keyword">protected</span> <span class="token function">buildUrl</span><span class="token punctuation">(</span>path<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>baseUrl<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> path<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// 確保不會有雙斜線</span>
+        <span class="token keyword">const</span> normalizedPath <span class="token operator">=</span> path<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span> <span class="token operator">?</span> path <span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>path<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>baseUrl<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>normalizedPath<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// ========================================</span>
+    <span class="token comment">// HttpResource - 只用於 GET（讀取數據，自動響應變化）</span>
+    <span class="token comment">// ========================================</span>
+
+    <span class="token comment">/**
+     * 創建 GET Resource - 自動追蹤數據變化
+     * @param url - API 端點 (使用 Signal)
+     * @param params - 查詢參數（可選，使用 Signal）
+     *
+     * 使用範例：
+     * const userId = signal('1');
+     * const userResource = this.apiService.createGetResource&lt;User>(
+     *   computed(() => &#96;/users/$&#123;userId()&#125;&#96;)
+     * );
+     */</span>
+    <span class="token generic-function"><span class="token function">createGetResource</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>
+        url<span class="token operator">:</span> Signal<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span><span class="token punctuation">,</span>
+        params<span class="token operator">?</span><span class="token operator">:</span> Signal<span class="token operator">&lt;</span>Record<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token punctuation">,</span> <span class="token builtin">string</span><span class="token operator">>></span>
+    <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">resource</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+            <span class="token function-variable function">loader</span><span class="token operator">:</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">const</span> currentUrl <span class="token operator">=</span> <span class="token function">url</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">const</span> currentParams <span class="token operator">=</span> params<span class="token operator">?.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">const</span> queryString <span class="token operator">=</span> currentParams
+                    <span class="token operator">?</span> <span class="token string">'?'</span> <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">URLSearchParams</span><span class="token punctuation">(</span>currentParams<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">;</span>
+
+                <span class="token comment">// 使用 buildUrl 自動處理 baseUrl</span>
+                <span class="token keyword">const</span> fullUrl <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">buildUrl</span><span class="token punctuation">(</span>currentUrl<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>fullUrl<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>queryString<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+                    method<span class="token operator">:</span> <span class="token string">'GET'</span><span class="token punctuation">,</span>
+                    headers<span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token string-property property">'Content-Type'</span><span class="token operator">:</span> <span class="token string">'application/json'</span> <span class="token punctuation">&#125;</span>
+                <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>response<span class="token punctuation">.</span>ok<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token keyword">await</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleFetchError</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+
+                <span class="token keyword">return</span> <span class="token keyword">await</span> response<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token constant">T</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// ========================================</span>
+    <span class="token comment">// HttpClient - 用於所有操作（GET/POST/PUT/PATCH/DELETE）</span>
+    <span class="token comment">// ========================================</span>
+
+    <span class="token comment">/**
+     * GET 請求 - 一次性數據獲取
+     * @param url - API 端點（相對路徑）
+     * @param params - 查詢參數（可選）
+     */</span>
+    <span class="token generic-function"><span class="token function">get</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> params<span class="token operator">?</span><span class="token operator">:</span> HttpParams<span class="token punctuation">)</span><span class="token operator">:</span> Observable<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> fullUrl <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">buildUrl</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">get</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>fullUrl<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> params <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
+            <span class="token function">catchError</span><span class="token punctuation">(</span>error <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleHttpClientError</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * POST 請求 - 新增數據
+     * @param url - API 端點（相對路徑）
+     * @param data - 請求數據
+     */</span>
+    <span class="token generic-function"><span class="token function">post</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> data<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> Observable<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> fullUrl <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">buildUrl</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">post</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>fullUrl<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
+            <span class="token function">catchError</span><span class="token punctuation">(</span>error <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleHttpClientError</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * PUT 請求 - 完整更新
+     * @param url - API 端點（相對路徑）
+     * @param data - 請求數據
+     */</span>
+    <span class="token generic-function"><span class="token function">put</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> data<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> Observable<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> fullUrl <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">buildUrl</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">put</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>fullUrl<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
+            <span class="token function">catchError</span><span class="token punctuation">(</span>error <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleHttpClientError</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * PATCH 請求 - 部分更新
+     * @param url - API 端點（相對路徑）
+     * @param data - 請求數據
+     */</span>
+    <span class="token generic-function"><span class="token function">patch</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> data<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> Observable<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> fullUrl <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">buildUrl</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">patch</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>fullUrl<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
+            <span class="token function">catchError</span><span class="token punctuation">(</span>error <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleHttpClientError</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * DELETE 請求 - 刪除數據
+     * @param url - API 端點（相對路徑）
+     */</span>
+    <span class="token keyword">delete</span><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> Observable<span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> fullUrl <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">buildUrl</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">delete</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token constant">T</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>fullUrl<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
+            <span class="token function">catchError</span><span class="token punctuation">(</span>error <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleHttpClientError</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// ========================================</span>
+    <span class="token comment">// 錯誤處理 - 只處理通用錯誤</span>
+    <span class="token comment">// ========================================</span>
+
+    <span class="token comment">/**
+     * 處理 Fetch API 錯誤（用於 HttpResource）
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token function">handleFetchError</span><span class="token punctuation">(</span>response<span class="token operator">:</span> Response<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span><span class="token builtin">never</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> status <span class="token operator">=</span> response<span class="token punctuation">.</span>status<span class="token punctuation">;</span>
+
+        <span class="token comment">// 處理通用錯誤</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleGlobalError</span><span class="token punctuation">(</span>status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 拋出錯誤供外部捕獲</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">HTTP Error: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>status<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> - </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>response<span class="token punctuation">.</span>statusText<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 處理 HttpClient 錯誤
+     */</span>
+    <span class="token keyword">private</span> <span class="token function">handleHttpClientError</span><span class="token punctuation">(</span>error<span class="token operator">:</span> HttpErrorResponse<span class="token punctuation">)</span><span class="token operator">:</span> Observable<span class="token operator">&lt;</span><span class="token builtin">never</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 處理通用錯誤</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">handleGlobalError</span><span class="token punctuation">(</span>error<span class="token punctuation">.</span>status<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 拋出錯誤供外部捕獲</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'API Error:'</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">throwError</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 通用錯誤處理
+     * 只處理全局性錯誤：認證、權限、服務器錯誤、網絡錯誤
+     */</span>
+    <span class="token keyword">private</span> <span class="token function">handleGlobalError</span><span class="token punctuation">(</span>status<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">switch</span> <span class="token punctuation">(</span>status<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">case</span> <span class="token number">401</span><span class="token operator">:</span>
+                <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'[Global Error] 未授權：登入已過期，請重新登入'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">// TODO: 導向登入頁</span>
+                <span class="token comment">// this.router.navigate(['/login']);</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token number">403</span><span class="token operator">:</span>
+                <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'[Global Error] 無權限：您沒有權限執行此操作'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">// TODO: 顯示無權限提示</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token number">500</span><span class="token operator">:</span>
+            <span class="token keyword">case</span> <span class="token number">502</span><span class="token operator">:</span>
+            <span class="token keyword">case</span> <span class="token number">503</span><span class="token operator">:</span>
+                <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'[Global Error] 服務器錯誤：服務器發生錯誤，請稍後再試'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">// TODO: 顯示服務器錯誤提示</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token number">0</span><span class="token operator">:</span>
+                <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'[Global Error] 網絡錯誤：網絡連接失敗，請檢查網絡'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">// TODO: 顯示網絡錯誤提示</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token comment">// 其他錯誤（400, 404, 409 等）不在這裡處理，交給外部業務邏輯</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// ========================================</span>
+<span class="token comment">// Domain Services - 預設 Domain 配置</span>
+<span class="token comment">// ========================================</span>
+
+<span class="token comment">/**
+ * Domain 1 API Service
+ * 自動帶 Domain 1 的 base URL（從環境配置讀取）
+ */</span>
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    providedIn<span class="token operator">:</span> <span class="token string">'root'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">Domain1ApiService</span> <span class="token keyword">extends</span> <span class="token class-name">BaseApiService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">protected</span> override baseUrl <span class="token operator">=</span> environment<span class="token punctuation">.</span>apiUrls<span class="token punctuation">.</span>npcsDomain<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * Domain 2 API Service
+ * 自動帶 Domain 2 的 base URL（從環境配置讀取）
+ */</span>
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    providedIn<span class="token operator">:</span> <span class="token string">'root'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">Domain2ApiService</span> <span class="token keyword">extends</span> <span class="token class-name">BaseApiService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">protected</span> override baseUrl <span class="token operator">=</span> environment<span class="token punctuation">.</span>apiUrls<span class="token punctuation">.</span>domain2<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * Domain 3 API Service
+ * 自動帶 Domain 3 的 base URL（從環境配置讀取）
+ */</span>
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    providedIn<span class="token operator">:</span> <span class="token string">'root'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">Domain3ApiService</span> <span class="token keyword">extends</span> <span class="token class-name">BaseApiService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">protected</span> override baseUrl <span class="token operator">=</span> environment<span class="token punctuation">.</span>apiUrls<span class="token punctuation">.</span>domain3<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * Domain 4 API Service
+ * 自動帶 Domain 4 的 base URL（從環境配置讀取）
+ */</span>
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+    providedIn<span class="token operator">:</span> <span class="token string">'root'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">Domain4ApiService</span> <span class="token keyword">extends</span> <span class="token class-name">BaseApiService</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">protected</span> override baseUrl <span class="token operator">=</span> environment<span class="token punctuation">.</span>apiUrls<span class="token punctuation">.</span>domain4<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_13t0p20 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DZKSC-9B.js"),
+						import("../_app/immutable/entry/app.B2K8D4qi.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

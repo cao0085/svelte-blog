@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DZKSC-9B.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BVcywvEB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAYMW7KN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B2K8D4qi.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DLOfgsCD.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWH5SXhd.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.6hO-De83.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dOlALUcd.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.TxbabtXn.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 Auth &amp; Route 01</h1> <p class="svelte-mdkbyj">2025-12-08</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>基於 RBAC 實作權限控管和畫面渲染，先處理資料結構設計</h6> <hr/> <p>和要求資料庫一致性一樣，越全面的權限控管程式碼就會複雜很多，所以根據專案的使用場景去選擇想要的架構。</p> <p>這次需求是【登入】後才可以使用的 ERP 系統，其他都導到login、401、403、404 就可以了。這次我的需求是</p> <ol><li><p>權限控制的顆粒度設計: 除了按照常見的 admin/manager/user 層級分級外，還需要可以控制到單一使用者的行為。</p></li> <li><p>限制後行為處理: 當不符權限時還需分成不同情況處理，例如</p> <ul><li>目錄層級沒有權限就不顯示</li> <li>編輯/刪除操作需要跳出提醒框【尚無權限，請與經理申請開通】</li></ul></li> <li><p>防止緩存、網路異常和惡意攻擊: 即使阻斷使用者入口(隱藏 UI 元件)，後端仍需實作獨立的權限驗證防禦。代表前後端（使用不同語言）必須維護一組權限常數定義。</p></li></ol> <h3>DB TABLE</h3> <p>最小實踐 3 張可以完成結構: 人員表 / 行為表 / 人員行為表(多對多)</p> <pre class="language-json"><!----><code class="language-json">    <span class="token comment">// 人員表</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token comment">// 唯一識別ID</span>
+        <span class="token property">"username"</span><span class="token operator">:</span> <span class="token string">"admin"</span><span class="token punctuation">,</span>
+        <span class="token property">"password"</span><span class="token operator">:</span> <span class="token string">"admin123"</span><span class="token punctuation">,</span>
+        <span class="token property">"email"</span><span class="token operator">:</span> <span class="token string">"admin@example.com"</span><span class="token punctuation">,</span>
+        <span class="token comment">// 仿 JWT Token</span>
+        <span class="token property">"token"</span><span class="token operator">:</span> <span class="token string">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lWIjoiYWRtaW4ifQ.mock_token_admin"</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token comment">// 聲明行為表</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token comment">// 唯一就好不重要</span>
+        <span class="token property">"code"</span><span class="token operator">:</span> <span class="token string">"BASIC_SYSTEM_MODULE"</span><span class="token punctuation">,</span> <span class="token comment">// 常數字串，也要是唯一</span>
+        <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"基礎系統"</span><span class="token punctuation">,</span> <span class="token comment">// 前端顯示字串，也可以在前端維護</span>
+        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"ROUTE"</span><span class="token punctuation">,</span> <span class="token comment">// 行為定義 "ROUTE" "ACTION" ...</span>
+        <span class="token property">"module"</span><span class="token operator">:</span> <span class="token string">"BasicSystem"</span><span class="token punctuation">,</span> <span class="token comment">// 方便查詢定義</span>
+        <span class="token property">"parentId"</span><span class="token operator">:</span> <span class="token null keyword">null</span> <span class="token comment">// 用樹狀結構關聯行為</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token comment">// 連結表 => 該人員可以做甚麼行為</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+        <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">1</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span></code><!----></pre> <pre class="language-json"><!----><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"users"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token property">"username"</span><span class="token operator">:</span> <span class="token string">"admin"</span><span class="token punctuation">,</span>
+            <span class="token property">"password"</span><span class="token operator">:</span> <span class="token string">"admin123"</span><span class="token punctuation">,</span>
+            <span class="token property">"email"</span><span class="token operator">:</span> <span class="token string">"admin@example.com"</span><span class="token punctuation">,</span>
+            <span class="token property">"token"</span><span class="token operator">:</span> <span class="token string">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4ifQ.mock_token_admin"</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+            <span class="token property">"username"</span><span class="token operator">:</span> <span class="token string">"user01"</span><span class="token punctuation">,</span>
+            <span class="token property">"password"</span><span class="token operator">:</span> <span class="token string">"user123"</span><span class="token punctuation">,</span>
+            <span class="token property">"email"</span><span class="token operator">:</span> <span class="token string">"user01@example.com"</span><span class="token punctuation">,</span>
+            <span class="token property">"token"</span><span class="token operator">:</span> <span class="token string">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoidXNlcjAxIn0.mock_token_user01"</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"claims"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token property">"code"</span><span class="token operator">:</span> <span class="token string">"BASIC_SYSTEM_MODULE"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"基礎系統"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"ROUTE"</span><span class="token punctuation">,</span>
+            <span class="token property">"module"</span><span class="token operator">:</span> <span class="token string">"BasicSystem"</span><span class="token punctuation">,</span>
+            <span class="token property">"parentId"</span><span class="token operator">:</span> <span class="token null keyword">null</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+            <span class="token property">"code"</span><span class="token operator">:</span> <span class="token string">"BASIC_SYSTEM_LOG"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"系統日誌"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"ROUTE"</span><span class="token punctuation">,</span>
+            <span class="token property">"module"</span><span class="token operator">:</span> <span class="token string">"BasicSystem"</span><span class="token punctuation">,</span>
+            <span class="token property">"parentId"</span><span class="token operator">:</span> <span class="token number">1</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+            <span class="token property">"code"</span><span class="token operator">:</span> <span class="token string">"BASIC_SYSTEM_DIRECTORY"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"系統目錄"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"ROUTE"</span><span class="token punctuation">,</span>
+            <span class="token property">"module"</span><span class="token operator">:</span> <span class="token string">"BasicSystem"</span><span class="token punctuation">,</span>
+            <span class="token property">"parentId"</span><span class="token operator">:</span> <span class="token number">1</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
+            <span class="token property">"code"</span><span class="token operator">:</span> <span class="token string">"BASIC_SYSTEM_LOG_EXPORT"</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"匯出日誌"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"ACTION"</span><span class="token punctuation">,</span>
+            <span class="token property">"module"</span><span class="token operator">:</span> <span class="token string">"BasicSystem"</span><span class="token punctuation">,</span>
+            <span class="token property">"parentId"</span><span class="token operator">:</span> <span class="token number">2</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"userClaims"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">1</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">2</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">3</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">4</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+            <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">2</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>這時若要建立 n 帳號，連結表就會新增 n * n 筆資料，要解決資料量需要再開一張 role 定義表，來當作集合使用 ( user -> role -> Claims )</p> <p>不把 userRoles 直接合併到 user 是因為有可能單一人員有多種身份(A子公司的副理、B子公司的開發人員) 保持可擴充性。</p> <pre class="language-json"><!----><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"users"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+            <span class="token property">"username"</span><span class="token operator">:</span> <span class="token string">"accountA_manager"</span><span class="token punctuation">,</span>
+            <span class="token property">"email"</span><span class="token operator">:</span> <span class="token string">"manager@example.com"</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"roles"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"id"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"ACCOUNT_MANAGER"</span><span class="token punctuation">,</span>
+            <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"帳戶管理員"</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token comment">// 原先的 userClaims 移除改成 roleClaims</span>
+    <span class="token property">"userRoles"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+            <span class="token property">"roleId"</span><span class="token operator">:</span> <span class="token number">2</span>  <span class="token comment">// 基礎角色</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"roleClaims"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"roleId"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+            <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">10</span>  <span class="token comment">// 角色預設權限</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"roleId"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+            <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">11</span> <span class="token comment">// 角色預設權限</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>現在則是每個角色的權限都一樣，想要開特權/黑名單則需要再開一張表。</p> <pre class="language-json"><!----><code class="language-json"><span class="token punctuation">&#123;</span>   
+    <span class="token property">"userClaims"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"GRANT"</span><span class="token punctuation">,</span> <span class="token comment">// GRANT=額外給予, DENY=特別剔除</span>
+            <span class="token property">"claimId"</span><span class="token operator">:</span> <span class="token number">99</span><span class="token punctuation">,</span>  <span class="token comment">// 指定權限</span>
+            <span class="token property">"expiresAt"</span><span class="token operator">:</span> <span class="token string">"2025-12-16T23:59:59Z"</span><span class="token punctuation">,</span> <span class="token comment">// (可選)</span>
+            <span class="token property">"grantedBy"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>  <span class="token comment">// 由誰授予(可選)</span>
+            <span class="token property">"reason"</span><span class="token operator">:</span> <span class="token string">"緊急處理客戶問題"</span>  <span class="token comment">// 原因(可選)</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>核心概念就是定義一張權限總表集中管理，存/取方式就用關聯+集合+邏輯判斷。</p> <p>查詢 SQL 大概會長這樣</p> <pre class="language-sql"><!----><code class="language-sql">
+<span class="token comment">-- 1. 查詢指定使用者的所有權限 (透過角色 + 個人特權/黑名單)</span>
+<span class="token keyword">SELECT</span> <span class="token keyword">DISTINCT</span> 
+    c<span class="token punctuation">.</span><span class="token operator">*</span>
+<span class="token keyword">FROM</span> users u
+<span class="token comment">-- 透過角色獲得的權限</span>
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> userRoles ur <span class="token keyword">ON</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> ur<span class="token punctuation">.</span>userId
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> roleClaims rc <span class="token keyword">ON</span> ur<span class="token punctuation">.</span>roleId <span class="token operator">=</span> rc<span class="token punctuation">.</span>roleId
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> claims c <span class="token keyword">ON</span> rc<span class="token punctuation">.</span>claimId <span class="token operator">=</span> c<span class="token punctuation">.</span>id
+<span class="token comment">-- 個人特權權限 (GRANT)</span>
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> userClaims uc <span class="token keyword">ON</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> uc<span class="token punctuation">.</span>userId <span class="token operator">AND</span> uc<span class="token punctuation">.</span><span class="token keyword">type</span> <span class="token operator">=</span> <span class="token string">'GRANT'</span>
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> claims c2 <span class="token keyword">ON</span> uc<span class="token punctuation">.</span>claimId <span class="token operator">=</span> c2<span class="token punctuation">.</span>id
+<span class="token keyword">WHERE</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> <span class="token variable">@userId</span>
+  <span class="token operator">AND</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> <span class="token punctuation">(</span>
+      <span class="token comment">-- 排除黑名單 (DENY)</span>
+      <span class="token keyword">SELECT</span> <span class="token number">1</span> <span class="token keyword">FROM</span> userClaims uc_deny 
+      <span class="token keyword">WHERE</span> uc_deny<span class="token punctuation">.</span>userId <span class="token operator">=</span> u<span class="token punctuation">.</span>id 
+        <span class="token operator">AND</span> uc_deny<span class="token punctuation">.</span><span class="token keyword">type</span> <span class="token operator">=</span> <span class="token string">'DENY'</span>
+        <span class="token operator">AND</span> uc_deny<span class="token punctuation">.</span>claimId <span class="token operator">=</span> <span class="token keyword">COALESCE</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>id<span class="token punctuation">,</span> c2<span class="token punctuation">.</span>id<span class="token punctuation">)</span>
+        <span class="token operator">AND</span> <span class="token punctuation">(</span>uc_deny<span class="token punctuation">.</span>expiresAt <span class="token operator">IS</span> <span class="token boolean">NULL</span> <span class="token operator">OR</span> uc_deny<span class="token punctuation">.</span>expiresAt <span class="token operator">></span> <span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span>
+  <span class="token operator">AND</span> <span class="token punctuation">(</span>uc<span class="token punctuation">.</span>expiresAt <span class="token operator">IS</span> <span class="token boolean">NULL</span> <span class="token operator">OR</span> uc<span class="token punctuation">.</span>expiresAt <span class="token operator">></span> <span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- 檢查特權是否過期</span>
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> c<span class="token punctuation">.</span>module<span class="token punctuation">,</span> c<span class="token punctuation">.</span>parentId<span class="token punctuation">,</span> c<span class="token punctuation">.</span>id<span class="token punctuation">;</span>
+
+
+<span class="token comment">-- 2. 查詢指定使用者的角色資訊</span>
+<span class="token keyword">SELECT</span> 
+    r<span class="token punctuation">.</span>id<span class="token punctuation">,</span>
+    r<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+    r<span class="token punctuation">.</span>description
+<span class="token keyword">FROM</span> users u
+<span class="token keyword">JOIN</span> userRoles ur <span class="token keyword">ON</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> ur<span class="token punctuation">.</span>userId
+<span class="token keyword">JOIN</span> roles r <span class="token keyword">ON</span> ur<span class="token punctuation">.</span>roleId <span class="token operator">=</span> r<span class="token punctuation">.</span>id
+<span class="token keyword">WHERE</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> <span class="token variable">@userId</span><span class="token punctuation">;</span>
+
+
+<span class="token comment">-- 3. 檢查使用者是否有特定權限 (回傳 boolean)</span>
+<span class="token keyword">SELECT</span> 
+    <span class="token keyword">CASE</span> 
+        <span class="token keyword">WHEN</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span> <span class="token keyword">THEN</span> <span class="token number">1</span> 
+        <span class="token keyword">ELSE</span> <span class="token number">0</span> 
+    <span class="token keyword">END</span> <span class="token keyword">AS</span> hasPermission
+<span class="token keyword">FROM</span> <span class="token punctuation">(</span>
+    <span class="token comment">-- 從角色獲得的權限</span>
+    <span class="token keyword">SELECT</span> c<span class="token punctuation">.</span>id
+    <span class="token keyword">FROM</span> users u
+    <span class="token keyword">JOIN</span> userRoles ur <span class="token keyword">ON</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> ur<span class="token punctuation">.</span>userId
+    <span class="token keyword">JOIN</span> roleClaims rc <span class="token keyword">ON</span> ur<span class="token punctuation">.</span>roleId <span class="token operator">=</span> rc<span class="token punctuation">.</span>roleId
+    <span class="token keyword">JOIN</span> claims c <span class="token keyword">ON</span> rc<span class="token punctuation">.</span>claimId <span class="token operator">=</span> c<span class="token punctuation">.</span>id
+    <span class="token keyword">WHERE</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> <span class="token variable">@userId</span> <span class="token operator">AND</span> c<span class="token punctuation">.</span>code <span class="token operator">=</span> <span class="token variable">@claimCode</span>
+    
+    <span class="token keyword">UNION</span>
+    
+    <span class="token comment">-- 個人特權 (GRANT)</span>
+    <span class="token keyword">SELECT</span> c<span class="token punctuation">.</span>id
+    <span class="token keyword">FROM</span> userClaims uc
+    <span class="token keyword">JOIN</span> claims c <span class="token keyword">ON</span> uc<span class="token punctuation">.</span>claimId <span class="token operator">=</span> c<span class="token punctuation">.</span>id
+    <span class="token keyword">WHERE</span> uc<span class="token punctuation">.</span>userId <span class="token operator">=</span> <span class="token variable">@userId</span> 
+      <span class="token operator">AND</span> uc<span class="token punctuation">.</span><span class="token keyword">type</span> <span class="token operator">=</span> <span class="token string">'GRANT'</span>
+      <span class="token operator">AND</span> c<span class="token punctuation">.</span>code <span class="token operator">=</span> <span class="token variable">@claimCode</span>
+      <span class="token operator">AND</span> <span class="token punctuation">(</span>uc<span class="token punctuation">.</span>expiresAt <span class="token operator">IS</span> <span class="token boolean">NULL</span> <span class="token operator">OR</span> uc<span class="token punctuation">.</span>expiresAt <span class="token operator">></span> <span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span> <span class="token keyword">AS</span> permissions
+<span class="token keyword">WHERE</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> <span class="token punctuation">(</span>
+    <span class="token comment">-- 檢查是否被黑名單排除</span>
+    <span class="token keyword">SELECT</span> <span class="token number">1</span> 
+    <span class="token keyword">FROM</span> userClaims uc_deny
+    <span class="token keyword">JOIN</span> claims c <span class="token keyword">ON</span> uc_deny<span class="token punctuation">.</span>claimId <span class="token operator">=</span> c<span class="token punctuation">.</span>id
+    <span class="token keyword">WHERE</span> uc_deny<span class="token punctuation">.</span>userId <span class="token operator">=</span> <span class="token variable">@userId</span>
+      <span class="token operator">AND</span> uc_deny<span class="token punctuation">.</span><span class="token keyword">type</span> <span class="token operator">=</span> <span class="token string">'DENY'</span>
+      <span class="token operator">AND</span> c<span class="token punctuation">.</span>code <span class="token operator">=</span> <span class="token variable">@claimCode</span>
+      <span class="token operator">AND</span> <span class="token punctuation">(</span>uc_deny<span class="token punctuation">.</span>expiresAt <span class="token operator">IS</span> <span class="token boolean">NULL</span> <span class="token operator">OR</span> uc_deny<span class="token punctuation">.</span>expiresAt <span class="token operator">></span> <span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token comment">-- 4. 查詢使用者的所有特權/黑名單 (含過期時間)</span>
+<span class="token keyword">SELECT</span> 
+    c<span class="token punctuation">.</span>code<span class="token punctuation">,</span>
+    c<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+    uc<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token punctuation">,</span>
+    uc<span class="token punctuation">.</span>expiresAt<span class="token punctuation">,</span>
+    uc<span class="token punctuation">.</span>reason<span class="token punctuation">,</span>
+    u_granter<span class="token punctuation">.</span>username <span class="token keyword">AS</span> grantedByUser
+<span class="token keyword">FROM</span> userClaims uc
+<span class="token keyword">JOIN</span> claims c <span class="token keyword">ON</span> uc<span class="token punctuation">.</span>claimId <span class="token operator">=</span> c<span class="token punctuation">.</span>id
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> users u_granter <span class="token keyword">ON</span> uc<span class="token punctuation">.</span>grantedBy <span class="token operator">=</span> u_granter<span class="token punctuation">.</span>id
+<span class="token keyword">WHERE</span> uc<span class="token punctuation">.</span>userId <span class="token operator">=</span> <span class="token variable">@userId</span>
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> uc<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token punctuation">,</span> uc<span class="token punctuation">.</span>expiresAt<span class="token punctuation">;</span>
+
+
+<span class="token comment">-- 5. 查詢指定模組下使用者的所有權限</span>
+<span class="token keyword">SELECT</span> <span class="token keyword">DISTINCT</span> 
+    c<span class="token punctuation">.</span>code<span class="token punctuation">,</span>
+    c<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+    c<span class="token punctuation">.</span><span class="token keyword">type</span>
+<span class="token keyword">FROM</span> users u
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> userRoles ur <span class="token keyword">ON</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> ur<span class="token punctuation">.</span>userId
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> roleClaims rc <span class="token keyword">ON</span> ur<span class="token punctuation">.</span>roleId <span class="token operator">=</span> rc<span class="token punctuation">.</span>roleId
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> claims c <span class="token keyword">ON</span> rc<span class="token punctuation">.</span>claimId <span class="token operator">=</span> c<span class="token punctuation">.</span>id
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> userClaims uc <span class="token keyword">ON</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> uc<span class="token punctuation">.</span>userId <span class="token operator">AND</span> uc<span class="token punctuation">.</span><span class="token keyword">type</span> <span class="token operator">=</span> <span class="token string">'GRANT'</span>
+<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> claims c2 <span class="token keyword">ON</span> uc<span class="token punctuation">.</span>claimId <span class="token operator">=</span> c2<span class="token punctuation">.</span>id
+<span class="token keyword">WHERE</span> u<span class="token punctuation">.</span>id <span class="token operator">=</span> <span class="token variable">@userId</span>
+  <span class="token operator">AND</span> <span class="token keyword">COALESCE</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>module<span class="token punctuation">,</span> c2<span class="token punctuation">.</span>module<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token variable">@moduleName</span>
+  <span class="token operator">AND</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> <span class="token punctuation">(</span>
+      <span class="token keyword">SELECT</span> <span class="token number">1</span> <span class="token keyword">FROM</span> userClaims uc_deny 
+      <span class="token keyword">WHERE</span> uc_deny<span class="token punctuation">.</span>userId <span class="token operator">=</span> u<span class="token punctuation">.</span>id 
+        <span class="token operator">AND</span> uc_deny<span class="token punctuation">.</span><span class="token keyword">type</span> <span class="token operator">=</span> <span class="token string">'DENY'</span>
+        <span class="token operator">AND</span> uc_deny<span class="token punctuation">.</span>claimId <span class="token operator">=</span> <span class="token keyword">COALESCE</span><span class="token punctuation">(</span>c<span class="token punctuation">.</span>id<span class="token punctuation">,</span> c2<span class="token punctuation">.</span>id<span class="token punctuation">)</span>
+        <span class="token operator">AND</span> <span class="token punctuation">(</span>uc_deny<span class="token punctuation">.</span>expiresAt <span class="token operator">IS</span> <span class="token boolean">NULL</span> <span class="token operator">OR</span> uc_deny<span class="token punctuation">.</span>expiresAt <span class="token operator">></span> <span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span>
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> c<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token punctuation">,</span> c<span class="token punctuation">.</span>name<span class="token punctuation">;</span></code><!----></pre> <h3>前端的資料模型</h3> <p>把 DB 定義的常數值複製一份到前端，避免沒有同步更新、人為字串問題時可以好找錯誤。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// 對照 DB 的 Code 值，避免人工字串值問題</span>
+<span class="token keyword">export</span> <span class="token keyword">enum</span> ClaimCode <span class="token punctuation">&#123;</span>
+    <span class="token constant">BASIC_SYSTEM_MODULE</span> <span class="token operator">=</span> <span class="token string">'BASIC_SYSTEM_MODULE'</span><span class="token punctuation">,</span>
+    <span class="token constant">BASIC_SYSTEM_LOG</span> <span class="token operator">=</span> <span class="token string">'BASIC_SYSTEM_LOG'</span><span class="token punctuation">,</span>
+    <span class="token constant">BASIC_SYSTEM_DIRECTORY</span> <span class="token operator">=</span> <span class="token string">'BASIC_SYSTEM_DIRECTORY'</span><span class="token punctuation">,</span>
+    <span class="token constant">BASIC_SYSTEM_PERMISSION</span> <span class="token operator">=</span> <span class="token string">'BASIC_SYSTEM_PERMISSION'</span><span class="token punctuation">,</span>
+    <span class="token constant">BASIC_SYSTEM_LOG_VIEW</span> <span class="token operator">=</span> <span class="token string">'BASIC_SYSTEM_LOG_VIEW'</span><span class="token punctuation">,</span>
+    <span class="token constant">BASIC_SYSTEM_LOG_EXPORT</span> <span class="token operator">=</span> <span class="token string">'BASIC_SYSTEM_LOG_EXPORT'</span><span class="token punctuation">,</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 看前端如何定義這些行為</span>
+<span class="token keyword">export</span> <span class="token keyword">enum</span> ClaimType <span class="token punctuation">&#123;</span>
+    <span class="token constant">ROUTE</span> <span class="token operator">=</span> <span class="token string">'ROUTE'</span><span class="token punctuation">,</span>    <span class="token comment">// 路由權限（頁面訪問）</span>
+    <span class="token constant">ACTION</span> <span class="token operator">=</span> <span class="token string">'ACTION'</span>   <span class="token comment">// 操作權限（功能按鈕）</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>維護更新</h3> <p>以後要新作功能流程時候，就是</p> <ol><li>DB Claim Table 添加一個事件</li> <li>RoleClaim Table 綁定事件權限</li> <li>前端 ClaimCode.ts 同步添加就可以模組化使用了</li></ol><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_13t0p20 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DZKSC-9B.js"),
+						import("../_app/immutable/entry/app.B2K8D4qi.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
