@@ -8,24 +8,24 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DZKSC-9B.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BVcywvEB.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CF6GrDmk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BIT4Y2vL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DAYMW7KN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CvMeFQC-.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B2K8D4qi.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.u-n9Tfbm.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DLOfgsCD.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.Cn1PiG4Y.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BWH5SXhd.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.6hO-De83.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DIE4ujaW.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Bn412DrV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dOlALUcd.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.TxbabtXn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DyggROPN.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CQOEF2LZ.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 Auth &amp; Route 02</h1> <p class="svelte-mdkbyj">2025-12-09</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>基於 RBAC 實作權限控管和畫面渲染，這篇處理前端架構 Service 、 Route 、 Guard</h6> <hr/> <h3>Service</h3> <p>Angular 會使用 DI Service 的方式維護狀態管理與函數調用，通常會是 Singleton</p> <p>先簡單實作 auth.service.ts 讓 APP 可以判定登入狀態</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Injectable<span class="token punctuation">,</span> signal <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
@@ -419,7 +419,7 @@
 			
 			<script>
 				{
-					__sveltekit_13t0p20 = {
+					__sveltekit_4ugkf0 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -427,8 +427,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DZKSC-9B.js"),
-						import("../_app/immutable/entry/app.B2K8D4qi.js")
+						import("../_app/immutable/entry/start.CF6GrDmk.js"),
+						import("../_app/immutable/entry/app.u-n9Tfbm.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

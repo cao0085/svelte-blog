@@ -8,24 +8,24 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DZKSC-9B.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BVcywvEB.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CF6GrDmk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BIT4Y2vL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DAYMW7KN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CvMeFQC-.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B2K8D4qi.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.u-n9Tfbm.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DLOfgsCD.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.Cn1PiG4Y.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BWH5SXhd.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.6hO-De83.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DIE4ujaW.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Bn412DrV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dOlALUcd.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.TxbabtXn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DyggROPN.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CQOEF2LZ.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Nginx</h1> <p class="svelte-mdkbyj">2025-11-27</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>公司內部開發的時候用看看Nginx，就不用搬筆電跑來跑去</h6> <hr/> <p>可以這樣配置測試環境</p> <ol><li>本地先 run 一個要被訪問的 Server</li> <li>配置 nginx.conf，因為 nginx Server 是部屬在 docker，所以要使用 host.docker.internal</li> <li>docker run 一個 nginx container</li> <li>先測看看 localhost 不帶後贅是否可以連到預設的 nginx page</li> <li>再看不同裝置區網內連線可不可以(—ipConfig IPv4 位址)，能否連接到上述預設 page</li> <li>再測試反向代理是否轉發正確</li></ol> <pre class="language-dockerfile"><!----><code class="language-dockerfile"><span class="token comment"># Use the specific Ubuntu 22.04 image</span>
@@ -67,7 +67,7 @@ http &#123;
 			
 			<script>
 				{
-					__sveltekit_13t0p20 = {
+					__sveltekit_4ugkf0 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -75,8 +75,8 @@ http &#123;
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DZKSC-9B.js"),
-						import("../_app/immutable/entry/app.B2K8D4qi.js")
+						import("../_app/immutable/entry/start.CF6GrDmk.js"),
+						import("../_app/immutable/entry/app.u-n9Tfbm.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

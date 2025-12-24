@@ -8,24 +8,24 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DZKSC-9B.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BVcywvEB.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CF6GrDmk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BIT4Y2vL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DAYMW7KN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CvMeFQC-.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B2K8D4qi.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.u-n9Tfbm.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DLOfgsCD.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.Cn1PiG4Y.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BWH5SXhd.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.6hO-De83.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DIE4ujaW.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Bn412DrV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dOlALUcd.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.TxbabtXn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DyggROPN.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CQOEF2LZ.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">POS機台金流串接處理</h1> <p class="svelte-mdkbyj">2025-06-22</p></div> <section class="article-body svelte-mdkbyj"><!----><h6><a href="https://github.com/cao0085/code-pattern/tree/main/cashflow" rel="nofollow">相關程式碼範例</a></h6> <hr/> <h3>實踐重點</h3> <ul><li>交易一致性：更新多張表時務必使用 Transaction</li> <li>完整留痕：Request/Response 重要欄位存檔，方便日後錯誤處理</li> <li>編號唯一：重試時的唯一索引，避免重複請款/退款。</li> <li>錯誤碼映射表：將各家金流商的 ReturnCode Mapping 集中管理。</li> <li>人工介入流程：定義特殊處理的狀況，要有後台工具或警示流程。</li> <li>查詢補償機制：定時 Job/手動工具執行 Query，同步漏單、退款差額。</li></ul> <p><code>主要流程: Request => Pre-commit / record original state => Response Logging => State Machine => Commit</code></p> <h3>HTTP Request Skeleton</h3> <ul><li>依 PP 文件將必要 Header（例如 ChannelId / Secret…）與 Body JSON 組起來。</li> <li>這層邏輯最好抽成共用：<code>GenerateProviderRequest(method, url, envConfig)</code>。</li> <li>若有簽章/加密，放在這層集中處理</li></ul> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> req <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">HttpRequestMessage</span><span class="token punctuation">(</span>HttpMethod<span class="token punctuation">.</span>Post<span class="token punctuation">,</span> fullUrl<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -49,7 +49,7 @@
 			
 			<script>
 				{
-					__sveltekit_13t0p20 = {
+					__sveltekit_4ugkf0 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -57,8 +57,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DZKSC-9B.js"),
-						import("../_app/immutable/entry/app.B2K8D4qi.js")
+						import("../_app/immutable/entry/start.CF6GrDmk.js"),
+						import("../_app/immutable/entry/app.u-n9Tfbm.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CF6GrDmk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BIT4Y2vL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CvMeFQC-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.u-n9Tfbm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.Cn1PiG4Y.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DIE4ujaW.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Bn412DrV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DyggROPN.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CQOEF2LZ.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">EF Core - CodeFirst</h1> <p class="svelte-mdkbyj">2025-12-24</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>使用 EF Core 可以處理 CodeBase Model 與 DB Table 的一致姓，常見的有兩種 DB/Code first</h6> <hr/> <h3>基本設定</h3> <p>套件除了 EF Core 外需多安裝</p> <pre class="language-csharp"><!----><code class="language-csharp">Microsoft<span class="token punctuation">.</span>EntityFrameworkCore<span class="token punctuation">.</span>Design <span class="token number">9.0</span><span class="token number">.0</span>
+dotnet tool install <span class="token operator">--</span><span class="token keyword">global</span> dotnet<span class="token operator">-</span>ef <span class="token operator">--</span>version <span class="token number">9.0</span><span class="token number">.0</span></code><!----></pre> <p>基本概念就是繼承 EF Core 套件內的各個物件，讓套件可以抓起來辨識</p> <pre class="language-csharp"><!----><code class="language-csharp">
+<span class="token comment">// 會對應到資料表的欄位名稱</span>
+<span class="token keyword">public</span> <span class="token keyword">partial</span> <span class="token keyword">class</span> <span class="token class-name">ActionInfo</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Entity</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> ActionInfoId <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Name <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token operator">!</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/// &lt;summary></span>
+    <span class="token comment">/// 外顯名稱</span>
+    <span class="token comment">/// &lt;/summary></span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> DisplayName <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token operator">!</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/// &lt;summary></span>
+    <span class="token comment">/// 敘述</span>
+    <span class="token comment">/// &lt;/summary></span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> Description <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">virtual</span> <span class="token return-type class-name">ICollection<span class="token punctuation">&lt;</span>MenuAction<span class="token punctuation">></span></span> MenuAction <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">List<span class="token punctuation">&lt;</span>MenuAction<span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-cs"><!----><code class="language-cs"><span class="token comment">// 欄位細項</span>
+<span class="token keyword">public</span> <span class="token keyword">partial</span> <span class="token keyword">class</span> <span class="token class-name">ActionInfoConfiguration</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IEntityTypeConfiguration<span class="token punctuation">&lt;</span>ActionInfo<span class="token punctuation">></span></span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Configure</span><span class="token punctuation">(</span><span class="token class-name">EntityTypeBuilder<span class="token punctuation">&lt;</span>ActionInfo<span class="token punctuation">></span></span> entity<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        entity<span class="token punctuation">.</span><span class="token function">HasKey</span><span class="token punctuation">(</span>e <span class="token operator">=></span> e<span class="token punctuation">.</span>ActionInfoId<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">HasName</span><span class="token punctuation">(</span><span class="token string">"PK__Action__FFE3F4D99575B07E"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        entity<span class="token punctuation">.</span><span class="token function">HasIndex</span><span class="token punctuation">(</span>e <span class="token operator">=></span> e<span class="token punctuation">.</span>Name<span class="token punctuation">,</span> <span class="token string">"UQ__Action__A25C5AA7F76A945E"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">IsUnique</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        entity<span class="token punctuation">.</span><span class="token function">Property</span><span class="token punctuation">(</span>e <span class="token operator">=></span> e<span class="token punctuation">.</span>Description<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">HasMaxLength</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">HasComment</span><span class="token punctuation">(</span><span class="token string">"敘述"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        entity<span class="token punctuation">.</span><span class="token function">Property</span><span class="token punctuation">(</span>e <span class="token operator">=></span> e<span class="token punctuation">.</span>DisplayName<span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">HasMaxLength</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">HasComment</span><span class="token punctuation">(</span><span class="token string">"外顯名稱"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        entity<span class="token punctuation">.</span><span class="token function">Property</span><span class="token punctuation">(</span>e <span class="token operator">=></span> e<span class="token punctuation">.</span>Name<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">HasMaxLength</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">OnConfigurePartial</span><span class="token punctuation">(</span>entity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">partial</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">OnConfigurePartial</span><span class="token punctuation">(</span><span class="token class-name">EntityTypeBuilder<span class="token punctuation">&lt;</span>ActionInfo<span class="token punctuation">></span></span> modelBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">partial</span> <span class="token keyword">class</span> <span class="token class-name">BaseDbContext</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">DbContext</span><span class="token punctuation">,</span> <span class="token class-name">IBaseDbContext</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token function">BaseDbContext</span><span class="token punctuation">(</span><span class="token class-name">DbContextOptions<span class="token punctuation">&lt;</span>BaseDbContext<span class="token punctuation">></span></span> options<span class="token punctuation">)</span>
+        <span class="token punctuation">:</span> <span class="token keyword">base</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">virtual</span> <span class="token return-type class-name">DbSet<span class="token punctuation">&lt;</span>ActionInfo<span class="token punctuation">></span></span> ActionInfo <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">OnModelCreating</span><span class="token punctuation">(</span><span class="token class-name">ModelBuilder</span> modelBuilder<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        modelBuilder<span class="token punctuation">.</span><span class="token function">ApplyConfiguration</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token constructor-invocation class-name">Configurations<span class="token punctuation">.</span>ActionInfoConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">OnModelCreatingPartial</span><span class="token punctuation">(</span>modelBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">partial</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">OnModelCreatingPartial</span><span class="token punctuation">(</span><span class="token class-name">ModelBuilder</span> modelBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IBaseDbContext</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">DbSet<span class="token punctuation">&lt;</span>ActionInfo<span class="token punctuation">></span></span> ActionInfo <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>補充一下: 套件執行的時候會需要連線 DB，但是跨層可能會吃不到 appsetting 參數，會需要建立一個 Factory 拿參數配置</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Infrastructure/Persistence/YourDbContextFactory.cs</span>
+<span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>EntityFrameworkCore</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>EntityFrameworkCore<span class="token punctuation">.</span>Design</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>Extensions<span class="token punctuation">.</span>Configuration</span><span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> <span class="token namespace">YourProject<span class="token punctuation">.</span>Infrastructure<span class="token punctuation">.</span>Persistence</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">YourDbContextFactory</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IDesignTimeDbContextFactory<span class="token punctuation">&lt;</span>YourDbContext<span class="token punctuation">></span></span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">YourDbContext</span> <span class="token function">CreateDbContext</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 讀取 appsettings.json</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> configuration <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ConfigurationBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">SetBasePath</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span>Directory<span class="token punctuation">.</span><span class="token function">GetCurrentDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"../YourWebApi"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">AddJsonFile</span><span class="token punctuation">(</span><span class="token string">"appsettings.json"</span><span class="token punctuation">,</span> <span class="token named-parameter punctuation">optional</span><span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">AddJsonFile</span><span class="token punctuation">(</span><span class="token string">"appsettings.Development.json"</span><span class="token punctuation">,</span> <span class="token named-parameter punctuation">optional</span><span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name"><span class="token keyword">var</span></span> optionsBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">DbContextOptionsBuilder<span class="token punctuation">&lt;</span>YourDbContext<span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> connectionString <span class="token operator">=</span> configuration<span class="token punctuation">.</span><span class="token function">GetConnectionString</span><span class="token punctuation">(</span><span class="token string">"DefaultConnection"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        optionsBuilder<span class="token punctuation">.</span><span class="token function">UseSqlServer</span><span class="token punctuation">(</span>connectionString<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">YourDbContext</span><span class="token punctuation">(</span>optionsBuilder<span class="token punctuation">.</span>Options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>準備好後就可以下終端機指令:</p> <p>產版本控制檔案 <code>(首次執行會建立 BaseDbContextModelSnapshot.cs 用來進行快照)</code></p> <pre class="language-bash"><!----><code class="language-bash">dotnet ef migrations <span class="token function">add</span> AddNewFeature <span class="token parameter variable">--context</span> MyDbContext // AddNewFeature 版本控制名稱, MyDbContext C<span class="token comment"># 的 DB Instance</span>
+dotnet ef migrations <span class="token function">add</span> AddNewFeature <span class="token parameter variable">--project</span> DDD.Infrastructure --startup-project DDD.WebApi <span class="token parameter variable">--context</span> BaseDbContext // 跨層設定</code><!----></pre> <p>拿 migration 檔案產SQL語法與資料庫更新<code>(首次執行資料庫會建一張表 __EFMigrationsHistory 用來進行版本控制)</code></p> <pre class="language-bash"><!----><code class="language-bash">dotnet ef database update <span class="token parameter variable">--context</span> BaseDbContext <span class="token parameter variable">--project</span> <span class="token punctuation">..</span>. --startup-project <span class="token punctuation">..</span>.</code><!----></pre> <p>這時候可以去資料庫檢查<code>__EFMigrationsHistory</code> 是不是有紀錄和更新成功與否。</p> <p>另外如果專案是從 DbFirst 轉 CodeFirst ，你的第一次<code>dotnet ef migrations add</code>產檔完成後,應該會是一整排 CreateTable 但實際資料庫已有了，可以直接把檔案中的 Up Scope 清空，邏輯上不動作保留提交紀錄。</p> <pre class="language-csharp"><!----><code class="language-csharp">    <span class="token keyword">public</span> <span class="token keyword">partial</span> <span class="token keyword">class</span> <span class="token class-name">InitialCreate</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Migration</span></span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">/// &lt;inheritdoc /></span>
+        <span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Up</span><span class="token punctuation">(</span><span class="token class-name">MigrationBuilder</span> migrationBuilder<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 資料庫已存在，不需要建立資料表</span>
+            <span class="token comment">// Database already exists, no need to create tables</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">/// &lt;inheritdoc /></span>
+        <span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Down</span><span class="token punctuation">(</span><span class="token class-name">MigrationBuilder</span> migrationBuilder<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 不執行任何還原動作</span>
+            <span class="token comment">// No rollback actions</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span></code><!----></pre> <p>剩下的操作就類似<code>git</code>一樣了。</p> <h3>自動化</h3> <p>為了避免忘記手動執行 <code>dotnet ef database update</code>，可以做一個 Installer 自動更新，正式環境需不需要就看習慣。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Infrastructure/Settings/DatabaseMigrate.cs</span>
+<span class="token keyword">namespace</span> <span class="token namespace">YourProject<span class="token punctuation">.</span>Infrastructure<span class="token punctuation">.</span>Settings</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">record</span> <span class="token class-name">DatabaseMigrate</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> required <span class="token return-type class-name"><span class="token keyword">string</span></span> DefaultConnection <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> required <span class="token return-type class-name"><span class="token keyword">bool</span></span> AutoMigrate <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>appsettings.json</p> <pre class="language-json"><!----><code class="language-json"><span class="token comment">// 正式</span>
+
+<span class="token punctuation">&#123;</span>
+  <span class="token property">"DatabaseMigrate"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"DefaultConnection"</span><span class="token operator">:</span> <span class="token string">"Server=prod-server;Database=ProdDB;..."</span><span class="token punctuation">,</span>
+    <span class="token property">"AutoMigrate"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 測試</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token property">"DatabaseMigrate"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"DefaultConnection"</span><span class="token operator">:</span> <span class="token string">"Server=dev-server;Database=DevDB;..."</span><span class="token punctuation">,</span>
+    <span class="token property">"AutoMigrate"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>Installer</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Infrastructure/Installers/DatabaseMigrationInstaller.cs</span>
+<span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>AspNetCore<span class="token punctuation">.</span>Builder</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>EntityFrameworkCore</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>Extensions<span class="token punctuation">.</span>Configuration</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>Extensions<span class="token punctuation">.</span>DependencyInjection</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>Extensions<span class="token punctuation">.</span>Logging</span><span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> <span class="token namespace">YourProject<span class="token punctuation">.</span>Infrastructure<span class="token punctuation">.</span>Installers</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">DatabaseMigrationInstaller</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ApplyDatabaseMigrations</span><span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token class-name">WebApplication</span> app<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> configuration <span class="token operator">=</span> app<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetRequiredService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IConfiguration<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> databaseMigrate <span class="token operator">=</span> configuration
+            <span class="token punctuation">.</span><span class="token function">GetSection</span><span class="token punctuation">(</span><span class="token keyword">nameof</span><span class="token punctuation">(</span>DatabaseMigrate<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Get</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>DatabaseMigrate<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>databaseMigrate <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token operator">!</span>databaseMigrate<span class="token punctuation">.</span>AutoMigrate<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> scope <span class="token operator">=</span> app<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">CreateScope</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> loggerFactory <span class="token operator">=</span> scope<span class="token punctuation">.</span>ServiceProvider<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetRequiredService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ILoggerFactory<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> logger <span class="token operator">=</span> loggerFactory<span class="token punctuation">.</span><span class="token function">CreateLogger</span><span class="token punctuation">(</span><span class="token string">"DatabaseMigration"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 建立 DbContext</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> optionsBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">DbContextOptionsBuilder<span class="token punctuation">&lt;</span>YourDbContext<span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            optionsBuilder<span class="token punctuation">.</span><span class="token function">UseSqlServer</span><span class="token punctuation">(</span>databaseMigrate<span class="token punctuation">.</span>DefaultConnection<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment">// 忽略 PendingModelChanges 警告（允許開發時 Entity 有變更）</span>
+            optionsBuilder<span class="token punctuation">.</span><span class="token function">ConfigureWarnings</span><span class="token punctuation">(</span>warnings <span class="token operator">=></span>
+                warnings<span class="token punctuation">.</span><span class="token function">Ignore</span><span class="token punctuation">(</span>
+                    Microsoft<span class="token punctuation">.</span>EntityFrameworkCore<span class="token punctuation">.</span>Diagnostics
+                        <span class="token punctuation">.</span>RelationalEventId<span class="token punctuation">.</span>PendingModelChangesWarning<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">YourDbContext</span><span class="token punctuation">(</span>optionsBuilder<span class="token punctuation">.</span>Options<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment">// 檢查待執行的 Migrations</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> pendingMigrations <span class="token operator">=</span> context<span class="token punctuation">.</span>Database<span class="token punctuation">.</span><span class="token function">GetPendingMigrations</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>pendingMigrations<span class="token punctuation">.</span><span class="token function">Any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#123;</span>
+                logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span>
+                    <span class="token string">"發現 &#123;count&#125; 個待執行的 migrations: &#123;migrations&#125;"</span><span class="token punctuation">,</span>
+                    pendingMigrations<span class="token punctuation">.</span>Count<span class="token punctuation">,</span>
+                    <span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">Join</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">,</span> pendingMigrations<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"開始執行資料庫 Migration..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                context<span class="token punctuation">.</span>Database<span class="token punctuation">.</span><span class="token function">Migrate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"資料庫 Migration 執行完成！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">else</span>
+            <span class="token punctuation">&#123;</span>
+                logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"資料庫已是最新版本，無需執行 Migration"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            logger<span class="token punctuation">.</span><span class="token function">LogError</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"執行資料庫 Migration 時發生錯誤"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">throw</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>Program.cs</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Program.cs</span>
+<span class="token class-name"><span class="token keyword">var</span></span> builder <span class="token operator">=</span> WebApplication<span class="token punctuation">.</span><span class="token function">CreateBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 註冊服務...</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">AddDbContext</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>YourDbContext<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>options <span class="token operator">=></span>
+    options<span class="token punctuation">.</span><span class="token function">UseSqlServer</span><span class="token punctuation">(</span>builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">.</span><span class="token function">GetConnectionString</span><span class="token punctuation">(</span><span class="token string">"DefaultConnection"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name"><span class="token keyword">var</span></span> app <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 自動執行資料庫 Migration</span>
+app<span class="token punctuation">.</span><span class="token function">ApplyDatabaseMigrations</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Configure the HTTP request pipeline...</span>
+app<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>常見的合併衝突可能會是<code>Snapshot.cs</code>，通常會是最後一個人先捨棄自己當前的 migration，再重新做一份比較安全。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_4ugkf0 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CF6GrDmk.js"),
+						import("../_app/immutable/entry/app.u-n9Tfbm.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
