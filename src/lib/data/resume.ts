@@ -32,7 +32,7 @@ export const resumeData: ResumeData = {
     email: 'codeing0085@gmail.com',
     github: 'github.com/cao0085',
   },
-  summary: 'Full-Stack engineer comfortable working independently or following team coding standards to maintain existing systems. Adaptable to different tech stacks based on project needs (C# .Net, Golang Gin, Angular, React, Vue). Currently exploring high-concurrency and distributed systems.',
+  summary: 'Full-Stack engineer comfortable working independently or following team coding standards to maintain existing systems. Adaptable to different tech stacks based on project needs (.Net, Gin, WinForm, Angular, Vue ...). Currently exploring high-concurrency and distributed systems.',
   objective: 'Seeking a Full-Stack / Backend Developer role with opportunities to work on challenging technical problems and grow with the team.',
   education: [
     {
