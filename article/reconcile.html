@@ -8,30 +8,30 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.CvJqZTP5.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Csu18b5d.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D_VtlYve.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/LxJswHCL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BoM7WMp4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/ysiS1iMM.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app._gAdP4bI.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.dZcyMzLR.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DsGThv_j.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.C2UaueZ5.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/jk_AkRDi.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CG4AVPDp.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/LVWCajIS.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BQdkIDIG.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/wk9K3V53.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.B6MHVhWZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DjHQGUs_.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">會計對帳檔案處理</h1> <p class="svelte-mdkbyj">2025-09-30</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>金流商通常會在N工作日後，提供一份撥款檔案視為實際銀行帳務核實依據</h6> <hr/> <p>通常為每日定時執行的自動化流程,但實務上常面臨以下異常狀況:</p> <ul><li>系統異常(網路中斷、伺服器故障)</li> <li>金流商未按時提供檔案</li> <li>資料格式錯誤或不完整</li></ul> <p>若每次異常都從頭重跑整個流程,會造成大量的資源浪費。因此需要設計重試節點(Checkpoint),讓人工介入後可以從中斷點繼續執行,而非全部重來。</p> <br/> <h3>1. 取得金流商靜態檔案</h3> <p>發生異常的話表示沒有寫入本地端，重試點就從 ERROR LOG 去找該參數直接重試可以了。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">/// &lt;summary></span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">會計對帳檔案處理</h1> <p class="svelte-mdkbyj">2025-09-30</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>金流商通常會在N工作日後，提供一份撥款檔案視為實際銀行帳務核實依據</h6> <hr/> <p>通常為每日定時執行的自動化流程,但實務上常面臨以下異常狀況:</p> <ul><li>系統異常(網路中斷、伺服器故障)</li> <li>金流商未按時提供檔案</li> <li>資料格式錯誤或不完整</li></ul> <p>若每次異常都從頭重跑整個流程,會造成大量的資源浪費。因此需要設計重試節點(Checkpoint),讓人工介入後可以從中斷點繼續執行,而非全部重來。</p> <br/> <h3>1. 取得金流商靜態檔案</h3> <p>發生異常的話表示沒有寫入本地端，重試點就從 ERROR LOG 去找該參數直接重試可以了。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">/// &lt;summary></span>
 <span class="token comment">/// 取得遠端檔案</span>
 <span class="token comment">/// &lt;/summary></span>
 <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token function">DownloadRemoteFileAsync</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> connectionJsonStr<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> storagePath<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> filePrefix<span class="token punctuation">,</span> <span class="token class-name">DateTime<span class="token punctuation">?</span></span> startDate <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token class-name">DateTime<span class="token punctuation">?</span></span> endDate <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
@@ -214,7 +214,7 @@ FileName <span class="token operator">=</span> <span class="token keyword">null<
 			
 			<script>
 				{
-					__sveltekit_cvbq1d = {
+					__sveltekit_hf38s8 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -222,8 +222,8 @@ FileName <span class="token operator">=</span> <span class="token keyword">null<
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.CvJqZTP5.js"),
-						import("../_app/immutable/entry/app._gAdP4bI.js")
+						import("../_app/immutable/entry/start.D_VtlYve.js"),
+						import("../_app/immutable/entry/app.dZcyMzLR.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
