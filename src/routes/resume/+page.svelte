@@ -45,7 +45,8 @@
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...subtitleColor);
     const contactParts = [];
-    if (resumeData.contact.location) contactParts.push(resumeData.contact.location);
+    if (resumeData.contact.location)
+      contactParts.push(resumeData.contact.location);
     if (resumeData.contact.phone) contactParts.push(resumeData.contact.phone);
     if (resumeData.contact.email) contactParts.push(resumeData.contact.email);
     if (resumeData.contact.github) contactParts.push(resumeData.contact.github);
@@ -60,7 +61,10 @@
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(...textColor);
-      const objectiveLines = doc.splitTextToSize(resumeData.objective, contentWidth);
+      const objectiveLines = doc.splitTextToSize(
+        resumeData.objective,
+        contentWidth,
+      );
       doc.text(objectiveLines, margin, y);
       y += objectiveLines.length * 5 + 6;
     }
@@ -71,7 +75,10 @@
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(...textColor);
-      const summaryLines = doc.splitTextToSize(resumeData.summary, contentWidth);
+      const summaryLines = doc.splitTextToSize(
+        resumeData.summary,
+        contentWidth,
+      );
       doc.text(summaryLines, margin, y);
       y += summaryLines.length * 5 + 6;
     }
@@ -101,7 +108,10 @@
         // Highlights
         doc.setTextColor(...textColor);
         exp.highlights.forEach((highlight) => {
-          const bulletLines = doc.splitTextToSize(`• ${highlight}`, contentWidth - 4);
+          const bulletLines = doc.splitTextToSize(
+            `• ${highlight}`,
+            contentWidth - 4,
+          );
           doc.text(bulletLines, margin + 2, y);
           y += bulletLines.length * 5.5;
         });
@@ -314,7 +324,7 @@
   }
 
   h2 {
-    font-size: 0.85rem;
+    font-size: 1rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -392,9 +402,13 @@
     color: #444;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 780px) {
+    .resume-container {
+      padding: 0 0;
+    }
+
     .resume {
-      padding: 1.5rem;
+      padding: 1.5rem 1rem;
     }
 
     h1 {
