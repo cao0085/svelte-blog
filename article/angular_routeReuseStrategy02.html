@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CEoFgwof.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/06VPYqZJ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/PXtlCoHu.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BvSIJhYP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BilCNSRP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CCLnhlR3.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.C1H7BiFm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DJkUW3vj.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.l-Nz-QAl.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 RouteReuseStrategy_02</h1> <p class="svelte-mdkbyj">2026-01-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 ANGULAR 判斷路由變更時，如何處理邏輯的一個介面</h6> <hr/> <p>前置流程:</p> <p><code>url變更 -> angular 去找有沒有物件 route -> 轉成物件 ActivatedRouteSnapshot -> 進入 Strategy</code></p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">interface</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 1. 判斷是否允許將當前路由從 DOM「分離」(detach) 並保存</span>
+  <span class="token function">shouldDetach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 2. 當 shouldDetach 返回 true 時觸發，將分離下來的路由「快照」存入你的儲存空間</span>
+  <span class="token function">store</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> handle<span class="token operator">:</span> DetachedRouteHandle<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 3. 判斷當前路由是否允許「還原」(attach) 之前存下來的快照</span>
+  <span class="token function">shouldAttach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 4. 當 shouldAttach 返回 true 時觸發，從你的儲存空間「取回」快照</span>
+  <span class="token function">retrieve</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> DetachedRouteHandle <span class="token operator">|</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 5. 判斷導航前後是否視為「同一個路由」(決定要重用還是銷毀重建)</span>
+  <span class="token function">shouldReuseRoute</span><span class="token punctuation">(</span>future<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> curr<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>運行時序</p> <pre class="language-md"><!----><code class="language-md">理想上的時序
+
+導航：頁面 A → 頁面 B
+
+<span class="token list punctuation">1.</span> shouldReuseRoute(B, A) → false（不同路由，繼續往下）
+
+── 處理「舊路由 A」──
+<span class="token list punctuation">2.</span> shouldDetach(A)         → 要不要保存 A？
+<span class="token list punctuation">3.</span> store(A, handle)        → （如果 yes）把 A 存起來
+
+── 處理「新路由 B」──
+<span class="token list punctuation">4.</span> shouldAttach(B)         → B 之前有被存過嗎？
+<span class="token list punctuation">5.</span> retrieve(B)             → （如果 yes）把 B 的快照拿出來用</code><!----></pre> <h3>儲存</h3> <p>第一步要在物件 route 內部塞值當作 <code>shouldDetach()</code> 的依據，<code>route</code>本身開放 data 屬性可以塞自訂義資料</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// router_module.d.d.ts</span>
+<span class="token keyword">interface</span> <span class="token class-name">Route</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * Additional developer-defined data provided to the component via
+     * &#96;ActivatedRoute&#96;. By default, no additional data is passed.
+     */</span>
+    data<span class="token operator">?</span><span class="token operator">:</span> Data<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// new Route()</span>
+<span class="token punctuation">&#123;</span>
+    path<span class="token operator">:</span> <span class="token string">'-'</span><span class="token punctuation">,</span>
+    <span class="token function-variable function">loadComponent</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'@app/features/basic-system/--'</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>m <span class="token operator">=></span> m<span class="token punctuation">.</span>CatalogManagement<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    canActivate<span class="token operator">:</span> <span class="token punctuation">[</span>routeGuard<span class="token punctuation">]</span><span class="token punctuation">,</span>
+    data<span class="token operator">:</span> <span class="token punctuation">&#123;</span> reuseRoute<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span> <span class="token comment">// reuseRoute: true</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>實作 func shouldDetach() 就變成</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
+ * 決定是否應該分離（保存）這個路由
+ * @param route 當前路由快照
+ * @returns true = 保存組件, false = 銷毀組件
+ */</span>
+<span class="token function">shouldDetach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> route<span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token string">'reuseRoute'</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token boolean">true</span><span class="token punctuation">;</span> <span class="token comment">// 只保存有 data.reuseRoute 標記的路由</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>再來是用 func store() 來維護已儲存的快照。參數<code>ActivatedRouteSnapshot</code>就是拿剛剛的、<code>handle</code>由 angular 自己處理 Dom 快照後傳入，這邊執行成功後就是保存快照完成了。</p> <pre class="language-ts"><!----><code class="language-ts">
+<span class="token comment">/**
+ * 最大快取數量，超過時會移除最舊的快取
+ */</span>
+<span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token constant">MAX_CACHE_SIZE</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 儲存已分離的路由組件
+ * key: 路由路徑
+ * value: 組件快照（包含狀態）
+ */</span>
+<span class="token keyword">private</span> handlers<span class="token operator">:</span> Map<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token punctuation">,</span> DetachedRouteHandle<span class="token operator">></span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 儲存分離的路由組件
+ * @param route 路由快照
+ * @param handle 組件快照（包含 DOM、狀態等）
+ */</span>
+<span class="token function">store</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> handle<span class="token operator">:</span> DetachedRouteHandle <span class="token operator">|</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>handle<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 如果快取已滿，移除最舊的快取（Map 保持插入順序）</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span>size <span class="token operator">>=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token constant">MAX_CACHE_SIZE</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">const</span> oldestKey <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>oldestKey<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">const</span> oldHandle <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>oldestKey<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>oldestKey<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>oldHandle <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>oldHandle <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>componentRef<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token punctuation">(</span>oldHandle <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>componentRef<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 快取已滿，移除最舊的: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>oldestKey<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> handle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 保存路由: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>path<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> (快取數量: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span>size<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token constant">MAX_CACHE_SIZE</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">)</span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * 生成路由的唯一鍵值
+ * @param route 路由快照
+ * @returns 路由鍵值
+ */</span>
+<span class="token keyword">private</span> <span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 使用 routeConfig.path 來組合完整路徑，避免空路徑子路由造成的問題</span>
+    <span class="token keyword">const</span> segments<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> current<span class="token operator">:</span> ActivatedRouteSnapshot <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token operator">=</span> route<span class="token punctuation">;</span>
+
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>current<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>current<span class="token punctuation">.</span>routeConfig <span class="token operator">&amp;&amp;</span> current<span class="token punctuation">.</span>routeConfig<span class="token punctuation">.</span>path<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            segments<span class="token punctuation">.</span><span class="token function">unshift</span><span class="token punctuation">(</span>current<span class="token punctuation">.</span>routeConfig<span class="token punctuation">.</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        current <span class="token operator">=</span> current<span class="token punctuation">.</span>parent<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> segments<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>讀取</h3> <p>跳轉路由時，就是去檢查 this.handlers 有沒有快照紀錄，來決定是否要 new Component() / retrieve()</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
+ * 決定是否應該重新附加（恢復）之前保存的路由
+ * @param route 路由快照
+ * @returns true = 使用保存的組件, false = 創建新組件
+ */</span>
+<span class="token function">shouldAttach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>route<span class="token punctuation">.</span>component <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>route<span class="token punctuation">.</span>routeConfig<span class="token operator">?.</span>loadComponent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> hasStored <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>hasStored<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 恢復路由: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>path<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> hasStored<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * 取回之前保存的路由組件
+ * @param route 路由快照
+ * @returns 保存的組件快照
+ */</span>
+<span class="token function">retrieve</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> DetachedRouteHandle <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 防止 Angular 13+ 的路由資料繼承問題：</span>
+    <span class="token comment">// 沒有組件的路由不應該取回快取，避免無限迴圈</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>route<span class="token punctuation">.</span>component <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>route<span class="token punctuation">.</span>routeConfig<span class="token operator">?.</span>loadComponent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>最後是判斷不同 URL 但使用相同路由設定的情況，例如不同參數的情境（如 /user/1 → /user/2）</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
+ * 決定是否應該重用路由
+ * @param future 即將進入的路由
+ * @param curr 當前路由
+ * @returns true = 重用, false = 不重用
+ */</span>
+<span class="token function">shouldReuseRoute</span><span class="token punctuation">(</span>future<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> curr<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> future<span class="token punctuation">.</span>routeConfig <span class="token operator">===</span> curr<span class="token punctuation">.</span>routeConfig<span class="token punctuation">;</span> <span class="token comment">// 比較的是物件參考</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>遞迴</h3> <p>當路由設定為父子結構時（父路由 path: ‘basic/catalogmanagement’，子路由 path: ”），兩者組合出的路由路徑相同，作為 key 時會指向同一個值。導致父路由和子路由在 retrieve 時都匹配到同一個 key，retrieve 逐層解析路由樹時反覆取到同一個 handle，形成無限遞迴。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// 路由設定：</span>
+<span class="token punctuation">&#123;</span>
+  path<span class="token operator">:</span> <span class="token string">'basic/catalogmanagement'</span><span class="token punctuation">,</span>     <span class="token comment">// 父路由（沒有 component）</span>
+  children<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span>
+    path<span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>                          <span class="token comment">// 子路由（有 component）</span>
+    data<span class="token operator">:</span> <span class="token punctuation">&#123;</span> reuseRoute<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>所以我們要做的事情是流程避免掉父路由，那判斷依據可以用有沒有 component 去識別</p> <pre class="language-ts"><!----><code class="language-ts">
+<span class="token comment">/**
+ * 決定是否應該重新附加（恢復）之前保存的路由
+ * @param route 路由快照
+ * @returns true = 使用保存的組件, false = 創建新組件
+ */</span>
+<span class="token function">shouldAttach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>route<span class="token punctuation">.</span>component <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>route<span class="token punctuation">.</span>routeConfig<span class="token operator">?.</span>loadComponent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> hasStored <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>hasStored<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 恢復路由: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>path<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> hasStored<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * 取回之前保存的路由組件
+ * @param route 路由快照
+ * @returns 保存的組件快照
+ */</span>
+<span class="token function">retrieve</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> DetachedRouteHandle <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 防止 Angular 13+ 的路由資料繼承問題：</span>
+    <span class="token comment">// 沒有組件的路由不應該取回快取，避免無限迴圈</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>route<span class="token punctuation">.</span>component <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>route<span class="token punctuation">.</span>routeConfig<span class="token operator">?.</span>loadComponent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+</code><!----></pre> <p>完整程式碼</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> DetachedRouteHandle<span class="token punctuation">,</span> RouteReuseStrategy <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/router'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">CustomRouteReuseStrategy</span> <span class="token keyword">implements</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * 最大快取數量，超過時會移除最舊的快取
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token constant">MAX_CACHE_SIZE</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * 儲存已分離的路由組件
+     * key: 路由路徑
+     * value: 組件快照（包含狀態）
+     */</span>
+    <span class="token keyword">private</span> handlers<span class="token operator">:</span> Map<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token punctuation">,</span> DetachedRouteHandle<span class="token operator">></span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * 標記準備要被銷毀的路由路徑
+     * 用於處理「關閉當前分頁」的情況，防止路由在導航離開時被再次保存
+     */</span>
+    <span class="token keyword">private</span> safeToDestroy <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Set<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/**
+     * 決定是否應該分離（保存）這個路由
+     * @param route 當前路由快照
+     * @returns true = 保存組件, false = 銷毀組件
+     */</span>
+    <span class="token function">shouldDetach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 如果該路徑被標記為要銷毀（即正在關閉分頁）</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>safeToDestroy<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>safeToDestroy<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 路由標記為銷毀，不進行保存: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>path<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 只保存有 data.reuseRoute 標記的路由</span>
+        <span class="token keyword">return</span> route<span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token string">'reuseRoute'</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 儲存分離的路由組件
+     * @param route 路由快照
+     * @param handle 組件快照（包含 DOM、狀態等）
+     */</span>
+    <span class="token function">store</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> handle<span class="token operator">:</span> DetachedRouteHandle <span class="token operator">|</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 再次檢查是否被標記為銷毀（雙重保險）</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>safeToDestroy<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>safeToDestroy<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>handle<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 如果快取已滿，移除最舊的快取（Map 保持插入順序）</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span>size <span class="token operator">>=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token constant">MAX_CACHE_SIZE</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">const</span> oldestKey <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>oldestKey<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token keyword">const</span> oldHandle <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>oldestKey<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>oldestKey<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>oldHandle <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>oldHandle <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>componentRef<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                        <span class="token punctuation">(</span>oldHandle <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>componentRef<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">&#125;</span>
+                    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 快取已滿，移除最舊的: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>oldestKey<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> handle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 保存路由: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>path<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> (快取數量: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span>size<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token constant">MAX_CACHE_SIZE</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">)</span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 決定是否應該重新附加（恢復）之前保存的路由
+     * @param route 路由快照
+     * @returns true = 使用保存的組件, false = 創建新組件
+     */</span>
+    <span class="token function">shouldAttach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>route<span class="token punctuation">.</span>component <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>route<span class="token punctuation">.</span>routeConfig<span class="token operator">?.</span>loadComponent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">const</span> hasStored <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>hasStored<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 恢復路由: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>path<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">return</span> hasStored<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 取回之前保存的路由組件
+     * @param route 路由快照
+     * @returns 保存的組件快照
+     */</span>
+    <span class="token function">retrieve</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> DetachedRouteHandle <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 防止 Angular 13+ 的路由資料繼承問題：</span>
+        <span class="token comment">// 沒有組件的路由不應該取回快取，避免無限迴圈</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>route<span class="token punctuation">.</span>component <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>route<span class="token punctuation">.</span>routeConfig<span class="token operator">?.</span>loadComponent<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 決定是否應該重用路由
+     * @param future 即將進入的路由
+     * @param curr 當前路由
+     * @returns true = 重用, false = 不重用
+     */</span>
+    <span class="token function">shouldReuseRoute</span><span class="token punctuation">(</span>future<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> curr<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> future<span class="token punctuation">.</span>routeConfig <span class="token operator">===</span> curr<span class="token punctuation">.</span>routeConfig<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 處理分頁關閉的邏輯
+     * @param url 完整的路由路徑 (e.g. /main/basic-system/log)
+     */</span>
+    <span class="token function">close</span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 確保格式一致（移除開頭 slash）</span>
+        <span class="token keyword">const</span> key <span class="token operator">=</span> url<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span> <span class="token operator">?</span> url<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">:</span> url<span class="token punctuation">;</span>
+
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 嘗試關閉路由: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>key<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 1. 如果該路由目前在背景緩存中，直接移除並銷毀</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">const</span> handle <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment">// 嘗試手動銷毀組件以釋放資源</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>handle <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>handle <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>componentRef<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token punctuation">(</span>handle <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>componentRef<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">[RouteReuse] 已清除緩存並銷毀組件: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>key<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 2. 標記該路徑為待銷毀</span>
+        <span class="token comment">// 這樣如果它是「當前分頁」，在導航離開觸發 shouldDetach 時會回傳 false</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>safeToDestroy<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 生成路由的唯一鍵值
+     * @param route 路由快照
+     * @returns 路由鍵值
+     */</span>
+    <span class="token keyword">private</span> <span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 使用 routeConfig.path 來組合完整路徑，避免空路徑子路由造成的問題</span>
+        <span class="token keyword">const</span> segments<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> current<span class="token operator">:</span> ActivatedRouteSnapshot <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token operator">=</span> route<span class="token punctuation">;</span>
+
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>current<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>current<span class="token punctuation">.</span>routeConfig <span class="token operator">&amp;&amp;</span> current<span class="token punctuation">.</span>routeConfig<span class="token punctuation">.</span>path<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                segments<span class="token punctuation">.</span><span class="token function">unshift</span><span class="token punctuation">(</span>current<span class="token punctuation">.</span>routeConfig<span class="token punctuation">.</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            current <span class="token operator">=</span> current<span class="token punctuation">.</span>parent<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">return</span> segments<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 清除所有保存的路由
+     */</span>
+    <span class="token function">clearAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>handle <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>handle <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>handle <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>componentRef<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token punctuation">(</span>handle <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>componentRef<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>safeToDestroy<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'[RouteReuse] 清除所有保存的路由'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/**
+     * 清除特定路由（舊版相容）
+     */</span>
+    <span class="token function">clear</span><span class="token punctuation">(</span>path<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_198iivn = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CEoFgwof.js"),
+						import("../_app/immutable/entry/app.BvSIJhYP.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

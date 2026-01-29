@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CEoFgwof.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/06VPYqZJ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/PXtlCoHu.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BvSIJhYP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BilCNSRP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CCLnhlR3.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.C1H7BiFm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DJkUW3vj.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.l-Nz-QAl.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 RouteReuseStrategy_01</h1> <p class="svelte-mdkbyj">2026-01-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 ANGULAR 判斷路由變更時，如何處理邏輯的一個介面</h6> <hr/> <p>Angular 在路由導航時，會自動把物件<code>route</code>轉成物件<code>ActivatedRouteSnapshot</code>，再經由<code>RouteReuse</code>去做邏輯判斷和流程。也就是說就算 app 沒有內部實作，系統也會自動帶入最基本的 Strategy 去過過水，可以看看檔案原始碼。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">declare</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">BaseRouteReuseStrategy</span> <span class="token keyword">implements</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/**
+     * Whether the given route should detach for later reuse.
+     * Always returns false for &#96;BaseRouteReuseStrategy&#96;.
+     * */</span>
+    <span class="token function">shouldDetach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+    <span class="token comment">/**
+     * A no-op; the route is never stored since this strategy never detaches routes for later re-use.
+     */</span>
+    <span class="token function">store</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> detachedTree<span class="token operator">:</span> DetachedRouteHandle<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span><span class="token punctuation">;</span>
+    <span class="token comment">/** Returns &#96;false&#96;, meaning the route (and its subtree) is never reattached */</span>
+    <span class="token function">shouldAttach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+    <span class="token comment">/** Returns &#96;null&#96; because this strategy does not store routes for later re-use. */</span>
+    <span class="token function">retrieve</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> DetachedRouteHandle <span class="token operator">|</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token comment">/**
+     * Determines if a route should be reused.
+     * This strategy returns &#96;true&#96; when the future route config and current route config are
+     * identical.
+     */</span>
+    <span class="token function">shouldReuseRoute</span><span class="token punctuation">(</span>future<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> curr<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>所以若要去控制流程，需要替換掉預設的<code>BaseRouteReuseStrategy</code>改成自己需求的策略，那就是必須實作 5 個特定物件作為參數的函式，這 5 個必須實作的接口如下：</p> <pre class="language-typescript"><!----><code class="language-typescript"><span class="token keyword">interface</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 1. 判斷是否允許將當前路由從 DOM「分離」(detach) 並保存</span>
+  <span class="token function">shouldDetach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 2. 當 shouldDetach 返回 true 時觸發，將分離下來的路由「快照」存入你的儲存空間</span>
+  <span class="token function">store</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> handle<span class="token operator">:</span> DetachedRouteHandle<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 3. 判斷當前路由是否允許「還原」(attach) 之前存下來的快照</span>
+  <span class="token function">shouldAttach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 4. 當 shouldAttach 返回 true 時觸發，從你的儲存空間「取回」快照</span>
+  <span class="token function">retrieve</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> DetachedRouteHandle <span class="token operator">|</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 5. 判斷導航前後是否視為「同一個路由」(決定要重用還是銷毀重建)</span>
+  <span class="token function">shouldReuseRoute</span><span class="token punctuation">(</span>future<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> curr<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// route-reuse.strategy.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> DetachedRouteHandle<span class="token punctuation">,</span> RouteReuseStrategy <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/router'</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">CustomRouteReuseStrategy</span> <span class="token keyword">implements</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 實作邏輯...</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>再來就是去宣告 app 說若有引用到 <code>RouteReuseStrategy</code> 時都必須使用我定義好的 class</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// app.config.ts</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> appConfig<span class="token operator">:</span> ApplicationConfig <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  providers<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token comment">// provideBrowserGlobalErrorListeners(),</span>
+    <span class="token comment">// provideZoneChangeDetection(&#123; eventCoalescing: true &#125;),</span>
+    <span class="token comment">// provideRouter(routes),</span>
+    <span class="token comment">// provideHttpClient(</span>
+    <span class="token comment">//   withInterceptors([authInterceptor]) // 註冊 Auth Interceptor</span>
+    <span class="token comment">// ),</span>
+    <span class="token comment">// provideAnimationsAsync(),</span>
+
+    <span class="token comment">// // App 初始化：恢復登入狀態（在路由啟動前完成）</span>
+    <span class="token comment">// &#123;</span>
+    <span class="token comment">//   provide: APP_INITIALIZER,</span>
+    <span class="token comment">//   useFactory: initializeAuth,</span>
+    <span class="token comment">//   multi: true</span>
+    <span class="token comment">// &#125;,</span>
+
+    <span class="token comment">// ANGULAR DI</span>
+    <span class="token punctuation">&#123;</span> provide<span class="token operator">:</span> RouteReuseStrategy<span class="token punctuation">,</span> useClass<span class="token operator">:</span> CustomRouteReuseStrategy <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token comment">// provideNzIcons(icons),</span>
+    <span class="token comment">// provideNzI18n(zh_TW),</span>
+    <span class="token comment">// provideAnimationsAsync(),</span>
+    <span class="token comment">// provideHttpClient()</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_198iivn = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CEoFgwof.js"),
+						import("../_app/immutable/entry/app.BvSIJhYP.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
