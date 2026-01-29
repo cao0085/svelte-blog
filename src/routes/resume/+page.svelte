@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { resumeData } from '$lib/data/resume';
-  import { jsPDF } from 'jspdf';
+  import { resumeData } from "$lib/data/resume";
+  import { jsPDF } from "jspdf";
 
   function generatePDF() {
     const doc = new jsPDF({
-      unit: 'mm',
-      format: 'a4',
+      unit: "mm",
+      format: "a4",
     });
 
     const pageWidth = 210;
@@ -16,56 +16,78 @@
     // Helper functions
     const drawSectionHeader = (title: string) => {
       doc.setFillColor(220, 220, 220);
-      doc.rect(margin, y, contentWidth, 7, 'F');
+      doc.rect(margin, y, contentWidth, 7, "F");
       doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont("helvetica", "bold");
       doc.text(title, margin + 2, y + 5);
       y += 10;
     };
 
-    const drawText = (text: string, x: number, fontSize: number = 10, style: 'normal' | 'bold' = 'normal') => {
+    const drawText = (
+      text: string,
+      x: number,
+      fontSize: number = 10,
+      style: "normal" | "bold" = "normal",
+    ) => {
       doc.setFontSize(fontSize);
-      doc.setFont('helvetica', style);
+      doc.setFont("helvetica", style);
       doc.text(text, x, y);
     };
 
     // Name
     doc.setFontSize(22);
-    doc.setFont('helvetica', 'bold');
+    doc.setFont("helvetica", "bold");
     doc.text(resumeData.name, margin, y);
     y += 8;
 
     // Contact info
     doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     const contactLines = [];
-    if (resumeData.contact.location) contactLines.push(resumeData.contact.location);
+    if (resumeData.contact.location)
+      contactLines.push(resumeData.contact.location);
     if (resumeData.contact.phone) contactLines.push(resumeData.contact.phone);
     if (resumeData.contact.email) contactLines.push(resumeData.contact.email);
     if (resumeData.contact.github) contactLines.push(resumeData.contact.github);
 
-    doc.text(contactLines.join(' | '), margin, y);
+    doc.text(contactLines.join(" | "), margin, y);
     y += 10;
+
+    // Career Objective
+    if (resumeData.objective) {
+      drawSectionHeader("Career Objective");
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const objectiveLines = doc.splitTextToSize(
+        resumeData.objective,
+        contentWidth,
+      );
+      doc.text(objectiveLines, margin, y);
+      y += objectiveLines.length * 5 + 5;
+    }
 
     // Professional Summary
     if (resumeData.summary) {
-      drawSectionHeader('Professional Summary');
+      drawSectionHeader("Professional Summary");
       doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      const summaryLines = doc.splitTextToSize(resumeData.summary, contentWidth);
+      doc.setFont("helvetica", "normal");
+      const summaryLines = doc.splitTextToSize(
+        resumeData.summary,
+        contentWidth,
+      );
       doc.text(summaryLines, margin, y);
       y += summaryLines.length * 5 + 5;
     }
 
     // Education
     if (resumeData.education.length > 0) {
-      drawSectionHeader('Education');
+      drawSectionHeader("Education");
       resumeData.education.forEach((edu) => {
         doc.setFontSize(10);
-        doc.setFont('helvetica', 'bold');
+        doc.setFont("helvetica", "bold");
         doc.text(edu.degree, margin, y);
         y += 5;
-        doc.setFont('helvetica', 'normal');
+        doc.setFont("helvetica", "normal");
         doc.text(edu.date, margin, y);
         y += 5;
         doc.text(edu.school, margin, y);
@@ -75,13 +97,13 @@
 
     // Work History
     if (resumeData.experience.length > 0) {
-      drawSectionHeader('Work History');
+      drawSectionHeader("Work History");
       resumeData.experience.forEach((exp) => {
         doc.setFontSize(10);
-        doc.setFont('helvetica', 'bold');
+        doc.setFont("helvetica", "bold");
         doc.text(exp.title, margin, y);
         y += 5;
-        doc.setFont('helvetica', 'normal');
+        doc.setFont("helvetica", "normal");
         doc.setTextColor(100, 100, 100);
         doc.text(exp.period, margin, y);
         y += 5;
@@ -99,9 +121,9 @@
 
     // Skills
     if (resumeData.skills.length > 0) {
-      drawSectionHeader('Skills');
+      drawSectionHeader("Skills");
       doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
+      doc.setFont("helvetica", "normal");
 
       // Two columns for skills
       const midPoint = Math.ceil(resumeData.skills.length / 2);
@@ -121,7 +143,7 @@
       });
     }
 
-    doc.save('resume.pdf');
+    doc.save("resume.pdf");
   }
 </script>
 
@@ -131,39 +153,36 @@
 
 <div class="resume-container">
   <div class="actions">
-    <button on:click={generatePDF} class="download-btn">
-      Download PDF
-    </button>
+    <button on:click={generatePDF} class="download-btn"> Download PDF </button>
   </div>
 
   <div class="resume">
     <header>
       <h1>{resumeData.name}</h1>
       <div class="contact">
-        {#if resumeData.contact.location}<span>{resumeData.contact.location}</span>{/if}
-        {#if resumeData.contact.phone}<span>{resumeData.contact.phone}</span>{/if}
-        {#if resumeData.contact.email}<span>{resumeData.contact.email}</span>{/if}
-        {#if resumeData.contact.github}<span>{resumeData.contact.github}</span>{/if}
+        {#if resumeData.contact.location}<span
+            >{resumeData.contact.location}</span
+          >{/if}
+        {#if resumeData.contact.phone}<span>{resumeData.contact.phone}</span
+          >{/if}
+        {#if resumeData.contact.email}<span>{resumeData.contact.email}</span
+          >{/if}
+        {#if resumeData.contact.github}<span>{resumeData.contact.github}</span
+          >{/if}
       </div>
     </header>
+
+    {#if resumeData.objective}
+      <section>
+        <h2>Career Objective</h2>
+        <p>{resumeData.objective}</p>
+      </section>
+    {/if}
 
     {#if resumeData.summary}
       <section>
         <h2>Professional Summary</h2>
         <p>{resumeData.summary}</p>
-      </section>
-    {/if}
-
-    {#if resumeData.education.length > 0}
-      <section>
-        <h2>Education</h2>
-        {#each resumeData.education as edu}
-          <div class="entry">
-            <div class="entry-title">{edu.degree}</div>
-            <div class="entry-date">{edu.date}</div>
-            <div class="entry-subtitle">{edu.school}</div>
-          </div>
-        {/each}
       </section>
     {/if}
 
@@ -185,7 +204,20 @@
       </section>
     {/if}
 
-    {#if resumeData.skills.length > 0}
+    {#if resumeData.education.length > 0}
+      <section>
+        <h2>Education</h2>
+        {#each resumeData.education as edu}
+          <div class="entry">
+            <div class="entry-title">{edu.degree}</div>
+            <div class="entry-date">{edu.date}</div>
+            <div class="entry-subtitle">{edu.school}</div>
+          </div>
+        {/each}
+      </section>
+    {/if}
+
+    <!-- {#if resumeData.skills.length > 0}
       <section>
         <h2>Skills</h2>
         <div class="skills-grid">
@@ -194,7 +226,7 @@
           {/each}
         </div>
       </section>
-    {/if}
+    {/if} -->
   </div>
 </div>
 

@@ -10,6 +10,7 @@ export interface ResumeData {
     linkedin?: string;
   };
   summary?: string;
+  objective?: string;
   education: {
     degree: string;
     date: string;
@@ -25,39 +26,55 @@ export interface ResumeData {
 }
 
 export const resumeData: ResumeData = {
-  name: 'Your Name',
+  name: 'Tony Ko',
   contact: {
-    location: 'Taipei, Taiwan',
-    phone: '0912-345-678',
-    email: 'your.email@example.com',
-    github: 'github.com/yourusername',
+    location: 'New Taipei, Taiwan',
+    email: 'codeing0085@gmail.com',
+    github: 'github.com/cao0085',
   },
-  summary: 'Experienced software engineer with expertise in web development and system design.',
+  summary: 'Full-Stack engineer comfortable working independently or following team coding standards to maintain existing systems. Adaptable to different tech stacks based on project needs (C# .Net, Golang Gin, Angular, React, Vue). Currently exploring high-concurrency and distributed systems.',
+  objective: 'Seeking a Full-Stack / Backend Developer role with opportunities to work on challenging technical problems and grow with the team.',
   education: [
     {
-      degree: "Bachelor's in Computer Science",
+      degree: "Department of International Business",
       date: 'June 2020',
-      school: 'National Taiwan University',
+      school: 'China University of Technology',
+    },
+    {
+      degree: "TOEIC Listening & Reading",
+      date: 'June 2023',
+      school: '735/990',
     },
   ],
   experience: [
     {
-      title: 'Software Engineer',
-      period: 'Jan 2022 - Present',
-      company: 'Tech Company - Taipei, Taiwan',
+      title: 'Full-Stack Software Engineer',
+      period: 'Apr 2025 - Present',
+      company: 'Parking Management Company - Taipei, Taiwan',
       highlights: [
-        'Developed and maintained web applications using modern frameworks',
-        'Improved system performance by 30%',
-        'Collaborated with cross-functional teams',
+        'Designed parking management system architecture and developed core features',
+        'Integrated external payment systems (POS, online payment gateways)',
+        'Developed data transformation tools for government platform compliance',
       ],
     },
     {
-      title: 'Junior Developer',
-      period: 'Jul 2020 - Dec 2021',
-      company: 'Startup Inc. - Taipei, Taiwan',
+      title: 'Software Solution Sales',
+      period: 'Apr 2023 - Sep 2023',
+      company: 'Tech Company - Taipei, Taiwan',
       highlights: [
-        'Built RESTful APIs and database schemas',
-        'Participated in code reviews and agile development',
+        'Sold PCB design solutions to major electronics manufacturers in Taiwan',
+        'Ranked 2nd in client appointments and cold outreach within the team',
+        'Coordinated cross-departmental collaboration to deliver technical proposals',
+      ],
+    },
+    {
+      title: 'Project Manager',
+      period: 'Apr 2021 - Sep 2022',
+      company: 'Textile Inc. - Taipei, Taiwan',
+      highlights: [
+        'Managed garment sampling, cost analysis, and production scheduling',
+        'Coordinated material procurement, shipment arrangements, and quality issues',
+        'Handled projects for FILA, Nautica, Jeep, and government contracts',
       ],
     },
   ],
