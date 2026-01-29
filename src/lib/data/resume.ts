@@ -23,6 +23,7 @@ export interface ResumeData {
     highlights: string[];
   }[];
   skills: string[];
+  lastUpdate: string;
 }
 
 export const resumeData: ResumeData = {
@@ -88,4 +89,5 @@ export const resumeData: ResumeData = {
     'Git',
     'Docker',
   ],
+  lastUpdate: '2026-01-29',
 };

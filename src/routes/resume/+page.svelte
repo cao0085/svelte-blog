@@ -9,61 +9,60 @@
     });
 
     const pageWidth = 210;
-    const margin = 15;
+    const margin = 20;
     const contentWidth = pageWidth - margin * 2;
-    let y = 20;
+    let y = 25;
 
-    // Helper functions
+    // Colors
+    const primaryColor: [number, number, number] = [44, 62, 80]; // #2c3e50
+    const textColor: [number, number, number] = [68, 68, 68]; // #444
+    const subtitleColor: [number, number, number] = [85, 85, 85]; // #555
+
+    // Helper: Draw section header with underline
     const drawSectionHeader = (title: string) => {
-      doc.setFillColor(220, 220, 220);
-      doc.rect(margin, y, contentWidth, 7, "F");
       doc.setFontSize(11);
       doc.setFont("helvetica", "bold");
-      doc.text(title, margin + 2, y + 5);
-      y += 10;
+      doc.setTextColor(...primaryColor);
+      doc.text(title.toUpperCase(), margin, y);
+      y += 3;
+      doc.setDrawColor(...primaryColor);
+      doc.setLineWidth(0.3);
+      doc.line(margin, y, margin + contentWidth, y);
+      y += 7;
     };
 
-    const drawText = (
-      text: string,
-      x: number,
-      fontSize: number = 10,
-      style: "normal" | "bold" = "normal",
-    ) => {
-      doc.setFontSize(fontSize);
-      doc.setFont("helvetica", style);
-      doc.text(text, x, y);
-    };
-
-    // Name
-    doc.setFontSize(22);
+    // Name - centered, uppercase
+    doc.setFontSize(20);
     doc.setFont("helvetica", "bold");
-    doc.text(resumeData.name, margin, y);
+    doc.setTextColor(...primaryColor);
+    const nameText = resumeData.name.toUpperCase();
+    const nameWidth = doc.getTextWidth(nameText);
+    doc.text(nameText, (pageWidth - nameWidth) / 2, y);
     y += 8;
 
-    // Contact info
-    doc.setFontSize(10);
+    // Contact info - centered
+    doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
-    const contactLines = [];
-    if (resumeData.contact.location)
-      contactLines.push(resumeData.contact.location);
-    if (resumeData.contact.phone) contactLines.push(resumeData.contact.phone);
-    if (resumeData.contact.email) contactLines.push(resumeData.contact.email);
-    if (resumeData.contact.github) contactLines.push(resumeData.contact.github);
-
-    doc.text(contactLines.join(" | "), margin, y);
-    y += 10;
+    doc.setTextColor(...subtitleColor);
+    const contactParts = [];
+    if (resumeData.contact.location) contactParts.push(resumeData.contact.location);
+    if (resumeData.contact.phone) contactParts.push(resumeData.contact.phone);
+    if (resumeData.contact.email) contactParts.push(resumeData.contact.email);
+    if (resumeData.contact.github) contactParts.push(resumeData.contact.github);
+    const contactText = contactParts.join("  |  ");
+    const contactWidth = doc.getTextWidth(contactText);
+    doc.text(contactText, (pageWidth - contactWidth) / 2, y);
+    y += 12;
 
     // Career Objective
     if (resumeData.objective) {
       drawSectionHeader("Career Objective");
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      const objectiveLines = doc.splitTextToSize(
-        resumeData.objective,
-        contentWidth,
-      );
+      doc.setTextColor(...textColor);
+      const objectiveLines = doc.splitTextToSize(resumeData.objective, contentWidth);
       doc.text(objectiveLines, margin, y);
-      y += objectiveLines.length * 5 + 5;
+      y += objectiveLines.length * 5 + 6;
     }
 
     // Professional Summary
@@ -71,77 +70,77 @@
       drawSectionHeader("Professional Summary");
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      const summaryLines = doc.splitTextToSize(
-        resumeData.summary,
-        contentWidth,
-      );
+      doc.setTextColor(...textColor);
+      const summaryLines = doc.splitTextToSize(resumeData.summary, contentWidth);
       doc.text(summaryLines, margin, y);
-      y += summaryLines.length * 5 + 5;
+      y += summaryLines.length * 5 + 6;
+    }
+
+    // Work History
+    if (resumeData.experience.length > 0) {
+      drawSectionHeader("Work Experience");
+      resumeData.experience.forEach((exp) => {
+        // Title and date on same line
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(...primaryColor);
+        doc.text(exp.title, margin, y);
+
+        doc.setFont("helvetica", "italic");
+        doc.setTextColor(...subtitleColor);
+        const dateWidth = doc.getTextWidth(exp.period);
+        doc.text(exp.period, margin + contentWidth - dateWidth, y);
+        y += 5;
+
+        // Company
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(...subtitleColor);
+        doc.text(exp.company, margin, y);
+        y += 5;
+
+        // Highlights
+        doc.setTextColor(...textColor);
+        exp.highlights.forEach((highlight) => {
+          const bulletLines = doc.splitTextToSize(`• ${highlight}`, contentWidth - 4);
+          doc.text(bulletLines, margin + 2, y);
+          y += bulletLines.length * 5.5;
+        });
+        y += 5;
+      });
     }
 
     // Education
     if (resumeData.education.length > 0) {
       drawSectionHeader("Education");
       resumeData.education.forEach((edu) => {
+        // Degree and date on same line
         doc.setFontSize(10);
         doc.setFont("helvetica", "bold");
+        doc.setTextColor(...primaryColor);
         doc.text(edu.degree, margin, y);
+
+        doc.setFont("helvetica", "italic");
+        doc.setTextColor(...subtitleColor);
+        const dateWidth = doc.getTextWidth(edu.date);
+        doc.text(edu.date, margin + contentWidth - dateWidth, y);
         y += 5;
+
+        // School
         doc.setFont("helvetica", "normal");
-        doc.text(edu.date, margin, y);
-        y += 5;
+        doc.setTextColor(...subtitleColor);
         doc.text(edu.school, margin, y);
-        y += 8;
+        y += 7;
       });
     }
 
-    // Work History
-    if (resumeData.experience.length > 0) {
-      drawSectionHeader("Work History");
-      resumeData.experience.forEach((exp) => {
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text(exp.title, margin, y);
-        y += 5;
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(100, 100, 100);
-        doc.text(exp.period, margin, y);
-        y += 5;
-        doc.setTextColor(0, 0, 0);
-        doc.text(exp.company, margin, y);
-        y += 5;
-
-        exp.highlights.forEach((highlight) => {
-          doc.text(`• ${highlight}`, margin + 2, y);
-          y += 5;
-        });
-        y += 3;
-      });
-    }
-
-    // Skills
-    if (resumeData.skills.length > 0) {
-      drawSectionHeader("Skills");
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-
-      // Two columns for skills
-      const midPoint = Math.ceil(resumeData.skills.length / 2);
-      const leftSkills = resumeData.skills.slice(0, midPoint);
-      const rightSkills = resumeData.skills.slice(midPoint);
-
-      const startY = y;
-      leftSkills.forEach((skill) => {
-        doc.text(`• ${skill}`, margin, y);
-        y += 5;
-      });
-
-      y = startY;
-      rightSkills.forEach((skill) => {
-        doc.text(`• ${skill}`, margin + contentWidth / 2, y);
-        y += 5;
-      });
-    }
+    // Last Update watermark at bottom
+    const pageHeight = 297;
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(180, 180, 180);
+    const updateText = `Last Update: ${resumeData.lastUpdate}`;
+    const updateWidth = doc.getTextWidth(updateText);
+    doc.text(updateText, (pageWidth - updateWidth) / 2, pageHeight - 10);
 
     doc.save("resume.pdf");
   }
@@ -188,7 +187,7 @@
 
     {#if resumeData.experience.length > 0}
       <section>
-        <h2>Work History</h2>
+        <h2>Work Experience</h2>
         {#each resumeData.experience as exp}
           <div class="entry">
             <div class="entry-header">
@@ -231,6 +230,8 @@
         </div>
       </section>
     {/if} -->
+
+    <div class="last-update">Last Update: {resumeData.lastUpdate}</div>
   </div>
 </div>
 
@@ -413,5 +414,14 @@
       flex-direction: column;
       gap: 0.25rem;
     }
+  }
+
+  .last-update {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #bbb;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 </style>
