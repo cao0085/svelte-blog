@@ -13,4 +13,6 @@ slug: "resume"
 
 <!-- 後端 DDD GoLang repo -->
 
+<!-- 地端程式 -->
+
 <!-- 資料庫 正規化 -->
