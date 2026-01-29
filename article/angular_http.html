@@ -8,24 +8,27 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.CfkIeOOE.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bjk0npeM.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/COc0ozwQ.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CR_4RHM7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BkI-hTm5.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BjM09ad5.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BVL1-QXK.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/1-kU2YTO.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Cew64nlL.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CYQQZ9Kc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dbPvbsOE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.syJQhqKh.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C5SEx9ip.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/9oPOX3kV.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.DxomYDRj.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/3ot0CaDB.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DJkUW3vj.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.B81wl56R.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BbaGF0Bk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DYEVmuku.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/1s15JKTc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DY5PRT3N.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DDz6dGjQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B9-mxLC8.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BKW1qyZo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DfdqX-iE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.Cl5iht1G.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 Http</h1> <p class="svelte-mdkbyj">2025-12-12</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>Angular 有包好 HttpClient &amp; HttpResource 可以直接拿來用</h6> <hr/> <p><strong><em>HttpClient</em></strong></p> <p>基於 RxJS Observable 所以可以使用物件提供的一套方法，錯誤自動透過 Observable 的 error channel 處理 2XX 外的都會拋出，需要手動 subscribe() 或搭配 async pipe 使用</p> <p><strong><em>HttpResource</em></strong></p> <p>基於 Signal 新推出 API，當依賴的 Signal 變化時自動重新請求，回傳的是 Resource 物件，包含 value()、status()、error() 等 Signal</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// HttpClient 傳統寫法</span>
@@ -283,7 +286,7 @@ results <span class="token operator">=</span> <span class="token function">httpR
 			
 			<script>
 				{
-					__sveltekit_iolvq4 = {
+					__sveltekit_17t5jkn = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -291,8 +294,8 @@ results <span class="token operator">=</span> <span class="token function">httpR
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.CfkIeOOE.js"),
-						import("../_app/immutable/entry/app.BVL1-QXK.js")
+						import("../_app/immutable/entry/start.BbaGF0Bk.js"),
+						import("../_app/immutable/entry/app.DY5PRT3N.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
