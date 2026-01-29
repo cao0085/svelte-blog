@@ -8,34 +8,34 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BbaGF0Bk.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DYEVmuku.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CvJqZTP5.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Csu18b5d.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/1s15JKTc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BoM7WMp4.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.DY5PRT3N.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app._gAdP4bI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DDz6dGjQ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DsGThv_j.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B9-mxLC8.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.BKW1qyZo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/jk_AkRDi.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CG4AVPDp.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DfdqX-iE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.Cl5iht1G.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/wk9K3V53.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.B6MHVhWZ.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Paxon</h1> <p class="svelte-mdkbyj">2025-09-02</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>保證的是 “記錄的事實必定相同” 這件事情，不同節點 (DB Server) 資料(ID) 僅可以是 有/無 的差異</h6> <hr/> <p>在古希臘的Paxon島上，有一個議會制政府。這個島上的議員們需要通過投票來決定各種法案和政策。但是這個政治體系面臨著一些現實挑戰：</p> <ol><li><p>議員可能缺席：有些議員可能因為各種原因離開議會或無法參與投票</p></li> <li><p>通信不可靠：通過信使傳遞消息，可能會迷路、延遲送達和重複傳遞同樣的消息</p></li> <li><p>異步環境：沒有統一的時鐘，無法保證消息的送達順序</p></li></ol> <p>在不可靠的環境，如何讓議會就某個提案達成一致(簡單多數)的決定？</p> <h3>概念</h3> <p>上個月趙議員發起 <strong>002號提案</strong>：</p> <p>「各位同仁，我想申請討論A路段修整的開工日期，這是002號提案申請。」</p> <ul><li>李議員：「好的我同意討論。我承諾在您的002號提案結束前，不接受編號更低的提案。」</li> <li>但也有部分議員沒有接收到消息</li></ul> <p>但是趙議員後來因為生病，002號提案沒有進行到第二階段就中斷</p> <p>__</p> <br/> <p>今天林議員想發起提案，他不知道有 <strong>002號提案</strong> 狀況。</p> <p>林議員：「各位同仁，我想申請討論A路段修整的開工日期，這是<strong>001號提案</strong>申請。」</p> <ul><li>王議員：「好的林議員，我同意討論。我這邊沒有其他相關提案記錄。我承諾在您的001號提案結束前，不接受編號更低的提案。」</li></ul> <p><em>Promise(001, null)</em></p> <ul><li><em>回覆：Promise(001, null)</em> 張議員：「好的林議員，我同意討論。雖然陳議員曾經在私下討論中提到『3月20日』這個想法，雖然沒有正式提案。我承諾支持您的001號提案。」</li></ul> <p><em>Promise(001, null)</em></p> <ul><li><em>回覆：</em> 李議員：「抱歉林議員，我必須拒絕。上個月趙議員的002號提案還沒有正式結束，基於議會流程，我不能接受您的提案。」</li></ul> <p><em>Reject(002)</em></p> <p>__</p> <br/> <p>林議員：「什麼？還有002號提案？那麼依規定我需要更高的編號！」</p> <p>林議員：「各位同仁我重新申請：這是003號提案，討論A路段修整開工日期。」</p> <ul><li>王議員：「好的，003號比之前都大，我同意。」</li></ul> <p><em>Promise(003, null)</em></p> <ul><li>張議員：「我也同意003號提案」</li></ul> <p><em>Promise(003, null)</em></p> <ul><li>李議員：「003號比002號大，我可以接受。趙議員當時沒有提出具體日期就中斷了。」</li></ul> <p><em>Promise(003, null)</em></p> <p>__</p> <p>林議員：「我獲得了多數支持，而且對於結果都沒有意見，我可以提議自己原本想要的『3月15日』。」正式提案</p> <ul><li>張議員：「我接受003號提案。A路段開工日期：3月15日。」</li></ul> <p><em>Accepted(003, “3月15日”)</em></p> <ul><li>李議員：「我接受003號提案。A路段開工日期：3月15日。」</li></ul> <p><em>Accepted(003, “3月15日”)</em></p> <br/> <p>林議員收到回覆後：「太好了！我有收到了2個接受回覆，超過半數了！」</p> <p>書記員宣布：「根據一致決議，003號提案通過！A路段修整開工日期確定為『3月15日』。」</p> <h3>實務</h3> <p>通常應用在DB集群維護 Acceptor 節點，任一個DB收到寫入資料就可以視作是 Proposer，其他DB節點作為 Acceptor 參與共識決策。</p> <ul><li>Proposer: 收到寫入請求的 DB 節點（動態角色）</li> <li>Acceptor: 集群中的所有 DB 節點（包括 Proposer 自己）</li> <li>Learner: 需要同步最終結果的節點，或客戶端應用</li></ul> <br/> <p>實際運作</p> <ol><li>前端寫入請求 → DB-1</li> <li>DB-1 變成 Proposer，向所有節點（包括自己）發起提案</li> <li>所有 DB 節點作為 Acceptor 回應是否接受</li> <li>達成多數決 後，寫入被確認</li> <li>Learner 節點（如快取、備份系統）獲得最終結果</li></ol><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_17t5jkn = {
+					__sveltekit_cvbq1d = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -43,8 +43,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BbaGF0Bk.js"),
-						import("../_app/immutable/entry/app.DY5PRT3N.js")
+						import("../_app/immutable/entry/start.CvJqZTP5.js"),
+						import("../_app/immutable/entry/app._gAdP4bI.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

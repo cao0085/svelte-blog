@@ -8,27 +8,27 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BbaGF0Bk.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DYEVmuku.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CvJqZTP5.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Csu18b5d.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/1s15JKTc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BoM7WMp4.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.DY5PRT3N.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app._gAdP4bI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DDz6dGjQ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DsGThv_j.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B9-mxLC8.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.BKW1qyZo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/jk_AkRDi.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CG4AVPDp.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DfdqX-iE.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.Cl5iht1G.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/wk9K3V53.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.B6MHVhWZ.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs">Blog</div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 RouteReuseStrategy_01</h1> <p class="svelte-mdkbyj">2026-01-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 ANGULAR 判斷路由變更時，如何處理邏輯的一個介面</h6> <hr/> <p>Angular 在路由導航時，會自動把物件<code>route</code>轉成物件<code>ActivatedRouteSnapshot</code>，再經由<code>RouteReuse</code>去做邏輯判斷和流程。也就是說就算 app 沒有內部實作，系統也會自動帶入最基本的 Strategy 去過過水，可以看看檔案原始碼。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">declare</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">BaseRouteReuseStrategy</span> <span class="token keyword">implements</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
@@ -101,7 +101,7 @@
 			
 			<script>
 				{
-					__sveltekit_17t5jkn = {
+					__sveltekit_cvbq1d = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -109,8 +109,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BbaGF0Bk.js"),
-						import("../_app/immutable/entry/app.DY5PRT3N.js")
+						import("../_app/immutable/entry/start.CvJqZTP5.js"),
+						import("../_app/immutable/entry/app._gAdP4bI.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
