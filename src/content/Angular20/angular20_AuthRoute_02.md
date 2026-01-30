@@ -1,5 +1,5 @@
 ---
-title: "Angular20 Auth & Route 02"
+title: "Auth & Route 2"
 date: "2025-12-09"
 category: "software"
 subCategory: "Angular20"

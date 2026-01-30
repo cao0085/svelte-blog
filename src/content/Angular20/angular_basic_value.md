@@ -1,5 +1,5 @@
 ---
-title: "Angular Basic _ Value"
+title: "Value 1"
 date: "2025-06-22"
 category: "software"
 subCategory: "Angular20"

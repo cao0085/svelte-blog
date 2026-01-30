@@ -1,6 +1,6 @@
 ---
-title: "RouteReuseStrategy 02"
-date: "2026-01-23"
+title: "RouteReuseStrategy 2"
+date: "2026-01-24"
 category: "software"
 subCategory: "Angular20"
 tags: ["fronted", "angular"]

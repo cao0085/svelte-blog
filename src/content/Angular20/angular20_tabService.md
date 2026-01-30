@@ -1,5 +1,5 @@
 ---
-title: "Angular20 RxJS TabService"
+title: "TabService"
 date: "2025-12-05"
 category: "software"
 subCategory: "Angular20"

@@ -1,5 +1,5 @@
 ---
-title: "RouteReuseStrategy 01"
+title: "RouteReuseStrategy 1"
 date: "2026-01-23"
 category: "software"
 subCategory: "Angular20"

@@ -1,6 +1,6 @@
 ---
-title: "Angular20 Http"
-date: "2025-12-12"
+title: "HttpClient"
+date: "2025-11-22"
 category: "software"
 subCategory: "Angular20"
 tags: ["fronted", "angular", "route"]

@@ -1,6 +1,6 @@
 ---
-title: "Angular Http Observable"
-date: "2025-06-22"
+title: "RxJS Observable"
+date: "2025-11-23"
 category: "software"
 subCategory: "Angular20"
 tags: ["http", "angular", "api"]
@@ -10,15 +10,12 @@ slug: "angular_http_observable"
 
 ---
 
-在 Angular 裡，HttpClient 的每個方法都會回傳一個 RxJS Observable，這些 Observable 屬於 cold 類型 —— 在訂閱（subscribe）時才真正發送請求。
-
-多次訂閱同一個 Observable 會觸發多次獨立的後端呼叫；若在請求途中解除訂閱，Angular 會直接 中止（abort）尚未完成的 HTTP 連線。
+Angular 內建整合了 RxJS 函式庫，其 Observable 物件提供很多方法可用來處理異步邏輯。另外，Angular 提供的 HttpClient 預設回傳就是 Observable 物件。
 
 ```js
 this.http.get('/api/getExportData')
   // 邏輯排程
   .pipe(
-    // Step 1. 拿取 res.data
     switchMap(data => {
       console.log('step1 response:', data);
       const filename = 'report.pdf';
@@ -35,42 +32,6 @@ this.http.get('/api/getExportData')
     console.log('全部流程完成', result);
   });
 
-```
-
-簡易封裝才可以靈活使用 pipe()、switchMap() ...
-
-```js
-// src/app/core/api/api.service.ts
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-
-@Injectable({ providedIn: 'root' })
-export class ApiService {
-  private readonly baseUrl = environment.apiBaseUrl;
-
-  constructor(private http: HttpClient) {}
-
-  get<T>(url: string, params?: Record<string, any>): Observable<T> {
-    const httpParams = new HttpParams({
-      fromObject: params || {}
-    });
-    return this.http.get<T>(`${this.baseUrl}${url}`, { params: httpParams });
-  }
-
-  post<T>(url: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}${url}`, body);
-  }
-
-  put<T>(url: string, body: any): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}${url}`, body);
-  }
-
-  delete<T>(url: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}${url}`);
-  }
-}
 ```
 
 ### Observable 常見 Method
@@ -111,5 +72,3 @@ this.api.get<any>('/api/users')
   });
 
 ```
-
-

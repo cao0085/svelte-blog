@@ -1,6 +1,6 @@
 ---
-title: "Angular20 Signal"
-date: "2025-12-12"
+title: "Signal"
+date: "2025-11-12"
 category: "software"
 subCategory: "Angular20"
 tags: ["fronted", "angular", "route"]
