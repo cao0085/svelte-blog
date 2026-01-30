@@ -8,30 +8,30 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.D6RU86SW.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bfb10vSg.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BRnY09Qi.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CwrXORcm.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Ch5zAq0C.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DXI-f9Mr.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B6MoGZLo.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.6sDYdWu2.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BS6fmF9T.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BjGMZAQw.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DaBGQGJR.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.y5UN3cSJ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dwg5X7NM.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DZRPcs6C.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/YtkakPjT.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.gycUQwqU.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C2C_Ob-a.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.WHfbMsCJ.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RouteReuseStrategy 01</h1> <p class="svelte-mdkbyj">2026-01-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 ANGULAR 判斷路由變更時，如何處理邏輯的一個介面</h6> <hr/> <p>Angular 在路由導航時，會自動把物件<code>route</code>轉成物件<code>ActivatedRouteSnapshot</code>，再經由<code>RouteReuse</code>去做邏輯判斷和流程。也就是說就算 app 沒有內部實作，系統也會自動帶入最基本的 Strategy 去過過水，可以看看檔案原始碼。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">declare</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">BaseRouteReuseStrategy</span> <span class="token keyword">implements</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RouteReuseStrategy 1</h1> <p class="svelte-mdkbyj">2026-01-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 ANGULAR 判斷路由變更時，如何處理邏輯的一個介面</h6> <hr/> <p>Angular 在路由導航時，會自動把物件<code>route</code>轉成物件<code>ActivatedRouteSnapshot</code>，再經由<code>RouteReuse</code>去做邏輯判斷和流程。也就是說就算 app 沒有內部實作，系統也會自動帶入最基本的 Strategy 去過過水，可以看看檔案原始碼。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">declare</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">BaseRouteReuseStrategy</span> <span class="token keyword">implements</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">/**
      * Whether the given route should detach for later reuse.
      * Always returns false for &#96;BaseRouteReuseStrategy&#96;.
@@ -101,7 +101,7 @@
 			
 			<script>
 				{
-					__sveltekit_p5phq2 = {
+					__sveltekit_y7gqqh = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -109,8 +109,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.D6RU86SW.js"),
-						import("../_app/immutable/entry/app.B6MoGZLo.js")
+						import("../_app/immutable/entry/start.BRnY09Qi.js"),
+						import("../_app/immutable/entry/app.6sDYdWu2.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

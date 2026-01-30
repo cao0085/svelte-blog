@@ -8,30 +8,30 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.D6RU86SW.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bfb10vSg.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BRnY09Qi.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CwrXORcm.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Ch5zAq0C.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DXI-f9Mr.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B6MoGZLo.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.6sDYdWu2.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BS6fmF9T.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BjGMZAQw.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DaBGQGJR.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.y5UN3cSJ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dwg5X7NM.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DZRPcs6C.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/YtkakPjT.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.gycUQwqU.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C2C_Ob-a.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.WHfbMsCJ.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular Basic _ Value02</h1> <p class="svelte-mdkbyj">2025-06-22</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>應用中維護值的一些關鍵字</h6> <hr/> <h3>Component 層級的單向綁定( logic update -> dom rerender )</h3> <p><strong>普通變數 + Change Detection :</strong> Angular 的 Zone.js 會自動觸發變更檢測</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">&#123;</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Value 2</h1> <p class="svelte-mdkbyj">2025-06-22</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>應用中維護值的一些關鍵字</h6> <hr/> <h3>Component 層級的單向綁定( logic update -> dom rerender )</h3> <p><strong>普通變數 + Change Detection :</strong> Angular 的 Zone.js 會自動觸發變更檢測</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">&#123;</span>
   count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">// 普通變數</span>
   
   <span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -143,7 +143,7 @@ data$<span class="token punctuation">.</span><span class="token function">pipe</
 			
 			<script>
 				{
-					__sveltekit_p5phq2 = {
+					__sveltekit_y7gqqh = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -151,8 +151,8 @@ data$<span class="token punctuation">.</span><span class="token function">pipe</
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.D6RU86SW.js"),
-						import("../_app/immutable/entry/app.B6MoGZLo.js")
+						import("../_app/immutable/entry/start.BRnY09Qi.js"),
+						import("../_app/immutable/entry/app.6sDYdWu2.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
