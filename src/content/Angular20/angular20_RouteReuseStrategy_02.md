@@ -1,8 +1,8 @@
 ---
-title: "Angular20 RouteReuseStrategy_02"
+title: "RouteReuseStrategy 02"
 date: "2026-01-23"
 category: "software"
-subCategory: "Frontend"
+subCategory: "Angular20"
 tags: ["fronted", "angular"]
 slug: "angular_routeReuseStrategy02"
 ---

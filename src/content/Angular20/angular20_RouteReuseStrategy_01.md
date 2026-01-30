@@ -1,8 +1,8 @@
 ---
-title: "Angular20 RouteReuseStrategy_01"
+title: "RouteReuseStrategy 01"
 date: "2026-01-23"
 category: "software"
-subCategory: "Frontend"
+subCategory: "Angular20"
 tags: ["fronted", "angular"]
 slug: "angular_routeReuseStrategy01"
 ---
@@ -93,5 +93,3 @@ export const appConfig: ApplicationConfig = {
   ]
 };
 ```
-
-

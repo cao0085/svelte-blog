@@ -2,7 +2,7 @@
 title: "Angular20 Http"
 date: "2025-12-12"
 category: "software"
-subCategory: "Frontend"
+subCategory: "Angular20"
 tags: ["fronted", "angular", "route"]
 slug: "angular_http"
 ---

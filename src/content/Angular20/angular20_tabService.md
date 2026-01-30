@@ -2,7 +2,7 @@
 title: "Angular20 RxJS TabService"
 date: "2025-12-05"
 category: "software"
-subCategory: "Frontend"
+subCategory: "Angular20"
 tags: ["fronted", "angular", "RxJS"]
 slug: "angular_tabService"
 ---

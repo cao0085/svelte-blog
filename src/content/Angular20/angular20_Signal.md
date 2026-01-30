@@ -2,7 +2,7 @@
 title: "Angular20 Signal"
 date: "2025-12-12"
 category: "software"
-subCategory: "Frontend"
+subCategory: "Angular20"
 tags: ["fronted", "angular", "route"]
 slug: "angular_signal"
 ---
@@ -12,14 +12,49 @@ slug: "angular_signal"
 
 ### Signals
 
-basic
+Writable signals
+
+宣告一個 WritableSignal<number> 初始值為 signal(a)
 
 ```ts
-// basic
+const count = signal(0);
+console.log('The count is: ' + count());
+count.set(3);
+count.update(value => value + 1); // 當前值 ++
+```
+
+Computed signals
+
+宣告一個 Signal<number> 初始值由 signal() * 2 計算得出
+當 computed 被宣告時，會執行一次函數
+  - 函數內呼叫 signal() 時，signal 會自動記錄 "computed 依賴"
+當 signal 被更新(set)時，會通知所有依賴它的 computed
+  - 標記那些 computed 的快取為無效
+當讀取 computed() 時，檢查快取是否無效
+  - 無效 → 重新執行函數計算新值
+  - 有效 → 直接回傳快取值
+
+```ts
 const count: WritableSignal<number> = signal(0);
 const doubleCount: Signal<number> = computed(() => count() * 2);
+```
 
-// 1
+```ts
+// in class 
+readonly showCount = signal(false);
+readonly count = signal(0);
+readonly conditionalCount = computed(() => {
+  if (showCount()) {
+    return `The count is ${count()}.`;
+  } else {
+    return 'Nothing to see here!';
+  }
+});
+```
+
+實務開發上 Angular20 都是寫 class component 和有提供 DI 注入(全域管理)，大多是 Class 內宣告 readonly 來完整保護屬性 ```readonly count = signal(0)```，外部需要修改值直接使用 ```count.set(3)``` 就可以了。
+
+```ts
 @Component({
   template: `
     <p>Hello, {{ name() }}</p>
@@ -57,7 +92,7 @@ export class AppStore {
 
 *** signal 、 computed 、 effect、 linkedSignal ***
 
-情境 - 根據地區(本島、外島)來控制可運送選項
+順便提另外一種寫法就是限讀 ```private _options = signal<string[]>```，確認變數在外部只能讀取無法調用 signal API
 
 ```ts
 // signal

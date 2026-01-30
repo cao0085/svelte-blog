@@ -2,7 +2,7 @@
 title: "Angular Basic _ Value"
 date: "2025-06-22"
 category: "software"
-subCategory: "Frontend"
+subCategory: "Angular20"
 tags: ["fronted", "angular", "value"]
 slug: "angular_value02"
 ---

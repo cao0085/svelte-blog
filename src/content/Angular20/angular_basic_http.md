@@ -2,7 +2,7 @@
 title: "Angular Http Observable"
 date: "2025-06-22"
 category: "software"
-subCategory: "Frontend"
+subCategory: "Angular20"
 tags: ["http", "angular", "api"]
 slug: "angular_http_observable"
 ---

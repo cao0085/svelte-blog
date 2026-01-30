@@ -2,7 +2,7 @@
 title: "Angular20 Auth & Route 02"
 date: "2025-12-09"
 category: "software"
-subCategory: "Frontend"
+subCategory: "Angular20"
 tags: ["fronted", "angular", "route"]
 slug: "angular_AuthRoute_02"
 ---
