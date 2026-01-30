@@ -8,35 +8,46 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.D_VtlYve.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/LxJswHCL.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D6RU86SW.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bfb10vSg.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/ysiS1iMM.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Ch5zAq0C.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.dZcyMzLR.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B6MoGZLo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.C2UaueZ5.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BS6fmF9T.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/LVWCajIS.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.BQdkIDIG.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DaBGQGJR.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.y5UN3cSJ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/wk9K3V53.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DjHQGUs_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtkakPjT.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.gycUQwqU.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 Signal</h1> <p class="svelte-mdkbyj">2025-12-12</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>認識新的 StateAPI - Signal 參考 <a href="https://v20.angular.dev/guide/signals" rel="nofollow">Angular20</a>、<a href="https://nx.dev/blog/angular-state-management-2025" rel="nofollow">2025 AngularStateManagement</a></h6> <hr/> <h3>Signals</h3> <p>basic</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// basic</span>
-<span class="token keyword">const</span> count<span class="token operator">:</span> WritableSignal<span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> doubleCount<span class="token operator">:</span> Signal<span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// 1</span>
-<span class="token decorator"><span class="token at operator">@</span><span class="token function">Component</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 Signal</h1> <p class="svelte-mdkbyj">2025-12-12</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>認識新的 StateAPI - Signal 參考 <a href="https://v20.angular.dev/guide/signals" rel="nofollow">Angular20</a>、<a href="https://nx.dev/blog/angular-state-management-2025" rel="nofollow">2025 AngularStateManagement</a></h6> <hr/> <h3>Signals</h3> <p>Writable signals</p> <p>宣告一個 WritableSignal<number>初始值為 signal(a)</number></p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">const</span> count <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'The count is: '</span> <span class="token operator">+</span> <span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+count<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+count<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>value <span class="token operator">=></span> value <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 當前值 ++</span></code><!----></pre> <p>Computed signals</p> <p>宣告一個 Signal<number>初始值由 signal() * 2 計算得出
+當 computed 被宣告時，會執行一次函數</number></p> <ul><li>函數內呼叫 signal() 時，signal 會自動記錄 “computed 依賴”
+當 signal 被更新(set)時，會通知所有依賴它的 computed</li> <li>標記那些 computed 的快取為無效
+當讀取 computed() 時，檢查快取是否無效</li> <li>無效 → 重新執行函數計算新值</li> <li>有效 → 直接回傳快取值</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">const</span> count<span class="token operator">:</span> WritableSignal<span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> doubleCount<span class="token operator">:</span> Signal<span class="token operator">&lt;</span><span class="token builtin">number</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// in class </span>
+<span class="token keyword">readonly</span> showCount <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">readonly</span> count <span class="token operator">=</span> <span class="token function">signal</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">readonly</span> conditionalCount <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">showCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">The count is </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">.</span><span class="token template-punctuation string">&#96;</span></span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token string">'Nothing to see here!'</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>實務開發上 Angular20 都是寫 class component 和有提供 DI 注入(全域管理)，大多是 Class 內宣告 readonly 來完整保護屬性 <code>readonly count = signal(0)</code>，外部需要修改值直接使用 <code>count.set(3)</code> 就可以了。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token decorator"><span class="token at operator">@</span><span class="token function">Component</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
   template<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">&#96;</span><span class="token string">
     &lt;p>Hello, &#123;&#123; name() &#125;&#125;&lt;/p>
     &lt;button (click)="updateName()">Update&lt;/button>
@@ -68,7 +79,7 @@
       oldState<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>id <span class="token operator">===</span> item<span class="token punctuation">.</span>id <span class="token operator">?</span> item <span class="token operator">:</span> e<span class="token punctuation">)</span><span class="token punctuation">)</span>
     <span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <p><strong><em>signal 、 computed 、 effect、 linkedSignal</em></strong></p> <p>情境 - 根據地區(本島、外島)來控制可運送選項</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// signal</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p><strong><em>signal 、 computed 、 effect、 linkedSignal</em></strong></p> <p>順便提另外一種寫法就是限讀 <code>private _options = signal&lt;string[]></code>，確認變數在外部只能讀取無法調用 signal API</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// signal</span>
 <span class="token decorator"><span class="token at operator">@</span><span class="token function">Component</span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token operator">...</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
 <span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">ShoppingCart</span> <span class="token punctuation">&#123;</span>
   <span class="token keyword">private</span> _options <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'標準運送'</span><span class="token punctuation">,</span> <span class="token string">'快速運送'</span><span class="token punctuation">,</span> <span class="token string">'超商取貨'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -303,7 +314,7 @@
 			
 			<script>
 				{
-					__sveltekit_hf38s8 = {
+					__sveltekit_p5phq2 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -311,8 +322,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.D_VtlYve.js"),
-						import("../_app/immutable/entry/app.dZcyMzLR.js")
+						import("../_app/immutable/entry/start.D6RU86SW.js"),
+						import("../_app/immutable/entry/app.B6MoGZLo.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

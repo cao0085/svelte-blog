@@ -8,27 +8,27 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.D_VtlYve.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/LxJswHCL.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D6RU86SW.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bfb10vSg.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/ysiS1iMM.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Ch5zAq0C.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.dZcyMzLR.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B6MoGZLo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.C2UaueZ5.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BS6fmF9T.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/LVWCajIS.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.BQdkIDIG.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DaBGQGJR.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.y5UN3cSJ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/wk9K3V53.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DjHQGUs_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtkakPjT.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.gycUQwqU.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Angular20 Auth &amp; Route 01</h1> <p class="svelte-mdkbyj">2025-12-08</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>基於 RBAC 實作權限控管和畫面渲染，先處理資料結構設計</h6> <hr/> <p>和要求資料庫一致性一樣，越全面的權限控管程式碼就會複雜很多，所以根據專案的使用場景去選擇想要的架構。</p> <p>這次需求是【登入】後才可以使用的 ERP 系統，其他都導到login、401、403、404 就可以了。這次我的需求是</p> <ol><li><p>權限控制的顆粒度設計: 除了按照常見的 admin/manager/user 層級分級外，還需要可以控制到單一使用者的行為。</p></li> <li><p>限制後行為處理: 當不符權限時還需分成不同情況處理，例如</p> <ul><li>目錄層級沒有權限就不顯示</li> <li>編輯/刪除操作需要跳出提醒框【尚無權限，請與經理申請開通】</li></ul></li> <li><p>防止緩存、網路異常和惡意攻擊: 即使阻斷使用者入口(隱藏 UI 元件)，後端仍需實作獨立的權限驗證防禦。代表前後端（使用不同語言）必須維護一組權限常數定義。</p></li></ol> <h3>DB TABLE</h3> <p>最小實踐 3 張可以完成結構: 人員表 / 行為表 / 人員行為表(多對多)</p> <pre class="language-json"><!----><code class="language-json">    <span class="token comment">// 人員表</span>
@@ -297,7 +297,7 @@
 			
 			<script>
 				{
-					__sveltekit_hf38s8 = {
+					__sveltekit_p5phq2 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -305,8 +305,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.D_VtlYve.js"),
-						import("../_app/immutable/entry/app.dZcyMzLR.js")
+						import("../_app/immutable/entry/start.D6RU86SW.js"),
+						import("../_app/immutable/entry/app.B6MoGZLo.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
