@@ -8,27 +8,28 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BRnY09Qi.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CwrXORcm.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/0ToATJGC.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DAfH7ANP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DXI-f9Mr.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/aNbQnXTK.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.6sDYdWu2.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BWK_3Ur8.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BAa3W-GH.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CcpuZyRN.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BZ3UpD_i.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DFNB0EL6.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BRBz30gx.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Qo032D5r.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DF_u8ilP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Dn9Mp12R.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BjGMZAQw.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/OqQvD7rY.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Dwg5X7NM.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.DZRPcs6C.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/AaIT7I_7.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BSS2p-5R.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C2C_Ob-a.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.WHfbMsCJ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.B3THmh49.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/ByfkaKGc.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.B6MzjELk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BtAZKvvN.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.8dwnWCE4.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Website Editor</h1> <p class="svelte-mdkbyj">2025-10-30</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>基於 Electron 框架開發支援跨平台，實作一個本地端網站編輯器，解決靜態網站修改的問題</h6> <hr/> <p>當客戶想對靜態網站微調時，如果沒有維護雲端伺服器和資料庫，就無法提供後台系統給客戶使用，雖然在本地 Run Server + 修改文字檔案技術上不難，但對非技術人員來說心理門檻很高，所以往往還是會陷入「無法即時預覽 → 來回修改 → 直到一方妥協」，。</p> <p>以前覺得對免費仔來說是無解的問題，但有天上班開發 Windows C# 小程式突然想到：好像提供一套本地端應用程式模擬雲端後台，讓客戶可以在自己電腦上編輯和預覽網站也是個做法？</p> <h3>專案架構</h3> <p>用 Electron 他基於 Chromium 引擎和 Node.js 又可以跨平台，可以簡單理解為：</p> <ul><li>內建瀏覽器（Chromium）：負責渲染 UI 和即時預覽</li> <li>內建伺服器（Node.js）：處理檔案讀寫和本地服務</li></ul> <p>這個專案的核心目標是把使用門檻降低，目前編輯的部份用這樣設計：</p> <ol><li>資料層：所有可編輯的內容都存放在 <code>data.json</code> 中</li> <li>載入方式：專案就採用類似 i18n 多語系的方式，Import 載入.json文字</li> <li>編輯介面：提供視覺化的編輯頁面，讓客戶透過表單修改內容，而非直接編輯 JSON 檔案</li></ol> <p>簡單理解就是 <code>.json = Database</code> / <code>Import = Query Db API</code> / <code>編輯 = Update Db API</code></p> <h4>核心組件</h4> <p>專案用 Electron - WebContentsView + IPC 實踐多進程管理，技術有點複雜可以問 AI 比較好，但大概會如下</p> <pre class="language-text"><!----><code class="language-text">┌─────────────────────────────────────┐
@@ -66,7 +67,7 @@
 			
 			<script>
 				{
-					__sveltekit_y7gqqh = {
+					__sveltekit_ev7ymr = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -74,8 +75,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BRnY09Qi.js"),
-						import("../_app/immutable/entry/app.6sDYdWu2.js")
+						import("../_app/immutable/entry/start.BWK_3Ur8.js"),
+						import("../_app/immutable/entry/app.BZ3UpD_i.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
