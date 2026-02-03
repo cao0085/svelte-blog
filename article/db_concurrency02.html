@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BV7yux3g.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BuagMGfn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DgxLTxFc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.D254ovoy.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BJ11HkiF.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CC-McyLN.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.OPEYF1WY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/ttG9PryH.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.B8h6BQSQ.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">PostgreSQL 併發控制 2</h1> <p class="svelte-mdkbyj">2026-02-04</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>PostgreSQL 的併發處理 <a href="https://www.postgresql.org/docs" rel="nofollow">PostgreSQL Doc</a></h6> <hr/> <h3>交易隔離</h3> <p>交易開始後可能會有以下問題:</p> <ol><li><p>Dirty Read 髒讀 :</p> <ul><li>不保證讀到的資料都是已 Commit 的。</li></ul></li> <li><p>Nonrepeatable Read 複讀 :</p> <ul><li>保證讀取的資料是已 Commit</li> <li>不保證同個交易獲得的資料一樣(期間該交易被更新)</li></ul></li> <li><p>Phantom Read 幻讀 :</p> <ul><li>保證讀取的”現有行”數據一樣（不會被修改）</li> <li>不保證獲得的”行集合”一樣(期間插入/刪除)</li></ul></li> <li><p>Serialization 序列化 :</p> <ul><li>保證讀取的資料來源、邏輯一致</li></ul></li></ol> <h3>鎖表</h3> <p>PostgreSQL 提供以下鎖層級，根據鎖之間是否產生衝突，來決定該交易列隊等待與否，按限制性從低到高排列：</p> <h4>ACCESS SHARE（訪問共享鎖）</h4> <p>只衝突<code>ACCESS EXCLUSIVE</code>，普通的讀取。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users<span class="token punctuation">;</span>  <span class="token comment">-- 自動獲得 ACCESS SHARE 鎖</span>
+<span class="token comment">-- 其他交易也可以同時讀取 users 表</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h4>ROW SHARE（行共享鎖）</h4> <p>只衝突<code>EXCLUSIVE, ACCESS EXCLUSIVE</code>，可讀不改。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span> <span class="token keyword">FOR</span> <span class="token keyword">SHARE</span><span class="token punctuation">;</span>  
+<span class="token comment">-- 鎖定 id=1 的行，但其他人可以讀</span>
+<span class="token comment">-- 只是不能修改這一行</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span></code><!----></pre> <p>ROW SHARE 總共有四種模式</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span> <span class="token keyword">FOR</span> <span class="token keyword">UPDATE</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span> <span class="token keyword">FOR</span> <span class="token keyword">NO</span> <span class="token keyword">KEY</span> <span class="token keyword">UPDATE</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span> <span class="token keyword">FOR</span> <span class="token keyword">SHARE</span><span class="token punctuation">;</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span> <span class="token keyword">FOR</span> <span class="token keyword">KEY</span> <span class="token keyword">SHARE</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h4>ROW EXCLUSIVE（行排他鎖）</h4> <p>衝突<code>SHARE, SHARE UPDATE EXCLUSIVE, SHARE ROW EXCLUSIVE, EXCLUSIVE, ACCESS EXCLUSIVE</code>，常見的編輯。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- 交易 A</span>
+<span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+<span class="token keyword">UPDATE</span> users <span class="token keyword">SET</span> age <span class="token operator">=</span> <span class="token number">30</span> <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  
+<span class="token comment">-- 自動獲得 ROW EXCLUSIVE 鎖</span>
+<span class="token comment">-- 其他交易可以讀，但不能修改</span>
+
+<span class="token comment">-- 交易 B（同時執行）</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users<span class="token punctuation">;</span>  <span class="token comment">-- ✓ 可以讀</span>
+<span class="token keyword">UPDATE</span> users <span class="token keyword">SET</span> age <span class="token operator">=</span> <span class="token number">25</span> <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>  <span class="token comment">-- ✗ 被阻塞</span>
+
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h4>SHARE UPDATE EXCLUSIVE（共享更新排他鎖）</h4> <p>衝突<code>SHARE UPDATE EXCLUSIVE, SHARE, SHARE ROW EXCLUSIVE, EXCLUSIVE, ACCESS EXCLUSIVE</code>，用來執行系統性設定(索引創建)，避免該表被鎖死。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+<span class="token keyword">ANALYZE</span> users<span class="token punctuation">;</span>  <span class="token comment">-- 自動獲得 SHARE UPDATE EXCLUSIVE 鎖</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> CONCURRENTLY    <span class="token comment">-- 並行創建索引</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">STATISTICS</span>            <span class="token comment">-- 創建統計信息</span>
+
+<span class="token comment">-- 其他交易可以讀和修改，但不能同時 VACUUM 或 CREATE INDEX CONCURRENTLY</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h4>SHARE（共享鎖）</h4> <p>衝突<code>ROW EXCLUSIVE, SHARE UPDATE EXCLUSIVE, SHARE ROW EXCLUSIVE, EXCLUSIVE, ACCESS EXCLUSIVE</code></p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> idx_users_email <span class="token keyword">ON</span> users<span class="token punctuation">(</span>email<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+<span class="token comment">-- 獲得 SHARE 鎖（整個創建過程持有）</span>
+<span class="token comment">-- 阻止所有修改，但允許讀取</span>
+
+<span class="token comment">-- 其他交易</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users<span class="token punctuation">;</span>  <span class="token comment">-- ✓ 可以讀</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> users <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">-- ✗ 被阻塞</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h4>SHARE ROW EXCLUSIVE</h4> <p>衝突<code>ROW EXCLUSIVE, SHARE UPDATE EXCLUSIVE, SHARE, SHARE ROW EXCLUSIVE, EXCLUSIVE, ACCESS EXCLUSIVE</code>，會自衝突。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- 交易 A</span>
+<span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TRIGGER</span> check_age BEFORE <span class="token keyword">INSERT</span> <span class="token keyword">ON</span> users <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token comment">-- 獲得 SHARE ROW EXCLUSIVE 鎖</span>
+
+<span class="token comment">-- 交易 B（同時執行）</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users<span class="token punctuation">;</span>  <span class="token comment">-- ✓ 可以讀</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> users <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">-- ✗ 被阻塞（衝突）</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>EXCLUSIVE（排他鎖）</h3> <p>限制性非常高，只允許<code>ACCESS SHARE</code></p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+REFRESH MATERIALIZED <span class="token keyword">VIEW</span> mat_view<span class="token punctuation">;</span>
+<span class="token comment">-- 獲得 EXCLUSIVE 鎖</span>
+
+<span class="token comment">-- 其他交易</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> mat_view<span class="token punctuation">;</span>  <span class="token comment">-- ✓ 可以讀</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> mat_view <span class="token keyword">FOR</span> <span class="token keyword">UPDATE</span><span class="token punctuation">;</span>  <span class="token comment">-- ✗ 被阻塞</span>
+<span class="token keyword">UPDATE</span> mat_view <span class="token keyword">SET</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">;</span>  <span class="token comment">-- ✗ 被阻塞</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>ACCESS EXCLUSIVE（訪問排他鎖）</h3> <p>限制性最高，等同該表只能被該交易使用</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- 交易 A</span>
+<span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+<span class="token keyword">DROP</span> <span class="token keyword">TABLE</span> users<span class="token punctuation">;</span>  <span class="token comment">-- 獲得 ACCESS EXCLUSIVE 鎖</span>
+
+<span class="token comment">-- 交易 B（同時執行）</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users<span class="token punctuation">;</span>  <span class="token comment">-- ✗ 被完全阻塞！</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> users <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">-- ✗ 被完全阻塞！</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_6bih9z = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BV7yux3g.js"),
+						import("../_app/immutable/entry/app.D254ovoy.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
