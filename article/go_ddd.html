@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DDqIF5JP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/ByVliOMU.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BGLOmdlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CjO81wrs.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BOY0Dopy.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CGIRYF0y.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.xNvaVjdb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bx34spGl.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CWf88C1l.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">DDD Architecture</h1> <p class="svelte-mdkbyj">2026-02-04</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>DDD 複雜的是定義邊界，模型出來後就是想辦法呵護他直到寫入資料庫</h6> <hr/> <h3>Domain Layer</h3> <p>主題是訂單搶購，主領域就 <code>Product 、 Order</code> ，就以這兩個為中心出發</p> <h4>Product</h4> <p>很直覺的欄位該有要有</p> <pre class="language-go"><!----><code class="language-go">    <span class="token comment">// Aggregate Object</span>
+    <span class="token keyword">type</span> Product <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+        id          <span class="token builtin">int64</span>
+        sku         <span class="token builtin">string</span>
+        name        <span class="token builtin">string</span>
+        price       <span class="token builtin">int16</span>
+        stock       <span class="token builtin">int16</span>
+        description <span class="token builtin">string</span>
+        status      <span class="token builtin">int8</span>
+        createdAt   time<span class="token punctuation">.</span>Time
+        updatedAt   time<span class="token punctuation">.</span>Time
+    <span class="token punctuation">&#125;</span></code><!----></pre> <p>訂單進來<code>update Product set Stock = (stock -= order)</code>，這樣會有的問題:</p> <ol><li>訂單實際上會有未/付款，時間內仍未付款庫存難回朔</li> <li>無法區分「可售庫存」和「實際庫存」</li></ol> <p>所以可以引入 Value Object 概念把 <code>Stock</code> 改成</p> <pre class="language-go"><!----><code class="language-go">    <span class="token keyword">type</span> Stock <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+        available <span class="token builtin">int32</span>
+        reserved  <span class="token builtin">int32</span>
+    <span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_slbq0u = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DDqIF5JP.js"),
+						import("../_app/immutable/entry/app.CjO81wrs.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

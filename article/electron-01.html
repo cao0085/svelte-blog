@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BV7yux3g.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BuagMGfn.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DDqIF5JP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/ByVliOMU.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DgxLTxFc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BGLOmdlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.D254ovoy.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CjO81wrs.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BJ11HkiF.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BOY0Dopy.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CC-McyLN.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.OPEYF1WY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CGIRYF0y.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.xNvaVjdb.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/ttG9PryH.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.B8h6BQSQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bx34spGl.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CWf88C1l.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Electron With WebContentsView</h1> <p class="svelte-mdkbyj">2025-10-12</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>用 Electron 的 WebContentsView 實作編輯器</h6> <hr/> <h3>主要架構</h3> <p>Electron 基於 <strong>Node.js</strong> 和 <strong>Chromium</strong> 建構而成：</p> <ul><li>Node.js：提供後端能力，可以存取檔案系統、作業系統 API 等原生功能</li> <li>Chromium：負責渲染使用者界面，提供現代化的網頁技術支援</li> <li>主進程 (Main Process)：負責管理應用程式生命週期、建立視窗、處理系統事件</li> <li>渲染進程 (Renderer Process)：每個視窗或 WebContentsView 都運行在獨立的渲染進程中</li></ul> <h3>WebContentsView</h3> <p>可以想像成一個獨立的瀏覽器分頁：</p> <ul><li>每個 View 運行在獨立的渲染進程中</li> <li>進程之間互相隔離，提升穩定性與安全性</li> <li>各自維護獨立的狀態，不會互相干擾</li> <li>適合用於建立多文件編輯器、分頁瀏覽器等應用</li></ul> <br/> <p>困難的地方在於模組化 WebContentsView 的配置與切換，基本設定流程會是</p> <pre class="language-js"><!----><code class="language-js"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">createWCV</span><span class="token punctuation">(</span><span class="token parameter">viewType<span class="token punctuation">,</span> isIntegration <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">,</span> isIsolation<span class="token operator">=</span> <span class="token boolean">true</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -84,7 +84,7 @@
 			
 			<script>
 				{
-					__sveltekit_6bih9z = {
+					__sveltekit_slbq0u = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -92,8 +92,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BV7yux3g.js"),
-						import("../_app/immutable/entry/app.D254ovoy.js")
+						import("../_app/immutable/entry/start.DDqIF5JP.js"),
+						import("../_app/immutable/entry/app.CjO81wrs.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

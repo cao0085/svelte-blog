@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BV7yux3g.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BuagMGfn.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DDqIF5JP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/ByVliOMU.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DgxLTxFc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BGLOmdlL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.D254ovoy.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CjO81wrs.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BJ11HkiF.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BOY0Dopy.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CC-McyLN.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.OPEYF1WY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CGIRYF0y.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.xNvaVjdb.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/ttG9PryH.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.B8h6BQSQ.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bx34spGl.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CWf88C1l.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Svelte Blog</h1> <p class="svelte-mdkbyj">2025-09-09</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>用 Svelte 做一個類似 Jekyll 的 Markdown 語法生成網站 (你正在閱讀的)，提供 <a href="https://github.com/cao0085/svelte-blog" rel="nofollow">Repository</a> 參考</h6> <hr/> <p>我第一個專案就是套 Jekyll + GitHub Pages 架 Blog ，有朋友推薦可以玩玩看 Svelte，就決定拿來就架一個文章模板網站，也順手把 Blog 搬過來。</p> <h3>專案架構評估</h3> <p>有傳說搜尋引擎對於靜態 HTML 的權重比較高，所以推薦文字內容為主的網站使用靜態網站的形式，但傳統靜態網站的缺點是需要維護多張 HTML、切換頁面都需要發送網路請求。</p> <p>而另一種主流 SPA (Single Page Application) 的優勢是首次載入後，後續切換頁面完全由 JavaScript 在記憶體中處理，缺點就是搜尋引擎可能只看到空白的 HTML 殼。</p> <p>要結合上述的優點就是要</p> <ul><li>首次訪問返回完整 HTML (SEO 友善 + 快速顯示)</li> <li>後續在站內切換文章，由使用端觸發 JavaScript 操作 (SPA 體驗)</li></ul> <p>需求聽起來矛盾，但是基本上就是預先準備好 N 份 JavaScript 一樣 + 不同文字的 HTML (SPA) 當作入口被訪問，常見名稱叫做【混合式渲染】<code>SSG（Static Site Generation）+ CSR（Client-Side Rendering）</code>。</p> <p>你現在可以打開開發者面板觀察，在站內切換文章是不會向外部發送網路請求的。</p> <h3>混合式渲染</h3> <p>在 Svelte 可以用 mdsvex 套件來實踐，他提供 run build 時把你指定的 模板 + .md 輸出成 HTML。整體流程如下:</p> <ol><li>構建時: 為<strong>每篇</strong>文章生成獨立的靜態 HTML，內含 Markdown 完整的文字內容</li> <li>首次訪問: 伺服器返回該路由的 HTML</li> <li>Hydration: Svelte runtime 載入後接管頁面</li> <li>文章切換: 用 JS 做虛擬路由切換，後續點擊文章連結變成客戶端導航</li></ol> <p>程式碼架構</p> <pre class="language-markdown"><!----><code class="language-markdown">src/routes/
@@ -97,7 +97,7 @@
 			
 			<script>
 				{
-					__sveltekit_6bih9z = {
+					__sveltekit_slbq0u = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -105,8 +105,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BV7yux3g.js"),
-						import("../_app/immutable/entry/app.D254ovoy.js")
+						import("../_app/immutable/entry/start.DDqIF5JP.js"),
+						import("../_app/immutable/entry/app.CjO81wrs.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
