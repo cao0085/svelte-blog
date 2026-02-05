@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DDqIF5JP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/ByVliOMU.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.Ydrp4lmE.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BXJXbgDY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BGLOmdlL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CNCWaNky.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.CjO81wrs.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BSv_Adcq.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BOY0Dopy.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.Bez9QqLD.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CGIRYF0y.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.xNvaVjdb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bjry1Qtg.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CrHtDSL_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bx34spGl.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.CWf88C1l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/ui6y7Ki0.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.vD6Cr1Lc.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">CORS &amp; SOP</h1> <p class="svelte-mdkbyj">2025-10-27</p></div> <section class="article-body svelte-mdkbyj"><!----><h2>常常看到 CORS 今天才知道有 SOP</h2> <p>瀏覽器原生就有一個預設的安全機制叫做 <code>Same-Origin Policy (SOP)</code>，它只允許網頁接收來自相同來源（Same Origin）的資料。</p> <p>這個限制在實務上會造成一些不便：如果前後端分別部署在不同的 Server 上，前端就無法直接向後端發送請求取得資料。傳統的解決方式是讓後端先接收外部資料，再轉發給前端。</p> <p>為了突破這個限制，讓跨來源的資料交換更方便，<code>CORS（Cross-Origin Resource Sharing）</code> 機制因此誕生。</p> <h3>Same-Origin Policy</h3> <p>主要用來防範 <strong>跨站請求偽造（CSRF）</strong> 等攻擊。由於瀏覽器發送請求時會自動帶上當前網站的 Origin，且 JavaScript 無法隨意偽造這個值，因此 SOP 可以有效防止惡意網站冒用使用者身份。</p> <p>假設你登入了銀行網站 A，此時瀏覽器會儲存 A 網站的 Cookie（包含登入憑證）。如果沒有 SOP 保護，當你訪問惡意網站 B 時，B 網站的 JavaScript 就能向 A 銀行發送請求，並自動帶上你的登入 Cookie，進而盜取資料或進行轉帳。有了 SOP，瀏覽器會阻擋 B 網站讀取來自 A 網站的回應資料。</p> <pre class="language-md"><!----><code class="language-md">    B 網站的 JS 發起請求到 A Server
@@ -196,7 +196,7 @@ func main() &#123;
 			
 			<script>
 				{
-					__sveltekit_slbq0u = {
+					__sveltekit_upoc1o = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -204,8 +204,8 @@ func main() &#123;
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DDqIF5JP.js"),
-						import("../_app/immutable/entry/app.CjO81wrs.js")
+						import("../_app/immutable/entry/start.Ydrp4lmE.js"),
+						import("../_app/immutable/entry/app.BSv_Adcq.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
