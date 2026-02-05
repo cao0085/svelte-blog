@@ -15,7 +15,7 @@ DDD 全名是 Domain Driven Design，實作前先分享我對這個概念的理�
 
 ### Error Data
 
-當系統儲存了錯誤的資料，事後修正的成本遠高於在寫入前就擋下來。也就是如果能保證從使用者輸入到儲存的過程中完全不會出錯，那直接把資料丟進 Excel 就夠了，也不用透過系統去處理了。
+當系統儲存了錯誤資料，事後修正的成本遠高於寫入前就擋下。如果能保證從使用者輸入到儲存的過程中完全不會出錯，那直接把資料丟進 Excel 就夠了，也不用透過系統去處理了。
 
 實際情況當然是不可能，所以會透過各種手段降低錯誤資料儲存的機率：
 
@@ -23,24 +23,28 @@ DDD 全名是 Domain Driven Design，實作前先分享我對這個概念的理�
 - ```Strongly Typed Language```: 在編譯期防止開發人員犯錯
 - ```DB Column Type```: 在儲存層防止不合法的資料寫入
 
-但這些只能防止部份的錯誤（型別錯、欄位空值等），無法防止「業務上的錯誤」。
+但這些只能防止部份的錯誤（型別錯、欄位空值等），無法防止業務上的錯誤，所以還會需要添加一些規範。
 
 ```go
 type Stock struct {
-    quantity int32
+    Quantity int32
 }
 
 // A. 預購系統
-db.update(Stock.quantity - order)
+db.update(Stock.Quantity - order)
 
 // B. 零售系統
-if Stock.quantity - order < 0 {
+if Stock.Quantity - order < 0 {
     return // 超賣
 }
-db.update(Stock.quantity - order)
+db.update(Stock.Quantity - order)
 ```
 
-這就是 DDD 要解決的問題，把業務規則定義在模型上，任何地方要修改資料都必須經過模型驗證，不合法就拋錯，從源頭保證資料的一致性。
+如果依照上面寫，我們未來有牽涉到 Update Stock 前就要去檢查，而這就是 DDD 想要解決的問題。
+
+### Domain Object
+
+把業務規則定義在模型上，任何地方要修改資料都必須經過模型驗證，不合法就拋錯，從源頭保證資料的一致性。
 
 ```go
 // 預購系統 Domain Model
@@ -68,17 +72,13 @@ func (s *RetailStock) Deduct(order int32) error {
 }
 ```
 
-### Core
-
-DDD 的核心概念由 Aggregate 和 Value Object 組成，用手機來舉例:
+DDD 中提出 Aggregate 和 Value Object 這兩個模型概念，來去防止非預期資料寫入，拿用手機來舉例:
 
 - Aggregate: 每一台手機拆開都會有一組 Serial Num 具有唯一識別性（ID）。即使兩台手機型號、顏色完全相同，Serial Num 不同就是不同的手機。
 
 - Value Object: 手機的螢幕尺寸、顏色、電池容量這些屬性沒有自己的 ID，純粹由值來定義。
 
-但實務上 Value Object 和普通欄位的界線會有點模糊，例如「顏色」最終就是用 string 欄位儲存？或是需要特別抽象成 `type Color` 用列舉驗證？
-
-總結來說 Aggregate 就是由複數個定義好的欄位與 Value Object 組成，並透過業務規則盡可能保護這些值的正確性。
+總結來說 Aggregate 就是由複數個定義好的欄位與 Value Object 組成，並透過業務規則盡可能保護這些值的正確性。但實務上 Value Object 和普通欄位的界線會有點模糊，例如「顏色」最終就是用 string 欄位儲存？或是需要特別抽象成 `type Color` 用列舉驗證？等等
 
 <!-- 
 專案主題是訂單搶購，以 ```Product``` 和 ```Order``` 這兩個 Aggregate 為中心出發
