@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DD9aBYXP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/pUxPOPju.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BgBXjx-l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.Cehwvsna.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BbW3Rn2a.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0QwFFMc.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dlfue2UF.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0DlLLrc_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.-BZQ6meH.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Redis</h1> <p class="svelte-mdkbyj">2026-02-06</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>用 Redis 的原子性去處理資料寫入前的檢查</h6> <hr/> <p>Redis 全名是 Remote Dictionary Server，特性是讀寫速度極快和保證原子性，但容量小，基本上先視作進階版 Cache 來使用</p> <h3>基本指令</h3> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 查看所有 keys</span>
+KEYS *
+
+<span class="token comment"># 查看 Redis 信息</span>
+INFO
+
+<span class="token comment"># 查看記憶體使用情況</span>
+INFO memory
+
+<span class="token comment"># 查看連接的客戶端</span>
+CLIENT LIST
+
+<span class="token comment"># 監控實時命令</span>
+MONITOR
+
+<span class="token comment"># 退出</span>
+<span class="token builtin class-name">exit</span></code><!----></pre> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 查看實時日誌</span>
+<span class="token function">docker</span> logs <span class="token parameter variable">-f</span> flashsale-redis
+
+<span class="token comment"># 查看最近 100 行日誌</span>
+<span class="token function">docker</span> logs <span class="token parameter variable">--tail</span> <span class="token number">100</span> flashsale-redis
+
+<span class="token comment"># 不進入容器，直接執行命令</span>
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> flashsale-redis redis-cli INFO stats
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> flashsale-redis redis-cli DBSIZE
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> flashsale-redis redis-cli KEYS <span class="token string">"*"</span></code><!----></pre> <h3>同步策略</h3> <ul><li><p>TTL (Time To Live)</p> <p>固定時間更新一次資料 <code>SET key value EX 300</code></p></li> <li><p>Write-Through</p> <p>資料須更新時，同時更新 DB 和 Redis，例如訂單庫存</p></li> <li><p>Cache-Aside</p> <p>讀：先查 Redis，沒有再查 DB 並回寫 Redis</p> <p>寫：先更新 DB，再刪除 Redis（下次讀取時重建）</p></li> <li><p>Event-Driven</p> <p>被動觸發</p></li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_ye6eer = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DD9aBYXP.js"),
+						import("../_app/immutable/entry/app.Cehwvsna.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

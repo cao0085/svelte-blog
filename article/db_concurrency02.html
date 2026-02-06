@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.CxaNDOXa.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C1CbXY1y.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DD9aBYXP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/pUxPOPju.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DMEj7IRU.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BgBXjx-l.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B5UVBtpa.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.Cehwvsna.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DcpHotp_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BbW3Rn2a.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/a5nURgyH.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CIsQ7M89.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0QwFFMc.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dlfue2UF.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CpIwvuco.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DbyqfRzT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0DlLLrc_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.-BZQ6meH.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">PostgreSQL 併發控制 2</h1> <p class="svelte-mdkbyj">2026-02-04</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>PostgreSQL 的併發處理 <a href="https://www.postgresql.org/docs" rel="nofollow">PostgreSQL Doc</a></h6> <hr/> <h3>交易隔離</h3> <p>交易開始後可能會有以下問題:</p> <ol><li><p>Dirty Read 髒讀 :</p> <ul><li>不保證讀到的資料都是已 Commit 的。</li></ul></li> <li><p>Nonrepeatable Read 複讀 :</p> <ul><li>保證讀取的資料是已 Commit</li> <li>不保證同個交易獲得的資料一樣(期間該交易被更新)</li></ul></li> <li><p>Phantom Read 幻讀 :</p> <ul><li>保證讀取的”現有行”數據一樣（不會被修改）</li> <li>不保證獲得的”行集合”一樣(期間插入/刪除)</li></ul></li> <li><p>Serialization 序列化 :</p> <ul><li>保證讀取的資料來源、邏輯一致</li></ul></li></ol> <h3>鎖表</h3> <p>PostgreSQL 提供以下鎖層級，根據鎖之間是否產生衝突，來決定該交易列隊等待與否，按限制性從低到高排列：</p> <h4>ACCESS SHARE（訪問共享鎖）</h4> <p>只衝突<code>ACCESS EXCLUSIVE</code>，普通的讀取。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
@@ -93,7 +93,7 @@ REFRESH MATERIALIZED <span class="token keyword">VIEW</span> mat_view<span class
 			
 			<script>
 				{
-					__sveltekit_1w5xtp2 = {
+					__sveltekit_ye6eer = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -101,8 +101,8 @@ REFRESH MATERIALIZED <span class="token keyword">VIEW</span> mat_view<span class
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.CxaNDOXa.js"),
-						import("../_app/immutable/entry/app.B5UVBtpa.js")
+						import("../_app/immutable/entry/start.DD9aBYXP.js"),
+						import("../_app/immutable/entry/app.Cehwvsna.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

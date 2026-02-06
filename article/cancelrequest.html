@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DD9aBYXP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/pUxPOPju.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BgBXjx-l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.Cehwvsna.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BbW3Rn2a.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0QwFFMc.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dlfue2UF.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0DlLLrc_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.-BZQ6meH.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Canceling Http Requests</h1> <p class="svelte-mdkbyj">2026-02-06</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>主動去中斷 HTTP 請求</h6> <hr/> <h3>Http Request</h3> <p>前端 POST → Preflight (OPTIONS) → 實際 POST → 等待回應 → 收到回應</p> <pre class="language-md"><!----><code class="language-md">前端                          後端
+ │                              │
+ │── TCP 連線建立（三次握手）──→ │
+ │── 送出 HTTP Request ───────→ │
+ │                              │  處理中...
+ │        （TCP 連線開著）        │  處理中...
+ │                              │  處理中...
+ │←── 回傳 HTTP Response ────── │
+ │── TCP 連線關閉 ──────────────→│
+</code><!----></pre> <p>也就是在還沒有拿到 Response 前都會保持 TCP 通信，想要中斷取消該請求的方法</p> <ul><li><p>關閉瀏覽器/分頁</p></li> <li><p>JavaScript 呼叫 AbortController.abort()</p></li> <li><p>網路斷線</p></li></ul> <p>那當 TCP 連線中斷後，會希望後端終止該流程避免資源消耗，就可以使用 Cancel Token。</p> <h3>Canceling</h3> <p>概念滿單純的，就是從 <code>CancellationTokenSource</code> 創建一顆 token，當作參數傳入 <code>func(token)</code>。當 TCP 連線中斷後，Runtime 會自動將 token 狀態設為已取消，每個 func 內部就去檢查該 token 狀態來決定是否繼續執行。</p> <p>每個語言處理 token 的方式不一樣：</p> <ul><li><strong>C#</strong>：使用獨立的 <code>CancellationToken</code>，需手動呼叫 <code>ThrowIfCancellationRequested()</code> 拋出 <code>OperationCanceledException</code>，或檢查 <code>IsCancellationRequested</code> 屬性，另外很多套件和常用方法都接受 token 傳入</li> <li><strong>Go</strong>：包在 <code>context.Context</code> 裡面，透過 <code>ctx.Done()</code> channel 或 <code>ctx.Err()</code> 檢查是否取消</li></ul> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// ASP.NET Core - Controller 自動注入 CancellationToken</span>
+<span class="token punctuation">[</span>HttpGet<span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>IActionResult<span class="token punctuation">></span></span> <span class="token function">GetData</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> cancellationToken<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 方法一：手動檢查</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>cancellationToken<span class="token punctuation">.</span>IsCancellationRequested<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">StatusCode</span><span class="token punctuation">(</span><span class="token number">499</span><span class="token punctuation">,</span> <span class="token string">"Client Closed Request"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 方法二：拋出例外（會回傳 400 Bad Request）</span>
+    cancellationToken<span class="token punctuation">.</span><span class="token function">ThrowIfCancellationRequested</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 傳遞給其他 async 方法</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> result <span class="token operator">=</span> <span class="token keyword">await</span> _dbContext<span class="token punctuation">.</span>Users
+        <span class="token punctuation">.</span><span class="token function">ToListAsync</span><span class="token punctuation">(</span>cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token function">Ok</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// HttpClient - 支援 CancellationToken</span>
+<span class="token class-name"><span class="token keyword">var</span></span> response <span class="token operator">=</span> <span class="token keyword">await</span> _httpClient<span class="token punctuation">.</span><span class="token function">GetAsync</span><span class="token punctuation">(</span><span class="token string">"https://api.example.com/data"</span><span class="token punctuation">,</span> cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">var</span></span> content <span class="token operator">=</span> <span class="token keyword">await</span> response<span class="token punctuation">.</span>Content<span class="token punctuation">.</span><span class="token function">ReadAsStringAsync</span><span class="token punctuation">(</span>cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// System.IO - 檔案操作支援 CancellationToken</span>
+<span class="token class-name"><span class="token keyword">var</span></span> text <span class="token operator">=</span> <span class="token keyword">await</span> File<span class="token punctuation">.</span><span class="token function">ReadAllTextAsync</span><span class="token punctuation">(</span><span class="token string">"path/to/file.txt"</span><span class="token punctuation">,</span> cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">await</span> File<span class="token punctuation">.</span><span class="token function">WriteAllTextAsync</span><span class="token punctuation">(</span><span class="token string">"path/to/output.txt"</span><span class="token punctuation">,</span> content<span class="token punctuation">,</span> cancellationToken<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <pre class="language-go"><!----><code class="language-go"><span class="token comment">// Go - 使用 context.Context</span>
+<span class="token keyword">func</span> <span class="token function">GetData</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span>User<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 方法一：檢查 channel</span>
+    <span class="token keyword">select</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">case</span> <span class="token operator">&lt;-</span>ctx<span class="token punctuation">.</span><span class="token function">Done</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> ctx<span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// context.Canceled 或 context.DeadlineExceeded</span>
+    <span class="token keyword">default</span><span class="token punctuation">:</span>
+        <span class="token comment">// 繼續執行</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 方法二：傳遞給其他函數</span>
+    rows<span class="token punctuation">,</span> err <span class="token operator">:=</span> db<span class="token punctuation">.</span><span class="token function">QueryContext</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">"SELECT * FROM users"</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// Gin 框架範例</span>
+<span class="token keyword">func</span> <span class="token function">Handler</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    ctx <span class="token operator">:=</span> c<span class="token punctuation">.</span>Request<span class="token punctuation">.</span><span class="token function">Context</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 從 request 取得 context</span>
+    result<span class="token punctuation">,</span> err <span class="token operator">:=</span> <span class="token function">GetData</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_ye6eer = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DD9aBYXP.js"),
+						import("../_app/immutable/entry/app.Cehwvsna.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
