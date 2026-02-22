@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DD9aBYXP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/pUxPOPju.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.Pg-nL2tL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DhBny3BL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BgBXjx-l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CcKpjrNr.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.Cehwvsna.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app._BL5JyyV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,17 +22,17 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BbW3Rn2a.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BZFIDNXN.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C0QwFFMc.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dlfue2UF.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BziPnQ6m.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dj7StvnV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/0DlLLrc_.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.-BZQ6meH.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B3v1a-ez.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BMqm9JhM.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Domain-Driven - Outbox Message</h1> <p class="svelte-mdkbyj">2025-06-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>拆分主副邏輯，同時保持資料同步性</h6> <hr/> <h2>SideEffect</h2> <p>若把 DDD 流程中的主副行為拆分：</p> <ul><li>創建員工帳戶的時候 <code>&lt;TABLE_Employee></code> 新增一筆資料</li> <li>幫對應到的 <code>&lt;TABLE_Department>_Headcount</code> 總人數加一</li></ul> <br/> <p>若是以依照 MVC 架構會是</p> <pre class="language-csharp"><!----><code class="language-csharp">db_Employee<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Domain-Driven - Outbox Message</h1> <p class="svelte-mdkbyj">2025-06-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>拆分主副邏輯，同時保持資料同步性</h6> <hr/> <h2>SideEffect</h2> <p>若把 DDD 流程中的主副行為拆分：</p> <ul><li>創建員工帳戶的時候 <code>&lt;TABLE_Employee></code> 新增一筆資料</li> <li>幫對應到的 <code>&lt;TABLE_Department>_Headcount</code> 總人數加一</li></ul> <br/> <p>若是以依照 MVC 架構會是</p> <pre class="language-csharp"><!----><code class="language-csharp">db_Employee<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
 db_Department<span class="token punctuation">.</span><span class="token function">AddOrUpdate</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>Id <span class="token operator">==</span> data<span class="token punctuation">.</span>DepartmentId<span class="token punctuation">,</span> dept <span class="token operator">=></span> dept<span class="token punctuation">.</span>HandCount <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 db<span class="token punctuation">.</span><span class="token function">Commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>用 DDD 寫則變成是</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Application Layer</span>
 <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>Unit<span class="token punctuation">></span></span> <span class="token function">Handle</span><span class="token punctuation">(</span><span class="token class-name">CreateEmployeeCommand</span> command<span class="token punctuation">,</span> <span class="token class-name">CancellationToken</span> ct<span class="token punctuation">)</span>
@@ -147,7 +147,7 @@ db<span class="token punctuation">.</span><span class="token function">Commit</s
 			
 			<script>
 				{
-					__sveltekit_ye6eer = {
+					__sveltekit_1bzsiqb = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -155,8 +155,8 @@ db<span class="token punctuation">.</span><span class="token function">Commit</s
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DD9aBYXP.js"),
-						import("../_app/immutable/entry/app.Cehwvsna.js")
+						import("../_app/immutable/entry/start.Pg-nL2tL.js"),
+						import("../_app/immutable/entry/app._BL5JyyV.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

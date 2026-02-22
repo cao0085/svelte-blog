@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DD9aBYXP.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/pUxPOPju.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.Pg-nL2tL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DhBny3BL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BgBXjx-l.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CcKpjrNr.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.Cehwvsna.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app._BL5JyyV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,17 +22,17 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BbW3Rn2a.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BZFIDNXN.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C0QwFFMc.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dlfue2UF.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BziPnQ6m.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.Dj7StvnV.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/0DlLLrc_.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.-BZQ6meH.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B3v1a-ez.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BMqm9JhM.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">DDD Architecture</h1> <p class="svelte-mdkbyj">2026-02-04</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>DDD 複雜的是定義規則，模型出來後就是想辦法呵護直到寫入資料庫</h6> <hr/> <p>DDD 全名是 Domain Driven Design，實作前先分享我對這個概念的理解和是怎麼延伸出領域物件。</p> <h3>Error Data</h3> <p>當系統儲存了錯誤資料，事後修正的成本遠高於寫入前就擋下。如果能保證從使用者輸入到儲存的過程中完全不會出錯，那直接把資料丟進 Excel 就夠了，也不用透過系統去處理了。</p> <p>實際情況當然是不可能，所以會透過各種手段降低錯誤資料儲存的機率：</p> <ul><li><code>UI Input Rule</code>: 讓使用者在輸入時就即時發現錯誤</li> <li><code>Strongly Typed Language</code>: 在編譯期防止開發人員犯錯</li> <li><code>DB Column Type</code>: 在儲存層防止不合法的資料寫入</li></ul> <p>但這些只能防止部份的錯誤（型別錯、欄位空值等），無法防止業務上的錯誤，所以還會需要添加一些規範。</p> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">type</span> Stock <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">DDD Architecture</h1> <p class="svelte-mdkbyj">2026-02-04</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>DDD 複雜的是定義規則，模型出來後就是想辦法呵護直到寫入資料庫</h6> <hr/> <p>Domain Driven Design，分享我對這個概念的理解和是如何延伸出領域物件。</p> <h3>錯誤的資料</h3> <p>當系統儲存錯誤資料，事後修正的成本遠高於寫入前擋下，所以會透過各種方式降低發生的機率：</p> <ul><li><code>UI Input Rule</code>: 讓使用者在輸入時就即時發現錯誤</li> <li><code>Strongly Typed Language</code>: 在編譯期防止開發人員犯錯</li> <li><code>DB Column Type</code>: 在儲存層防止不合法的資料寫入</li></ul> <p>但這些只能防止資料型別的錯誤，並不能讓系統防止<strong><em>“規則”</em></strong>外的資料存入，所以還會需要添加一些規範。</p> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">type</span> Stock <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
     Quantity <span class="token builtin">int32</span>
 <span class="token punctuation">&#125;</span>
 
@@ -43,7 +43,7 @@ db<span class="token punctuation">.</span><span class="token function">update</s
 <span class="token keyword">if</span> Stock<span class="token punctuation">.</span>Quantity <span class="token operator">-</span> order <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">return</span> <span class="token comment">// 超賣</span>
 <span class="token punctuation">&#125;</span>
-db<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>Stock<span class="token punctuation">.</span>Quantity <span class="token operator">-</span> order<span class="token punctuation">)</span></code><!----></pre> <p>如果依照上面寫，我們未來有牽涉到 Update Stock 前就要去檢查，而這就是 DDD 想要解決的問題。</p> <h3>Domain Object</h3> <p>把業務規則定義在模型上，任何地方要修改資料都必須經過模型驗證，不合法就拋錯，從源頭保證資料的一致性。</p> <pre class="language-go"><!----><code class="language-go"><span class="token comment">// 預購系統 Domain Model</span>
+db<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>Stock<span class="token punctuation">.</span>Quantity <span class="token operator">-</span> order<span class="token punctuation">)</span></code><!----></pre> <p>上面的寫法會造成的問題就是，當系統中有 5 個流程可以 update 就會需要寫 5 次檢查，而這就是 DDD 想要解決的問題。</p> <h3>Domain Layer</h3> <p>把業務規則定義在模型上，任何地方要修改資料都必須經過模型驗證，不合法就拋錯從源頭保證資料的一致性。</p> <pre class="language-go"><!----><code class="language-go"><span class="token comment">// 預購系統 Domain Model</span>
 <span class="token keyword">type</span> PreOrderStock <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
     quantity <span class="token builtin">int32</span>
 <span class="token punctuation">&#125;</span>
@@ -61,11 +61,78 @@ db<span class="token punctuation">.</span><span class="token function">update</s
     <span class="token punctuation">&#125;</span>
     s<span class="token punctuation">.</span>quantity <span class="token operator">-=</span> order
     <span class="token keyword">return</span> <span class="token boolean">nil</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <p>DDD 中提出 Aggregate 和 Value Object 這兩個模型概念，來去防止非預期資料寫入，拿用手機來舉例:</p> <ul><li><p>Aggregate: 每一台手機拆開都會有一組 Serial Num 具有唯一識別性（ID）。即使兩台手機型號、顏色完全相同，Serial Num 不同就是不同的手機。</p></li> <li><p>Value Object: 手機的螢幕尺寸、顏色、電池容量這些屬性沒有自己的 ID，純粹由值來定義。</p></li></ul> <p>總結來說 Aggregate 就是由複數個定義好的欄位與 Value Object 組成，並透過業務規則盡可能保護這些值的正確性。但實務上 Value Object 和普通欄位的界線會有點模糊，例如「顏色」最終就是用 string 欄位儲存？或是需要特別抽象成 <code>type Color</code> 用列舉驗證？等等</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>也就是物件屬性幾乎都是 private 欄位，必須透過 func 來確保符合某種<strong><em>“規則”</em></strong>進行修改。壞處就是規則一但建立就很難更改，所有應用內的引用都會被影響到。</p> <h4>物件實體</h4> <p>DDD 主要由 Aggregate 和 Value Object 這兩個物件概念來描述、保護傳入的值符合我們的預期，用手機來舉例</p> <h4>Value Object</h4> <ol><li><p>建構子（Constructor）: 最基本的建立方式，適合單純的驗證與賦值</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ScreenSize</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">ValueObject</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">decimal</span></span> Inches <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token function">ScreenSize</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">decimal</span></span> inches<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>inches <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentException</span><span class="token punctuation">(</span><span class="token string">"螢幕尺寸必須大於 0"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Inches <span class="token operator">=</span> inches<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 使用</span>
+<span class="token class-name"><span class="token keyword">var</span></span> size <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ScreenSize</span><span class="token punctuation">(</span><span class="token number">6.7m</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre></li> <li><p>靜態工廠方法（Static Factory Method）：當同一個 Value Object 可能從不同來源建立時，用具名的工廠方法</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Description</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">ValueObject</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Value <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token function">Description</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> <span class="token keyword">value</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">IsNullOrWhiteSpace</span><span class="token punctuation">(</span><span class="token keyword">value</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentException</span><span class="token punctuation">(</span><span class="token string">"描述不能為空"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Value <span class="token operator">=</span> <span class="token keyword">value</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name">Description</span> <span class="token function">FromPlainText</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> text<span class="token punctuation">)</span>
+        <span class="token operator">=></span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Description</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name">Description</span> <span class="token function">FromHtml</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> html<span class="token punctuation">)</span>
+        <span class="token operator">=></span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Description</span><span class="token punctuation">(</span>Regex<span class="token punctuation">.</span><span class="token function">Replace</span><span class="token punctuation">(</span>html<span class="token punctuation">,</span> <span class="token string">"&lt;.*?>"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name">Description</span> <span class="token function">FromJson</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> json<span class="token punctuation">)</span>
+        <span class="token operator">=></span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Description</span><span class="token punctuation">(</span>JsonDocument<span class="token punctuation">.</span><span class="token function">Parse</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">.</span>RootElement<span class="token punctuation">.</span><span class="token function">GetProperty</span><span class="token punctuation">(</span><span class="token string">"description"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">GetString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 使用：不管來源是什麼，最終都正規化為同一種純文字</span>
+<span class="token class-name"><span class="token keyword">var</span></span> d1 <span class="token operator">=</span> Description<span class="token punctuation">.</span><span class="token function">FromPlainText</span><span class="token punctuation">(</span><span class="token string">"好手機"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">var</span></span> d2 <span class="token operator">=</span> Description<span class="token punctuation">.</span><span class="token function">FromHtml</span><span class="token punctuation">(</span><span class="token string">"&lt;p>好手機&lt;/p>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+d1 <span class="token operator">==</span> d2 <span class="token comment">// true</span></code><!----></pre> <p>注意建構子是 <code>private</code>，外部無法直接 <code>new Description()</code>，強制所有人透過工廠方法建立，確保每種來源都經過對應的處理邏輯。</p></li> <li><p>Interface + Domain Service：當沒辦法靠 Value Object 獨自驗證，例如「手機支援的電信頻段是否合法」這件事，頻段清單可能存在資料庫或外部 API 會隨政策變動，不適合寫死在程式碼裡。</p> <pre class="language-csharp"><!----><code class="language-csharp">    <span class="token comment">// Domain 層定義介面：「我需要查頻段是否合法」，但不關心怎麼查</span>
+    <span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IBandLookup</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token return-type class-name">Band</span> <span class="token function">FindBand</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> bandCode<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> regionCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// Domain Service 負責：查外部資料 → 驗證 → 建立 Value Object</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BandService</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">IBandLookup</span> _lookup<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token function">BandService</span><span class="token punctuation">(</span><span class="token class-name">IBandLookup</span> lookup<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            _lookup <span class="token operator">=</span> lookup<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">public</span> <span class="token return-type class-name">SupportedBand</span> <span class="token function">CreateBand</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> bandCode<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> regionCode<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> band <span class="token operator">=</span> _lookup<span class="token punctuation">.</span><span class="token function">FindBand</span><span class="token punctuation">(</span>bandCode<span class="token punctuation">,</span> regionCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>band <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token operator">!</span>band<span class="token punctuation">.</span>IsApproved<span class="token punctuation">)</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"頻段 </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">bandCode</span><span class="token punctuation">&#125;</span></span><span class="token string"> 在 </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">regionCode</span><span class="token punctuation">&#125;</span></span><span class="token string"> 未核准"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">SupportedBand</span><span class="token punctuation">(</span>bandCode<span class="token punctuation">,</span> regionCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-csharp"><!----><code class="language-csharp">    <span class="token comment">// Infrastructure 層提供實作：實際去查資料庫</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SqlBandLookup</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IBandLookup</span></span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">public</span> <span class="token return-type class-name">Band</span> <span class="token function">FindBand</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> bandCode<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> regionCode<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 查資料庫...</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span></code><!----></pre> <p><em>Interface 本身不是 Value Object 的建立手段。Value Object 最終還是透過建構子或工廠方法建立，Interface 解決的是「建立之前，怎麼取得與驗證外部資料」這件事</em></p></li></ol><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_ye6eer = {
+					__sveltekit_1bzsiqb = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -73,8 +140,8 @@ db<span class="token punctuation">.</span><span class="token function">update</s
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DD9aBYXP.js"),
-						import("../_app/immutable/entry/app.Cehwvsna.js")
+						import("../_app/immutable/entry/start.Pg-nL2tL.js"),
+						import("../_app/immutable/entry/app._BL5JyyV.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
