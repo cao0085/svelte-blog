@@ -121,5 +121,5 @@ export const resumeData: ResumeData = {
     'Git',
     'Docker',
   ],
-  lastUpdate: '2026-01-29',
+  lastUpdate: '2026-03-01',
 };
