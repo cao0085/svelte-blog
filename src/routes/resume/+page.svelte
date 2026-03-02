@@ -11,7 +11,7 @@
     const pageWidth = 210;
     const margin = 20;
     const contentWidth = pageWidth - margin * 2;
-    let y = 25;
+    let y = 15;
 
     // Colors
     const primaryColor: [number, number, number] = [44, 62, 80]; // #2c3e50
@@ -56,18 +56,18 @@
     y += 12;
 
     // Career Objective
-    if (resumeData.objective) {
-      drawSectionHeader("Career Objective");
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(...textColor);
-      const objectiveLines = doc.splitTextToSize(
-        resumeData.objective,
-        contentWidth,
-      );
-      doc.text(objectiveLines, margin, y);
-      y += objectiveLines.length * 5 + 6;
-    }
+    // if (resumeData.objective) {
+    //   drawSectionHeader("Career Objective");
+    //   doc.setFontSize(10);
+    //   doc.setFont("helvetica", "normal");
+    //   doc.setTextColor(...textColor);
+    //   const objectiveLines = doc.splitTextToSize(
+    //     resumeData.objective,
+    //     contentWidth,
+    //   );
+    //   doc.text(objectiveLines, margin, y);
+    //   y += objectiveLines.length * 5 + 6;
+    // }
 
     // Professional Summary
     if (resumeData.summary) {
@@ -81,6 +81,36 @@
       );
       doc.text(summaryLines, margin, y);
       y += summaryLines.length * 5 + 6;
+    }
+
+    // Work History
+    if (resumeData.sideprojects.length > 0) {
+      drawSectionHeader("Side Projects");
+      resumeData.sideprojects.forEach((exp) => {
+        // Title and date on same line
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(...primaryColor);
+        doc.text(exp.title, margin, y);
+
+        doc.setFont("helvetica", "italic");
+        doc.setTextColor(...subtitleColor);
+        const dateWidth = doc.getTextWidth(exp.link);
+        doc.text(exp.link, margin + contentWidth - dateWidth, y);
+        y += 5;
+
+        // Highlights
+        doc.setTextColor(...textColor);
+        exp.highlights.forEach((highlight) => {
+          const bulletLines = doc.splitTextToSize(
+            `• ${highlight}`,
+            contentWidth - 4,
+          );
+          doc.text(bulletLines, margin + 2, y);
+          y += bulletLines.length * 5.5;
+        });
+        y += 5;
+      });
     }
 
     // Work History
@@ -181,17 +211,37 @@
       </div>
     </section>
 
-    {#if resumeData.objective}
+    <!-- {#if resumeData.objective}
       <section>
         <h2>Career Objective</h2>
         <p>{resumeData.objective}</p>
       </section>
-    {/if}
+    {/if} -->
 
     {#if resumeData.summary}
       <section>
         <h2>Professional Summary</h2>
         <p>{resumeData.summary}</p>
+      </section>
+    {/if}
+
+    {#if resumeData.sideprojects.length > 0}
+      <section>
+        <h2>Side Projects</h2>
+        {#each resumeData.sideprojects as exp}
+          <div class="entry">
+            <div class="entry-header">
+              <div class="entry-title">{exp.title}</div>
+              <div class="entry-date">{exp.link}</div>
+            </div>
+            <!-- <div class="entry-subtitle">{exp.company}</div> -->
+            <ul>
+              {#each exp.highlights as highlight}
+                <li>{highlight}</li>
+              {/each}
+            </ul>
+          </div>
+        {/each}
       </section>
     {/if}
 

@@ -11,6 +11,11 @@ export interface ResumeData {
   };
   summary?: string;
   objective?: string;
+  sideprojects: {
+    title: string;
+    link: string;
+    highlights: string[];
+  }[];
   education: {
     degree: string;
     date: string;
@@ -47,6 +52,33 @@ export const resumeData: ResumeData = {
       school: '735/990',
     },
   ],
+  sideprojects: [
+    {
+      title: 'Golang-high-concurrency',
+      link: 'https://github.com/cao0085/go-ddd-high-concurrency',
+      highlights: [
+        'Architected scalable services using Gin and Domain-Driven Design principles.',
+        'Optimized data management and caching with PostgreSQL and Redis.',
+        'Implemented Kafka for high-concurrency messaging and Prometheus for system monitoring.',
+      ],
+    },
+    {
+      title: 'Angular20 ERP System',
+      link: 'https://github.com/cao0085/angular-20',
+      highlights: [
+        'Developed an Angular 20 ERP system featuring Standalone Components and Signals-based reactivity.',
+        'Designed a comprehensive RBAC system for secure, granular permission management across enterprise workflows.'
+      ],
+    },
+    {
+      title: 'C#.NET Domain-Driven Design',
+      link: 'https://github.com/cao0085/CleanDDD',
+      highlights: [
+        'Implemented Clean Architecture and DDD patterns with C#.NET to ensure system scalability.',
+        'Explored Bounded Contexts and Aggregates to define clear domain boundaries and business logic separation.'
+      ],
+    },
+  ],
   experience: [
     {
       title: 'Full-Stack Software Engineer',
@@ -64,7 +96,7 @@ export const resumeData: ResumeData = {
       company: 'Tech Company - Taipei, Taiwan',
       highlights: [
         'Sold PCB design solutions to major electronics manufacturers in Taiwan',
-        'Ranked 2nd in client appointments and cold outreach within the team',
+        // 'Ranked 2nd in client appointments and cold outreach within the team',
         'Coordinated cross-departmental collaboration to deliver technical proposals',
       ],
     },
@@ -74,7 +106,7 @@ export const resumeData: ResumeData = {
       company: 'Textile Inc. - Taipei, Taiwan',
       highlights: [
         'Managed garment sampling, cost analysis, and production scheduling',
-        'Coordinated material procurement, shipment arrangements, and quality issues',
+        // 'Coordinated material procurement, shipment arrangements, and quality issues',
         'Handled projects for FILA, Nautica, Jeep, and government contracts',
       ],
     },
