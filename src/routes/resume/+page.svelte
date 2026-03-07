@@ -11,7 +11,7 @@
     const pageWidth = 210;
     const margin = 20;
     const contentWidth = pageWidth - margin * 2;
-    let y = 15;
+    let y = 18;
 
     // Colors
     const primaryColor: [number, number, number] = [44, 62, 80]; // #2c3e50

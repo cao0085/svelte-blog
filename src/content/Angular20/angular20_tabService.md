@@ -1,250 +1,206 @@
 ---
-title: "TabService"
-date: "2025-12-05"
+title: "Multi-Tab Management"
+date: "2026-01-05"
 category: "software"
 subCategory: "Angular20"
-tags: ["fronted", "angular", "RxJS"]
+tags: ["frontend", "angular", "RxJS"]
 slug: "angular_tabService"
 ---
-###### 企業內部系統常用到的分頁顯示管理
+###### 企業內部系統常用到的分頁顯示管理，管理分頁列的狀態與切換，記錄當前開啟的路由分頁
 
 ---
 
-分頁管理器，主要功能會是需要可以
+### TabService
 
-1. 存放(已Instance)當前的分頁(Component)
-2. 選擇該分頁替換內容
-3. 銷毀分頁
+通常可以搭配 RouteReuseStrategy 控制元件顯示和復用
+
+- **RouteReuseStrategy**：攔截路由切換，快取 Component 實例
+- **TabService**：記錄哪些分頁存在、哪個是 active、呼叫 `router.navigate()` 切換路由
+    1. 存放（已 Instance）當前的分頁（Component）
+    2. 選擇該分頁替換內容
+    3. 銷毀分頁
 
 至少要建立兩個資料模型
 
-``` ts
+```ts
 // 每個目錄的基本資料結構，用 id 當作唯一識別
 interface MenuItem {
-    id: string;
-    label: string;
-    route: string;
-    icon?: string;
-    children?: MenuItem[];
-    expanded?: boolean;
+  id: string;
+  label: string;
+  route: string;
+  icon?: string;
+  children?: MenuItem[];
 }
 
-// new() 時參數拿做 MenuItem.id + MenuItem.route
-// MenuItem.id 當作識別 && MenuItem.route 當作 click(() => route)
+// new() 時參數取自 MenuItem.id + MenuItem.route
 export interface Tab {
-    id: string;
-    title: string;
-    route: string;
-    closable: boolean;
+  id: string;
+  title: string;
+  route: string;
+  closable: boolean;
 }
 ```
 
-### BehaviorSubject
+---
 
-RxJS庫提供一個可觀察物件 (Observable) BehaviorSubject。它主要用於宣告和管理一個帶有初始值的狀態變數。它同時具備「觀察者 (Observer)」和「可觀察物件 (Observable)」的特性。
+### BehaviorSubject 寫法
+
+`BehaviorSubject` 維護狀態，`.asObservable()` 提供給外部訂閱
 
 ```ts
+// tab.service.ts
+@Injectable({ providedIn: 'root' })
 export class TabService {
-    private tabs = new BehaviorSubject<Tab[]>([]);
-    private activeTabId = new BehaviorSubject<string>('');
+  private tabs = new BehaviorSubject<Tab[]>([]);
+  private activeTabId = new BehaviorSubject<string>('');
 
-    // 提供給外部使用的變數，會自動監聽值(tabs,activeTabId)
-    tabs$ = this.tabs.asObservable();
-    activeTabId$ = this.activeTabId.asObservable();
+  // 外部只能訂閱，不能直接寫入
+  tabs$ = this.tabs.asObservable();
+  activeTabId$ = this.activeTabId.asObservable();
 
-    constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
-    /**
-     * 開啟新分頁
-     */
-    openTab(tab: Tab) {
-        const currentTabs = this.tabs.value;
-        const existingTab = currentTabs.find(t => t.id === tab.id);
+  openTab(tab: Tab) {
+    const currentTabs = this.tabs.value;
+    const existing = currentTabs.find(t => t.id === tab.id);
 
-        if (existingTab) {
-            // 如果分頁已存在，切換到該分頁
-            this.setActiveTab(tab.id);
-            this.router.navigate([tab.route]);
-        } else {
-            // 新增分頁
-            this.tabs.next([...currentTabs, tab]); // 替換整個陣列才會觸發事件通知(rerender)
-            this.setActiveTab(tab.id);
-            this.router.navigate([tab.route]);
-        }
+    if (existing) {
+      this.setActiveTab(tab.id);
+    } else {
+      // 替換整個陣列才會觸發 Observable 通知
+      this.tabs.next([...currentTabs, tab]);
+      this.setActiveTab(tab.id);
     }
+    this.router.navigate([tab.route]);
+  }
+
+  closeTab(tabId: string) {
+    const currentTabs = this.tabs.value;
+    const index = currentTabs.findIndex(t => t.id === tabId);
+    if (index === -1) return;
+
+    const newTabs = currentTabs.filter(t => t.id !== tabId);
+    this.tabs.next(newTabs);
+
+    // 關閉當前分頁時，切換到前一個
+    if (this.activeTabId.value === tabId && newTabs.length > 0) {
+      const newActive = newTabs[Math.max(0, index - 1)];
+      this.setActiveTab(newActive.id);
+      this.router.navigate([newActive.route]);
+    } else if (newTabs.length === 0) {
+      this.activeTabId.next('');
+    }
+  }
+
+  setActiveTab(tabId: string) {
+    this.activeTabId.next(tabId);
+  }
+
+  closeAllTabs() {
+    this.tabs.next([]);
+    this.activeTabId.next('');
+  }
+
+  closeOtherTabs(tabId: string) {
+    const keep = this.tabs.value.find(t => t.id === tabId);
+    if (keep) {
+      this.tabs.next([keep]);
+      this.setActiveTab(tabId);
+    }
+  }
 }
 ```
 
-### Signal
+---
 
-新版 Angular(16+) 提供框架內部語法 Signal 來雙向監聽
-
-```ts
-import { Injectable, signal, computed, effect, Signal } from '@angular/core';
-
-// Signal 方式
-// 宣告可寫入的 Signal
-private tabsSignal = signal<Tab[]>([]);
-private activeTabIdSignal = signal<string>('');
-
-readonly tabs = this.tabsSignal.asReadonly();
-readonly activeTabId = this.activeTabIdSignal.asReadonly(); 
-
-```
-
-整體概念和 React18 useState 用法很像
+### Signal 寫法
 
 ```ts
-function TabServiceComponent() {
-    const [tabs, setTabs] = useState([])
-    const [activeTabId, setActiveTabId] = useState<number>(1);
-
-    const addTab = () => {
-        const newTab: Tab = {
-            id: nextId,
-            title: `新分頁 ${nextId}`
-        };
-        
-        setTabs(currentTabs => [...currentTabs, newTab]); 
-        setActiveTabId(nextId);
-    };
-
-    const switchTab = (id: number) => {
-        setActiveTabId(id);
-    };
-}
-```
-
-邏輯層 tab.service.ts
-
-```ts
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
-
-export interface Tab {
-    id: string;
-    title: string;
-    route: string;
-    closable: boolean;
-}
-
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class TabService {
-    private tabs = new BehaviorSubject<Tab[]>([]);
-    private activeTabId = new BehaviorSubject<string>('');
+  private tabsSignal = signal<Tab[]>([]);
+  private activeTabIdSignal = signal<string>('');
 
-    tabs$ = this.tabs.asObservable();
-    activeTabId$ = this.activeTabId.asObservable();
+  readonly tabs = this.tabsSignal.asReadonly();
+  readonly activeTabId = this.activeTabIdSignal.asReadonly();
 
-    constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
-    /**
-     * 開啟新分頁
-     */
-    openTab(tab: Tab) {
-        const currentTabs = this.tabs.value;
-        const existingTab = currentTabs.find(t => t.id === tab.id);
+  openTab(tab: Tab) {
+    const existing = this.tabsSignal().find(t => t.id === tab.id);
 
-        if (existingTab) {
-            // 如果分頁已存在，切換到該分頁
-            this.setActiveTab(tab.id);
-            this.router.navigate([tab.route]);
-        } else {
-            // 新增分頁
-            this.tabs.next([...currentTabs, tab]);
-            this.setActiveTab(tab.id);
-            this.router.navigate([tab.route]);
-        }
+    if (existing) {
+      this.activeTabIdSignal.set(tab.id);
+    } else {
+      this.tabsSignal.update(tabs => [...tabs, tab]);
+      this.activeTabIdSignal.set(tab.id);
     }
+    this.router.navigate([tab.route]);
+  }
 
-    /**
-     * 關閉分頁
-     */
-    closeTab(tabId: string) {
-        const currentTabs = this.tabs.value;
-        const index = currentTabs.findIndex(t => t.id === tabId);
+  closeTab(tabId: string) {
+    const currentTabs = this.tabsSignal();
+    const index = currentTabs.findIndex(t => t.id === tabId);
+    if (index === -1) return;
 
-        if (index === -1) return;
+    const newTabs = currentTabs.filter(t => t.id !== tabId);
+    this.tabsSignal.set(newTabs);
 
-        const newTabs = currentTabs.filter(t => t.id !== tabId);
-        this.tabs.next(newTabs);
-
-        // 如果關閉的是當前分頁，切換到前一個或後一個
-        if (this.activeTabId.value === tabId && newTabs.length > 0) {
-            const newActiveIndex = Math.max(0, index - 1);
-            this.setActiveTab(newTabs[newActiveIndex].id);
-            this.router.navigate([newTabs[newActiveIndex].route]);
-        } else if (newTabs.length === 0) {
-            this.activeTabId.next('');
-        }
+    if (this.activeTabIdSignal() === tabId && newTabs.length > 0) {
+      const newActive = newTabs[Math.max(0, index - 1)];
+      this.activeTabIdSignal.set(newActive.id);
+      this.router.navigate([newActive.route]);
+    } else if (newTabs.length === 0) {
+      this.activeTabIdSignal.set('');
     }
+  }
 
-    /**
-     * 設定當前分頁
-     */
-    setActiveTab(tabId: string) {
-        this.activeTabId.next(tabId);
-    }
+  setActiveTab(tabId: string) {
+    this.activeTabIdSignal.set(tabId);
+  }
 
-    /**
-     * 關閉所有分頁
-     */
-    closeAllTabs() {
-        this.tabs.next([]);
-        this.activeTabId.next('');
-    }
+  closeAllTabs() {
+    this.tabsSignal.set([]);
+    this.activeTabIdSignal.set('');
+  }
 
-    /**
-     * 關閉其他分頁
-     */
-    closeOtherTabs(tabId: string) {
-        const currentTabs = this.tabs.value;
-        const keepTab = currentTabs.find(t => t.id === tabId);
-        if (keepTab) {
-            this.tabs.next([keepTab]);
-            this.setActiveTab(tabId);
-        }
+  closeOtherTabs(tabId: string) {
+    const keep = this.tabsSignal().find(t => t.id === tabId);
+    if (keep) {
+      this.tabsSignal.set([keep]);
+      this.activeTabIdSignal.set(tabId);
     }
+  }
 }
 ```
 
-UI層 tab-container.ts
+---
+
+### UI 層
 
 ```ts
+// tab-container.component.ts
 @Component({
   selector: 'app-tab-container',
   standalone: true,
   imports: [CommonModule, RouterOutlet],
   template: `
     <div class="tab-container">
-      <!-- 分頁標籤列 -->
       <div class="tab-bar" *ngIf="(tabs$ | async)?.length">
-        <div *ngFor="let tab of tabs$ | async" 
+        <div *ngFor="let tab of tabs$ | async"
              class="tab"
              [class.active]="tab.id === (activeTabId$ | async)"
              (click)="switchTab(tab)">
-          <span class="tab-title">{{ tab.title }}</span>
-          <button *ngIf="tab.closable" 
-                  class="close-btn"
-                  (click)="closeTab($event, tab.id)">
-            ✕
-          </button>
+          <span>{{ tab.title }}</span>
+          <button *ngIf="tab.closable" (click)="closeTab($event, tab.id)">✕</button>
         </div>
       </div>
-
-      <!-- 分頁內容區 -->
       <div class="tab-content">
-        <router-outlet></router-outlet>
+        <router-outlet />
       </div>
     </div>
   `,
-  styles: [`...省略
-  `]
 })
-
 export class TabContainerComponent {
   private tabService = inject(TabService);
   tabs$ = this.tabService.tabs$;

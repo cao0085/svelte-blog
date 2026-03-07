@@ -1,23 +1,25 @@
 ---
-title: "Basic Router"
-date: "2025-06-22"
+title: "Router Basic"
+date: "2025-10-30"
 category: "software"
 subCategory: "Angular20"
 tags: ["route", "angular", "api"]
 slug: "angular_router"
 ---
-###### 參考這個[專案範本](https://github.com/mbejda/AngularFire-Starter-Template)、官方文件學習
+###### 可以參考這個[專案範本](https://github.com/mbejda/AngularFire-Starter-Template)、官方文件學習
 
 ---
 
-專案起始 index.html
+### Entry
+
+Angular SPA 的進入點 `index.html` 中的 `<base href="/">` 讓路由系統正確解析 URL。
 
 ```html
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>MyAngular18App</title>
+  <title>MyAngular</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -28,7 +30,7 @@ slug: "angular_router"
 </html>
 ```
 
-元件去抓專案的根節點，render的內容用`<router-outlet>`佔位
+根元件 `AppComponent` 透過 `<router-outlet>` 作為路由渲染的佔位符，根據當前 URL 動態替換顯示的元件。
 
 ```ts
 import { Component } from '@angular/core';
@@ -43,9 +45,9 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent {}
 ```
 
-Route
+### Routes
 
-設定該路由(Path) `<router-outlet>`映射的元件
+每個 Route 物件定義 `path` 與對應元件的映射，Angular 依序比對 URL 決定渲染哪個元件。
 
 ```ts
 import { Routes } from '@angular/router';
@@ -65,7 +67,8 @@ export const routes: Routes = [
         path: 'about',
         loadComponent: () =>
           import('./features/about/about.component').then(m => m.AboutComponent),
-      },      {
+      },
+      {
         path: 'form',
         loadComponent: () =>
           import('@features/form/form.component').then(m => m.FormComponent),
@@ -75,7 +78,7 @@ export const routes: Routes = [
 ];
 ```
 
-且若添加 children 屬性擇該 映射的元件 裡面也可以再放一個佔位
+加入 `children` 後，父層元件的樣板中也需要放置 `<router-outlet>`，作為子路由的渲染位置。
 
 ```ts
 import { Component } from '@angular/core';
@@ -110,9 +113,9 @@ export class LayoutComponent {}
 </div>
 ```
 
-### Route順序和路由守衛
+### Guard
 
-Angular自帶跳轉和瀏覽權限設定，可自行放入`canActivate[]`裡面做邏輯判斷
+`canActivate` 在路由執行前的守衛邏輯，可用來控制頁面存取權限。路由設定會依序比對，需注意順序。
 
 ```ts
 import { Routes } from '@angular/router';
@@ -135,13 +138,12 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
-
     ]
   },
   {
     path: '',
     component: MainLayoutComponent,
-    canActivate:[authGuard],
+    canActivate: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'alerts', component: AlertsComponent },
@@ -150,8 +152,8 @@ export const routes: Routes = [
   },
   {
     path: 'logout',
-    canActivate:[logoutGuard],
-    component:LoginComponent
+    canActivate: [logoutGuard],
+    component: LoginComponent
   },
   { path: '**', redirectTo: 'login' }
 ];
