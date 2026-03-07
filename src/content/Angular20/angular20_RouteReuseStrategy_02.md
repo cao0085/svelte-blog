@@ -1,18 +1,16 @@
 ---
-title: "RouteReuseStrategy 2"
+title: "RouteReuseStrategy 02"
 date: "2026-01-24"
 category: "software"
 subCategory: "Angular20"
 tags: ["fronted", "angular"]
 slug: "angular_routeReuseStrategy02"
 ---
-###### RouteReuseStrategy 是 ANGULAR 判斷路由變更時，如何處理邏輯的一個介面
+###### RouteReuseStrategy 是 Angular 路由變更時會自動調用的介面，允許透過實作介面並以 DI 替換預設邏輯，控制路由元件實例的銷毀或復用。
 
 ---
 
-前置流程:
-
-```url變更 -> angular 去找有沒有物件 route -> 轉成物件 ActivatedRouteSnapshot -> 進入 Strategy```
+RouteReuseStrategy 介面定義了 5 個必須實作的方法：
 
 ```ts
 interface RouteReuseStrategy {
@@ -33,26 +31,29 @@ interface RouteReuseStrategy {
 }
 ```
 
-運行時序
-``` md
-理想上的時序
+### 執行流程
 
-導航：頁面 A → 頁面 B
+```url變更 -> angular 去找有沒有紀錄過 -> 轉成物件 ActivatedRouteSnapshot -> 進入 Strategy```
+
+``` md
+導航：頁面 A → 頁面 B (理想上的時序如下)
 
 1. shouldReuseRoute(B, A) → false（不同路由，繼續往下）
 
-── 處理「舊路由 A」──
+── 第一部分處理「舊路由 A」──
 2. shouldDetach(A)         → 要不要保存 A？
 3. store(A, handle)        → （如果 yes）把 A 存起來
 
-── 處理「新路由 B」──
+── 第二部分處理「新路由 B」──
 4. shouldAttach(B)         → B 之前有被存過嗎？
 5. retrieve(B)             → （如果 yes）把 B 的快照拿出來用
 ```
 
-### 儲存
+### 儲存流程
 
-第一步要在物件 route 內部塞值當作 `shouldDetach()` 的依據，`route`本身開放 data 屬性可以塞自訂義資料
+#### shouldDetach()
+
+`shouldDetach()` 需要一個判斷依據，做法是在`route`的 `data` 屬性中加入自訂標記：
 
 ``` ts
 // router_module.d.d.ts
@@ -74,7 +75,7 @@ interface Route {
 }
 ```
 
-實作 func shouldDetach() 就變成
+實作 `shouldDetach()`後就是
 
 ```ts
 /**
@@ -87,7 +88,14 @@ shouldDetach(route: ActivatedRouteSnapshot): boolean {
 }
 ```
 
-再來是用 func store() 來維護已儲存的快照。參數`ActivatedRouteSnapshot`就是拿剛剛的、`handle`由 angular 自己處理 Dom 快照後傳入，這邊執行成功後就是保存快照完成了。
+### store()
+
+`store(route, handle)` 的兩個參數是由 Angular 自動傳入
+    - `route` 是當前路由快照
+    - `handle` 是 Angular 處理好的 DOM 快照
+
+`store()`只負責傳入，所以需實作儲存邏輯，這邊簡單用 Map & LRU 管理元件快取
+
 ```ts
 
 /**
@@ -150,10 +158,14 @@ private getRouteKey(route: ActivatedRouteSnapshot): string {
 }
 ```
 
+### 讀取流程
 
-### 讀取
+#### shouldAttach()
 
-跳轉路由時，就是去檢查 this.handlers 有沒有快照紀錄，來決定是否要 new Component() / retrieve()
+`shouldAttach()` 同樣由 Angular 自動傳入參數，
+實作上只需查詢剛剛自己實作 Map 中是否有對應的快取紀錄：
+    - return `true` 時 Angular 會接著呼叫 `retrieve()` 流程
+    - return `false` 則重新建立 `route` 元件
 
 ```ts
 /**
@@ -176,7 +188,11 @@ shouldAttach(route: ActivatedRouteSnapshot): boolean {
 
     return hasStored;
 }
+```
 
+#### retrieve()
+
+```ts
 /**
  * 取回之前保存的路由組件
  * @param route 路由快照
@@ -194,7 +210,9 @@ retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
 }
 ```
 
-最後是判斷不同 URL 但使用相同路由設定的情況，例如不同參數的情境（如 /user/1 → /user/2）
+#### shouldReuseRoute()
+
+ `shouldReuseRoute()`用來判斷前後路由是否視為同一個，例如不同參數的情境（如 /user/1 → /user/2）
 
 ```ts
 /**
@@ -210,7 +228,8 @@ shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): 
 
 ### 遞迴
 
-當路由設定為父子結構時（父路由 path: 'basic/catalogmanagement'，子路由 path: ''），兩者組合出的路由路徑相同，作為 key 時會指向同一個值。導致父路由和子路由在 retrieve 時都匹配到同一個 key，retrieve 逐層解析路由樹時反覆取到同一個 handle，形成無限遞迴。
+觸發原因是空路徑子路由（`path: ''`）不會有 key 可以識別，導致父路由與子路由會產生相同的快取 key。
+Angular 逐層處理路由樹時，兩層都命中同一個 handle，`retrieve` 陷入反覆呼叫的無限迴圈。
 
 ```ts
 // 路由設定：
@@ -223,7 +242,7 @@ shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): 
 }
 ```
 
-所以我們要做的事情是流程避免掉父路由，那判斷依據可以用有沒有 component 去識別
+解法是在 `shouldAttach` 和 `retrieve` 中跳過沒有 component 的路由，用屬性 `route.component` 或 `route.routeConfig?.loadComponent` 判斷
 
 ```ts
 
@@ -266,7 +285,7 @@ retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
 
 ```
 
-完整程式碼
+### 完整程式碼
 
 ```ts
 import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router';
@@ -458,4 +477,3 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
     }
 }
 ```
-

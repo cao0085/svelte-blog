@@ -1,16 +1,16 @@
 ---
-title: "RouteReuseStrategy 1"
+title: "RouteReuseStrategy 01"
 date: "2026-01-23"
 category: "software"
 subCategory: "Angular20"
 tags: ["fronted", "angular"]
 slug: "angular_routeReuseStrategy01"
 ---
-###### RouteReuseStrategy 是 ANGULAR 判斷路由變更時，如何處理邏輯的一個介面
+###### RouteReuseStrategy 是 Angular 路由變更時會自動調用的介面，允許透過實作介面並以 DI 替換預設邏輯，控制路由元件實例的銷毀或復用。
 
 ---
 
-Angular 在路由導航時，會自動把物件`route`轉成物件`ActivatedRouteSnapshot`，再經由`RouteReuse`去做邏輯判斷和流程。也就是說就算 app 沒有內部實作，系統也會自動帶入最基本的 Strategy 去過過水，可以看看檔案原始碼。
+Angular 的 `@angular/router` 套件在路由導航時，會從當前的路由資訊中提取內容建立`ActivatedRouteSnapshot`物件，再由`RouteReuseStrategy`介面中定義的方法處理後續流程，而預設注入的`BaseRouteReuseStrategy`行為可以看一下原始碼註解。
 
 ```ts
 declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
@@ -36,7 +36,7 @@ declare abstract class BaseRouteReuseStrategy implements RouteReuseStrategy {
 }
 ```
 
-所以若要去控制流程，需要替換掉預設的`BaseRouteReuseStrategy`改成自己需求的策略，那就是必須實作 5 個特定物件作為參數的函式，這 5 個必須實作的接口如下：
+所以若想自訂路由元件的復用行為，就必須替換預設的`BaseRouteReuseStrategy`，改為實作 RouteReuseStrategy 介面定義的 5 個方法：
 
 ```typescript
 interface RouteReuseStrategy {
@@ -63,7 +63,7 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
 }
 ```
 
-再來就是去宣告 app 說若有引用到 `RouteReuseStrategy` 時都必須使用我定義好的 class
+實作完成後在 `app.config.ts` 的 `providers` 中替換預設策略：
 
 ```ts
 // app.config.ts
@@ -84,7 +84,7 @@ export const appConfig: ApplicationConfig = {
     //   multi: true
     // },
 
-    // ANGULAR DI
+    // ========== ANGULAR DI ==========
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
     // provideNzIcons(icons),
     // provideNzI18n(zh_TW),
