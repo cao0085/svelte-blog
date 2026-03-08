@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">處理對帳檔案</h1> <p class="svelte-mdkbyj">2025-09-30</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>金流商通常在 N 個工作日後，提供一份撥款檔案作為實際金流的核實依據</h6> <hr/> <p>這個流程通常是每日定時自動執行，但實務上會遇到：網路中斷、金流商未按時提供、資料格式錯誤等異常，因此流程中需要設計 <strong>Checkpoint</strong>（重試斷點），讓人工介入後能從中斷點繼續節省資源。常見流程：</p> <pre class="language-undefined"><!----><code class="language-undefined">1. 取得遠端檔案 → 2. 讀入記憶體 → 3. 解析 &amp; 儲存 → 4. 產出靜態檔案備份</code><!----></pre> <hr/> <h3>1. 取得遠端檔案</h3> <p>透過 SFTP 下載指定日期範圍的 CSV 檔案，寫入本地路徑後回傳檔案清單。若發生異常，可從 Error Log 取得原始參數直接重試此步驟。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token function">DownloadRemoteFileAsync</span><span class="token punctuation">(</span>
+    <span class="token class-name"><span class="token keyword">string</span></span> connectionJsonStr<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> storagePath<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> filePrefix<span class="token punctuation">,</span>
+    <span class="token class-name">DateTime<span class="token punctuation">?</span></span> startDate <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token class-name">DateTime<span class="token punctuation">?</span></span> endDate <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> fromDate <span class="token operator">=</span> startDate <span class="token operator">??</span> DateTime<span class="token punctuation">.</span>Today<span class="token punctuation">.</span><span class="token function">AddDays</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> toDate <span class="token operator">=</span> endDate <span class="token operator">??</span> DateTime<span class="token punctuation">.</span>Today<span class="token punctuation">.</span><span class="token function">AddDays</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name"><span class="token keyword">var</span></span> config <span class="token operator">=</span> JsonSerializer<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Deserialize</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>SftpConfig<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>connectionJsonStr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> sftpClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">SftpClient</span><span class="token punctuation">(</span>config<span class="token punctuation">.</span>SftpIP<span class="token punctuation">,</span> config<span class="token punctuation">.</span>SftpPort<span class="token punctuation">,</span> config<span class="token punctuation">.</span>SftpAccount<span class="token punctuation">,</span> config<span class="token punctuation">.</span>SftpPassword<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">EnsureSftpConnected</span><span class="token punctuation">(</span>sftpClient<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name"><span class="token keyword">var</span></span> files <span class="token operator">=</span> <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> sftpClient<span class="token punctuation">.</span><span class="token function">ListDirectory</span><span class="token punctuation">(</span><span class="token string">"."</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> targetFiles <span class="token operator">=</span> files
+        <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>f <span class="token operator">=></span> f<span class="token punctuation">.</span>IsRegularFile <span class="token operator">&amp;&amp;</span> f<span class="token punctuation">.</span>Name<span class="token punctuation">.</span><span class="token function">EndsWith</span><span class="token punctuation">(</span><span class="token string">".csv"</span><span class="token punctuation">,</span> StringComparison<span class="token punctuation">.</span>OrdinalIgnoreCase<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>f <span class="token operator">=></span> Enumerable<span class="token punctuation">.</span><span class="token function">Range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>toDate <span class="token operator">-</span> fromDate<span class="token punctuation">)</span><span class="token punctuation">.</span>Days <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">Any</span><span class="token punctuation">(</span>d <span class="token operator">=></span> f<span class="token punctuation">.</span>Name<span class="token punctuation">.</span><span class="token function">Contains</span><span class="token punctuation">(</span>fromDate<span class="token punctuation">.</span><span class="token function">AddDays</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token string">"yyyyMMdd"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    Directory<span class="token punctuation">.</span><span class="token function">CreateDirectory</span><span class="token punctuation">(</span>storagePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> file <span class="token keyword">in</span> targetFiles<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> path <span class="token operator">=</span> Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span>storagePath<span class="token punctuation">,</span> <span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">filePrefix</span><span class="token punctuation">&#125;</span></span><span class="token string">_</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">file<span class="token punctuation">.</span>Name</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> fs <span class="token operator">=</span> File<span class="token punctuation">.</span><span class="token function">Create</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> sftpClient<span class="token punctuation">.</span><span class="token function">DownloadFile</span><span class="token punctuation">(</span>file<span class="token punctuation">.</span>FullName<span class="token punctuation">,</span> fs<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        result<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h3>2. 讀入記憶體</h3> <p>確認檔案存在後讀取，跳過第 N 行（通常是金流商的標頭說明）。重試斷點：確認本地檔案路徑存在即可重試。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token function">ReadFileAndGetValidLines</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> path<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> lines <span class="token operator">=</span> <span class="token keyword">await</span> File<span class="token punctuation">.</span><span class="token function">ReadAllLinesAsync</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> Encoding<span class="token punctuation">.</span>UTF8<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> lines<span class="token punctuation">.</span><span class="token function">Skip</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h3>3. 解析 &amp; 儲存</h3> <p>解析每一列資料、與內部 DB 比對，包在 try/catch 中。解析失敗的原始資料保留至 <code>failedRows</code>，等待人工檢閱。重試斷點：將 failedRows 回丟此方法重新處理。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>ReconciliationResult<span class="token punctuation">></span></span> <span class="token function">ProcessReconciliation</span><span class="token punctuation">(</span>
+    <span class="token class-name">CFContext</span> db<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> storeId<span class="token punctuation">,</span> <span class="token class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span> data<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token class-name"><span class="token keyword">int</span></span> successCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> unmatchedRows <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> failedRows <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> line <span class="token keyword">in</span> data<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">try</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> row <span class="token operator">=</span> line<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span><span class="token char">','</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span><span class="token function">Trim</span><span class="token punctuation">(</span><span class="token char">'"'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token class-name"><span class="token keyword">string</span></span> trxSeq    <span class="token operator">=</span> row<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token class-name"><span class="token keyword">string</span></span> payStatus <span class="token operator">=</span> row<span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token class-name"><span class="token keyword">string</span></span> orderNo   <span class="token operator">=</span> row<span class="token punctuation">[</span><span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token class-name">DateTime</span> scheduledDate <span class="token operator">=</span> DateTime<span class="token punctuation">.</span><span class="token function">ParseExact</span><span class="token punctuation">(</span>row<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"yyyyMMdd"</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name"><span class="token keyword">decimal</span></span> payAmount <span class="token operator">=</span> <span class="token keyword">decimal</span><span class="token punctuation">.</span><span class="token function">Parse</span><span class="token punctuation">(</span>row<span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// ... 其餘欄位解析</span>
+
+            <span class="token comment">// 查詢內部資料，比對後更新</span>
+            successCount<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">catch</span>
+        <span class="token punctuation">&#123;</span>
+            failedRows<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ReconciliationResult</span>
+    <span class="token punctuation">&#123;</span>
+        SuccessCount <span class="token operator">=</span> successCount<span class="token punctuation">,</span>
+        ProcessFailedData <span class="token operator">=</span> failedRows<span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        SeqNoUnmatchData <span class="token operator">=</span> unmatchedRows<span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h3>4. 產出靜態檔案</h3> <p>若需要將對帳結果輸出為 CSV 給外部使用，以 DB 為 SSOT，在 Table 欄位記錄匯出狀態：</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// 欄位設計</span>
+CreateDate <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>Now<span class="token punctuation">,</span>
+Exported <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+FileName <span class="token operator">=</span> <span class="token keyword">null</span></code><!----></pre> <p>產檔時<strong>先寫檔、再更新 DB</strong>，確保兩者一致：</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">GenerateStaticFile</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> storeId<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> records <span class="token operator">=</span> <span class="token keyword">await</span> _db<span class="token punctuation">.</span>CfReconciliation
+        <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>StoreID <span class="token operator">==</span> storeId <span class="token operator">&amp;&amp;</span> x<span class="token punctuation">.</span>Exported <span class="token operator">==</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">ToListAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name"><span class="token keyword">var</span></span> lines <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span> <span class="token string">"Column1,Column2,Column3"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    lines<span class="token punctuation">.</span><span class="token function">AddRange</span><span class="token punctuation">(</span>records<span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>r <span class="token operator">=></span> <span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">r<span class="token punctuation">.</span>StoreID</span><span class="token punctuation">&#125;</span></span><span class="token string">,</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">r<span class="token punctuation">.</span>SeqNo</span><span class="token punctuation">&#125;</span></span><span class="token string">,..."</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name"><span class="token keyword">var</span></span> fileName <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"RECONCILE_</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">DateTime<span class="token punctuation">.</span>Now</span><span class="token format-string"><span class="token punctuation">:</span>MMddHHmmss</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> filePath <span class="token operator">=</span> Path<span class="token punctuation">.</span><span class="token function">Combine</span><span class="token punctuation">(</span><span class="token string">"OUTPUT_PATH"</span><span class="token punctuation">,</span> <span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">fileName</span><span class="token punctuation">&#125;</span></span><span class="token string">.csv"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Directory<span class="token punctuation">.</span><span class="token function">CreateDirectory</span><span class="token punctuation">(</span>Path<span class="token punctuation">.</span><span class="token function">GetDirectoryName</span><span class="token punctuation">(</span>filePath<span class="token punctuation">)</span><span class="token operator">!</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">await</span> File<span class="token punctuation">.</span><span class="token function">WriteAllLinesAsync</span><span class="token punctuation">(</span>filePath<span class="token punctuation">,</span> lines<span class="token punctuation">,</span> Encoding<span class="token punctuation">.</span>UTF8<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 檔案確認寫入後，才更新 DB</span>
+    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> r <span class="token keyword">in</span> records<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        r<span class="token punctuation">.</span>Exported <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        r<span class="token punctuation">.</span>ExportedTime <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>Now<span class="token punctuation">;</span>
+        r<span class="token punctuation">.</span>ExportedFileName <span class="token operator">=</span> fileName<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">await</span> _db<span class="token punctuation">.</span><span class="token function">SaveChangesAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1k22rmj = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BmEzEElV.js"),
+						import("../_app/immutable/entry/app.BVPbw7dd.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

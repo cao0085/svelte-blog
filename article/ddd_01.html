@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Domain-Driven 01 - Concepts</h1> <p class="svelte-mdkbyj">2026-02-11</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>核心概念就是自定義超多規則保護資料的正確性</h6> <hr/> <h3>資料驗證</h3> <p>修正已儲存的錯誤資料，成本遠高於在寫入前就將它攔下。系統會透過多層次的防護機制，從源頭降低錯誤發生的機率：</p> <ul><li><code>UI Input Rule</code>: 即時回饋，引導使用者輸入符合基本格式的資料</li> <li><code>Strongly Typed Language</code>: 在編譯期間就提醒開發人員型別錯誤</li> <li><code>DB Column Type</code>: 利用資料庫本身的約束來防止不合法的資料寫入</li></ul> <p>上述這些技術層面的限制，都無法處理業務邏輯（Business Logic），例如一個庫存管理系統要求 「庫存數量不可為負」：</p> <ul><li><code>UI Input Rule</code>: 無法防止程式邏輯計算後產生的負值</li> <li><code>Strongly Typed Language</code>: 能確保 Quantity 是整數，卻無法約束減法運算的結果</li> <li><code>DB Column Type</code>: 將欄位設為無符號整數，但仍可能因運算而寫入負值（或需額外使用觸發器）</li></ul> <p>這些技術都無法表達「庫存不得為負」這條業務規則，因此需要這樣處理：</p> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">type</span> Stock <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+    Quantity <span class="token builtin">int32</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// A. 預購系統</span>
+db<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>Stock<span class="token punctuation">.</span>Quantity <span class="token operator">-</span> order<span class="token punctuation">)</span>
+
+<span class="token comment">// B. 零售系統</span>
+<span class="token keyword">if</span> Stock<span class="token punctuation">.</span>Quantity <span class="token operator">-</span> order <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token comment">// 超賣</span>
+<span class="token punctuation">&#125;</span>
+db<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span>Stock<span class="token punctuation">.</span>Quantity <span class="token operator">-</span> order<span class="token punctuation">)</span></code><!----></pre> <p>上面寫法會造成的問題就是，當系統中有 5 個流程可以更新庫存時就會需要寫 5 次檢查，而這就是 DDD 想要解決的問題。</p> <h3>資料規則實體化</h3> <p>DDD 提倡將規則封裝在資料模型中，任何外部程式碼要修改資料，都必須透過模型提供的公開方法，由模型自身驗證規則並確保資料的一致性。</p> <pre class="language-go"><!----><code class="language-go"><span class="token comment">// Data Model</span>
+<span class="token keyword">type</span> PreOrderStock <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+    quantity <span class="token builtin">int32</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>s <span class="token operator">*</span>PreOrderStock<span class="token punctuation">)</span> <span class="token function">Deduct</span><span class="token punctuation">(</span>order <span class="token builtin">int32</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    s<span class="token punctuation">.</span>quantity <span class="token operator">-=</span> order <span class="token comment">// 允許負數，代表預購量</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-go"><!----><code class="language-go"><span class="token comment">// Data Model</span>
+<span class="token keyword">type</span> RetailStock <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+    quantity <span class="token builtin">int32</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>s <span class="token operator">*</span>RetailStock<span class="token punctuation">)</span> <span class="token function">Deduct</span><span class="token punctuation">(</span>order <span class="token builtin">int32</span><span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> s<span class="token punctuation">.</span>quantity <span class="token operator">-</span> order <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> errors<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token string">"insufficient stock"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+    s<span class="token punctuation">.</span>quantity <span class="token operator">-=</span> order
+    <span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>屬性 quantity 欄位都設為私有，修改庫存的方法是呼叫 Deduct 方法，而方法內部則實作了各自對應的業務規則。任何使用此模型的地方都能確保規則被遵守，無需重複撰寫檢查邏輯。</p> <h3>描述物件</h3> <p>設計商業系統時經常需要處理 <strong><em>現實世界</em></strong> 中的物體，可以試想「小明的那支手機」可以如何被描述並紀錄在資料庫？若紀錄了「品牌」和「型號」足以完整描述的這支手機嗎？</p> <p><strong>Domain Driven Design</strong> 核心就是如何精確地描述物件和會發生的行為，為了解決這個問題進而提出兩個主要概念：</p> <ul><li>值物件（Value Object）: 不具備獨立的身分，其意義來自於所含的屬性值</li> <li>聚合（Aggregate）: 負責維護一群物件的整體一致性，同時又具有識別性</li></ul> <h4>Value Object</h4> <p>拿手機的「螢幕尺寸」為例，真實世界並不存在螢幕尺寸為 1 的手機，於是可以將螢幕尺寸封裝成 <code>Value Object</code>，在建構的當下就驗證資料的有效性：</p> <pre class="language-csharp"><!----><code class="language-csharp">
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ScreenSize</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">ValueObject</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">decimal</span></span> Inches <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token function">ScreenSize</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">decimal</span></span> inches<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>inches <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">)</span> 
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentException</span><span class="token punctuation">(</span><span class="token string">"螢幕尺寸必須大於 1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        Inches <span class="token operator">=</span> inches<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 使用方式</span>
+<span class="token class-name"><span class="token keyword">var</span></span> size <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ScreenSize</span><span class="token punctuation">(</span><span class="token number">6.7m</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 有效</span>
+<span class="token class-name"><span class="token keyword">var</span></span> invalidSize <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ScreenSize</span><span class="token punctuation">(</span><span class="token number">0.05m</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 拋出例外</span></code><!----></pre> <p>透過這樣的設計確保了任何一個 ScreenSize 存在系統內時就是合乎<strong>規則</strong>。當持續用這種方式描述組合起來的物件並分配一個識別碼，在系統內就稱之為<strong>聚合</strong>。</p> <h4>Aggregate</h4> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Phone</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">AggregateRoot</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 唯一識別碼（例如 IMEI）</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Imei <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> 
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Brand <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Model <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">ScreenSize</span> ScreenSize <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token function">Phone</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> imei<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> brand<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> model<span class="token punctuation">,</span> <span class="token class-name">ScreenSize</span> screenSize<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">IsNullOrWhiteSpace</span><span class="token punctuation">(</span>imei<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentException</span><span class="token punctuation">(</span><span class="token string">"IMEI 不可為空"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        Imei <span class="token operator">=</span> imei<span class="token punctuation">;</span>
+        Brand <span class="token operator">=</span> brand<span class="token punctuation">;</span>
+        Model <span class="token operator">=</span> model<span class="token punctuation">;</span>
+        ScreenSize <span class="token operator">=</span> screenSize <span class="token operator">??</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentNullException</span><span class="token punctuation">(</span><span class="token keyword">nameof</span><span class="token punctuation">(</span>screenSize<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 行為：更換螢幕（可加入額外規則）</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ReplaceScreen</span><span class="token punctuation">(</span><span class="token class-name">ScreenSize</span> newScreenSize<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 例如：只有特定型號允許更換螢幕的規則可在此實作</span>
+        ScreenSize <span class="token operator">=</span> newScreenSize <span class="token operator">??</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentNullException</span><span class="token punctuation">(</span><span class="token keyword">nameof</span><span class="token punctuation">(</span>newScreenSize<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 使用方式</span>
+<span class="token class-name"><span class="token keyword">var</span></span> screen <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ScreenSize</span><span class="token punctuation">(</span><span class="token number">6.7m</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">var</span></span> phone <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Phone</span><span class="token punctuation">(</span><span class="token string">"123456789012345"</span><span class="token punctuation">,</span> <span class="token string">"Apple"</span><span class="token punctuation">,</span> <span class="token string">"iPhone 14"</span><span class="token punctuation">,</span> screen<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>透過這樣的設計，任何一支 Phone 物件從建立的那一刻起，就擁有合法的螢幕尺寸，並且透過 Imei 與其他手機區別開來。當需要修改螢幕尺寸時，只能呼叫 ReplaceScreen 方法確保同樣經過驗證等等，這個就是 DDD 強調「描述物件」的用意。</p> <h4>Value Object</h4> <ol><li><p>建構子（Constructor）: 最基本的建立方式，適合單純的驗證與賦值</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ScreenSize</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">ValueObject</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">decimal</span></span> Inches <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token function">ScreenSize</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">decimal</span></span> inches<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>inches <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentException</span><span class="token punctuation">(</span><span class="token string">"螢幕尺寸必須大於 0"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Inches <span class="token operator">=</span> inches<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 使用</span>
+<span class="token class-name"><span class="token keyword">var</span></span> size <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ScreenSize</span><span class="token punctuation">(</span><span class="token number">6.7m</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre></li> <li><p>靜態工廠方法（Static Factory Method）：當同一個 Value Object 可能從不同來源建立時，用具名的工廠方法</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Description</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">ValueObject</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Value <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token function">Description</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> <span class="token keyword">value</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">IsNullOrWhiteSpace</span><span class="token punctuation">(</span><span class="token keyword">value</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentException</span><span class="token punctuation">(</span><span class="token string">"描述不能為空"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Value <span class="token operator">=</span> <span class="token keyword">value</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name">Description</span> <span class="token function">FromPlainText</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> text<span class="token punctuation">)</span>
+        <span class="token operator">=></span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Description</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name">Description</span> <span class="token function">FromHtml</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> html<span class="token punctuation">)</span>
+        <span class="token operator">=></span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Description</span><span class="token punctuation">(</span>Regex<span class="token punctuation">.</span><span class="token function">Replace</span><span class="token punctuation">(</span>html<span class="token punctuation">,</span> <span class="token string">"&lt;.*?>"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name">Description</span> <span class="token function">FromJson</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> json<span class="token punctuation">)</span>
+        <span class="token operator">=></span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Description</span><span class="token punctuation">(</span>JsonDocument<span class="token punctuation">.</span><span class="token function">Parse</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">.</span>RootElement<span class="token punctuation">.</span><span class="token function">GetProperty</span><span class="token punctuation">(</span><span class="token string">"description"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">GetString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 使用：不管來源是什麼，最終都正規化為同一種純文字</span>
+<span class="token class-name"><span class="token keyword">var</span></span> d1 <span class="token operator">=</span> Description<span class="token punctuation">.</span><span class="token function">FromPlainText</span><span class="token punctuation">(</span><span class="token string">"好手機"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">var</span></span> d2 <span class="token operator">=</span> Description<span class="token punctuation">.</span><span class="token function">FromHtml</span><span class="token punctuation">(</span><span class="token string">"&lt;p>好手機&lt;/p>"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+d1 <span class="token operator">==</span> d2 <span class="token comment">// true</span></code><!----></pre> <p>注意建構子是 <code>private</code>，外部無法直接 <code>new Description()</code>，強制所有人透過工廠方法建立，確保每種來源都經過對應的處理邏輯。</p></li> <li><p>Interface + Domain Service：當沒辦法靠 Value Object 獨自驗證，例如「手機支援的電信頻段是否合法」這件事，頻段清單可能存在資料庫或外部 API 會隨政策變動，不適合寫死在程式碼裡。</p> <pre class="language-csharp"><!----><code class="language-csharp">    <span class="token comment">// Domain 層定義介面：「我需要查頻段是否合法」，但不關心怎麼查</span>
+    <span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IBandLookup</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token return-type class-name">Band</span> <span class="token function">FindBand</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> bandCode<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> regionCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// Domain Service 負責：查外部資料 → 驗證 → 建立 Value Object</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BandService</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">IBandLookup</span> _lookup<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token function">BandService</span><span class="token punctuation">(</span><span class="token class-name">IBandLookup</span> lookup<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            _lookup <span class="token operator">=</span> lookup<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">public</span> <span class="token return-type class-name">SupportedBand</span> <span class="token function">CreateBand</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> bandCode<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> regionCode<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> band <span class="token operator">=</span> _lookup<span class="token punctuation">.</span><span class="token function">FindBand</span><span class="token punctuation">(</span>bandCode<span class="token punctuation">,</span> regionCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>band <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token operator">!</span>band<span class="token punctuation">.</span>IsApproved<span class="token punctuation">)</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">ArgumentException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"頻段 </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">bandCode</span><span class="token punctuation">&#125;</span></span><span class="token string"> 在 </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">regionCode</span><span class="token punctuation">&#125;</span></span><span class="token string"> 未核准"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">SupportedBand</span><span class="token punctuation">(</span>bandCode<span class="token punctuation">,</span> regionCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-csharp"><!----><code class="language-csharp">    <span class="token comment">// Infrastructure 層提供實作：實際去查資料庫</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SqlBandLookup</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IBandLookup</span></span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">public</span> <span class="token return-type class-name">Band</span> <span class="token function">FindBand</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> bandCode<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> regionCode<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 查資料庫...</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span></code><!----></pre> <p><em>Interface 本身不是 Value Object 的建立手段。Value Object 最終還是透過建構子或工廠方法建立，Interface 解決的是「建立之前，怎麼取得與驗證外部資料」這件事</em></p></li></ol><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1k22rmj = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BmEzEElV.js"),
+						import("../_app/immutable/entry/app.BVPbw7dd.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

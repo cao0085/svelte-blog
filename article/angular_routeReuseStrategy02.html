@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.SR5xDSK8.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/9IZnpr_c.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BpTnouFh.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BfcWcCVF.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,17 +22,17 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.3-KVzWgZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B9HB16Pz.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.C096Qo_q.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B3v1a-ez.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DDzkBSy9.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RouteReuseStrategy 2</h1> <p class="svelte-mdkbyj">2026-01-24</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 ANGULAR 判斷路由變更時，如何處理邏輯的一個介面</h6> <hr/> <p>前置流程:</p> <p><code>url變更 -> angular 去找有沒有物件 route -> 轉成物件 ActivatedRouteSnapshot -> 進入 Strategy</code></p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">interface</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RouteReuseStrategy 02</h1> <p class="svelte-mdkbyj">2026-01-24</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 Angular 路由變更時會自動調用的介面，允許透過實作介面並以 DI 替換預設邏輯，控制路由元件實例的銷毀或復用。</h6> <hr/> <p>RouteReuseStrategy 介面定義了 5 個必須實作的方法：</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">interface</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
   <span class="token comment">// 1. 判斷是否允許將當前路由從 DOM「分離」(detach) 並保存</span>
   <span class="token function">shouldDetach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
 
@@ -47,19 +47,17 @@
 
   <span class="token comment">// 5. 判斷導航前後是否視為「同一個路由」(決定要重用還是銷毀重建)</span>
   <span class="token function">shouldReuseRoute</span><span class="token punctuation">(</span>future<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> curr<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <p>運行時序</p> <pre class="language-md"><!----><code class="language-md">理想上的時序
-
-導航：頁面 A → 頁面 B
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>執行流程</h3> <p><code>url變更 -> angular 去找有沒有紀錄過 -> 轉成物件 ActivatedRouteSnapshot -> 進入 Strategy</code></p> <pre class="language-md"><!----><code class="language-md">導航：頁面 A → 頁面 B (理想上的時序如下)
 
 <span class="token list punctuation">1.</span> shouldReuseRoute(B, A) → false（不同路由，繼續往下）
 
-── 處理「舊路由 A」──
+── 第一部分處理「舊路由 A」──
 <span class="token list punctuation">2.</span> shouldDetach(A)         → 要不要保存 A？
 <span class="token list punctuation">3.</span> store(A, handle)        → （如果 yes）把 A 存起來
 
-── 處理「新路由 B」──
+── 第二部分處理「新路由 B」──
 <span class="token list punctuation">4.</span> shouldAttach(B)         → B 之前有被存過嗎？
-<span class="token list punctuation">5.</span> retrieve(B)             → （如果 yes）把 B 的快照拿出來用</code><!----></pre> <h3>儲存</h3> <p>第一步要在物件 route 內部塞值當作 <code>shouldDetach()</code> 的依據，<code>route</code>本身開放 data 屬性可以塞自訂義資料</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// router_module.d.d.ts</span>
+<span class="token list punctuation">5.</span> retrieve(B)             → （如果 yes）把 B 的快照拿出來用</code><!----></pre> <h3>儲存流程</h3> <h4>shouldDetach()</h4> <p><code>shouldDetach()</code> 需要一個判斷依據，做法是在<code>route</code>的 <code>data</code> 屬性中加入自訂標記：</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// router_module.d.d.ts</span>
 <span class="token keyword">interface</span> <span class="token class-name">Route</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">/**
      * Additional developer-defined data provided to the component via
@@ -75,14 +73,14 @@
         <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>m <span class="token operator">=></span> m<span class="token punctuation">.</span>CatalogManagement<span class="token punctuation">)</span><span class="token punctuation">,</span>
     canActivate<span class="token operator">:</span> <span class="token punctuation">[</span>routeGuard<span class="token punctuation">]</span><span class="token punctuation">,</span>
     data<span class="token operator">:</span> <span class="token punctuation">&#123;</span> reuseRoute<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span> <span class="token comment">// reuseRoute: true</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <p>實作 func shouldDetach() 就變成</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>實作 <code>shouldDetach()</code>後就是</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
  * 決定是否應該分離（保存）這個路由
  * @param route 當前路由快照
  * @returns true = 保存組件, false = 銷毀組件
  */</span>
 <span class="token function">shouldDetach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">return</span> route<span class="token punctuation">.</span>data<span class="token punctuation">[</span><span class="token string">'reuseRoute'</span><span class="token punctuation">]</span> <span class="token operator">===</span> <span class="token boolean">true</span><span class="token punctuation">;</span> <span class="token comment">// 只保存有 data.reuseRoute 標記的路由</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <p>再來是用 func store() 來維護已儲存的快照。參數<code>ActivatedRouteSnapshot</code>就是拿剛剛的、<code>handle</code>由 angular 自己處理 Dom 快照後傳入，這邊執行成功後就是保存快照完成了。</p> <pre class="language-ts"><!----><code class="language-ts">
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>store()</h3> <p><code>store(route, handle)</code> 的兩個參數是由 Angular 自動傳入</p> <ul><li><code>route</code> 是當前路由快照</li> <li><code>handle</code> 是 Angular 處理好的 DOM 快照</li></ul> <p><code>store()</code>只負責傳入，所以需實作儲存邏輯，這邊簡單用 Map &amp; LRU 管理元件快取</p> <pre class="language-ts"><!----><code class="language-ts">
 <span class="token comment">/**
  * 最大快取數量，超過時會移除最舊的快取
  */</span>
@@ -140,7 +138,8 @@
     <span class="token punctuation">&#125;</span>
 
     <span class="token keyword">return</span> segments<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <h3>讀取</h3> <p>跳轉路由時，就是去檢查 this.handlers 有沒有快照紀錄，來決定是否要 new Component() / retrieve()</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>讀取流程</h3> <h4>shouldAttach()</h4> <p><code>shouldAttach()</code> 同樣由 Angular 自動傳入參數，
+實作上只需查詢剛剛自己實作 Map 中是否有對應的快取紀錄：</p> <ul><li>return <code>true</code> 時 Angular 會接著呼叫 <code>retrieve()</code> 流程</li> <li>return <code>false</code> 則重新建立 <code>route</code> 元件</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
  * 決定是否應該重新附加（恢復）之前保存的路由
  * @param route 路由快照
  * @returns true = 使用保存的組件, false = 創建新組件
@@ -159,9 +158,7 @@
     <span class="token punctuation">&#125;</span>
 
     <span class="token keyword">return</span> hasStored<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">/**
+<span class="token punctuation">&#125;</span></code><!----></pre> <h4>retrieve()</h4> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
  * 取回之前保存的路由組件
  * @param route 路由快照
  * @returns 保存的組件快照
@@ -175,7 +172,7 @@
 
     <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <p>最後是判斷不同 URL 但使用相同路由設定的情況，例如不同參數的情境（如 /user/1 → /user/2）</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
+<span class="token punctuation">&#125;</span></code><!----></pre> <h4>shouldReuseRoute()</h4> <p><code>shouldReuseRoute()</code>用來判斷前後路由是否視為同一個，例如不同參數的情境（如 /user/1 → /user/2）</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">/**
  * 決定是否應該重用路由
  * @param future 即將進入的路由
  * @param curr 當前路由
@@ -183,14 +180,15 @@
  */</span>
 <span class="token function">shouldReuseRoute</span><span class="token punctuation">(</span>future<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> curr<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">return</span> future<span class="token punctuation">.</span>routeConfig <span class="token operator">===</span> curr<span class="token punctuation">.</span>routeConfig<span class="token punctuation">;</span> <span class="token comment">// 比較的是物件參考</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <h3>遞迴</h3> <p>當路由設定為父子結構時（父路由 path: ‘basic/catalogmanagement’，子路由 path: ”），兩者組合出的路由路徑相同，作為 key 時會指向同一個值。導致父路由和子路由在 retrieve 時都匹配到同一個 key，retrieve 逐層解析路由樹時反覆取到同一個 handle，形成無限遞迴。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// 路由設定：</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>遞迴</h3> <p>觸發原因是空路徑子路由（<code>path: ''</code>）不會有 key 可以識別，導致父路由與子路由會產生相同的快取 key。
+Angular 逐層處理路由樹時，兩層都命中同一個 handle，<code>retrieve</code> 陷入反覆呼叫的無限迴圈。</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// 路由設定：</span>
 <span class="token punctuation">&#123;</span>
   path<span class="token operator">:</span> <span class="token string">'basic/catalogmanagement'</span><span class="token punctuation">,</span>     <span class="token comment">// 父路由（沒有 component）</span>
   children<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span>
     path<span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>                          <span class="token comment">// 子路由（有 component）</span>
     data<span class="token operator">:</span> <span class="token punctuation">&#123;</span> reuseRoute<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span>
   <span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <p>所以我們要做的事情是流程避免掉父路由，那判斷依據可以用有沒有 component 去識別</p> <pre class="language-ts"><!----><code class="language-ts">
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>解法是在 <code>shouldAttach</code> 和 <code>retrieve</code> 中跳過沒有 component 的路由，用屬性 <code>route.component</code> 或 <code>route.routeConfig?.loadComponent</code> 判斷</p> <pre class="language-ts"><!----><code class="language-ts">
 <span class="token comment">/**
  * 決定是否應該重新附加（恢復）之前保存的路由
  * @param route 路由快照
@@ -227,7 +225,7 @@
     <span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getRouteKey</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
-</code><!----></pre> <p>完整程式碼</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> DetachedRouteHandle<span class="token punctuation">,</span> RouteReuseStrategy <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/router'</span><span class="token punctuation">;</span>
+</code><!----></pre> <h3>完整程式碼</h3> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> ActivatedRouteSnapshot<span class="token punctuation">,</span> DetachedRouteHandle<span class="token punctuation">,</span> RouteReuseStrategy <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/router'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">CustomRouteReuseStrategy</span> <span class="token keyword">implements</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">/**
@@ -418,7 +416,7 @@
 			
 			<script>
 				{
-					__sveltekit_jia8ae = {
+					__sveltekit_1k22rmj = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -426,8 +424,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.SR5xDSK8.js"),
-						import("../_app/immutable/entry/app.BfcWcCVF.js")
+						import("../_app/immutable/entry/start.BmEzEElV.js"),
+						import("../_app/immutable/entry/app.BVPbw7dd.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

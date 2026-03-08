@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.SR5xDSK8.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/9IZnpr_c.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BpTnouFh.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BfcWcCVF.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,59 +22,54 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.3-KVzWgZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B9HB16Pz.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.C096Qo_q.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B3v1a-ez.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DDzkBSy9.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RxJS Observable</h1> <p class="svelte-mdkbyj">2025-11-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RxJS Observable</h6> <hr/> <p>Angular 內建整合了 RxJS 函式庫，其 Observable 物件提供很多方法可用來處理異步邏輯。另外，Angular 提供的 HttpClient 預設回傳就是 Observable 物件。</p> <pre class="language-js"><!----><code class="language-js"><span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'/api/getExportData'</span><span class="token punctuation">)</span>
-  <span class="token comment">// 邏輯排程</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">HTTP - RxJS Observable</h1> <p class="svelte-mdkbyj">2025-11-23</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>Angular 內建整合 RxJS，Observable 是處理非同步資料流的核心物件，也是 HttpClient 的預設回傳型別。</h6> <hr/> <p><code>pipe()</code> 將多個 operator 串接成處理鏈，每個 operator 負責一個步驟，資料依序流過：</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'/api/getExportData'</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
-    <span class="token function">switchMap</span><span class="token punctuation">(</span><span class="token parameter">data</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'step1 response:'</span><span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">switchMap</span><span class="token punctuation">(</span>data <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+      <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'step1 response:'</span><span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
       <span class="token keyword">const</span> filename <span class="token operator">=</span> <span class="token string">'report.pdf'</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> <span class="token keyword">of</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 語法 of() 傳遞參數給下一個動作</span>
+      <span class="token keyword">return</span> <span class="token keyword">of</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// of() 傳遞參數給下一個 operator</span>
     <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token comment">// Step 2. 接收參數&amp;觸發下一隻API</span>
-    <span class="token function">switchMap</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">filename</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'step2 filename:'</span><span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">switchMap</span><span class="token punctuation">(</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+      <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'step2 filename:'</span><span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
       <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>http<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/api/confirmDownloaded'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> file<span class="token operator">:</span> filename <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
   <span class="token punctuation">)</span>
-  <span class="token comment">// 觸發執行</span>
-  <span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token parameter">result</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'全部流程完成'</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code><!----></pre> <h3>Observable 常見 Method</h3> <table><thead><tr><th>Operator</th><th>用途說明</th></tr></thead><tbody><tr><td><code>map()</code></td><td>資料轉換，取出你要的欄位、格式化資料</td></tr><tr><td><code>tap()</code></td><td>執行副作用（不改變資料），常用來 <code>console.log</code>, 設定 loading</td></tr><tr><td><code>switchMap()</code></td><td>用一筆資料觸發下一個 Observable，並自動取消舊的</td></tr><tr><td><code>mergeMap()</code></td><td>觸發下一個 Observable，但不取消前一筆（適合併發）</td></tr><tr><td><code>catchError()</code></td><td>錯誤處理，不讓錯誤中斷整個流程</td></tr><tr><td><code>finalize()</code></td><td>無論成功/失敗，最後一定會執行（常用來清除狀態）</td></tr><tr><td><code>retry(n)</code></td><td>API 失敗時，自動重試 n 次</td></tr><tr><td><code>timeout(ms)</code></td><td>若 Observable 超過時間未完成，會自動報錯</td></tr><tr><td><code>debounceTime(ms)</code></td><td>等使用者輸入穩定後才送出請求（防抖）</td></tr></tbody></table> <pre class="language-js"><!----><code class="language-js"><span class="token keyword">this</span><span class="token punctuation">.</span>api<span class="token punctuation">.</span>get<span class="token operator">&lt;</span>any<span class="token operator">></span><span class="token punctuation">(</span><span class="token string">'/api/users'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span>result <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'全部流程完成'</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>常見 Operator</h3> <table><thead><tr><th>Operator</th><th>用途說明</th></tr></thead><tbody><tr><td><code>map()</code></td><td>資料轉換，取出你要的欄位、格式化資料</td></tr><tr><td><code>tap()</code></td><td>執行副作用（不改變資料），常用來 <code>console.log</code>、設定 loading</td></tr><tr><td><code>switchMap()</code></td><td>用一筆資料觸發下一個 Observable，並自動取消舊的</td></tr><tr><td><code>mergeMap()</code></td><td>觸發下一個 Observable，但不取消前一筆（適合併發）</td></tr><tr><td><code>catchError()</code></td><td>錯誤處理，不讓錯誤中斷整個流程</td></tr><tr><td><code>finalize()</code></td><td>無論成功／失敗，最後一定會執行（常用來清除狀態）</td></tr><tr><td><code>retry(n)</code></td><td>API 失敗時自動重試 n 次</td></tr><tr><td><code>timeout(ms)</code></td><td>若 Observable 超過時間未完成，自動拋出錯誤</td></tr><tr><td><code>debounceTime(ms)</code></td><td>等使用者輸入穩定後才送出請求（防抖）</td></tr></tbody></table> <p>實際使用時通常會組合多個 operator：</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">this</span><span class="token punctuation">.</span>api<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">get</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token string">'/api/users'</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>
-    <span class="token function">tap</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span>loading <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token comment">//tap：觸發副作用（如顯示 loading）</span>
-    
-    <span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">res</span> <span class="token operator">=></span> res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token comment">// map：轉換回傳資料結構，拿出你需要的部分</span>
-    
-    <span class="token function">retry</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token comment">// retry：API 失敗時最多重試 2 次</span>
-    
-    <span class="token function">timeout</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token comment">// timeout：超過 5 秒沒回應就報錯</span>
-    
-    <span class="token function">catchError</span><span class="token punctuation">(</span><span class="token parameter">err</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> <span class="token comment">// catchError：攔截錯誤，避免流程中止</span>
-      <span class="token keyword">this</span><span class="token punctuation">.</span>toast<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'API 失敗'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-      <span class="token keyword">return</span> <span class="token keyword">of</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 回傳預設空陣列，保持 UI 正常</span>
+    <span class="token function">tap</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span>loading <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">,</span>          <span class="token comment">// 顯示 loading</span>
+
+    <span class="token function">map</span><span class="token punctuation">(</span>res <span class="token operator">=></span> res<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">,</span>                    <span class="token comment">// 取出需要的資料</span>
+
+    <span class="token function">retry</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>                                <span class="token comment">// 失敗時最多重試 2 次</span>
+
+    <span class="token function">timeout</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">,</span>                           <span class="token comment">// 超過 5 秒報錯</span>
+
+    <span class="token function">catchError</span><span class="token punctuation">(</span>err <span class="token operator">=></span> <span class="token punctuation">&#123;</span>                      <span class="token comment">// 攔截錯誤，避免流程中止</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>toast<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'API 失敗'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> <span class="token keyword">of</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                         <span class="token comment">// 回傳預設空陣列，保持 UI 正常</span>
     <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    
-    <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span>loading <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token comment">// finalize：成功或失敗都會執行，關閉 loading 狀態</span>
+
+    <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span>loading <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span>     <span class="token comment">// 成功或失敗都關閉 loading</span>
   <span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token parameter">data</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>users <span class="token operator">=</span> data<span class="token punctuation">;</span> <span class="token comment">// subscribe：最終資料回來後綁定到畫面</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+  <span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span>data <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>users <span class="token operator">=</span> data<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_jia8ae = {
+					__sveltekit_1k22rmj = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -82,8 +77,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.SR5xDSK8.js"),
-						import("../_app/immutable/entry/app.BfcWcCVF.js")
+						import("../_app/immutable/entry/start.BmEzEElV.js"),
+						import("../_app/immutable/entry/app.BVPbw7dd.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

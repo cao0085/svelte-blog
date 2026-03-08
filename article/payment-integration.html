@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">金流串接</h1> <p class="svelte-mdkbyj">2025-06-22</p></div> <section class="article-body svelte-mdkbyj"><!----><h6><a href="https://github.com/cao0085/code-pattern/tree/main/cashflow" rel="nofollow">程式碼</a></h6> <hr/> <p>在串接金流商（Payment Provider，以下簡稱 PP）時，有幾個核心原則：</p> <ul><li><strong>Transaction 一致性</strong>：更新多張 Table 時務必包在 Transaction 中</li> <li><strong>完整 Logging</strong>：初期 Request / Response 都紀錄詳細一點，上線穩定後再移除</li> <li><strong>ReturnCode Mapping</strong>：將各家 PP 的錯誤碼集中管理，統一轉換為系統內部狀態</li> <li><strong>人工介入流程</strong>：定義錯誤時的人工處理情境，搭配後台工具或警示通知</li> <li><strong>Query 補償機制</strong>：定時 Job 或手動工具執行查詢，同步漏單、補齊退款差額</li></ul> <p>主要流程：</p> <pre class="language-undefined"><!----><code class="language-undefined">Request → Pre-commit → Send → Response Logging → State Machine → Commit</code><!----></pre> <hr/> <h3>HTTP Request</h3> <p>依照 PP 文件組出必要的 Header（例如 <code>ChannelId</code>、<code>Secret</code>）與 Body JSON。簽章或加密邏輯也在這層集中處理，並抽成共用方法 <code>GenerateProviderRequest(method, url, envConfig)</code>。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> req <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">HttpRequestMessage</span><span class="token punctuation">(</span>HttpMethod<span class="token punctuation">.</span>Post<span class="token punctuation">,</span> fullUrl<span class="token punctuation">)</span><span class="token punctuation">;</span>
+req<span class="token punctuation">.</span>Headers<span class="token punctuation">.</span><span class="token function">TryAddWithoutValidation</span><span class="token punctuation">(</span><span class="token string">"X-Provider-Id"</span><span class="token punctuation">,</span> env<span class="token punctuation">.</span>ChannelId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+req<span class="token punctuation">.</span>Headers<span class="token punctuation">.</span><span class="token function">TryAddWithoutValidation</span><span class="token punctuation">(</span><span class="token string">"X-Provider-Secret"</span><span class="token punctuation">,</span> env<span class="token punctuation">.</span>Secret<span class="token punctuation">)</span><span class="token punctuation">;</span>
+req<span class="token punctuation">.</span>Content <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StringContent</span><span class="token punctuation">(</span>bodyJson<span class="token punctuation">,</span> Encoding<span class="token punctuation">.</span>UTF8<span class="token punctuation">,</span> <span class="token string">"application/json"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>Pre-commit</h3> <p>在呼叫 PP 之前，先在自家 DB 建立一筆交易主檔（包含交易序號、金額、初始狀態）。<code>SaveChanges()</code> 後才送出請求，即使後續網路異常或 PP 無回應，也有記錄可查，方便補單或人工處理。</p> <pre class="language-csharp"><!----><code class="language-csharp">db<span class="token punctuation">.</span><span class="token function">SaveChanges</span><span class="token punctuation">(</span>payInfo<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>Send Request</h3> <p>送出請求後，先確認是否為預期內的回應（成功 / 失敗 / 逾時），並記錄 Status Code 與錯誤訊息。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">HttpClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> res <span class="token operator">=</span> <span class="token keyword">await</span> client<span class="token punctuation">.</span><span class="token function">SendAsync</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> HttpCompletionOption<span class="token punctuation">.</span>ResponseHeadersRead<span class="token punctuation">,</span> ct<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>State Machine</h3> <p>根據 PP 回傳的 <code>ReturnCode</code> 判斷交易結果，更新 DB 狀態與寫入明細，整段邏輯包在 Transaction 中確保一致性。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">switch</span> <span class="token punctuation">(</span>res<span class="token punctuation">.</span>data<span class="token punctuation">.</span>ReturnCode<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">case</span> <span class="token string">"0000"</span><span class="token punctuation">:</span> <span class="token comment">// 付款成功</span>
+    <span class="token keyword">case</span> <span class="token string">"1165"</span><span class="token punctuation">:</span> <span class="token comment">// 付款失敗</span>
+    <span class="token keyword">case</span> <span class="token string">"xxxx"</span><span class="token punctuation">:</span> <span class="token comment">// 例外狀況</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">await</span> db<span class="token punctuation">.</span><span class="token function">SaveChangesAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">await</span> transaction<span class="token punctuation">.</span><span class="token function">CommitAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>補查詢機制</h3> <p>若請求過程中發生網路異常或收到非預期回應，可主動向 PP 查詢最新交易狀態，與自家 DB 比對後進行同步更新。可根據需求設計為純查詢或查詢後強制同步兩種模式。</p> <hr/> <h3>Finite State Machine</h3> <p>金流交易的狀態變更是有條件的，導入 FSM 可以明確定義每個 State 允許的 Transition 也比較好維護。</p> <p><strong>State 定義：</strong></p> <table><thead><tr><th>State</th><th>說明</th></tr></thead><tbody><tr><td><code>Pending</code></td><td>交易建立，等待 PP 回應</td></tr><tr><td><code>Success</code></td><td>付款成功</td></tr><tr><td><code>Failed</code></td><td>付款失敗</td></tr><tr><td><code>Cancelled</code></td><td>取消交易</td></tr><tr><td><code>Refunding</code></td><td>退款處理中</td></tr><tr><td><code>Refunded</code></td><td>退款完成</td></tr></tbody></table> <p><strong>合法 Transition：</strong></p> <table><thead><tr><th>當前 State</th><th>可轉移至</th></tr></thead><tbody><tr><td><code>Pending</code></td><td><code>Success</code>、<code>Failed</code>、<code>Cancelled</code></td></tr><tr><td><code>Success</code></td><td><code>Refunding</code></td></tr><tr><td><code>Refunding</code></td><td><code>Refunded</code>、<code>Failed</code></td></tr><tr><td><code>Failed</code> / <code>Cancelled</code> / <code>Refunded</code></td><td>— （終態，不可再變更）</td></tr></tbody></table> <p>實作上可在更新狀態前加一層驗證，拒絕非法 Transition：</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>_allowedTransitions<span class="token punctuation">[</span>current<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">Contains</span><span class="token punctuation">(</span>next<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">InvalidOperationException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"Invalid transition: </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">current</span><span class="token punctuation">&#125;</span></span><span class="token string"> → </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token expression language-csharp">next</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1k22rmj = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BmEzEElV.js"),
+						import("../_app/immutable/entry/app.BVPbw7dd.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RBAC 03 - Sidebar UI</h1> <p class="svelte-mdkbyj">2025-12-11</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>根據使用者權限動態渲染側邊欄，將 PermissionService 的權限樹轉換為 UI 資料結構</h6> <hr/> <h3>Layout</h3> <p>主畫面的 Layout 是常見的三段式：</p> <ol><li><strong>Header</strong>：放入基本資料</li> <li><strong>Sidebar</strong>：根據權限 render 出目錄入口</li> <li><strong>ContentView</strong>：根據路由顯示對應的 Component</li></ol> <hr/> <h3>SidebarComponent</h3> <p>主要工作是把 <code>permissionService.userClaimTree()</code> 轉成 UI 好渲染的 <code>menuItems</code></p> <ul><li>遞迴過濾出 <code>ROUTE</code> 類型的節點（去掉 ACTION 類型）</li> <li>用 <code>buildAllClaimRouteMap()</code> 把 ClaimCode 對應到實際 URL path</li> <li><code>menuItems</code> 用 <code>computed</code> 自動追蹤權限變化</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// sidebar.component.ts</span>
+<span class="token keyword">interface</span> <span class="token class-name">MenuItem</span> <span class="token punctuation">&#123;</span>
+  id<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  route<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  icon<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  children<span class="token operator">?</span><span class="token operator">:</span> MenuItem<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  expanded<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+  claimCode<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">SidebarComponent</span> <span class="token punctuation">&#123;</span>
+  isCollapsed <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> allRouteMap <span class="token operator">=</span> <span class="token function">buildAllClaimRouteMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  menuItems <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> claimTree <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>permissionService<span class="token punctuation">.</span><span class="token function">userClaimTree</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> routeTree <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">filterRoutePermissions</span><span class="token punctuation">(</span>claimTree<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">convertToMenuItems</span><span class="token punctuation">(</span>routeTree<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">constructor</span><span class="token punctuation">(</span>
+    <span class="token keyword">private</span> tabService<span class="token operator">:</span> TabService<span class="token punctuation">,</span>
+    <span class="token keyword">private</span> permissionService<span class="token operator">:</span> PermissionService<span class="token punctuation">,</span>
+    <span class="token keyword">private</span> router<span class="token operator">:</span> Router
+  <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+  <span class="token comment">// 遞迴過濾 ROUTE 類型的權限節點</span>
+  <span class="token keyword">private</span> <span class="token function">filterRoutePermissions</span><span class="token punctuation">(</span>nodes<span class="token operator">:</span> ClaimTreeNode<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token operator">:</span> ClaimTreeNode<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> nodes
+      <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>node <span class="token operator">=></span> node<span class="token punctuation">.</span>type <span class="token operator">===</span> ClaimType<span class="token punctuation">.</span><span class="token constant">ROUTE</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>node <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+        <span class="token operator">...</span>node<span class="token punctuation">,</span>
+        children<span class="token operator">:</span> node<span class="token punctuation">.</span>children <span class="token operator">?</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">filterRoutePermissions</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>children<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token comment">// 遞迴將 ClaimTreeNode 轉換為 MenuItem</span>
+  <span class="token keyword">private</span> <span class="token function">convertToMenuItems</span><span class="token punctuation">(</span>nodes<span class="token operator">:</span> ClaimTreeNode<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token operator">:</span> MenuItem<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> nodes<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>node <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+      id<span class="token operator">:</span> node<span class="token punctuation">.</span>id<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      name<span class="token operator">:</span> node<span class="token punctuation">.</span>name<span class="token punctuation">,</span>
+      route<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>allRouteMap<span class="token punctuation">[</span>node<span class="token punctuation">.</span>code <span class="token keyword">as</span> ClaimCode<span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token string">'#'</span><span class="token punctuation">,</span>
+      claimCode<span class="token operator">:</span> node<span class="token punctuation">.</span>code<span class="token punctuation">,</span>
+      expanded<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      children<span class="token operator">:</span> node<span class="token punctuation">.</span>children<span class="token operator">?.</span>length <span class="token operator">?</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">convertToMenuItems</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>children<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">undefined</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">goToRoute</span><span class="token punctuation">(</span>item<span class="token operator">:</span> MenuItem<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>router<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token punctuation">[</span>item<span class="token punctuation">.</span>route<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+  <span class="token function">toggleSidebar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>isCollapsed <span class="token operator">=</span> <span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>isCollapsed<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+  <span class="token function">toggleMenu</span><span class="token punctuation">(</span>item<span class="token operator">:</span> MenuItem<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> item<span class="token punctuation">.</span>expanded <span class="token operator">=</span> <span class="token operator">!</span>item<span class="token punctuation">.</span>expanded<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h3>RouteConfig</h3> <p><code>PermissionService</code> 的 ClaimCode 是 DB 常數，Sidebar 需要對應到實際 URL，為此定義 <code>RouteConfig</code> 作為橋接</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">RouteConfig</span> <span class="token punctuation">&#123;</span>
+  path<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>          <span class="token comment">// URL path</span>
+  claim<span class="token operator">:</span> ClaimCode<span class="token punctuation">;</span>      <span class="token comment">// 對應的 DB 權限常數</span>
+  <span class="token function-variable function">loadComponent</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token operator">></span><span class="token punctuation">;</span>
+  reuseRoute<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">enum</span> ClaimCode <span class="token punctuation">&#123;</span>
+  <span class="token constant">BASIC_SYSTEM_MODULE</span>          <span class="token operator">=</span> <span class="token string">'BASIC_SYSTEM_MODULE'</span><span class="token punctuation">,</span>
+  <span class="token constant">BASIC_SYSTEM_LOG</span>             <span class="token operator">=</span> <span class="token string">'BASIC_SYSTEM_LOG'</span><span class="token punctuation">,</span>
+  <span class="token constant">EXTERNAL_SYSTEM_MODULE</span>       <span class="token operator">=</span> <span class="token string">'EXTERNAL_SYSTEM_MODULE'</span><span class="token punctuation">,</span>
+  <span class="token constant">EXTERNAL_SYSTEM_VENDOR_DATA</span>  <span class="token operator">=</span> <span class="token string">'EXTERNAL_SYSTEM_VENDOR_DATA'</span><span class="token punctuation">,</span>
+  <span class="token constant">PAYMENT_SYSTEM_MODULE</span>        <span class="token operator">=</span> <span class="token string">'PAYMENT_SYSTEM_MODULE'</span><span class="token punctuation">,</span>
+  <span class="token constant">PAYMENT_SYSTEM_METHOD</span>        <span class="token operator">=</span> <span class="token string">'PAYMENT_SYSTEM_METHOD'</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h3>route.config.ts</h3> <p>集中管理所有路由設定，提供三個工具函式：</p> <ul><li><code>convertToRoute()</code> ：將一筆 RouteConfig 轉成 Angular Route（自動掛上 <code>permissionGuard</code>）</li> <li><code>convertToRoutes()</code> ：批次轉換</li> <li><code>buildAllClaimRouteMap()</code> ：建立 ClaimCode → path 的 Map，給 Sidebar 使用</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">const</span> <span class="token constant">ROUTE_CONFIGS</span><span class="token operator">:</span> RouteConfig<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">&#123;</span>
+    path<span class="token operator">:</span> <span class="token string">'basic-system/log'</span><span class="token punctuation">,</span>
+    claim<span class="token operator">:</span> ClaimCode<span class="token punctuation">.</span><span class="token constant">BASIC_SYSTEM_LOG</span><span class="token punctuation">,</span>
+    <span class="token function-variable function">loadComponent</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'../../features/basic-system/system-log.component'</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>m <span class="token operator">=></span> m<span class="token punctuation">.</span>SystemLogComponent<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    reuseRoute<span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#123;</span>
+    path<span class="token operator">:</span> <span class="token string">'payment-system/payment-method'</span><span class="token punctuation">,</span>
+    claim<span class="token operator">:</span> ClaimCode<span class="token punctuation">.</span><span class="token constant">PAYMENT_SYSTEM_METHOD</span><span class="token punctuation">,</span>
+    <span class="token function-variable function">loadComponent</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'../../features/payment-system/payment-method.component'</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>m <span class="token operator">=></span> m<span class="token punctuation">.</span>PaymentMethodComponent<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">convertToRoute</span><span class="token punctuation">(</span>config<span class="token operator">:</span> RouteConfig<span class="token punctuation">)</span><span class="token operator">:</span> Route <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+    path<span class="token operator">:</span> config<span class="token punctuation">.</span>path<span class="token punctuation">,</span>
+    loadComponent<span class="token operator">:</span> config<span class="token punctuation">.</span>loadComponent<span class="token punctuation">,</span>
+    canActivate<span class="token operator">:</span> <span class="token punctuation">[</span>permissionGuard<span class="token punctuation">]</span><span class="token punctuation">,</span>
+    data<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      requiredClaim<span class="token operator">:</span> config<span class="token punctuation">.</span>claim<span class="token punctuation">,</span>
+      reuseRoute<span class="token operator">:</span> config<span class="token punctuation">.</span>reuseRoute <span class="token operator">??</span> <span class="token boolean">true</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">convertToRoutes</span><span class="token punctuation">(</span>configs<span class="token operator">:</span> RouteConfig<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token operator">:</span> Route<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> configs<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>convertToRoute<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// Sidebar 用：建立 ClaimCode → path 的映射表</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">buildAllClaimRouteMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> Partial<span class="token operator">&lt;</span>Record<span class="token operator">&lt;</span>ClaimCode<span class="token punctuation">,</span> <span class="token builtin">string</span><span class="token operator">>></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> map<span class="token operator">:</span> Partial<span class="token operator">&lt;</span>Record<span class="token operator">&lt;</span>ClaimCode<span class="token punctuation">,</span> <span class="token builtin">string</span><span class="token operator">>></span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+  <span class="token constant">ROUTE_CONFIGS</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>config <span class="token operator">=></span> <span class="token punctuation">&#123;</span> map<span class="token punctuation">[</span>config<span class="token punctuation">.</span>claim<span class="token punctuation">]</span> <span class="token operator">=</span> config<span class="token punctuation">.</span>path<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> map<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h3>新增畫面流程</h3> <p>未來要新增一個畫面，前端只需：</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// 1. ClaimCode 新增常數</span>
+<span class="token constant">PARKING_SYSTEM_ORDER</span> <span class="token operator">=</span> <span class="token string">'PARKING_SYSTEM_ORDER'</span><span class="token punctuation">,</span>
+
+<span class="token comment">// 2. ROUTE_CONFIGS 新增一筆</span>
+<span class="token punctuation">&#123;</span>
+  path<span class="token operator">:</span> <span class="token string">'parking-system/order-management'</span><span class="token punctuation">,</span>
+  claim<span class="token operator">:</span> ClaimCode<span class="token punctuation">.</span><span class="token constant">PARKING_SYSTEM_ORDER</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">loadComponent</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'../../features/parking-system/order-management.component'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>m <span class="token operator">=></span> m<span class="token punctuation">.</span>OrderManagementComponent<span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>DB 那邊同步新增 claim 記錄並綁定角色，Sidebar 和 Guard 會自動套用。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1k22rmj = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BmEzEElV.js"),
+						import("../_app/immutable/entry/app.BVPbw7dd.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Domain-Driven 03 - Domain Object Design</h1> <p class="svelte-mdkbyj">2026-02-13</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>Aggregate Root 與 Domain Event 是 Domain 層的兩個核心支柱</h6> <hr/> <h2>Aggregate Root Base Class</h2> <p>所有 Aggregate Root 繼承同一個基礎類別，負責收集在業務操作中產生的 Domain Event。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">AggregateRoot</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">List<span class="token punctuation">&lt;</span>IDomainEvent<span class="token punctuation">></span></span> _domainEvents <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">IReadOnlyList<span class="token punctuation">&lt;</span>IDomainEvent<span class="token punctuation">></span></span> DomainEvents <span class="token operator">=></span> _domainEvents<span class="token punctuation">.</span><span class="token function">AsReadOnly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">protected</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">RaiseDomainEvent</span><span class="token punctuation">(</span><span class="token class-name">IDomainEvent</span> domainEvent<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        _domainEvents<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>domainEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">ClearDomainEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        _domainEvents<span class="token punctuation">.</span><span class="token function">Clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IDomainEvent</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">INotification</span></span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span></code><!----></pre> <p>所有狀態修改都必須透過方法進行，欄位設為 <code>private set</code> 或完全 <code>private</code>，讓外部無法繞過驗證邏輯直接賦值。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Order</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">AggregateRoot</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Guid</span> Id <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">OrderStatus</span> Status <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Money</span> TotalAmount <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">List<span class="token punctuation">&lt;</span>OrderItem<span class="token punctuation">></span></span> _items <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">IReadOnlyList<span class="token punctuation">&lt;</span>OrderItem<span class="token punctuation">></span></span> Items <span class="token operator">=></span> _items<span class="token punctuation">.</span><span class="token function">AsReadOnly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token function">Order</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span> <span class="token comment">// EF Core 需要無參數建構子</span>
+
+    <span class="token comment">// 用 static factory 取代 public constructor，確保建立時一定 Raise 事件</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name">Order</span> <span class="token function">Create</span><span class="token punctuation">(</span><span class="token class-name">Guid</span> customerId<span class="token punctuation">,</span> <span class="token class-name">Currency</span> currency<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> order <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Order</span>
+        <span class="token punctuation">&#123;</span>
+            Id <span class="token operator">=</span> Guid<span class="token punctuation">.</span><span class="token function">NewGuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            Status <span class="token operator">=</span> OrderStatus<span class="token punctuation">.</span>Draft<span class="token punctuation">,</span>
+            TotalAmount <span class="token operator">=</span> Money<span class="token punctuation">.</span><span class="token function">Zero</span><span class="token punctuation">(</span>currency<span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        order<span class="token punctuation">.</span><span class="token function">RaiseDomainEvent</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token constructor-invocation class-name">OrderCreatedDomainEvent</span><span class="token punctuation">(</span>order<span class="token punctuation">.</span>Id<span class="token punctuation">,</span> customerId<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> order<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">AddItem</span><span class="token punctuation">(</span><span class="token class-name">ProductId</span> productId<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">int</span></span> quantity<span class="token punctuation">,</span> <span class="token class-name">Money</span> unitPrice<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>Status <span class="token operator">!=</span> OrderStatus<span class="token punctuation">.</span>Draft<span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">DomainException</span><span class="token punctuation">(</span><span class="token string">"只有 Draft 狀態的訂單可以新增商品"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name"><span class="token keyword">var</span></span> item <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">OrderItem</span><span class="token punctuation">(</span>productId<span class="token punctuation">,</span> quantity<span class="token punctuation">,</span> unitPrice<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _items<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        TotalAmount <span class="token operator">=</span> TotalAmount<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>item<span class="token punctuation">.</span>SubTotal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Submit</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>_items<span class="token punctuation">.</span><span class="token function">Any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">DomainException</span><span class="token punctuation">(</span><span class="token string">"訂單不能為空"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        Status <span class="token operator">=</span> OrderStatus<span class="token punctuation">.</span>Submitted<span class="token punctuation">;</span>
+        <span class="token function">RaiseDomainEvent</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token constructor-invocation class-name">OrderSubmittedDomainEvent</span><span class="token punctuation">(</span>Id<span class="token punctuation">,</span> TotalAmount<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h2>Entity vs Value Object</h2> <table><thead><tr><th></th><th>Entity</th><th>Value Object</th></tr></thead><tbody><tr><td>識別性</td><td>有 ID</td><td>無 ID</td></tr><tr><td>可變性</td><td>可變（透過方法）</td><td>不可變（Immutable）</td></tr><tr><td>相等性</td><td>比較 ID</td><td>比較所有屬性值</td></tr><tr><td>例子</td><td>Order、OrderItem</td><td>Money、Address、Email</td></tr></tbody></table> <p><code>OrderItem</code> 是 Entity（需要追蹤每一筆），<code>Money</code> 是 Value Object（<code>$100 TWD</code> 不需要獨立 ID，兩個 <code>$100 TWD</code> 就是相等）。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Entity：有 ID，有生命週期</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrderItem</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Guid</span> Id <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">ProductId</span> ProductId <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Quantity <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Money</span> UnitPrice <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Money</span> SubTotal <span class="token operator">=></span> UnitPrice<span class="token punctuation">.</span><span class="token function">Multiply</span><span class="token punctuation">(</span>Quantity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">OrderItem</span><span class="token punctuation">(</span><span class="token class-name">ProductId</span> productId<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">int</span></span> quantity<span class="token punctuation">,</span> <span class="token class-name">Money</span> unitPrice<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>quantity <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">DomainException</span><span class="token punctuation">(</span><span class="token string">"數量必須大於 0"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Id <span class="token operator">=</span> Guid<span class="token punctuation">.</span><span class="token function">NewGuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ProductId <span class="token operator">=</span> productId<span class="token punctuation">;</span>
+        Quantity <span class="token operator">=</span> quantity<span class="token punctuation">;</span>
+        UnitPrice <span class="token operator">=</span> unitPrice<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// Value Object Base：相等性由值決定</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">ValueObject</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token return-type class-name">IEnumerable<span class="token punctuation">&lt;</span><span class="token keyword">object</span><span class="token punctuation">></span></span> <span class="token function">GetEqualityComponents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> <span class="token function">Equals</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">object</span><span class="token punctuation">?</span></span> obj<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>obj <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token class-name">ValueObject</span> other<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">GetEqualityComponents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">SequenceEqual</span><span class="token punctuation">(</span>other<span class="token punctuation">.</span><span class="token function">GetEqualityComponents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> <span class="token function">GetHashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token operator">=></span> <span class="token function">GetEqualityComponents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Aggregate</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> HashCode<span class="token punctuation">.</span>Combine<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// Value Object：無 ID，不可變</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Money</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">ValueObject</span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">decimal</span></span> Amount <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Currency</span> Currency <span class="token punctuation">&#123;</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token function">Money</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">decimal</span></span> amount<span class="token punctuation">,</span> <span class="token class-name">Currency</span> currency<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>amount <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">DomainException</span><span class="token punctuation">(</span><span class="token string">"金額不能為負數"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Amount <span class="token operator">=</span> amount<span class="token punctuation">;</span>
+        Currency <span class="token operator">=</span> currency<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name">Money</span> <span class="token function">Zero</span><span class="token punctuation">(</span><span class="token class-name">Currency</span> currency<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">new</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> currency<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name">Money</span> <span class="token function">Add</span><span class="token punctuation">(</span><span class="token class-name">Money</span> other<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>Currency <span class="token operator">!=</span> other<span class="token punctuation">.</span>Currency<span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">DomainException</span><span class="token punctuation">(</span><span class="token string">"不同幣別不能相加"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Money</span><span class="token punctuation">(</span>Amount <span class="token operator">+</span> other<span class="token punctuation">.</span>Amount<span class="token punctuation">,</span> Currency<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name">Money</span> <span class="token function">Multiply</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">int</span></span> factor<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">new</span><span class="token punctuation">(</span>Amount <span class="token operator">*</span> factor<span class="token punctuation">,</span> Currency<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token return-type class-name">IEnumerable<span class="token punctuation">&lt;</span><span class="token keyword">object</span><span class="token punctuation">></span></span> <span class="token function">GetEqualityComponents</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">yield</span> <span class="token keyword">return</span> Amount<span class="token punctuation">;</span>
+        <span class="token keyword">yield</span> <span class="token keyword">return</span> Currency<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h2>Domain Event</h2> <p>Domain Event 代表「領域中發生了一件值得記錄的事」，例如訂單建立、訂單提交。</p> <p><strong>設計原則：</strong></p> <ul><li>Aggregate 負責 <strong>Raise</strong>（收集事件，不立即發送）</li> <li>Application Layer 的 Handler 負責<strong>處理後續</strong>（發 Email、更新統計等）</li> <li>Domain 層完全不知道後續行為，保持單向依賴</li></ul> <h3>Event 定義</h3> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Domain 層定義（只有資料，沒有行為）</span>
+<span class="token keyword">public</span> <span class="token keyword">record</span> <span class="token class-name">OrderCreatedDomainEvent</span><span class="token punctuation">(</span><span class="token class-name">Guid</span> OrderId<span class="token punctuation">,</span> <span class="token class-name">Guid</span> CustomerId<span class="token punctuation">)</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IDomainEvent</span></span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">record</span> <span class="token class-name">OrderSubmittedDomainEvent</span><span class="token punctuation">(</span><span class="token class-name">Guid</span> OrderId<span class="token punctuation">,</span> <span class="token class-name">Money</span> TotalAmount<span class="token punctuation">)</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IDomainEvent</span></span><span class="token punctuation">;</span></code><!----></pre> <h3>發布時機：SaveChanges 後統一發送</h3> <p>Domain Event 不在 Raise 的當下立即發出，而是等 <code>SaveChangesAsync()</code> 存檔成功後才統一發送，避免「資料還沒寫入就觸發後續流程」。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Infrastructure - DbContext override</span>
+<span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span><span class="token keyword">int</span><span class="token punctuation">></span></span> <span class="token function">SaveChangesAsync</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> ct <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 1. 收集所有待發布事件</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> aggregates <span class="token operator">=</span> ChangeTracker<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Entries</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>AggregateRoot<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>e <span class="token operator">=></span> e<span class="token punctuation">.</span>Entity<span class="token punctuation">.</span>DomainEvents<span class="token punctuation">.</span><span class="token function">Any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>e <span class="token operator">=></span> e<span class="token punctuation">.</span>Entity<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 2. 先存檔</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">base</span><span class="token punctuation">.</span><span class="token function">SaveChangesAsync</span><span class="token punctuation">(</span>ct<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 3. 存檔成功後再發事件</span>
+    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> aggregate <span class="token keyword">in</span> aggregates<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> domainEvent <span class="token keyword">in</span> aggregate<span class="token punctuation">.</span>DomainEvents<span class="token punctuation">)</span>
+            <span class="token keyword">await</span> _mediator<span class="token punctuation">.</span><span class="token function">Publish</span><span class="token punctuation">(</span>domainEvent<span class="token punctuation">,</span> ct<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        aggregate<span class="token punctuation">.</span><span class="token function">ClearDomainEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>Handler</h3> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// Application 層</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OrderSubmittedHandler</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">INotificationHandler<span class="token punctuation">&lt;</span>OrderSubmittedDomainEvent<span class="token punctuation">></span></span></span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">IEmailService</span> _emailService<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">OrderSubmittedHandler</span><span class="token punctuation">(</span><span class="token class-name">IEmailService</span> emailService<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        _emailService <span class="token operator">=</span> emailService<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">Handle</span><span class="token punctuation">(</span><span class="token class-name">OrderSubmittedDomainEvent</span> evt<span class="token punctuation">,</span> <span class="token class-name">CancellationToken</span> ct<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">await</span> _emailService<span class="token punctuation">.</span><span class="token function">SendOrderConfirmationAsync</span><span class="token punctuation">(</span>evt<span class="token punctuation">.</span>OrderId<span class="token punctuation">,</span> evt<span class="token punctuation">.</span>TotalAmount<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h2>Aggregate 邊界設計</h2> <p>設計 Aggregate 邊界是 DDD 中最難的判斷，核心原則：</p> <p><strong>Aggregate 內：強一致性（Strong Consistency）</strong> 同一個交易中，Aggregate 內的所有資料必須保持一致。</p> <p><strong>Aggregate 間：最終一致性（Eventual Consistency）</strong> 跨 Aggregate 的操作透過 Domain Event 達成，允許短暫不一致。</p> <pre class="language-undefined"><!----><code class="language-undefined">// ❌ 錯誤：Order 直接包含完整 Customer 物件（兩個 Aggregate 耦合）
+Order &#123;
+    Customer customer    // 整個 Customer Aggregate
+    OrderItem[] items
+&#125;
+
+// ✅ 正確：只存 CustomerId，需要資料時由 Application Layer 另外載入
+Order &#123;
+    Guid customerId      // 只存 ID 引用
+    OrderItem[] items
+&#125;</code><!----></pre> <p><strong>判斷 checklist：</strong></p> <ul><li>這個資料修改是否需要在同一筆 Transaction 完成？ → 放同一個 Aggregate</li> <li>跨兩個 Aggregate 的操作是否可以接受短暫不一致？ → 用 Domain Event</li> <li>Aggregate 是否越來越大、難以測試？ → 重新拆分邊界</li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1k22rmj = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BmEzEElV.js"),
+						import("../_app/immutable/entry/app.BVPbw7dd.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
