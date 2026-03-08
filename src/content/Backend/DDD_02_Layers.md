@@ -1,10 +1,10 @@
 ---
-title: "Domain-Driven - Basic"
-date: "2025-06-21"
+title: "Domain-Driven 02 - Layer Structure"
+date: "2026-02-12"
 category: "software"
 subCategory: "Backend"
-tags: ["DDD", "backend", "design"]
-slug: "ddd_layer"
+tags: ["DDD", "backend", "design", "csharp"]
+slug: "ddd_02"
 ---
 
 ###### 事件目的為核心設計模式 Domain-Driven Design

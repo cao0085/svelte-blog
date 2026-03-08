@@ -1,10 +1,10 @@
 ---
-title: "Domain-Driven - Outbox Message"
-date: "2025-06-23"
+title: "Domain-Driven 05 - Outbox Pattern"
+date: "2026-02-15"
 category: "software"
 subCategory: "Backend"
-tags: ["DDD", "backend", "design"]
-slug: "ddd_outbox"
+tags: ["DDD", "backend", "design", "csharp", "outbox"]
+slug: "ddd_05"
 ---
 ###### 拆分主副邏輯，同時保持資料同步性
 

@@ -1,27 +1,31 @@
 ---
-title: "DDD Architecture"
-date: "2026-02-04"
+title: "Domain-Driven 01 - Concepts"
+date: "2026-02-11"
 category: "software"
-subCategory: "Golang"
-tags: ["DDD", "backend", "go"]
-slug: "go_ddd"
+subCategory: "Backend"
+tags: ["DDD", "backend", "design", "go", "csharp"]
+slug: "ddd_01"
 ---
 
-###### DDD 複雜的是定義規則，模型出來後就是想辦法呵護直到寫入資料庫
+###### 核心概念就是自定義超多規則保護資料的正確性
 
 ---
 
-Domain Driven Design，分享我對這個概念的理解和是如何延伸出領域物件。
+### 資料驗證
 
-### 錯誤的資料
+修正已儲存的錯誤資料，成本遠高於在寫入前就將它攔下。系統會透過多層次的防護機制，從源頭降低錯誤發生的機率：
 
-當系統儲存錯誤資料，事後修正的成本遠高於寫入前擋下，所以會透過各種方式降低發生的機率：
+- ```UI Input Rule```: 即時回饋，引導使用者輸入符合基本格式的資料
+- ```Strongly Typed Language```: 在編譯期間就提醒開發人員型別錯誤
+- ```DB Column Type```: 利用資料庫本身的約束來防止不合法的資料寫入
 
-- ```UI Input Rule```: 讓使用者在輸入時就即時發現錯誤
-- ```Strongly Typed Language```: 在編譯期防止開發人員犯錯
-- ```DB Column Type```: 在儲存層防止不合法的資料寫入
+上述這些技術層面的限制，都無法處理業務邏輯（Business Logic），例如一個庫存管理系統要求 「庫存數量不可為負」：
 
-但這些只能防止資料型別的錯誤，並不能讓系統防止***"規則"***外的資料存入，所以還會需要添加一些規範。
+- ```UI Input Rule```: 無法防止程式邏輯計算後產生的負值
+- ```Strongly Typed Language```: 能確保 Quantity 是整數，卻無法約束減法運算的結果
+- ```DB Column Type```: 將欄位設為無符號整數，但仍可能因運算而寫入負值（或需額外使用觸發器）
+
+這些技術都無法表達「庫存不得為負」這條業務規則，因此需要這樣處理：
 
 ```go
 type Stock struct {
@@ -38,14 +42,14 @@ if Stock.Quantity - order < 0 {
 db.update(Stock.Quantity - order)
 ```
 
-上面的寫法會造成的問題就是，當系統中有 5 個流程可以 update 就會需要寫 5 次檢查，而這就是 DDD 想要解決的問題。
+上面寫法會造成的問題就是，當系統中有 5 個流程可以更新庫存時就會需要寫 5 次檢查，而這就是 DDD 想要解決的問題。
 
-### Domain Layer
+### 資料規則實體化
 
-把業務規則定義在模型上，任何地方要修改資料都必須經過模型驗證，不合法就拋錯從源頭保證資料的一致性。
+DDD 提倡將規則封裝在資料模型中，任何外部程式碼要修改資料，都必須透過模型提供的公開方法，由模型自身驗證規則並確保資料的一致性。
 
 ```go
-// 預購系統 Domain Model
+// Data Model
 type PreOrderStock struct {
     quantity int32
 }
@@ -56,7 +60,7 @@ func (s *PreOrderStock) Deduct(order int32) {
 ```
 
 ```go
-// 零售系統 Domain Model
+// Data Model
 type RetailStock struct {
     quantity int32
 }
@@ -70,11 +74,80 @@ func (s *RetailStock) Deduct(order int32) error {
 }
 ```
 
-也就是物件屬性幾乎都是 private 欄位，必須透過 func 來確保符合某種***"規則"***進行修改。壞處就是規則一但建立就很難更改，所有應用內的引用都會被影響到。
+屬性 quantity 欄位都設為私有，修改庫存的方法是呼叫 Deduct 方法，而方法內部則實作了各自對應的業務規則。任何使用此模型的地方都能確保規則被遵守，無需重複撰寫檢查邏輯。
 
-#### 物件實體
+### 描述物件
 
-DDD 主要由 Aggregate 和 Value Object 這兩個物件概念來描述、保護傳入的值符合我們的預期，用手機來舉例
+設計商業系統時經常需要處理 ***現實世界*** 中的物體，可以試想「小明的那支手機」可以如何被描述並紀錄在資料庫？若紀錄了「品牌」和「型號」足以完整描述的這支手機嗎？
+
+**Domain Driven Design** 核心就是如何精確地描述物件和會發生的行為，為了解決這個問題進而提出兩個主要概念：
+    - 值物件（Value Object）: 不具備獨立的身分，其意義來自於所含的屬性值
+    - 聚合（Aggregate）: 負責維護一群物件的整體一致性，同時又具有識別性
+
+#### Value Object
+
+拿手機的「螢幕尺寸」為例，真實世界並不存在螢幕尺寸為 1 的手機，於是可以將螢幕尺寸封裝成 ```Value Object```，在建構的當下就驗證資料的有效性：
+
+```csharp
+
+public class ScreenSize : ValueObject
+{
+    public decimal Inches { get; }
+
+    public ScreenSize(decimal inches)
+    {
+        if (inches <= 1) 
+            throw new ArgumentException("螢幕尺寸必須大於 1");
+        
+        Inches = inches;
+    }
+}
+
+// 使用方式
+var size = new ScreenSize(6.7m);  // 有效
+var invalidSize = new ScreenSize(0.05m); // 拋出例外
+```
+
+透過這樣的設計確保了任何一個 ScreenSize 存在系統內時就是合乎**規則**。當持續用這種方式描述組合起來的物件並分配一個識別碼，在系統內就稱之為**聚合**。
+
+#### Aggregate
+
+```csharp
+public class Phone : AggregateRoot
+{
+    // 唯一識別碼（例如 IMEI）
+    public string Imei { get; private set; } 
+    public string Brand { get; private set; }
+    public string Model { get; private set; }
+    public ScreenSize ScreenSize { get; private set; }
+
+    public Phone(string imei, string brand, string model, ScreenSize screenSize)
+    {
+        if (string.IsNullOrWhiteSpace(imei)) 
+            throw new ArgumentException("IMEI 不可為空");
+        
+        Imei = imei;
+        Brand = brand;
+        Model = model;
+        ScreenSize = screenSize ?? throw new ArgumentNullException(nameof(screenSize));
+    }
+
+    // 行為：更換螢幕（可加入額外規則）
+    public void ReplaceScreen(ScreenSize newScreenSize)
+    {
+        // 例如：只有特定型號允許更換螢幕的規則可在此實作
+        ScreenSize = newScreenSize ?? throw new ArgumentNullException(nameof(newScreenSize));
+    }
+}
+
+// 使用方式
+var screen = new ScreenSize(6.7m);
+var phone = new Phone("123456789012345", "Apple", "iPhone 14", screen);
+```
+
+透過這樣的設計，任何一支 Phone 物件從建立的那一刻起，就擁有合法的螢幕尺寸，並且透過 Imei 與其他手機區別開來。當需要修改螢幕尺寸時，只能呼叫 ReplaceScreen 方法確保同樣經過驗證等等，這個就是 DDD 強調「描述物件」的用意。
+
+<!--  -->
 
 #### Value Object
 
@@ -171,7 +244,7 @@ DDD 主要由 Aggregate 和 Value Object 這兩個物件概念來描述、保護
 
     *Interface 本身不是 Value Object 的建立手段。Value Object 最終還是透過建構子或工廠方法建立，Interface 解決的是「建立之前，怎麼取得與驗證外部資料」這件事*
 
-<!-- 
+<!--
 ### temp
 # Aggregate 持久化與 Unit of Work
 

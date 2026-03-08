@@ -1,10 +1,10 @@
 ---
-title: "Domain-Driven - Mediator"
-date: "2025-06-22"
+title: "Domain-Driven 04 - MediatR & MassTransit"
+date: "2026-02-14"
 category: "software"
 subCategory: "Backend"
-tags: ["DDD", "backend", "design"]
-slug: "ddd_mediator"
+tags: ["DDD", "backend", "design", "csharp", "mediator"]
+slug: "ddd_04"
 ---
 ###### 事件驅動搭配中介者模式
 

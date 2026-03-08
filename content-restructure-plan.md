@@ -6,7 +6,7 @@
 content/
 ├── Algorithm/        ← 保留不動
 ├── Angular/          ← 原 Angular20/（改名）
-├── Backend/          ← 保留，定位：library/framework 用法（EFCore、HttpCancel）
+├── Backend/          ← 保留，定位：library/framework 用法 + DDD/架構類文章
 ├── Database/         ← 保留，定位：SQL/協議/一致性概念
 ├── Frontend/         ← 原 Fronted/（修正拼字）
 ├── Golang/           ← 保留不動
@@ -28,37 +28,19 @@ content/
 
 ---
 
-### Angular/（原 Angular20/）— 改目錄名
-
-| 原檔名 | 現有標題 | 建議新標題 | 備註 |
-|--------|----------|-----------|------|
-| angular20_API_01.md | RxJS Observable | RxJS Observable | OK |
-| angular20_API_02.md | HttpClient | HttpClient & HttpResource | 加 HttpResource 更清楚 |
-| angular20_Forms.md | Forms | Reactive Forms | 加 Reactive 更具體 |
-| angular20_Signal.md | Signal | Signal - State Management | OK（可加副標） |
-| angular20_tabService.md | TabService | TabService - Multi-Tab Management | OK |
-| angular_basic_value.md | Value 1 | Value Passing - Input / Output / ViewChild | 比 "Value 1" 清楚 |
-| angular_basic_value_02.md | Value 2 | Value Passing - Signal / RxJS / Computed | 比 "Value 2" 清楚 |
-| angular_router.md | Basic Router | Angular Router - Basic | OK |
-| angular20_AuthRoute_01.md | Auth & Route 1 | Auth & Route - Database & RBAC Design | 系列文 |
-| angular20_AuthRoute_02.md | Auth & Route 2 | Auth & Route - Service & Guard | |
-| angular20_AuthRoute_03.md | Auth & Route 3 | Auth & Route - Sidebar UI/UX | |
-| angular20_RouteReuseStrategy_01.md | RouteReuseStrategy 1 | RouteReuseStrategy - Concepts | |
-| angular20_RouteReuseStrategy_02.md | RouteReuseStrategy 2 | RouteReuseStrategy - Implementation | |
-
-**合併建議：**
-
-- `AuthRoute 01/02/03`：主題連貫，可考慮合成一篇（也可維持）
-- `RouteReuseStrategy 01/02`：同上，可合可維持
-
----
-
-### Backend/（定位：library/framework 說明）— 移出架構類後只剩 2 篇
+### Backend/（定位：library/framework 用法 + DDD/架構類文章）
 
 | 原檔名 | 現有標題 | 建議新標題 | 備註 |
 |--------|----------|-----------|------|
 | EFCore_Codefirst.md | EF Core - CodeFirst | EF Core - Code First Migration | 加 Migration 更清楚 |
 | HttpCancel.md | Canceling Http Requests | Canceling HTTP Requests - CancellationToken | OK |
+| DDD_01.md | DDD Architecture | Domain-Driven 01 - Architecture & Core Concepts | 從 Golang/ 移入 ✅ |
+| DDD_02.md | Domain-Driven - Basic | Domain-Driven 02 - Layer Structure | 原 DDD_layer.md ✅ |
+| DDD_03.md | Domain-Driven - Basic | Domain-Driven 03 - Domain Object Design | 原 DDD_Domain.md，內容補寫 ✅ |
+| DDD_04.md | Domain-Driven - Mediator | Domain-Driven 04 - MediatR & MassTransit | 原 DDD_mediator.md ✅ |
+| DDD_05.md | Domain-Driven - Outbox Message | Domain-Driven 05 - Outbox Pattern | 原 DDD_outbox.md ✅ |
+| FSM.md | Finite-State Machine | How to Design a Finite-State Machine | |
+| BackgroudService.md | Base Backgroud Service | How to Build a Background Service | 修正拼字 → BackgroundService.md |
 
 ---
 
@@ -102,7 +84,6 @@ content/
 
 | 原檔名 | 現有標題 | 建議新標題 | 備註 |
 |--------|----------|-----------|------|
-| DDD_01.md | DDD Architecture | DDD Architecture in Go | 加 "in Go" 更清楚 |
 | Redis.md | Redis | Redis with Go | 加 "with Go" |
 | summary.md | Golang High Concurrency Summary | Golang - High Concurrency Summary | 加連字號 |
 
@@ -121,17 +102,6 @@ content/
 ---
 
 ### How-To/（新建）
-
-#### 來自 Backend/（架構類文章）
-
-| 原檔名 | 現有標題 | 建議新標題 | 備註 |
-|--------|----------|-----------|------|
-| DDD_Domain.md | Domain-Driven - Basic | How to Design DDD Domain Layer | slug 重複，需修正（見下） |
-| DDD_layer.md | Domain-Driven - Basic | How to Structure DDD Layers | 原標題與 DDD_Domain 相同 |
-| DDD_mediator.md | Domain-Driven - Mediator | How to Use MediatR & MassTransit | |
-| DDD_outbox.md | Domain-Driven - Outbox Message | How to Implement Outbox Pattern | |
-| FSM.md | Finite-State Machine | How to Design a Finite-State Machine | |
-| BackgroudService.md | Base Backgroud Service | How to Build a Background Service | 修正拼字 → BackgroundService.md |
 
 #### 來自 Devlop-Note/（全部移入）
 
@@ -160,7 +130,7 @@ content/
 
 ## 關鍵問題（執行前需處理）
 
-1. **DDD_Domain.md 和 DDD_layer.md 的 slug 相同（ddd_layer）** — 其中一個需改 slug，否則路由會衝突
+1. ~~**DDD_Domain.md 和 DDD_layer.md 的 slug 相同（ddd_layer）**~~ → 已解決，全部改為 ddd_01 ~ ddd_05 ✅
 2. **BackgroudService.md 拼字** — 改為 `BackgroundService.md`
 3. **Paxon → Paxos** 拼字（選擇性修正）
 
@@ -168,13 +138,14 @@ content/
 
 ## 執行步驟
 
-1. 建立 `How-To/` 目錄
-2. 移動 Backend 架構類文章 → `How-To/`
-3. 移動 `Devlop-Note/` 全部 → `How-To/`，刪除 `Devlop-Note/`
-4. 重命名 `Angular20/` → `Angular/`
-5. 重命名 `Fronted/` → `Frontend/`
-6. 修改各文章 frontmatter（title、category、修正重複 slug）
-7. 必要時重新命名 md 檔名（如 BackgroudService.md）
+1. ~~移動 `Golang/DDD_01.md` → `Backend/`，更新 frontmatter~~ ✅
+2. ~~修改 DDD 系列文章 frontmatter（title、slug ddd_01~05、date 遞增）、檔名改為 DDD_01~05.md~~ ✅
+3. 修改其他 Backend 文章 frontmatter（BackgroudService.md 改名）
+3. 建立 `How-To/` 目錄
+4. 移動 `Devlop-Note/` 全部 → `How-To/`，刪除 `Devlop-Note/`
+5. 重命名 `Angular20/` → `Angular/`
+6. 重命名 `Fronted/` → `Frontend/`
+7. 修改其餘文章 frontmatter（title、category）
 
 ---
 

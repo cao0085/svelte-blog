@@ -1,5 +1,5 @@
 ---
-title: "Base Backgroud Service"
+title: "Backgroud Service"
 date: "2025-09-25"
 category: "software"
 subCategory: "Backend"
