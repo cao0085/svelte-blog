@@ -6,7 +6,7 @@ subCategory: "Frontend"
 tags: ["css", "fronted", "web"]
 slug: "webdesign"
 ---
-###### [U.S. Web Design System](https://designsystem.digital.gov/)
+###### 讓設計師與工程人員共同制訂一套設計標準 [U.S. Web Design System](https://designsystem.digital.gov/)
 
 ---
 

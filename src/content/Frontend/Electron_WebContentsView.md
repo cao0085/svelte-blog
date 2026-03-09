@@ -6,19 +6,19 @@ subCategory: "Frontend"
 tags: ["Electron", "fronted", "web"]
 slug: "electron-01"
 ---
-###### 用 Electron 的 WebContentsView 實作編輯器
+###### 理解 Electron 的新API WebContentsView
 
 ---
 
-### 主要架構
+Electron 是基於 **Node.js** 和 **Chromium** 建構而成：
 
-Electron 基於 **Node.js** 和 **Chromium** 建構而成：
 - Node.js：提供後端能力，可以存取檔案系統、作業系統 API 等原生功能
 - Chromium：負責渲染使用者界面，提供現代化的網頁技術支援
 - 主進程 (Main Process)：負責管理應用程式生命週期、建立視窗、處理系統事件
 - 渲染進程 (Renderer Process)：每個視窗或 WebContentsView 都運行在獨立的渲染進程中
 
-### WebContentsView
+#### WebContentsView
+
 可以想像成一個獨立的瀏覽器分頁：
 - 每個 View 運行在獨立的渲染進程中
 - 進程之間互相隔離，提升穩定性與安全性
@@ -96,21 +96,15 @@ async function createWCV(viewType, isIntegration = false, isIsolation= true) {
 
 目前我是用透過 `_isSingleton` 和 `_inAppCustomType` 來自訂屬性來標記 View，有點卡卡以後可能會再更新
 
-<br>
-
 ### Inter-Process Communication
 
 基於安全性考量，Renderer Process 運行在沙盒環境中，無法直接存取系統資源。當需要執行特權操作（如檔案讀寫、系統 API 呼叫）時，必須透過 IPC 與 Main Process 通信。而實踐的方式類似前端的全域資料管理，都是透過**統一的接口**來管理和存取共享資源。
-
-<br>
 
 React 為例：
 
 - 整個應用共用一個 Singleton Data（例如 Context 或 Redux Store）
 - 需要提供 `update` API 讓元件更新資料
 - 某個 Renderer View 要使用時，就要 `import` 或透過事件反向 callback 注入
-
-<br>
 
 Electron IPC：
 - Main Process 管理共享資料和特權操作

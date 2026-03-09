@@ -6,7 +6,7 @@ subCategory: "Frontend"
 tags: ["css", "fronted", "web"]
 slug: "css"
 ---
-###### [U.S. Web Design System](https://designsystem.digital.gov/)
+###### 記錄一下 Element 不然常常蝦寫tag [U.S. Web Design System](https://designsystem.digital.gov/)
 
 ---
 

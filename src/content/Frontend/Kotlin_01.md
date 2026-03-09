@@ -106,6 +106,7 @@ navigationCompose = "2.8.6"
 ### 入口設定
 
 Android 會自己抓，AndroidManifest.xml 裡面的 Activity LAUNCHER 相關當作 APP 啟動的入口，然後根據開發模式設計成
+
 -  Activity + Navigation 一個主視窗管理分頁
 - 多個 Activity
 
