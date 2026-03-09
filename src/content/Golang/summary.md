@@ -1,7 +1,7 @@
 ---
 title: "Golang High Concurrency Summary"
 date: "2026-02-04"
-category: "software"
+category: ""
 subCategory: "Golang"
 tags: ["DDD", "backend", "go"]
 slug: "go-high-concurrency-Summary"

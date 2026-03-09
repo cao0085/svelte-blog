@@ -1,18 +1,19 @@
 ---
-title: "LeetCode SQL 50"
+title: "RDBMS - LeetCode SQL 50"
 date: "2025-07-24"
 category: "software"
-subCategory: "Database"
+subCategory: "DataStorage"
 tags: ["database", "leetcode", "sql"]
-slug: "db_leetcode50"
----
-###### 練習練習練習 [SQL 50](https://leetcode.com/studyplan/top-sql-50/)
-
+slug: "db-leetcode50"
 ---
 
-### [570. Manager...](https://leetcode.com/problems/managers-with-at-least-5-direct-reports/description/?envType=study-plan-v2&envId=top-sql-50)
+###### [LeetCode SQL 50](https://leetcode.com/studyplan/top-sql-50/) 邊寫邊整理常見查詢技巧
 
-GROUP BY + HAVING 選出符合條件值當作 where 條件
+---
+
+### [570. Managers with at Least 5 Direct Reports](https://leetcode.com/problems/managers-with-at-least-5-direct-reports/description/?envType=study-plan-v2&envId=top-sql-50)
+
+**技巧：** `GROUP BY` + `HAVING` 先聚合出符合條件的 ID，再用子查詢當作 `WHERE` 條件。
 
 ```sql
 SELECT name
@@ -26,12 +27,14 @@ WHERE id IN (
 );
 ```
 
+---
+
 ### [1934. Confirmation Rate](https://leetcode.com/problems/confirmation-rate/description/?envType=study-plan-v2&envId=top-sql-50)
 
-用 GROUP BY + function 做出一張暫時表單 join 到主表，再處理 IFNULL 的邏輯
+**技巧：** 先用子查詢 + `GROUP BY` 做出確認率暫時表，再 `LEFT JOIN` 回主表，用 `IFNULL` 處理無紀錄的用戶。
 
 ```sql
-SELECT s.user_id, 
+SELECT s.user_id,
        IFNULL(aa.confirmation_rate, 0) AS confirmation_rate
 FROM Signups AS s
 LEFT JOIN (
@@ -44,32 +47,32 @@ LEFT JOIN (
       ) AS confirmation_rate
     FROM Confirmations
     GROUP BY user_id
-) AS aa
-ON s.user_id = aa.user_id;
+) AS aa ON s.user_id = aa.user_id;
 ```
+
+---
 
 ### [1193. Monthly Transactions I](https://leetcode.com/problems/monthly-transactions-i/description/?envType=study-plan-v2&envId=top-sql-50)
 
-熟悉在SELECT欄位可一起使用到的語法
+**技巧：** `CASE WHEN` 可在 `SELECT` 內與 `SUM` 搭配做條件加總；`DATE_FORMAT` 格式化日期作為群組鍵。
 
 ```sql
-SELECT 
+SELECT
     DATE_FORMAT(trans_date, '%Y-%m') AS month,
     country,
     COUNT(*) AS trans_count,
     SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
     SUM(amount) AS trans_total_amount,
     SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount
-FROM 
-    Transactions
-GROUP BY 
-    DATE_FORMAT(trans_date, '%Y-%m'),
-    country;
+FROM Transactions
+GROUP BY DATE_FORMAT(trans_date, '%Y-%m'), country;
 ```
+
+---
 
 ### [1174. Immediate Food Delivery II](https://leetcode.com/problems/immediate-food-delivery-ii/?envType=study-plan-v2&envId=top-sql-50)
 
-先用 GROUPBY + MIN(DATE) 找到顧客的首筆訂單，但因為是聚合函數，無法直接帶出該筆訂單的 delivery_id ，再用 Duplicate ID key 找出該對應的原始表欄位。
+**技巧：** 先用 `GROUP BY` + `MIN(order_date)` 找到每位顧客的首筆訂單日期，再用 `(customer_id, order_date)` 複合條件篩回原始表。
 
 ```sql
 SELECT
@@ -85,27 +88,29 @@ WHERE (customer_id, order_date) IN (
 );
 ```
 
+---
+
 ### [1978. Employees Whose Manager Left the Company](https://leetcode.com/problems/employees-whose-manager-left-the-company/?envType=study-plan-v2&envId=top-sql-50)
 
-利用 left join 會填補 null 的特性去篩選出欄位
+**技巧：** `LEFT JOIN` 後篩選右表為 `NULL`，找出「關聯對象不存在」的資料。
 
 ```sql
-select e1.employee_id
-from (
-    select *
-    from Employees
-    where salary < 30000 AND manager_id is not null
-    order by employee_id
-) as e1
-left join Employees as e2
-on e1.manager_id = e2.employee_id
-where e2.employee_id is null
-order by employee_id asc
+SELECT e1.employee_id
+FROM (
+    SELECT *
+    FROM Employees
+    WHERE salary < 30000 AND manager_id IS NOT NULL
+) AS e1
+LEFT JOIN Employees AS e2 ON e1.manager_id = e2.employee_id
+WHERE e2.employee_id IS NULL
+ORDER BY employee_id ASC;
 ```
+
+---
 
 ### [1341. Movie Rating](https://leetcode.com/problems/movie-rating/description/?envType=study-plan-v2&envId=top-sql-50)
 
-取同一個變數名稱 results + 練習 LIMIT + 雙排序
+**技巧：** 兩個獨立查詢用 `UNION ALL` 合併，欄位命名相同即可；搭配多欄 `ORDER BY` 處理平手情況。
 
 ```sql
 (
@@ -128,9 +133,11 @@ UNION ALL
 );
 ```
 
+---
+
 ### [602. Friend Requests II: Who Has the Most Friends](https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/description/?envType=study-plan-v2&envId=top-sql-50)
 
-總數可直接用 requester_id + accepter_id 加總來處理，所以先用 UNION ALL 攤平就好處理了
+**技巧：** 雙向關係（發送者 + 接受者）都算朋友，用 `UNION ALL` 攤平後再 `GROUP BY` 統計。
 
 ```sql
 SELECT id, COUNT(*) AS num

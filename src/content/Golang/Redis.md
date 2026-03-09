@@ -1,7 +1,7 @@
 ---
 title: "Redis"
 date: "2026-02-06"
-category: "software"
+category: ""
 subCategory: "Golang"
 tags: ["DDD", "backend", "go"]
 slug: "go_redis"
