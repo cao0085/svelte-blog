@@ -1,7 +1,7 @@
 ---
 title: "金錢多重宇宙（下）"
 date: "2026-02-15"
-category: "book"
+category: ""
 subCategory:  "Finance"
 tags: ["read", "blog", "Money"]
 slug: "nackedmoney2"
