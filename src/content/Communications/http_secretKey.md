@@ -1,54 +1,70 @@
 ---
-title: "Http 加密"
+title: "Http 加密與簽名驗證"
 date: "2025-09-23"
 category: "software"
-subCategory: "Internet"
+subCategory: "Communications"
 tags: ["Http", "tcp", "backend"]
 slug: "http_secretKey"
 ---
-
+###### 紀錄一些加密的選擇
 ---
 
-### SHA256 - 雙方同步加密
+HTTPS 能保護傳輸過程不被竊聽或竄改，但無法確認「請求來自誰」。簽名驗證的目的是讓接收方能確認：
 
-雙方約定使用同一組字串、演算法生成【HASH】當作簽名，一樣就當作比對成功
+1. **來源身份**：請求確實來自授權的發送方
+2. **內容完整**：請求內容沒有被竄改
+3. **防止重放**：加入時間戳，避免攻擊者截取請求後重複發送
 
-實作:
+### HMAC-SHA256 簽名驗證
 
-1. 雙方私下約定一組 KEY 都用 HMAC-SHA256 加密
-2. 發送方在 Header 加入生成的【簽名】、【時間戳】，可以把【時間戳】當成是方便使用和驗證的變數
-3. 接收方先拿明文的【時間戳】檢查是否在有效期間，接者用 KEY+TIME 生成簽名
-4. 若產出值一樣就代表成功
+雙方約定使用同一組 Key 和演算法產生簽名，接收方重新計算後比對是否一致，注意這是雜湊（Hash）比對，不是加密解密。
+
+#### 流程
+
+1. 雙方私下約定一組 Secret Key
+2. 發送方用 `HMAC-SHA256(timestamp + secretKey)` 產生簽名
+3. 發送方在 Header 帶上簽名和時間戳
+4. 接收方用相同方式產生簽名，比對是否一致
+5. 檢查時間戳是否在有效範圍內（防止重放攻擊）
+
+#### 發送方
 
 ```js
-const secretKey = function HMAC-SHA256(TimeStemp + Key) // 產生密鑰
-header : secretKey
-header : TimeStemp
-// https request -> Service Server
+const timestamp = Math.floor(Date.now() / 1000).toString()
+const signature = HMAC_SHA256(timestamp + secretKey)
+
+// Headers
+// X-Signature: signature
+// X-Timestamp: timestamp
 ```
 
-```csharp
-// Service Server
+#### 接收方
 
+```csharp
 private bool ValidateSignature(string timestamp, string receivedSignature)
 {
-    var secretKey = _configuration["ApiSecurity:SecretKey"]; // 發給對方的KEY
+    var secretKey = _configuration["ApiSecurity:SecretKey"];
     if (string.IsNullOrEmpty(secretKey))
     {
         _logger.LogError("未設定 SecretKey");
         return false;
     }
 
-    var dataToSign = timestamp + secretKey;
-    var expectedSignature = ComputeHmacSha256(dataToSign, secretKey); // 用同一個加密演算法生成簽名
+    // 先驗證時間戳
+    if (!ValidateTimestamp(timestamp))
+    {
+        _logger.LogWarning("時間戳已過期");
+        return false;
+    }
 
-    // 比對有無一樣、不做解密
-    return expectedSignature.Equals(receivedSignature, StringComparison.OrdinalIgnoreCase); 
+    // 用相同方式產生簽名
+    var dataToSign = timestamp + secretKey;
+    var expectedSignature = ComputeHmacSha256(dataToSign, secretKey);
+
+    // 比對簽名是否一致（不是解密）
+    return expectedSignature.Equals(receivedSignature, StringComparison.OrdinalIgnoreCase);
 }
 
-/// <summary>
-/// 計算 HMAC-SHA256 簽名
-/// </summary>
 private string ComputeHmacSha256(string data, string key)
 {
     using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(key));
@@ -56,18 +72,30 @@ private string ComputeHmacSha256(string data, string key)
     return Convert.ToHexString(hashBytes).ToLower();
 }
 
+private bool ValidateTimestamp(string timestamp)
+{
+    if (!long.TryParse(timestamp, out var requestTime))
+        return false;
+
+    var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    var maxDifference = 3 * 60; // 3 分鐘
+
+    return Math.Abs(currentTime - requestTime) <= maxDifference;
+}
 ```
 
-### RSA - 約定加密
+---
 
-金鑰值是由RSA演算法生成一對【Private / Public】Key，雙方用KEY加解密和辨識。
+### RSA 非對稱加密
+
+接收方產生一對公私鑰，將公鑰交給發送方。金鑰值是由 RSA 演算法生成一對【Private / Public】Key，接收方用私鑰解密和辨識。
 
 實作:
 
-1. 接收方私下提供一組 PublicKey 給發送方，自己維護一組 PrivateKey
-2. 發送方用 PublicKey + RSA 去加密字串如 "ServerName|TimeStamp" 後把值放到 Header
-3. 接收方拿到 Header 值後使用 PrivateKey + RSA 去解密取得 "ServerName|TimeStamp"
-4. 接收方可以自己去驗證 ServerName 是否在名單 & TimeStamp 等邏輯
+1. 接收方產生 RSA 金鑰對，將 Public Key 提供給發送方
+2. 發送方用 Public Key 加密 `ServerName|Timestamp` 後放到 Header
+3. 接收方用 Private Key 解密，取得內容
+4. 驗證 ServerName 是否在允許清單、Timestamp 是否有效
 
 ```csharp
 public override void OnActionExecuting(ActionExecutingContext context)
@@ -228,3 +256,11 @@ private bool ValidatePublicKey(string publicKey, string[] validPublicKeys)
     return validPublicKeys.Contains(publicKey);
 }
 ```
+
+---
+
+### 選擇
+
+- 內部服務互相呼叫 → HMAC-SHA256，簡單快速
+- 對外開放 API、多個第三方接入 → RSA，每個第三方可以有自己的識別，不用共享同一把 Key
+- 更嚴謹的場景 → 可以考慮 JWT 或 OAuth 2.0，有更完整的標準規範

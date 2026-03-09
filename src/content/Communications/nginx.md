@@ -2,25 +2,29 @@
 title: "Nginx"
 date: "2025-11-27"
 category: "software"
-subCategory: "Internet"
+subCategory: "Communications"
 tags: ["http", "nginx"]
 slug: "nginx"
 ---
-###### 公司內部開發的時候用看看Nginx，就不用搬筆電跑來跑去
+###### 用 Nginx + Docker 建立本地反向代理，方便非技術人員測試和預覽
 ---
 
+### 使用場景
 
+- 本地開發時，讓非技術人員透過區網 IP 預覽網站
+- 模擬正式環境的反向代理結構
+- 解決前後端分離開發時的 CORS 問題
 
+---
 
-可以這樣配置測試環境
+### 環境配置步驟
 
-1. 本地先 run 一個要被訪問的 Server
-2. 配置 nginx.conf，因為 nginx Server 是部屬在 docker，所以要使用 host.docker.internal
-3. docker run 一個 nginx container
-4. 先測看看 localhost 不帶後贅是否可以連到預設的 nginx page
-5. 再看不同裝置區網內連線可不可以(--ipConfig IPv4 位址)，能否連接到上述預設 page
-6. 再測試反向代理是否轉發正確
-
+1. 本地啟動要被代理的 Server（假設跑在 `localhost:4041`）
+2. 編寫 `nginx.conf` 設定反向代理
+3. 用 Docker 跑 Nginx container
+4. 測試 `localhost` 是否連到 Nginx 預設頁面
+5. 測試區網內其他裝置能否連線（用 `ipconfig` 查 IPv4 位址）
+6. 測試反向代理是否正確轉發
 
 ``` dockerfile
 # Use the specific Ubuntu 22.04 image
@@ -38,7 +42,12 @@ docker build -t my-nginx-proxy .
 docker run -d -p 80:80 --name my-proxy my-nginx-proxy
 ```
 
-nginx.conf (假設 Server 部署在 local4041 )
+---
+
+### nginx.conf
+
+假設後端 Server 跑在本機的 port 4041：
+
 ```conf
 events {
     worker_connections 1024;
@@ -70,9 +79,7 @@ http {
 }
 ```
 
-上面大概就是基礎的轉發功能，剩下的就是看專案當初的環境配置了，nginx 本身也可以 subdomain 配置，可以用來解決 cors 的問題。
-
-其餘可進階的配置
+上面是基礎轉發功能，nginx 本身也可以 subdomain 配置，可以用來解決 cors 的問題等。其餘可進階的配置等有需求再來做看看
 
 - SPA (單頁應用) 路由設定
 - 靜態資源快取 (Browser Caching)

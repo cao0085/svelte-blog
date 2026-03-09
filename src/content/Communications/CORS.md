@@ -1,23 +1,23 @@
 ---
-title: "CORS & SOP"
+title: "Browser SOP & CORS"
 date: "2025-10-27"
 category: "software"
-subCategory: "Internet"
+subCategory: "Communications"
 tags: ["http", "SOP", "CORS"]
 slug: "cors"
 ---
-常常看到 CORS 今天才知道有 SOP
+###### 常常看到 CORS 今天才知道有 SOP
 ---
 
-瀏覽器原生就有一個預設的安全機制叫做 `Same-Origin Policy (SOP)`，它只允許網頁接收來自相同來源（Same Origin）的資料。
+瀏覽器預設的安全機制叫做 `Same-Origin Policy (SOP)`，它限制網頁腳本只能讀取來自同源的回應資料。雖然提升了安全性，但在實務上會造成問題：前後端通常各自運行在不同的 port（例如前端 `localhost:5173`、後端 `localhost:3000`）。傳統的解決方式是將前端打包成靜態檔，由後端統一提供服務確保同源，但這在開發階段很不方便。所以衍伸出 `CORS（Cross-Origin Resource Sharing）` 讓後端可以透過 HTTP 標頭明確授權特定來源的跨域存取，解決開發時前後端分離的問題。
 
-這個限制在實務上會造成一些不便：如果前後端分別部署在不同的 Server 上，前端就無法直接向後端發送請求取得資料。傳統的解決方式是讓後端先接收外部資料，再轉發給前端。
-
-為了突破這個限制，讓跨來源的資料交換更方便，`CORS（Cross-Origin Resource Sharing）` 機制因此誕生。
+- SOP 判斷「同源」的標準是 protocol + domain + port 三者都相同
+- CORS 是由後端設定的（透過 Access-Control-Allow-Origin 等標頭），不是前端能單方面突破的
+- 對於某些「非簡單請求」，瀏覽器會先發送 preflight（OPTIONS）請求確認伺服器是否允許
 
 ### Same-Origin Policy
 
-主要用來防範 **跨站請求偽造（CSRF）** 等攻擊。由於瀏覽器發送請求時會自動帶上當前網站的 Origin，且 JavaScript 無法隨意偽造這個值，因此 SOP 可以有效防止惡意網站冒用使用者身份。
+主要防範 **跨站請求偽造（CSRF）** 等攻擊。由於瀏覽器發送請求時會自動帶上當前網站的 Origin，且無法透過 JavaScript 隨意偽造這個值，因此 SOP 可以有效防止網站假冒用使用者身份。
 
 假設你登入了銀行網站 A，此時瀏覽器會儲存 A 網站的 Cookie（包含登入憑證）。如果沒有 SOP 保護，當你訪問惡意網站 B 時，B 網站的 JavaScript 就能向 A 銀行發送請求，並自動帶上你的登入 Cookie，進而盜取資料或進行轉帳。有了 SOP，瀏覽器會阻擋 B 網站讀取來自 A 網站的回應資料。
 
@@ -35,22 +35,20 @@ slug: "cors"
 
 ### Cross-Origin Resource Sharing
 
-當進入 CORS 流程時，瀏覽器會先檢查該請求是簡單請求還是預檢請求。
+當進入 CORS 流程時，瀏覽器會先檢查該請求是【簡單請求】還是【預檢請求】。
 
-為什麼要分兩種請求？主要是為了保護舊的後端伺服器。簡單請求通常只是讀取資料，比較安全，可以直接送出。但如果是可能修改資料的請求（如 PUT、DELETE）或帶有自訂 Header，就需要先用預檢確認後端有支援 CORS，避免對不支援的舊伺服器造成意外影響。
+分兩種請求的用意是為了保護舊後端伺服器。簡單請求只是讀取資料可以直接送出，但如果是修改資料的請求（如 PUT、DELETE）或帶有 **自訂 Header** 就需要先用預檢確認後端有無支援 CORS，避免對不支援的舊伺服器造成意外影響。
 
-**簡單請求 (Simple Request)**
+#### 簡單請求 (Simple Request)
 
-符合以下條件的請求會被視為簡單請求：
-- HTTP Method 為 `GET`、`HEAD` 或 `POST`
+簡單請求會直接送出，伺服器透過回應 Header 告知瀏覽器是否允許該跨來源請求。符合以下條件的請求會被視為簡單請求：
+- HTTP Method 為 `GET`、`HEAD` 或 `POST`?
 - Content-Type 只能是 `application/x-www-form-urlencoded`、`multipart/form-data` 或 `text/plain`
 - 沒有自訂的 Header
 
-簡單請求會直接送出，伺服器透過回應 Header 告知瀏覽器是否允許該跨來源請求。
+#### 預檢請求 (Preflight Request)
 
-**預檢請求 (Preflight Request)**
-
-不符合簡單請求條件的請求，瀏覽器會先發送一個 `OPTIONS` 方法的預檢請求，詢問伺服器是否允許實際請求。只有當預檢通過後，才會發送真正的請求。
+瀏覽器會先發送一個 `OPTIONS` 方法的預檢請求，詢問伺服器是否允許實際請求。只有當預檢通過後，才會發送真正的請求。
 
 ```md
     瀏覽器發送 OPTIONS 請求
@@ -63,17 +61,15 @@ slug: "cors"
     取得回應      顯示 CORS 錯誤
 ```
 
-**常見的 CORS Headers**
+### 常見的 CORS Headers
 
-伺服器端需要設定的主要 Headers：
+伺服器(後端)需要設定的主要 Headers：
 
 - `Access-Control-Allow-Origin`: 指定允許的來源，可設為特定網域或 `*`（所有來源）
 - `Access-Control-Allow-Methods`: 允許的 HTTP 方法，如 `GET, POST, PUT, DELETE`
 - `Access-Control-Allow-Headers`: 允許的自訂 Headers
 - `Access-Control-Allow-Credentials`: 是否允許攜帶憑證（如 Cookie）
 - `Access-Control-Max-Age`: 預檢請求的快取時間（秒）
-
-**範例設定**
 
 ```javascript
 // Node.js Express 範例
@@ -90,11 +86,9 @@ app.use((req, res, next) => {
 });
 ```
 
-分兩種請求主要是保護舊的後端伺服器。簡單請求通常只是讀取資料，可以直接送出。但如果是可能修改資料的請求（如 PUT、DELETE）或帶有自訂 Header，就需要先用預檢確認後端有支援 CORS，避免對不支援的舊伺服器造成意外影響。
+#### 測試
 
-**實際測試 CORS**
-
-架好後端後，用瀏覽器打開任意網站（例如 `https://policy.medium.com/medium-terms-of-service-9db0094a1e0f`），開啟開發者工具的主控台執行：
+後端設定好後，就可以用瀏覽器打開任意網站（例如 `https://policy.medium.com/medium-terms-of-service-9db0094a1e0f`）開啟開發者工具的主控台執行：
 
 ```js
 fetch('http://127.0.0.1:8080/api', {})
@@ -102,17 +96,14 @@ fetch('http://127.0.0.1:8080/api', {})
   .then(d => console.log(d))
 ```
 
-此時前端會看到 CORS 錯誤，但如果觀察後端 Log，會發現請求有成功並回應，只是瀏覽器阻擋了回應。
-
-回到瀏覽器切換到「網路」面板，找到這個請求，查看「要求標頭」中的 `Origin` 欄位（例如 `https://policy.medium.com`）這就是瀏覽器自動帶上的來源網域。回到後端程式碼，加上允許的來源並重啟：
+此時前端會看到 CORS 錯誤，但觀察後端 Log 其實會發現請求有成功並回應，只是瀏覽器端阻擋住回應。這時回到瀏覽器切換到「網路」面板，找到這個請求，查看「要求標頭」中的 `Origin` 欄位（例如 `https://policy.medium.com`）這就是瀏覽器自動帶上的來源網域。回到後端程式碼，加上允許的來源並重啟：
 
 ```golang
 w.Header().Set("Access-Control-Allow-Origin", "https://policy.medium.com") // 允許特定網域
 w.Header().Set("Access-Control-Allow-Origin", "*") // 允許所有來源
 ```
 
-重新執行 fetch，就可以成功取得資料了。
-
+重新執行就可以成功取得資料。
 
 **完整程式碼**
 
