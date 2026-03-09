@@ -1,8 +1,8 @@
 ---
-title: "Website Previewer"
+title: "Website Template"
 date: "2025-10-21"
 category: "software"
-subCategory: "專案"
+subCategory: "Side Project"
 tags: ["react", "typescript", "redux"]
 slug: "base-web-design"
 ---
@@ -11,7 +11,7 @@ slug: "base-web-design"
 
 ---
 
-主要是每次要做新網站，都要重複安裝一些套件和狀態管理設計，所以決定設計成一個整合型範本專案。好處是這個專案可以一直留著當作母版範本持續優化，同時當需要正式部屬時開時，複製一份範本再刪掉不需要的 views 就能脫鉤成為全新的獨立專案。
+做網站久了會累積出習慣的架構：常用套件、狀態管理模式、資料夾結構等。與其每次新專案都重新設定，不如維護一個 **Starter Template**，把這些基礎建設都整合進去。需要開新專案時，複製一份 Template，刪掉不需要的頁面，就能快速脫鉤成獨立專案，同時 Template 本身也能持續優化。
 
 ### 專案架構
 

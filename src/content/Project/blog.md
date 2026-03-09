@@ -2,7 +2,7 @@
 title: "Svelte Blog"
 date: "2025-09-09"
 category: "software"
-subCategory: "專案"
+subCategory: "Side Project"
 tags: ["svelte", "blog", "markdown"]
 slug: "svelteblog"
 ---
@@ -11,9 +11,9 @@ slug: "svelteblog"
 
 ---
 
-我第一個專案就是套 Jekyll + GitHub Pages 架 Blog ，有朋友推薦可以玩玩看 Svelte，就決定拿來就架一個文章模板網站，也順手把 Blog 搬過來。
+接觸軟體開發第一個專案就是套 Jekyll + GitHub Pages 架 Blog ，有朋友推薦可以玩玩看 Svelte，就決定拿來就架一個文章模板網站，也順手把 Blog 搬過來。
 
-### 專案架構評估
+### 架構評估
 
 有傳說搜尋引擎對於靜態 HTML 的權重比較高，所以推薦文字內容為主的網站使用靜態網站的形式，但傳統靜態網站的缺點是需要維護多張 HTML、切換頁面都需要發送網路請求。
 
