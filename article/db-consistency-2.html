@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CZK6GDR-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWQ0FR8G.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/94ksONbY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CMVtuRpT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D_Fnql-q.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BZ0RSSSZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DPZs2KdY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DbSs8zJ_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CX_DWW2i.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">DDB 02 - Vector Clock</h1> <p class="svelte-mdkbyj">2025-07-28</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>實作時不同伺服器中的時間戳不可當作最新資料的判斷依據</h6> <hr/> <h3>為什麼不能用時間戳？</h3> <p>分散式系統中，每台伺服器的時鐘無法保持完全同步（Network Time Protocol 有誤差），導致：</p> <ul><li>伺服器 A 的時間可能比 B 快幾毫秒</li> <li>用「誰的時間戳更大就是最新」會誤判版本順序</li></ul> <p>解決方案：<strong>Vector Clock</strong>，用邏輯計數取代物理時間。</p> <hr/> <h3>Vector Clock</h3> <p>背景：3 台 replica R1、R2、R3，每台維護一個向量版本號。</p> <p><strong>Client 讀資料時拿到：</strong></p> <pre class="language-text"><!----><code class="language-text">value   = 100
+version = &#123; R1: 1, R2: 1, R3: 0 &#125;</code><!----></pre> <p><strong>Client 寫入資料時帶上舊版本：</strong></p> <pre class="language-text"><!----><code class="language-text">&#123;
+  value:       99,
+  old_version: &#123; R1: 1, R2: 1, R3: 0 &#125;
+&#125;</code><!----></pre> <p><strong>R1 收到後，將自己的計數 +1：</strong></p> <pre class="language-text"><!----><code class="language-text">&#123; R1: 2, R2: 1, R3: 0 &#125;</code><!----></pre> <p><strong>R2 收到後，將自己的計數 +1：</strong></p> <pre class="language-text"><!----><code class="language-text">&#123; R1: 1, R2: 2, R3: 0 &#125;</code><!----></pre> <hr/> <h3>版本比較規則</h3> <p>讀取時比較多台節點的 Vector Clock，選出「數字最大」的那份作為最新版本。</p> <pre class="language-text"><!----><code class="language-text">R1 版本: &#123; R1: 2, R2: 1, R3: 0 &#125;  → 較新（R1 多了一次寫入）
+R2 版本: &#123; R1: 1, R2: 2, R3: 0 &#125;  → 不同分支
+
+如果兩份版本無法判斷誰先誰後（都有對方沒有的更新）
+→ 發生衝突（conflict），需交由應用層或使用者解決</code><!----></pre> <h3>衝突範例</h3> <pre class="language-text"><!----><code class="language-text">初始：&#123; R1: 1, R2: 1, R3: 1 &#125;
+
+A 在 R1 寫入 → R1 版本: &#123; R1: 2, R2: 1, R3: 1 &#125;
+B 同時在 R2 寫入 → R2 版本: &#123; R1: 1, R2: 2, R3: 1 &#125;
+
+→ 兩份版本無法比較（各自超前對方一步）
+→ 系統偵測到衝突，需要合併策略</code><!----></pre> <blockquote><p>Amazon Dynamo 使用 Vector Clock，衝突時讓用戶選擇（例如購物車合併兩份商品列表）。</p></blockquote><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_24l839 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CZK6GDR-.js"),
+						import("../_app/immutable/entry/app.CMVtuRpT.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

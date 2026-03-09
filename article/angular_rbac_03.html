@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CZK6GDR-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWQ0FR8G.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/94ksONbY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CMVtuRpT.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,17 +22,17 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D_Fnql-q.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BZ0RSSSZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DPZs2KdY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DbSs8zJ_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CX_DWW2i.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RBAC 03 - Sidebar UI</h1> <p class="svelte-mdkbyj">2025-12-11</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>根據使用者權限動態渲染側邊欄，將 PermissionService 的權限樹轉換為 UI 資料結構</h6> <hr/> <h3>Layout</h3> <p>主畫面的 Layout 是常見的三段式：</p> <ol><li><strong>Header</strong>：放入基本資料</li> <li><strong>Sidebar</strong>：根據權限 render 出目錄入口</li> <li><strong>ContentView</strong>：根據路由顯示對應的 Component</li></ol> <hr/> <h3>SidebarComponent</h3> <p>主要工作是把 <code>permissionService.userClaimTree()</code> 轉成 UI 好渲染的 <code>menuItems</code></p> <ul><li>遞迴過濾出 <code>ROUTE</code> 類型的節點（去掉 ACTION 類型）</li> <li>用 <code>buildAllClaimRouteMap()</code> 把 ClaimCode 對應到實際 URL path</li> <li><code>menuItems</code> 用 <code>computed</code> 自動追蹤權限變化</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// sidebar.component.ts</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RBAC 03 - Sidebar UI</h1> <p class="svelte-mdkbyj">2025-12-11</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>根據使用者權限動態渲染側邊欄，將 PermissionService 的權限樹轉換為 UI 資料結構</h6> <hr/> <h3>Layout</h3> <p>主畫面的 Layout 是常見的三段式：</p> <ol><li><strong>Header</strong>：放入基本資料</li> <li><strong>Sidebar</strong>：根據權限 render 出目錄入口</li> <li><strong>ContentView</strong>：根據路由顯示對應的 Component</li></ol> <hr/> <h3>SidebarComponent</h3> <p>主要工作是把 <code>permissionService.userClaimTree()</code> 轉成 UI 好渲染的 <code>menuItems</code></p> <ul><li>遞迴過濾出 <code>ROUTE</code> 類型的節點（去掉 ACTION 類型）</li> <li>用 <code>buildAllClaimRouteMap()</code> 把 ClaimCode 對應到實際 URL path</li> <li><code>menuItems</code> 用 <code>computed</code> 自動追蹤權限變化</li></ul> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// sidebar.component.ts</span>
 <span class="token keyword">interface</span> <span class="token class-name">MenuItem</span> <span class="token punctuation">&#123;</span>
   id<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
   name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
@@ -148,7 +148,7 @@
 			
 			<script>
 				{
-					__sveltekit_1k22rmj = {
+					__sveltekit_24l839 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -156,8 +156,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BmEzEElV.js"),
-						import("../_app/immutable/entry/app.BVPbw7dd.js")
+						import("../_app/immutable/entry/start.CZK6GDR-.js"),
+						import("../_app/immutable/entry/app.CMVtuRpT.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

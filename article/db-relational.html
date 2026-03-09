@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CZK6GDR-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWQ0FR8G.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/94ksONbY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CMVtuRpT.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,17 +22,17 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D_Fnql-q.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BZ0RSSSZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DPZs2KdY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DbSs8zJ_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CX_DWW2i.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">關聯式資料庫</h1> <p class="svelte-mdkbyj">2025-06-22</p></div> <section class="article-body svelte-mdkbyj"><!----><pre class="language-pgsql"><!----><code class="language-pgsql">SQL Server Instance
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RDBMS - 關聯式資料庫</h1> <p class="svelte-mdkbyj">2025-06-21</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>以「表格（Table）」為核心，透過鍵值關聯管理結構化資料的資料庫系統</h6> <hr/> <p>關聯式資料庫（RDBMS）將資料組織成多張表格，每張表格由列（Row）與欄（Column）構成，並透過主鍵、外鍵建立表之間的關聯。</p> <h3>結構層次（以 SQL Server 為例）</h3> <pre class="language-text"><!----><code class="language-text">SQL Server Instance
 ├── Database
 │   ├── Schema
 │   │   ├── Table
@@ -42,7 +42,7 @@
 │   │   ├── Synonym
 │   │   └── Permissions / Roles
 │   └── Security Settings
-└── System Databases (master, msdb, model, tempdb)</code><!----></pre> <p>連接 SQL Server 時是透過 TDS（Tabular Data Stream）的通訊協定來交換資料。</p> <ul><li>TDS 是 SQL Server 專用的底層通訊協定，負責在用戶端與資料庫伺服器之間傳遞</li> <li>通常透過 TCP/IP 傳輸，預設使用的連接埠為 1433。</li> <li>用戶端要連接資料庫時，會使用一段 Connection String（連線字串）</li></ul> <pre class="language-pgsql"><!----><code class="language-pgsql">Server=127.0.0.1,1433;Database=MyDb;User Id=sa;Password=MyPassword;TrustServerCertificate=True;</code><!----></pre> <h3>Table（資料表）</h3> <p>資料表是資料的儲存核心，每個表由「列（row）」與「欄（column）」構成。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Users <span class="token punctuation">(</span>
+└── System Databases (master, msdb, model, tempdb)</code><!----></pre> <p>連接 SQL Server 時是透過 TDS（Tabular Data Stream）的通訊協定來交換資料。</p> <ul><li>TDS 是 SQL Server 專用的底層通訊協定，負責在用戶端與資料庫伺服器之間傳遞資料</li> <li>通常透過 TCP/IP 傳輸，預設使用的連接埠為 1433</li> <li>用戶端要連接資料庫時，會使用一段 Connection String（連線字串）</li></ul> <pre class="language-text"><!----><code class="language-text">Server=127.0.0.1,1433;Database=MyDb;User Id=sa;Password=MyPassword;TrustServerCertificate=True;</code><!----></pre> <hr/> <h3>Table（資料表）</h3> <p>資料表是資料的儲存核心，每個表由「列（row）」與「欄（column）」構成。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Users <span class="token punctuation">(</span>
     Id <span class="token keyword">INT</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
     UserName NVARCHAR<span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
     Email NVARCHAR<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span> <span class="token keyword">UNIQUE</span><span class="token punctuation">,</span>
@@ -51,15 +51,15 @@
 <span class="token keyword">ADD</span> <span class="token keyword">CONSTRAINT</span> PK_Users <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>Id<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Unique Constraint（唯一約束）</h3> <p>限制欄位值不能重複，一張表可以有多個唯一欄位。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Products <span class="token punctuation">(</span>
     ProductId <span class="token keyword">INT</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
     SKU NVARCHAR<span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token keyword">UNIQUE</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Foreign Key（外鍵）</h3> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Orders <span class="token punctuation">(</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Foreign Key（外鍵）</h3> <p>建立兩張表之間的參照關係，確保資料完整性（referential integrity）。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Orders <span class="token punctuation">(</span>
     OrderId <span class="token keyword">INT</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
     UserId <span class="token keyword">INT</span><span class="token punctuation">,</span>
     <span class="token keyword">FOREIGN</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>UserId<span class="token punctuation">)</span> <span class="token keyword">REFERENCES</span> Users<span class="token punctuation">(</span>Id<span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Index（索引）</h3> <p>加速查詢效率，類似書本的目錄，索引可以建立在單一欄位或多個欄位上。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> IDX_Users_UserName <span class="token keyword">ON</span> Users<span class="token punctuation">(</span>UserName<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h3>Index（索引）</h3> <p>加速查詢效率，類似書本的目錄，索引可以建立在單一欄位或多個欄位上。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> IDX_Users_UserName <span class="token keyword">ON</span> Users<span class="token punctuation">(</span>UserName<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <blockquote><p>索引加速 SELECT，但會略為拖慢 INSERT / UPDATE / DELETE，因為每次寫入都需同步更新索引。</p></blockquote><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_1k22rmj = {
+					__sveltekit_24l839 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -67,8 +67,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BmEzEElV.js"),
-						import("../_app/immutable/entry/app.BVPbw7dd.js")
+						import("../_app/immutable/entry/start.CZK6GDR-.js"),
+						import("../_app/immutable/entry/app.CMVtuRpT.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

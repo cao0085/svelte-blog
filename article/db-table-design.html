@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CZK6GDR-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWQ0FR8G.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/94ksONbY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CMVtuRpT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D_Fnql-q.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BZ0RSSSZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DPZs2KdY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DbSs8zJ_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CX_DWW2i.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RDBMS - 表單設計</h1> <p class="svelte-mdkbyj">2025-06-22</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>當資料具有層級關係（父子、樹狀），有四種常見的儲存模式，各有取捨</h6> <hr/> <h3>Recursive Hierarchy（遞迴層級）</h3> <p>適用情境：類別樹、組織架構、選單、地區層級等</p> <p>每筆資料的共通特性：</p> <ul><li>ID</li> <li>辨識父節點的 ID</li> <li>其他業務欄位（名稱、排序、狀態…）</li></ul> <hr/> <h3>鄰接表 Adjacency List</h3> <p>最直觀的設計，欄位直接標示父節點 <code>UpCode</code>。</p> <table><thead><tr><th>ID</th><th>UpCode</th><th>Name</th></tr></thead><tbody><tr><td>1</td><td>NULL</td><td>電子產品</td></tr><tr><td>2</td><td>1</td><td>手機</td></tr><tr><td>3</td><td>1</td><td>筆記型電腦</td></tr><tr><td>4</td><td>2</td><td>智慧型手機</td></tr></tbody></table> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Category <span class="token punctuation">(</span>
+  ID        <span class="token keyword">BIGINT</span>        <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+  UpCode    <span class="token keyword">BIGINT</span>        <span class="token boolean">NULL</span><span class="token punctuation">,</span>         <span class="token comment">-- 指向父節點 ID（根節點 UpCode = NULL）</span>
+  Name      NVARCHAR<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  SortOrder <span class="token keyword">INT</span>           <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  State     <span class="token keyword">TINYINT</span>       <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 多層查詢（SQL Server Recursive CTE）</span>
+<span class="token keyword">WITH</span> RecursiveCTE <span class="token keyword">AS</span> <span class="token punctuation">(</span>
+  <span class="token comment">-- 從最上層開始，標記 Level = 1</span>
+  <span class="token keyword">SELECT</span> ID<span class="token punctuation">,</span> UpCode<span class="token punctuation">,</span> Name<span class="token punctuation">,</span> <span class="token number">1</span> <span class="token keyword">AS</span> <span class="token keyword">Level</span>
+  <span class="token keyword">FROM</span> Category
+  <span class="token keyword">WHERE</span> UpCode <span class="token operator">IS</span> <span class="token boolean">NULL</span>
+
+  <span class="token keyword">UNION</span> <span class="token keyword">ALL</span>
+
+  <span class="token keyword">SELECT</span> c<span class="token punctuation">.</span>ID<span class="token punctuation">,</span> c<span class="token punctuation">.</span>UpCode<span class="token punctuation">,</span> c<span class="token punctuation">.</span>Name<span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token keyword">Level</span> <span class="token operator">+</span> <span class="token number">1</span>
+  <span class="token keyword">FROM</span> Category c
+  <span class="token keyword">JOIN</span> RecursiveCTE r <span class="token keyword">ON</span> c<span class="token punctuation">.</span>UpCode <span class="token operator">=</span> r<span class="token punctuation">.</span>ID
+<span class="token punctuation">)</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> RecursiveCTE
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> <span class="token keyword">Level</span><span class="token punctuation">,</span> ID<span class="token punctuation">;</span></code><!----></pre> <p><strong>優點：</strong> 結構簡單，新增容易 <strong>缺點：</strong> 查詢整棵樹需要遞迴，效能較差</p> <hr/> <h3>Nested Set（巢狀集合）</h3> <p>用左（Lft）、右（Rgt）兩個數字表達樹的範圍，查找快但維護難。</p> <pre class="language-text"><!----><code class="language-text">1. 類別A (ID=1)
+   ├─ 子類A1 (ID=3)
+   └─ 子類A2 (ID=4)
+
+2. 類別B (ID=2)
+   └─ 子類B1 (ID=5)</code><!----></pre> <table><thead><tr><th>ID</th><th>Name</th><th>Lft</th><th>Rgt</th></tr></thead><tbody><tr><td>1</td><td>類別A</td><td>1</td><td>6</td></tr><tr><td>3</td><td>子類A1</td><td>2</td><td>3</td></tr><tr><td>4</td><td>子類A2</td><td>4</td><td>5</td></tr><tr><td>2</td><td>類別B</td><td>7</td><td>10</td></tr><tr><td>5</td><td>子類B1</td><td>8</td><td>9</td></tr></tbody></table> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> CategoryNested <span class="token punctuation">(</span>
+  ID   <span class="token keyword">BIGINT</span>        <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+  Name NVARCHAR<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  Lft  <span class="token keyword">INT</span>           <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  Rgt  <span class="token keyword">INT</span>           <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 查詢「類別A」(ID=1) 的所有子孫（含自己）</span>
+<span class="token keyword">SELECT</span> node<span class="token punctuation">.</span><span class="token operator">*</span>
+<span class="token keyword">FROM</span> CategoryNested <span class="token keyword">AS</span> node
+<span class="token keyword">JOIN</span> CategoryNested <span class="token keyword">AS</span> parent
+  <span class="token keyword">ON</span> node<span class="token punctuation">.</span>Lft <span class="token operator">BETWEEN</span> parent<span class="token punctuation">.</span>Lft <span class="token operator">AND</span> parent<span class="token punctuation">.</span>Rgt
+<span class="token keyword">WHERE</span> parent<span class="token punctuation">.</span>ID <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> node<span class="token punctuation">.</span>Lft<span class="token punctuation">;</span>
+
+<span class="token comment">-- 新增主類別（需重新計算 Lft / Rgt）</span>
+<span class="token keyword">DECLARE</span> <span class="token variable">@newId</span> <span class="token keyword">INT</span> <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+<span class="token keyword">DECLARE</span> <span class="token variable">@newName</span> NVARCHAR<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span> <span class="token operator">=</span> N<span class="token string">'類別C'</span><span class="token punctuation">;</span>
+<span class="token keyword">DECLARE</span> <span class="token variable">@maxRgt</span> <span class="token keyword">INT</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">SELECT</span> <span class="token function">MAX</span><span class="token punctuation">(</span>Rgt<span class="token punctuation">)</span> <span class="token keyword">FROM</span> CategoryNested<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">UPDATE</span> CategoryNested
+<span class="token keyword">SET</span> Lft <span class="token operator">=</span> <span class="token keyword">CASE</span> <span class="token keyword">WHEN</span> Lft <span class="token operator">></span> <span class="token variable">@maxRgt</span> <span class="token keyword">THEN</span> Lft <span class="token operator">+</span> <span class="token number">2</span> <span class="token keyword">ELSE</span> Lft <span class="token keyword">END</span><span class="token punctuation">,</span>
+    Rgt <span class="token operator">=</span> <span class="token keyword">CASE</span> <span class="token keyword">WHEN</span> Rgt <span class="token operator">>=</span> <span class="token variable">@maxRgt</span> <span class="token keyword">THEN</span> Rgt <span class="token operator">+</span> <span class="token number">2</span> <span class="token keyword">ELSE</span> Rgt <span class="token keyword">END</span><span class="token punctuation">;</span>
+
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> CategoryNested <span class="token punctuation">(</span>ID<span class="token punctuation">,</span> Name<span class="token punctuation">,</span> Lft<span class="token punctuation">,</span> Rgt<span class="token punctuation">)</span>
+<span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token variable">@newId</span><span class="token punctuation">,</span> <span class="token variable">@newName</span><span class="token punctuation">,</span> <span class="token variable">@maxRgt</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token variable">@maxRgt</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p><strong>優點：</strong> 查詢整棵子樹只需一個 BETWEEN 查詢，極快 <strong>缺點：</strong> 新增或移動節點需重新計算全表，維護成本高</p> <hr/> <h3>Materialized Path（路徑枚舉）</h3> <p>用類似 URL 的路徑字串記錄完整祖先鏈。</p> <table><thead><tr><th>ID</th><th>Path</th><th>Name</th></tr></thead><tbody><tr><td>1</td><td><code>/1/</code></td><td>電子產品</td></tr><tr><td>2</td><td><code>/1/2/</code></td><td>手機</td></tr><tr><td>4</td><td><code>/1/2/4/</code></td><td>智慧型手機</td></tr><tr><td>3</td><td><code>/1/3/</code></td><td>筆記型電腦</td></tr></tbody></table> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> CategoryPath <span class="token punctuation">(</span>
+  ID   <span class="token keyword">BIGINT</span>        <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+  Path NVARCHAR<span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>  <span class="token comment">-- 以 "/" 分隔的父節點路徑</span>
+  Name NVARCHAR<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 查詢某節點的所有子孫</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> CategoryPath <span class="token keyword">WHERE</span> Path <span class="token operator">LIKE</span> <span class="token string">'/1/2/%'</span><span class="token punctuation">;</span></code><!----></pre> <p><strong>優點：</strong> 查詢子樹只需 LIKE，新增節點容易 <strong>缺點：</strong> Path 欄位需要 LIKE 查詢（不易用到索引），移動節點需批次更新 Path</p> <hr/> <h3>Closure Table（關係表）</h3> <p>用獨立表記錄所有祖先-後代關係，查詢與維護都最完整。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> Category <span class="token punctuation">(</span>
+  ID   <span class="token keyword">BIGINT</span>        <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+  Name NVARCHAR<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> CategoryClosure <span class="token punctuation">(</span>
+  Ancestor   <span class="token keyword">BIGINT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>  <span class="token comment">-- 祖先節點</span>
+  Descendant <span class="token keyword">BIGINT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>  <span class="token comment">-- 後代節點</span>
+  Depth      <span class="token keyword">INT</span>    <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>  <span class="token comment">-- 兩者間距離：0 = 自己</span>
+  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>Ancestor<span class="token punctuation">,</span> Descendant<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <pre class="language-text"><!----><code class="language-text">A (ID=1)
+├─ B (ID=2)
+│   └─ D (ID=4)
+└─ C (ID=3)</code><!----></pre> <p>CategoryClosure 資料（每個節點都與所有祖先有一筆記錄）：</p> <table><thead><tr><th>Ancestor</th><th>Descendant</th><th>Depth</th><th></th></tr></thead><tbody><tr><td>1</td><td>1</td><td>0</td><td>← A→A</td></tr><tr><td>2</td><td>2</td><td>0</td><td>← B→B</td></tr><tr><td>3</td><td>3</td><td>0</td><td>← C→C</td></tr><tr><td>4</td><td>4</td><td>0</td><td>← D→D</td></tr><tr><td>1</td><td>2</td><td>1</td><td>← A→B</td></tr><tr><td>1</td><td>3</td><td>1</td><td>← A→C</td></tr><tr><td>2</td><td>4</td><td>1</td><td>← B→D</td></tr><tr><td>1</td><td>4</td><td>2</td><td>← A→D</td></tr></tbody></table> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- 查詢某節點的所有後代（含自己）</span>
+<span class="token keyword">SELECT</span> c<span class="token punctuation">.</span><span class="token operator">*</span>
+<span class="token keyword">FROM</span> Category <span class="token keyword">AS</span> c
+<span class="token keyword">JOIN</span> CategoryClosure <span class="token keyword">AS</span> cc <span class="token keyword">ON</span> c<span class="token punctuation">.</span>ID <span class="token operator">=</span> cc<span class="token punctuation">.</span>Descendant
+<span class="token keyword">WHERE</span> cc<span class="token punctuation">.</span>Ancestor <span class="token operator">=</span> <span class="token variable">@nodeId</span>
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> cc<span class="token punctuation">.</span>Depth<span class="token punctuation">;</span>
+
+<span class="token comment">-- 查詢某節點的所有祖先（含自己）</span>
+<span class="token keyword">SELECT</span> c<span class="token punctuation">.</span><span class="token operator">*</span>
+<span class="token keyword">FROM</span> Category <span class="token keyword">AS</span> c
+<span class="token keyword">JOIN</span> CategoryClosure <span class="token keyword">AS</span> cc <span class="token keyword">ON</span> c<span class="token punctuation">.</span>ID <span class="token operator">=</span> cc<span class="token punctuation">.</span>Ancestor
+<span class="token keyword">WHERE</span> cc<span class="token punctuation">.</span>Descendant <span class="token operator">=</span> <span class="token variable">@nodeId</span>
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> cc<span class="token punctuation">.</span>Depth<span class="token punctuation">;</span>
+
+<span class="token comment">-- 插入新節點（先 INSERT 主表取得 @newId）</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> CategoryClosure <span class="token punctuation">(</span>Ancestor<span class="token punctuation">,</span> Descendant<span class="token punctuation">,</span> Depth<span class="token punctuation">)</span>
+<span class="token keyword">SELECT</span> Ancestor<span class="token punctuation">,</span> <span class="token variable">@newId</span><span class="token punctuation">,</span> Depth <span class="token operator">+</span> <span class="token number">1</span>
+<span class="token keyword">FROM</span> CategoryClosure
+<span class="token keyword">WHERE</span> Descendant <span class="token operator">=</span> <span class="token variable">@parentId</span><span class="token punctuation">;</span>
+
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> CategoryClosure <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token variable">@newId</span><span class="token punctuation">,</span> <span class="token variable">@newId</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 刪除節點（先刪 Closure，再刪主表）</span>
+<span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> CategoryClosure
+<span class="token keyword">WHERE</span> Descendant <span class="token operator">=</span> <span class="token variable">@nodeId</span> <span class="token operator">OR</span> Ancestor <span class="token operator">=</span> <span class="token variable">@nodeId</span><span class="token punctuation">;</span></code><!----></pre> <p><strong>優點：</strong> 查詢任意祖先/後代都只需 JOIN，效能最佳；新增容易 <strong>缺點：</strong> Closure 表資料量為 O(節點數²)，移動節點操作較複雜</p> <hr/> <h3>比較總結</h3> <table><thead><tr><th>方案</th><th>查詢子樹</th><th>新增節點</th><th>移動節點</th><th>適用場景</th></tr></thead><tbody><tr><td>Adjacency List</td><td>慢（遞迴）</td><td>容易</td><td>容易</td><td>簡單層級，少量資料</td></tr><tr><td>Nested Set</td><td>快</td><td>難</td><td>難</td><td>唯讀或極少異動的樹</td></tr><tr><td>Materialized Path</td><td>中等</td><td>容易</td><td>中等</td><td>路徑可讀性重要的場景</td></tr><tr><td>Closure Table</td><td>快</td><td>容易</td><td>中等</td><td>查詢頻繁、需要任意層查詢</td></tr></tbody></table><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_24l839 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CZK6GDR-.js"),
+						import("../_app/immutable/entry/app.CMVtuRpT.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

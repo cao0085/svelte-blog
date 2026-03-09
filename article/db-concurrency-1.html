@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CZK6GDR-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWQ0FR8G.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/94ksONbY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CMVtuRpT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D_Fnql-q.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BZ0RSSSZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DPZs2KdY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DbSs8zJ_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CX_DWW2i.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">PostgreSQL 01 - 交易效能</h1> <p class="svelte-mdkbyj">2026-02-03</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>任何 DB 操作（包含讀取）都是一個交易，理解開銷才能做出正確的設計取捨</h6> <hr/> <h3>交易的生命週期</h3> <p>任何 DB 指令包含讀取，都從 <code>BEGIN</code> 到 <code>COMMIT</code>。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- BEGIN 時的開銷</span>
+<span class="token number">1.</span> 分配 <span class="token keyword">Transaction</span> ID <span class="token punctuation">(</span>XID<span class="token punctuation">)</span>
+<span class="token number">2.</span> 在 WAL <span class="token punctuation">(</span><span class="token keyword">Write</span><span class="token operator">-</span>Ahead Log<span class="token punctuation">)</span> 寫入事務開始記錄
+<span class="token number">3.</span> 初始化 MVCC 快照（<span class="token keyword">Snapshot</span>）
+<span class="token number">4.</span> 分配 undo log 空間
+<span class="token number">5.</span> 在記憶體中建立事務上下文
+
+時間：<span class="token number">0.1</span> <span class="token operator">~</span> <span class="token number">0.5</span>ms（本地資料庫）
+      <span class="token number">1</span> <span class="token operator">~</span> <span class="token number">5</span>ms（遠端資料庫，包含 RTT）
+
+<span class="token comment">-- COMMIT 時的開銷</span>
+<span class="token number">1.</span> 檢查衝突（MVCC）
+<span class="token number">2.</span> 寫入 WAL（<span class="token keyword">Write</span><span class="token operator">-</span>Ahead Log）
+<span class="token number">3.</span> 刷新到磁碟（fsync，如果開啟持久化）
+<span class="token number">4.</span> 釋放鎖
+<span class="token number">5.</span> 清理 undo log
+<span class="token number">6.</span> 更新事務狀態表
+
+時間：<span class="token number">0.5</span> <span class="token operator">~</span> <span class="token number">2</span>ms（無 fsync）
+      <span class="token number">5</span> <span class="token operator">~</span> <span class="token number">50</span>ms（有 fsync，取決於磁碟）</code><!----></pre> <h3>未提交交易的持續開銷</h3> <p>當一個交易沒有 <code>COMMIT</code> 之前，會持續消耗以下資源：</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
+
+MVCC <span class="token keyword">Snapshot</span>（快照）
+  <span class="token operator">-</span> 記錄當前所有活躍 <span class="token keyword">Transaction</span> ID
+  <span class="token operator">-</span> 佔用記憶體
+
+<span class="token keyword">Transaction</span> ID <span class="token punctuation">(</span>XID<span class="token punctuation">)</span>
+  <span class="token operator">-</span> 持有不釋放
+  <span class="token operator">-</span> 阻止 VACUUM 清理舊資料
+
+Undo Log 空間
+  <span class="token operator">-</span> 用於 <span class="token keyword">Rollback</span>
+
+鎖資訊
+  <span class="token operator">-</span> <span class="token keyword">Lock</span> <span class="token keyword">table</span> entries
+  <span class="token operator">-</span> 即使沒有 <span class="token keyword">FOR</span> <span class="token keyword">UPDATE</span>，也可能持有隱式鎖
+
+死鎖檢測 <span class="token punctuation">(</span>Deadlock Detection<span class="token punctuation">)</span>
+  <span class="token operator">-</span> 每 <span class="token number">1</span> 秒掃描一次所有活躍連線
+  <span class="token operator">-</span> 連線越多，掃描開銷越大
+
+連線被佔用（不可用給其他請求）</code><!----></pre> <hr/> <h3>單一長交易 vs 多個短交易</h3> <p>網路延遲（RTT）對效能的影響至關重要：</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- 本地資料庫 RTT ≈ 0.1ms</span>
+
+方案 A（<span class="token number">1</span> 個長交易）
+<span class="token keyword">BEGIN</span>     <span class="token number">0.1</span>ms
+<span class="token keyword">SELECT</span>    <span class="token number">0.1</span>ms <span class="token operator">+</span> <span class="token number">1</span>ms <span class="token operator">=</span> <span class="token number">1.1</span>ms
+<span class="token keyword">UPDATE</span>    <span class="token number">0.1</span>ms <span class="token operator">+</span> <span class="token number">1</span>ms <span class="token operator">=</span> <span class="token number">1.1</span>ms
+<span class="token keyword">UPDATE</span>    <span class="token number">0.1</span>ms <span class="token operator">+</span> <span class="token number">1</span>ms <span class="token operator">=</span> <span class="token number">1.1</span>ms
+<span class="token keyword">COMMIT</span>    <span class="token number">0.1</span>ms
+總計: <span class="token number">3.5</span>ms
+
+方案 B（<span class="token number">3</span> 個短交易）
+<span class="token keyword">BEGIN</span> <span class="token operator">+</span> <span class="token keyword">SELECT</span> <span class="token operator">+</span> <span class="token keyword">COMMIT</span>  × <span class="token number">3</span> <span class="token operator">=</span> <span class="token number">3.9</span>ms
+差異: <span class="token operator">+</span><span class="token number">11</span><span class="token operator">%</span>（本地差異不大）
+
+<span class="token comment">---</span>
+
+<span class="token comment">-- 遠端資料庫 RTT ≈ 10ms（跨雲端區域）</span>
+
+方案 A（<span class="token number">1</span> 個長交易）
+<span class="token keyword">BEGIN</span>     <span class="token number">10</span>ms
+<span class="token keyword">SELECT</span>    <span class="token number">10</span>ms <span class="token operator">+</span> <span class="token number">1</span>ms <span class="token operator">=</span> <span class="token number">11</span>ms
+<span class="token keyword">UPDATE</span>    <span class="token number">10</span>ms <span class="token operator">+</span> <span class="token number">1</span>ms <span class="token operator">=</span> <span class="token number">11</span>ms
+<span class="token keyword">UPDATE</span>    <span class="token number">10</span>ms <span class="token operator">+</span> <span class="token number">1</span>ms <span class="token operator">=</span> <span class="token number">11</span>ms
+<span class="token keyword">COMMIT</span>    <span class="token number">10</span>ms
+總計: <span class="token number">53</span>ms
+
+方案 B（<span class="token number">3</span> 個短交易）
+事務 <span class="token number">1</span>: <span class="token number">10</span> <span class="token operator">+</span> <span class="token number">11</span> <span class="token operator">+</span> <span class="token number">10</span> <span class="token operator">=</span> <span class="token number">31</span>ms
+事務 <span class="token number">2</span>: <span class="token number">10</span> <span class="token operator">+</span> <span class="token number">11</span> <span class="token operator">+</span> <span class="token number">10</span> <span class="token operator">=</span> <span class="token number">31</span>ms
+事務 <span class="token number">3</span>: <span class="token number">10</span> <span class="token operator">+</span> <span class="token number">11</span> <span class="token operator">+</span> <span class="token number">10</span> <span class="token operator">=</span> <span class="token number">31</span>ms
+總計: <span class="token number">93</span>ms
+差異: <span class="token operator">+</span><span class="token number">75</span><span class="token operator">%</span>（遠端差異顯著）</code><!----></pre> <hr/> <h3>連線池的影響</h3> <p>長交易讓連線長期被佔用，直接限制系統吞吐量：</p> <pre class="language-python"><!----><code class="language-python"><span class="token comment"># 方案 A（長交易）</span>
+<span class="token keyword">with</span> connection_pool<span class="token punctuation">.</span>get_connection<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> conn<span class="token punctuation">:</span>  <span class="token comment"># 佔用開始</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"BEGIN"</span><span class="token punctuation">)</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"SELECT ... FOR UPDATE"</span><span class="token punctuation">)</span>
+    <span class="token comment"># 業務邏輯 200ms ⚠️ 連線一直被佔用</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"UPDATE ..."</span><span class="token punctuation">)</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"COMMIT"</span><span class="token punctuation">)</span>
+<span class="token comment"># 佔用結束</span>
+
+連線佔用時間：205ms
+連線池 <span class="token number">10</span> 個連線，最多支援<span class="token punctuation">:</span> <span class="token number">10</span> <span class="token operator">/</span> <span class="token number">0.205</span> ≈ <span class="token number">48</span> TPS
+
+<span class="token comment"># 方案 B（短交易 + 連線歸還後執行業務邏輯）</span>
+<span class="token keyword">with</span> connection_pool<span class="token punctuation">.</span>get_connection<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> conn<span class="token punctuation">:</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"BEGIN"</span><span class="token punctuation">)</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"SELECT ..."</span><span class="token punctuation">)</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"COMMIT"</span><span class="token punctuation">)</span>
+<span class="token comment"># 連線立即歸還</span>
+
+<span class="token comment"># 業務邏輯 200ms（不佔用連線）</span>
+
+<span class="token keyword">with</span> connection_pool<span class="token punctuation">.</span>get_connection<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> conn<span class="token punctuation">:</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"BEGIN"</span><span class="token punctuation">)</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"UPDATE ..."</span><span class="token punctuation">)</span>
+    conn<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token string">"COMMIT"</span><span class="token punctuation">)</span>
+
+連線佔用時間：5ms × <span class="token number">3</span> <span class="token operator">=</span> 15ms
+連線池 <span class="token number">10</span> 個連線，最多支援<span class="token punctuation">:</span> <span class="token number">10</span> <span class="token operator">/</span> <span class="token number">0.015</span> ≈ <span class="token number">666</span> TPS</code><!----></pre> <hr/> <h3>COMMIT 的磁碟同步開銷</h3> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- PostgreSQL 預設 synchronous_commit = on</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span>  <span class="token comment">-- 執行 fsync()，強制寫入磁碟</span>
+
+<span class="token comment">-- 磁碟性能比較：</span>
+HDD:      <span class="token number">10</span>ms <span class="token operator">/</span> fsync
+SATA SSD: <span class="token number">1</span>ms  <span class="token operator">/</span> fsync
+NVMe SSD: <span class="token number">0.1</span>ms <span class="token operator">/</span> fsync
+
+<span class="token comment">-- 方案 A（1 次 COMMIT）vs 方案 B（3 次 COMMIT）：</span>
+SSD: <span class="token number">1</span>ms vs <span class="token number">3</span>ms
+HDD: <span class="token number">10</span>ms vs <span class="token number">30</span>ms</code><!----></pre> <hr/> <h3>小結論</h3> <ul><li>多個短交易通常優於單個長交易，當然前提是業務邏輯允許拆分（不需要跨操作的原子性）。</li> <li>長交易的核心問題不只是效能，還有連線佔用、鎖持有時間延長，進而影響系統整體吞吐量。</li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_24l839 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CZK6GDR-.js"),
+						import("../_app/immutable/entry/app.CMVtuRpT.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

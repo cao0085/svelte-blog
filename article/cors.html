@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CZK6GDR-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWQ0FR8G.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/94ksONbY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CMVtuRpT.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,17 +22,17 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D_Fnql-q.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BZ0RSSSZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DPZs2KdY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DbSs8zJ_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CX_DWW2i.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">CORS &amp; SOP</h1> <p class="svelte-mdkbyj">2025-10-27</p></div> <section class="article-body svelte-mdkbyj"><!----><h2>常常看到 CORS 今天才知道有 SOP</h2> <p>瀏覽器原生就有一個預設的安全機制叫做 <code>Same-Origin Policy (SOP)</code>，它只允許網頁接收來自相同來源（Same Origin）的資料。</p> <p>這個限制在實務上會造成一些不便：如果前後端分別部署在不同的 Server 上，前端就無法直接向後端發送請求取得資料。傳統的解決方式是讓後端先接收外部資料，再轉發給前端。</p> <p>為了突破這個限制，讓跨來源的資料交換更方便，<code>CORS（Cross-Origin Resource Sharing）</code> 機制因此誕生。</p> <h3>Same-Origin Policy</h3> <p>主要用來防範 <strong>跨站請求偽造（CSRF）</strong> 等攻擊。由於瀏覽器發送請求時會自動帶上當前網站的 Origin，且 JavaScript 無法隨意偽造這個值，因此 SOP 可以有效防止惡意網站冒用使用者身份。</p> <p>假設你登入了銀行網站 A，此時瀏覽器會儲存 A 網站的 Cookie（包含登入憑證）。如果沒有 SOP 保護，當你訪問惡意網站 B 時，B 網站的 JavaScript 就能向 A 銀行發送請求，並自動帶上你的登入 Cookie，進而盜取資料或進行轉帳。有了 SOP，瀏覽器會阻擋 B 網站讀取來自 A 網站的回應資料。</p> <pre class="language-md"><!----><code class="language-md">    B 網站的 JS 發起請求到 A Server
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Browser SOP &amp; CORS</h1> <p class="svelte-mdkbyj">2025-10-27</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>常常看到 CORS 今天才知道有 SOP</h6> <hr/> <p>瀏覽器預設的安全機制叫做 <code>Same-Origin Policy (SOP)</code>，它限制網頁腳本只能讀取來自同源的回應資料。雖然提升了安全性，但在實務上會造成問題：前後端通常各自運行在不同的 port（例如前端 <code>localhost:5173</code>、後端 <code>localhost:3000</code>）。傳統的解決方式是將前端打包成靜態檔，由後端統一提供服務確保同源，但這在開發階段很不方便。所以衍伸出 <code>CORS（Cross-Origin Resource Sharing）</code> 讓後端可以透過 HTTP 標頭明確授權特定來源的跨域存取，解決開發時前後端分離的問題。</p> <ul><li>SOP 判斷「同源」的標準是 protocol + domain + port 三者都相同</li> <li>CORS 是由後端設定的（透過 Access-Control-Allow-Origin 等標頭），不是前端能單方面突破的</li> <li>對於某些「非簡單請求」，瀏覽器會先發送 preflight（OPTIONS）請求確認伺服器是否允許</li></ul> <h3>Same-Origin Policy</h3> <p>主要防範 <strong>跨站請求偽造（CSRF）</strong> 等攻擊。由於瀏覽器發送請求時會自動帶上當前網站的 Origin，且無法透過 JavaScript 隨意偽造這個值，因此 SOP 可以有效防止網站假冒用使用者身份。</p> <p>假設你登入了銀行網站 A，此時瀏覽器會儲存 A 網站的 Cookie（包含登入憑證）。如果沒有 SOP 保護，當你訪問惡意網站 B 時，B 網站的 JavaScript 就能向 A 銀行發送請求，並自動帶上你的登入 Cookie，進而盜取資料或進行轉帳。有了 SOP，瀏覽器會阻擋 B 網站讀取來自 A 網站的回應資料。</p> <pre class="language-md"><!----><code class="language-md">    B 網站的 JS 發起請求到 A Server
             ↓
     瀏覽器檢查:
     「B 的 origin」 vs 「A 的 origin」
@@ -40,14 +40,14 @@
         是否同源?
     (Yes)      (No)
     直接發送    進入 CORS 流程
-    正常讀取</code><!----></pre> <h3>Cross-Origin Resource Sharing</h3> <p>當進入 CORS 流程時，瀏覽器會先檢查該請求是簡單請求還是預檢請求。</p> <p>為什麼要分兩種請求？主要是為了保護舊的後端伺服器。簡單請求通常只是讀取資料，比較安全，可以直接送出。但如果是可能修改資料的請求（如 PUT、DELETE）或帶有自訂 Header，就需要先用預檢確認後端有支援 CORS，避免對不支援的舊伺服器造成意外影響。</p> <p><strong>簡單請求 (Simple Request)</strong></p> <p>符合以下條件的請求會被視為簡單請求：</p> <ul><li>HTTP Method 為 <code>GET</code>、<code>HEAD</code> 或 <code>POST</code></li> <li>Content-Type 只能是 <code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code> 或 <code>text/plain</code></li> <li>沒有自訂的 Header</li></ul> <p>簡單請求會直接送出，伺服器透過回應 Header 告知瀏覽器是否允許該跨來源請求。</p> <p><strong>預檢請求 (Preflight Request)</strong></p> <p>不符合簡單請求條件的請求，瀏覽器會先發送一個 <code>OPTIONS</code> 方法的預檢請求，詢問伺服器是否允許實際請求。只有當預檢通過後，才會發送真正的請求。</p> <pre class="language-md"><!----><code class="language-md">    瀏覽器發送 OPTIONS 請求
+    正常讀取</code><!----></pre> <h3>Cross-Origin Resource Sharing</h3> <p>當進入 CORS 流程時，瀏覽器會先檢查該請求是【簡單請求】還是【預檢請求】。</p> <p>分兩種請求的用意是為了保護舊後端伺服器。簡單請求只是讀取資料可以直接送出，但如果是修改資料的請求（如 PUT、DELETE）或帶有 <strong>自訂 Header</strong> 就需要先用預檢確認後端有無支援 CORS，避免對不支援的舊伺服器造成意外影響。</p> <h4>簡單請求 (Simple Request)</h4> <p>簡單請求會直接送出，伺服器透過回應 Header 告知瀏覽器是否允許該跨來源請求。符合以下條件的請求會被視為簡單請求：</p> <ul><li>HTTP Method 為 <code>GET</code>、<code>HEAD</code> 或 <code>POST</code>?</li> <li>Content-Type 只能是 <code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code> 或 <code>text/plain</code></li> <li>沒有自訂的 Header</li></ul> <h4>預檢請求 (Preflight Request)</h4> <p>瀏覽器會先發送一個 <code>OPTIONS</code> 方法的預檢請求，詢問伺服器是否允許實際請求。只有當預檢通過後，才會發送真正的請求。</p> <pre class="language-md"><!----><code class="language-md">    瀏覽器發送 OPTIONS 請求
             ↓
     伺服器檢查並回應 CORS Headers
             ↓
         預檢是否通過?
     (Yes)         (No)
     發送實際請求    阻擋請求
-    取得回應      顯示 CORS 錯誤</code><!----></pre> <p><strong>常見的 CORS Headers</strong></p> <p>伺服器端需要設定的主要 Headers：</p> <ul><li><code>Access-Control-Allow-Origin</code>: 指定允許的來源，可設為特定網域或 <code>*</code>（所有來源）</li> <li><code>Access-Control-Allow-Methods</code>: 允許的 HTTP 方法，如 <code>GET, POST, PUT, DELETE</code></li> <li><code>Access-Control-Allow-Headers</code>: 允許的自訂 Headers</li> <li><code>Access-Control-Allow-Credentials</code>: 是否允許攜帶憑證（如 Cookie）</li> <li><code>Access-Control-Max-Age</code>: 預檢請求的快取時間（秒）</li></ul> <p><strong>範例設定</strong></p> <pre class="language-javascript"><!----><code class="language-javascript"><span class="token comment">// Node.js Express 範例</span>
+    取得回應      顯示 CORS 錯誤</code><!----></pre> <h3>常見的 CORS Headers</h3> <p>伺服器(後端)需要設定的主要 Headers：</p> <ul><li><code>Access-Control-Allow-Origin</code>: 指定允許的來源，可設為特定網域或 <code>*</code>（所有來源）</li> <li><code>Access-Control-Allow-Methods</code>: 允許的 HTTP 方法，如 <code>GET, POST, PUT, DELETE</code></li> <li><code>Access-Control-Allow-Headers</code>: 允許的自訂 Headers</li> <li><code>Access-Control-Allow-Credentials</code>: 是否允許攜帶憑證（如 Cookie）</li> <li><code>Access-Control-Max-Age</code>: 預檢請求的快取時間（秒）</li></ul> <pre class="language-javascript"><!----><code class="language-javascript"><span class="token comment">// Node.js Express 範例</span>
 app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
   res<span class="token punctuation">.</span><span class="token function">header</span><span class="token punctuation">(</span><span class="token string">'Access-Control-Allow-Origin'</span><span class="token punctuation">,</span> <span class="token string">'https://example.com'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   res<span class="token punctuation">.</span><span class="token function">header</span><span class="token punctuation">(</span><span class="token string">'Access-Control-Allow-Methods'</span><span class="token punctuation">,</span> <span class="token string">'GET, POST, PUT, DELETE'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -58,10 +58,10 @@ app<span class="token punctuation">.</span><span class="token function">use</spa
     <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">sendStatus</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">&#125;</span>
   <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>分兩種請求主要是保護舊的後端伺服器。簡單請求通常只是讀取資料，可以直接送出。但如果是可能修改資料的請求（如 PUT、DELETE）或帶有自訂 Header，就需要先用預檢確認後端有支援 CORS，避免對不支援的舊伺服器造成意外影響。</p> <p><strong>實際測試 CORS</strong></p> <p>架好後端後，用瀏覽器打開任意網站（例如 <code>https://policy.medium.com/medium-terms-of-service-9db0094a1e0f</code>），開啟開發者工具的主控台執行：</p> <pre class="language-js"><!----><code class="language-js"><span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">'http://127.0.0.1:8080/api'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h4>測試</h4> <p>後端設定好後，就可以用瀏覽器打開任意網站（例如 <code>https://policy.medium.com/medium-terms-of-service-9db0094a1e0f</code>）開啟開發者工具的主控台執行：</p> <pre class="language-js"><!----><code class="language-js"><span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">'http://127.0.0.1:8080/api'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">r</span> <span class="token operator">=></span> r<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">d</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span></code><!----></pre> <p>此時前端會看到 CORS 錯誤，但如果觀察後端 Log，會發現請求有成功並回應，只是瀏覽器阻擋了回應。</p> <p>回到瀏覽器切換到「網路」面板，找到這個請求，查看「要求標頭」中的 <code>Origin</code> 欄位（例如 <code>https://policy.medium.com</code>）這就是瀏覽器自動帶上的來源網域。回到後端程式碼，加上允許的來源並重啟：</p> <pre class="language-golang"><!----><code class="language-golang">w.Header().Set(&quot;Access-Control-Allow-Origin&quot;, &quot;https://policy.medium.com&quot;) // 允許特定網域
-w.Header().Set(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;) // 允許所有來源</code><!----></pre> <p>重新執行 fetch，就可以成功取得資料了。</p> <p><strong>完整程式碼</strong></p> <pre class="language-golang"><!----><code class="language-golang">// golang
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">d</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span></code><!----></pre> <p>此時前端會看到 CORS 錯誤，但觀察後端 Log 其實會發現請求有成功並回應，只是瀏覽器端阻擋住回應。這時回到瀏覽器切換到「網路」面板，找到這個請求，查看「要求標頭」中的 <code>Origin</code> 欄位（例如 <code>https://policy.medium.com</code>）這就是瀏覽器自動帶上的來源網域。回到後端程式碼，加上允許的來源並重啟：</p> <pre class="language-golang"><!----><code class="language-golang">w.Header().Set(&quot;Access-Control-Allow-Origin&quot;, &quot;https://policy.medium.com&quot;) // 允許特定網域
+w.Header().Set(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;) // 允許所有來源</code><!----></pre> <p>重新執行就可以成功取得資料。</p> <p><strong>完整程式碼</strong></p> <pre class="language-golang"><!----><code class="language-golang">// golang
 package main 
 
 import (
@@ -196,7 +196,7 @@ func main() &#123;
 			
 			<script>
 				{
-					__sveltekit_1k22rmj = {
+					__sveltekit_24l839 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -204,8 +204,8 @@ func main() &#123;
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BmEzEElV.js"),
-						import("../_app/immutable/entry/app.BVPbw7dd.js")
+						import("../_app/immutable/entry/start.CZK6GDR-.js"),
+						import("../_app/immutable/entry/app.CMVtuRpT.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

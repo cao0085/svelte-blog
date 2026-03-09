@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CZK6GDR-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWQ0FR8G.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/94ksONbY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CMVtuRpT.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,17 +22,23 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D_Fnql-q.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BZ0RSSSZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DPZs2KdY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DbSs8zJ_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CX_DWW2i.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">HTTP &amp; FileStream</h1> <p class="svelte-mdkbyj">2025-10-27</p></div> <section class="article-body svelte-mdkbyj"><!----><p>實作串流相關 API</p> <hr/> <h3>FileStream 特性</h3> <ul><li>指針機制：串流有一個內部指針，讀取時會向前移動，讀完後就到了末尾</li> <li>記憶體效率：串流設計用來處理大文件，不會把整個文件載入記憶體</li> <li>即時處理：數據是可以邊讀邊處理的，適合有獨立資料結構導向的檔案類型</li></ul> <p><strong>適合的類型</strong> : <code>.txt</code>, <code>.csv</code>,<code>.jsonl</code>,<code>.mp3</code>, <code>.mp4</code></p> <p><strong>不適合的類型</strong> : <code>.json</code>, <code>.zip</code>, <code>.rar</code></p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// 串流處理：記憶體效率高</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">處理大型檔案上傳</h1> <p class="svelte-mdkbyj">2025-10-27</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>利用串流處理檔案暫存的問題</h6> <hr/> <p>用一般的方式處理檔案上傳，會將整個檔案載入記憶體後再處理。遇到檔案較大或同時有多個請求時，記憶體容易爆掉。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// 傳統方式：一次載入整個檔案</span>
+<span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">UploadFile</span><span class="token punctuation">(</span><span class="token class-name">IFormFile</span> file<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 整個檔案載入記憶體，100MB 檔案就佔 100MB 記憶體</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bytes <span class="token operator">=</span> <span class="token keyword">await</span> file<span class="token punctuation">.</span><span class="token function">ReadAllBytesAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">await</span> System<span class="token punctuation">.</span>IO<span class="token punctuation">.</span>File<span class="token punctuation">.</span><span class="token function">WriteAllBytesAsync</span><span class="token punctuation">(</span><span class="token string">"output.dat"</span><span class="token punctuation">,</span> bytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>串流的設計就是為了解決這個問題：<strong>分批讀取、邊讀邊處理、用完即釋放</strong>。</p> <hr/> <h3>FileStream</h3> <ul><li><strong>指針機制</strong>：串流有一個內部指針，讀取時會向前移動，讀完後就到了末尾</li> <li><strong>記憶體效率</strong>：不會把整個檔案載入記憶體，而是分批讀取</li> <li><strong>即時處理</strong>：資料可以邊讀邊處理，適合有獨立資料結構的檔案類型</li></ul> <p><strong>適合串流處理的類型</strong>：<code>.txt</code>, <code>.csv</code>, <code>.jsonl</code>, <code>.mp3</code>, <code>.mp4</code> 這些格式的資料是逐行或逐段獨立的，可以讀一段處理一段。</p> <p><strong>不適合串流處理的類型</strong>：<code>.json</code>, <code>.zip</code>, <code>.rar</code> 這些格式需要完整讀取才能解析結構（JSON 要完整才能 parse，壓縮檔要完整才能解壓）。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token comment">// 串流處理：記憶體效率高</span>
 <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>ActionResult<span class="token punctuation">></span></span> <span class="token function">UploadFile</span><span class="token punctuation">(</span><span class="token class-name">IFormFile</span> file<span class="token punctuation">)</span>
 <span class="token punctuation">&#123;</span>
     <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StreamReader</span><span class="token punctuation">(</span>file<span class="token punctuation">.</span><span class="token function">OpenReadStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -44,11 +50,24 @@
         <span class="token function">ProcessLine</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 處理完就釋放記憶體</span>
     <span class="token punctuation">&#125;</span>
     <span class="token comment">// while 結束 = 檔案完全接收完畢</span>
-<span class="token punctuation">&#125;</span></code><!----></pre> <p>這邊可邊接收邊處理，是因為 <strong>HTTP 不同 Request 參數類型，會有不同的執行時機</strong>，例如:</p> <ul><li><p>String / Object：Body 完整接收後才執行，資料立即可用（適合小型資料、JSON）</p></li> <li><p>IFormFile：Headers 接收後就執行，檔案資訊立即可用但內容需等待串流（適合大型檔案）</p></li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h3>為什麼 IFormFile 可以邊接收邊處理？</h3> <p>這跟 HTTP 不同參數類型的執行時機有關：</p> <table><thead><tr><th>參數類型</th><th>執行時機</th><th>資料狀態</th><th>適用場景</th></tr></thead><tbody><tr><td><code>string</code> / <code>object</code></td><td>Body 完整接收後</td><td>立即可用</td><td>小型資料、JSON</td></tr><tr><td><code>IFormFile</code></td><td>Headers 接收後</td><td>檔案資訊可用，內容需串流讀取</td><td>大型檔案</td></tr></tbody></table> <p>當使用 <code>IFormFile</code> 時，Controller Action 在收到 Headers 後就會開始執行。此時檔案的 metadata（檔名、大小、類型）已經可用，但檔案內容還在傳輸中。呼叫 <code>OpenReadStream()</code> 時，就是在讀取這個「還在進來」的資料流。</p> <hr/> <h3>二進位串流處理</h3> <p>對於非文字檔（如圖片、影片），使用 byte buffer 分批處理：</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">UploadBinaryFile</span><span class="token punctuation">(</span><span class="token class-name">IFormFile</span> file<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> inputStream <span class="token operator">=</span> file<span class="token punctuation">.</span><span class="token function">OpenReadStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> outputStream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">FileStream</span><span class="token punctuation">(</span><span class="token string">"output.dat"</span><span class="token punctuation">,</span> FileMode<span class="token punctuation">.</span>Create<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token class-name"><span class="token keyword">var</span></span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name"><span class="token keyword">byte</span></span><span class="token punctuation">[</span><span class="token number">8192</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 8KB buffer</span>
+    <span class="token class-name"><span class="token keyword">int</span></span> bytesRead<span class="token punctuation">;</span>
+    
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>bytesRead <span class="token operator">=</span> <span class="token keyword">await</span> inputStream<span class="token punctuation">.</span><span class="token function">ReadAsync</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> buffer<span class="token punctuation">.</span>Length<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">await</span> outputStream<span class="token punctuation">.</span><span class="token function">WriteAsync</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> bytesRead<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 每次只處理 8KB，記憶體用量固定</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <hr/> <h3>串流處理的注意事項</h3> <ul><li><p><strong>指針只能前進</strong>：讀過的資料不會保留，重讀就要重新開啟串流或先存起來。</p></li> <li><p><strong>錯誤處理</strong>：串流過程中可能因網路問題中斷，需要妥善處理例外。</p></li> <li><p><strong>Dispose 很重要</strong>：用 <code>using</code> 確保串流正確關閉，避免資源洩漏。</p></li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_1k22rmj = {
+					__sveltekit_24l839 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -56,8 +75,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BmEzEElV.js"),
-						import("../_app/immutable/entry/app.BVPbw7dd.js")
+						import("../_app/immutable/entry/start.CZK6GDR-.js"),
+						import("../_app/immutable/entry/app.CMVtuRpT.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

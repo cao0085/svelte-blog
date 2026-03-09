@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.BmEzEElV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bb7-FHWm.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CZK6GDR-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWQ0FR8G.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CD4inCvb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/94ksONbY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BVPbw7dd.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CMVtuRpT.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,17 +22,17 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.D2ZlUi-3.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D_Fnql-q.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/dkap8kjk.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CSS4E9q7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BZ0RSSSZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DPZs2KdY.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C8EOoOma.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DG-tkVxt.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DbSs8zJ_.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CX_DWW2i.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><section><button class="category-toggle">book</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RouteReuseStrategy 02</h1> <p class="svelte-mdkbyj">2026-01-24</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 Angular 路由變更時會自動調用的介面，允許透過實作介面並以 DI 替換預設邏輯，控制路由元件實例的銷毀或復用。</h6> <hr/> <p>RouteReuseStrategy 介面定義了 5 個必須實作的方法：</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">interface</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RouteReuseStrategy 02</h1> <p class="svelte-mdkbyj">2026-01-24</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>RouteReuseStrategy 是 Angular 路由變更時會自動調用的介面，允許透過實作介面並以 DI 替換預設邏輯，控制路由元件實例的銷毀或復用。</h6> <hr/> <p>RouteReuseStrategy 介面定義了 5 個必須實作的方法：</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token keyword">interface</span> <span class="token class-name">RouteReuseStrategy</span> <span class="token punctuation">&#123;</span>
   <span class="token comment">// 1. 判斷是否允許將當前路由從 DOM「分離」(detach) 並保存</span>
   <span class="token function">shouldDetach</span><span class="token punctuation">(</span>route<span class="token operator">:</span> ActivatedRouteSnapshot<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
 
@@ -416,7 +416,7 @@ Angular 逐層處理路由樹時，兩層都命中同一個 handle，<code>retri
 			
 			<script>
 				{
-					__sveltekit_1k22rmj = {
+					__sveltekit_24l839 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -424,8 +424,8 @@ Angular 逐層處理路由樹時，兩層都命中同一個 handle，<code>retri
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.BmEzEElV.js"),
-						import("../_app/immutable/entry/app.BVPbw7dd.js")
+						import("../_app/immutable/entry/start.CZK6GDR-.js"),
+						import("../_app/immutable/entry/app.CMVtuRpT.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
