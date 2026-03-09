@@ -60,7 +60,7 @@ Proposer 發送提案編號 `n` 給所有 Acceptor，目的是讓過半數承諾
 
 收到過半數 Promise 後，Proposer 決定要提出的值，並廣播 Accept 請求。若過半數 Acceptor 接受，值即確定。
 
-詳細流程請見下一篇：[Paxos Algorithm 敘事說明](/paxos-algorithm)
+詳細流程請見下一篇：[Paxos Algorithm 敘事說明](/svelte-blog/article/paxos_algorithm)
 
 ---
 

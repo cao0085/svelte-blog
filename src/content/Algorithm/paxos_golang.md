@@ -11,7 +11,7 @@ slug: "paxos_golang"
 
 ---
 
-演算法概念請先閱讀：[Paxos Algorithm](/paxos-algorithm)
+演算法概念請先閱讀
 
 ---
 
