@@ -1,7 +1,7 @@
 ---
 title: "Paxos with Golang"
 date: "2025-09-02"
-category: "software"
+category: ""
 subCategory: "DataStorage"
 tags: ["distributed", "consensus", "database", "paxos", "golang"]
 slug: "paxos-golang"
