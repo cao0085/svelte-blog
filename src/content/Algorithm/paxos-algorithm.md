@@ -4,7 +4,7 @@ date: "2025-09-02"
 category: ""
 subCategory: "DataStorage"
 tags: ["distributed", "consensus", "database", "paxos"]
-slug: "paxos-algorithm"
+slug: "paxos_algorithm"
 ---
 
 ###### 保證的是「記錄的事實必定相同」——不同節點（DB Server）資料只可以是「有/無」的差異，不會有「不一致的值」

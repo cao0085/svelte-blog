@@ -4,7 +4,7 @@ date: "2025-09-02"
 category: ""
 subCategory: "DataStorage"
 tags: ["distributed", "consensus", "database", "paxos", "golang"]
-slug: "paxos-golang"
+slug: "paxos_golang"
 ---
 
 ###### 基本概念實作，實務上 ID 分發與節點生命週期管理會更複雜

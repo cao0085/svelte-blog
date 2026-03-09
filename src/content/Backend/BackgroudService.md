@@ -6,7 +6,7 @@ subCategory: "Backend"
 tags: ["Backgroud", "backend", "markdown"]
 slug: "backgroudservice"
 ---
-###### C#實作非立即性的服務排序
+###### Runtime 時候的服務器，只需回覆有無觸發
 
 ---
 
