@@ -2,7 +2,7 @@
 title: "Redis"
 date: "2026-02-06"
 category: ""
-subCategory: "Golang"
+subCategory: "DataStorage"
 tags: ["DDD", "backend", "go"]
 slug: "go_redis"
 ---

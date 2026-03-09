@@ -2,7 +2,7 @@
 title: "Canceling Http Requests"
 date: "2026-02-06"
 category: "software"
-subCategory: "Backend"
+subCategory: "Communications"
 tags: ["Backgroud", "backend", "Cancel"]
 slug: "cancelrequest"
 ---
@@ -43,8 +43,8 @@ slug: "cancelrequest"
 
 每個語言處理 token 的方式不一樣：
 
-- **C#**：使用獨立的 `CancellationToken`，需手動呼叫 `ThrowIfCancellationRequested()` 拋出 `OperationCanceledException`，或檢查 `IsCancellationRequested` 屬性，另外很多套件和常用方法都接受 token 傳入
-- **Go**：包在 `context.Context` 裡面，透過 `ctx.Done()` channel 或 `ctx.Err()` 檢查是否取消
+- C#：使用獨立的 `CancellationToken`，需手動呼叫 `ThrowIfCancellationRequested()` 拋出 `OperationCanceledException`，或檢查 `IsCancellationRequested` 屬性，另外很多套件和常用方法都接受 token 傳入
+- Go：包在 `context.Context` 裡面，透過 `ctx.Done()` channel 或 `ctx.Err()` 檢查是否取消
 
 ```csharp
 // ASP.NET Core - Controller 自動注入 CancellationToken
