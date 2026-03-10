@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D68lVCjg.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C9ZK7KVb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D2OF2XlI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CeoZ7EMX.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.B6HYvPes.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B4cR0-bw.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.s5EzUrz3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bs23mmE4.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DI2kH_7n.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Message Queue 02 - Consuming</h1> <p class="svelte-mdkbyj">2026-03-12</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>透過 RabbitMQ 學習 Message Queue</h6> <hr/> <p>RabbitMQ 提供兩種取得已處理消息的方法</p> <h4>Basic.Get</h4> <p>持續型服務 <strong>不考慮</strong> 使用,適用場景限:</p> <ul><li>一次性腳本: 跑完就結束，不需要持續監聽</li> <li>檢查 queue 狀態: 偶爾看一下有沒有訊息</li> <li>批次處理: 定時跑，拉一批訊息處理完就結束</li></ul> <h4>Basic.Consume</h4> <p>Pub-Sub 模式；當 Application 與 RabbitMQ 建立連線時會訂閱一次持續接收訊息，直到發送 Basic.Cancel 才停止。</p> <ul><li>Consumer Tag：訂閱的唯一識別碼，用於區分多個訂閱來源或發送 <code>Basic.Cancel</code> 取消特定訂閱</li> <li>Delivery Tag：訊息的唯一識別碼，發送 Ack / Nack / Reject 時用來指定是哪一則訊息</li> <li>取消訂閱時：Library 自動發送 <code>Basic.Cancel</code>，未處理的訊息會 <code>Basic.Nack</code> 重回 queue</li> <li>效能優勢：比 Basic.Get 至少快 2 倍，RabbitMQ 可預先準備訊息推送</li></ul> <pre class="language-md"><!----><code class="language-md">訂閱流程：
+
+Client                          Server
+   │                               │
+   │  Basic.Consume                │
+   │ ────────────────────────────▶ │
+   │              Basic.ConsumeOk  │
+   │ ◀──────────────────────────── │
+   │                               │
+   │   （持續推送訊息...）            │
+   │                               │
+   │              Basic.Deliver    │
+   │              Header + Body    │
+   │ ◀──────────────────────────── │
+   │                               │
+   │  Basic.Ack                    │
+   │ ────────────────────────────▶ │
+   │                               │
+   │              Basic.Deliver    │
+   │              Header + Body    │
+   │ ◀──────────────────────────── │
+   │                               │
+   │  Basic.Ack                    │
+   │ ────────────────────────────▶ │
+   │                               │
+   │  Basic.Cancel                 │  ← 停止訂閱
+   │ ────────────────────────────▶ │
+   │                               │
+   │              Basic.CancelOk   │
+   │ ◀──────────────────────────── │
+   │                               │
+   │  （如果有未處理訊息）            │
+   │  Basic.Nack                   │  ← 訊息重回 queue
+   │ ────────────────────────────▶ │</code><!----></pre> <h3>Tuning Consumers</h3> <pre class="language-md"><!----><code class="language-md">🐇 快                                              慢 🐢
+◄─────────────────────────────────────────────────────►
+
+┌─────────────┬─────────────┬─────────────┬─────────────┐
+│ no_ack=True │ ack + QoS>1 │ ack 模式    │ transactions│
+│             │ (prefetch)  │             │ + Get       │
+└─────────────┴─────────────┴─────────────┴─────────────┘
+      │                                          │
+   最快                                        最慢
+   最不可靠                                    最可靠</code><!----></pre> <h4>no_ack=True（自動確認模式）</h4> <p>TCP ACK 拿到 OS 的 Socket Buffer 就認定已送達，最快但最不可靠的方式</p> <pre class="language-md"><!----><code class="language-md">RabbitMQ                              Consumer 機器
+   │                                       │
+   │  ─────── 網路傳輸 ───────▶            │
+   │                                       │
+   │                          ┌────────────┴────────────┐
+   │                          │     Operating System    │
+   │                          │  ┌───────────────────┐  │
+   │                          │  │   Socket Buffer   │  │ ← 這一層就表示送達
+   │                          │  │   (OS 管理的緩衝)  │  │
+   │                          │  └─────────┬─────────┘  │
+   │                          └────────────┼────────────┘
+   │                                       │
+   │                                       ▼
+   │                          ┌────────────────────────┐
+   │                          │    Client Library      │
+   │                          │    (rabbitpy 等)       │
+   │                          └────────────┬───────────┘
+   │                                       │
+   │                                       ▼
+   │                          ┌────────────────────────┐
+   │                          │   Your Application     │
+   │                          │   (你的程式碼)          │
+   │                          └────────────────────────┘</code><!----></pre> <h4>QoS Prefetch（預取設定）</h4> <p>設定 Consumer 手上最多能有幾則「未 ack」的訊息，ack 一則就補送一則，維持固定數量。</p> <ul><li><code>prefetch = 0</code>（預設）：無限制，RabbitMQ 全送 → 可能記憶體爆炸</li> <li><code>prefetch = 1</code>：處理完一則才送下一則 → 最安全但最慢</li> <li><code>prefetch = N</code>：維持 N 則在手上 → 平衡效能與可靠性</li></ul> <pre class="language-md"><!----><code class="language-md">RabbitMQ                              Consumer
+    │                                    │
+    │  prefetch_count = 10               │
+    │  ─────────────────────────────▶    │
+    │                                    │
+    │  一次送 10 則訊息                    │
+    │  ══════════════════════════════▶   │
+    │                                    │
+    │         （等待 ack...）             │
+    │                                    │
+    │                        處理完第 1 則 │
+    │  ◀──────── Basic.Ack ─────────     │
+    │                                    │
+    │  補送 1 則（維持 10 則）             │
+    │  ─────────────────────────────▶    │</code><!----></pre> <h3>Reject</h3> <ul><li>Basic.Reject（AMQP 標準）: 一次只能拒絕「一則」訊息，requeue 決定是否回 queue</li> <li>Basic.Nack（RabbitMQ 擴充）:可以批次拒絕（multiple=True），其他行為和 Reject 相同</li> <li>Dead Letter Exchange: 當訊息被拒絕無效時，也可轉發到另一個 exchange 進行後續處理。</li></ul> <pre class="language-md"><!----><code class="language-md">Publisher ──▶ Exchange ──▶ Queue ──▶ Consumer
+                                        │
+                                        ▼
+                                   處理成功？
+                                   ╱        ╲
+                                 Yes         No
+                                 ╱             ╲
+                                ▼               ▼
+                           Basic.Ack      Basic.Reject
+                               │          或 Basic.Nack
+                               ▼               │
+                          從 queue 刪除         │
+                                               ▼
+                                      requeue=True?
+                                      ╱          ╲
+                                    Yes           No
+                                    ╱               ╲
+                                   ▼                 ▼
+                              重回 queue          丟棄（或進 DLX）
+
+// 「兩次出局」策略
+if message.redelivered:
+    <span class="token title important"><span class="token punctuation">#</span> 已經重試過一次了，這次還是失敗就丟棄</span>
+    message.reject(requeue=False)
+else:
+    <span class="token title important"><span class="token punctuation">#</span> 第一次失敗，給它重試機會</span>
+    message.reject(requeue=True)</code><!----></pre> <h3>Controlling queues</h3> <p>Queue 設定是<strong>不可變的</strong>，建立後無法修改，要改必須刪除重建。</p> <h4>Temporary queues（臨時 Queue）</h4> <table><thead><tr><th>設定</th><th>行為</th><th>刪除時機</th><th>用途</th></tr></thead><tbody><tr><td>auto_delete</td><td>可多個 consumer</td><td>最後一個 consumer 斷開</td><td>聊天室用戶 queue</td></tr><tr><td>exclusive</td><td>只有建立者可消費</td><td>Channel 關閉</td><td>RPC reply queue</td></tr><tr><td>x-expires</td><td>閒置計時</td><td>超過 TTL 且無活動</td><td>限時等待回應</td></tr></tbody></table> <h4>Permanent queues（持久 Queue）</h4> <table><thead><tr><th>設定</th><th>說明</th><th>用途</th></tr></thead><tbody><tr><td>durable</td><td>Queue 定義持久化，重啟後還在</td><td>多 consumer 共用的工作佇列</td></tr><tr><td>x-message-ttl</td><td>訊息最大存活時間，過期自動刪除或進 DLX</td><td>避免過期資料被處理</td></tr><tr><td>x-max-length</td><td>Queue 最大訊息數，超過時丟棄最舊的</td><td>聊天室只保留最新 N 則</td></tr></tbody></table> <h4>durable vs delivery-mode 差異</h4> <table><thead><tr><th></th><th>durable=True</th><th>delivery-mode=2</th></tr></thead><tbody><tr><td>持久化什麼</td><td>Queue 定義</td><td>訊息內容</td></tr><tr><td>重啟後</td><td>Queue 還在</td><td>訊息還在</td></tr><tr><td>兩者都要</td><td>✓</td><td>✓</td></tr></tbody></table><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1pdhsmv = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.D68lVCjg.js"),
+						import("../_app/immutable/entry/app.CeoZ7EMX.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

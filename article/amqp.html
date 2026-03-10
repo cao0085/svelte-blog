@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D68lVCjg.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C9ZK7KVb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D2OF2XlI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CeoZ7EMX.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.B6HYvPes.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B4cR0-bw.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.s5EzUrz3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bs23mmE4.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DI2kH_7n.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">AMQP</h1> <p class="svelte-mdkbyj">2025-03-10</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>常常聽到的 Message Queue 是使用這個通訊協議</h6> <hr/> <p><code>AMQP（Advanced Message Queuing Protocol）</code> 是一個開放標準的應用層協議，專門設計用於訊息導向的通訊方式。</p> <ul><li>AMQP 使用長連線 + Channel，不須每次請求重新建立連線</li> <li>訊息路由靠 Exchange + Routing Key + Binding</li> <li>內建 ack/nack 確認機制，保護訊息不丟失</li> <li>支援 Dead Letter Exchange，處理失敗的訊息會有標準流程</li></ul> <h4>Request</h4> <pre class="language-md"><!----><code class="language-md">// 連線
+// 一條 TCP 連線內多路復用多個邏輯通道，避免頻繁建立連線的開銷。
+Client ──── TCP 連線（長期維持）──── Broker
+              │
+              ├── Channel 1 (類似 HTTP/2 的 stream)
+              ├── Channel 2
+              └── Channel 3
+
+// 請求
+PUBLISH
+Exchange: orders.exchange
+Routing-Key: orders.created
+Properties:
+  content-type: application/json
+  delivery-mode: 2 (persistent)
+  message-id: abc123
+
+&#123;"item": "book", "qty": 1&#125;
+
+// 路由 Exchange + Routing Key + Binding
+Exchange: events (type: topic)
+  │
+  ├── Binding: "order.*"       → Queue: order-service
+  ├── Binding: "order.created" → Queue: notification-service  
+  └── Binding: "#"             → Queue: logging-service (收全部)</code><!----></pre> <h4>Exchange</h4> <ul><li>Direct: 精確匹配 routing key</li> <li>Fanout: 廣播到所有綁定的佇列</li> <li>Topic: 模式匹配（<code>*</code> 和 <code>#</code>）</li> <li>Headers: 根據 header 屬性匹配</li></ul> <h4>Response</h4> <pre class="language-md"><!----><code class="language-md">Producer ── Publish ──→ Broker ── Deliver ──→ Consumer
+Producer ←── Confirm ── Broker ←── Ack ────── Consumer
+[不阻塞，稍後收確認]</code><!----></pre> <h3>Error</h3> <pre class="language-md"><!----><code class="language-md">Consumer 處理失敗
+    ↓ nack
+原 Queue
+    ↓ 超過重試次數
+Dead Letter Exchange
+    ↓
+Dead Letter Queue（人工檢視或另行處理）</code><!----></pre> <h4>Frame</h4> <p>封裝好的 Command 會被拆成 N 個 Frame 來傳遞訊息</p> <pre class="language-md"><!----><code class="language-md">channel.basic_publish(
+    exchange='orders',           # → Exchange name
+    routing_key='order.created', # → Routing key value  
+    body='&#123;"id": 123&#125;',
+    mandatory=True               # → Mandatory flag
+)
+
+// Publish Flow
+Method Frame > Header Frame > Body Frame // 若 Body 太大就會拆成多個 Body Frame
+
+// Frame structure 
+<span class="token list punctuation">-</span> Protocol Header: 連線時只用一次
+<span class="token list punctuation">-</span> Method Frame: 攜帶 RPC 請求/回應
+<span class="token list punctuation">-</span> Content: Header訊息的大小和屬性
+<span class="token list punctuation">-</span> Body Frame: 訊息的實際內容
+<span class="token list punctuation">-</span> Heartbeat: 雙向檢查連線是否正常
+<span class="token url">[<span class="token content">Type</span>] [<span class="token variable">Channel</span>]</span> <span class="token url">[<span class="token content">Size</span>] [<span class="token variable">Payload</span>]</span> [End]
+
+┌───────────────────────────────────────────────────────────┐
+│  <span class="token url">[<span class="token content">1</span>][<span class="token variable">1</span>]</span>[41]<span class="token url">[<span class="token content">        Method frame payload        </span>][<span class="token variable">0xce</span>]</span>   │
+│             │                                             │
+│             ▼                                             │
+│  ┌───────┬─────────┬──────────┬─────────────┬───────────┐ │
+│  │ Basic │ Publish │ Exchange │ Routing key │ Mandatory │ │
+│  │  60   │   40    │  name    │    value    │   flag    │ │
+│  └───────┴─────────┴──────────┴─────────────┴───────────┘ │
+└───────────────────────────────────────────────────────────┘
+
+// Method Frame Payload 
+<span class="token list punctuation">-</span> Basic: 數字 (60) Class ID，表示這是 Basic 類別的指令
+<span class="token list punctuation">-</span> Publish: 數字 (40) Method ID，表示是 Publish 方法
+<span class="token list punctuation">-</span> Exchange: name 字串要發送到哪個 exchange
+<span class="token list punctuation">-</span> Routing key: 字串路由規則，exchange 用這個決定送去哪些 queue
+<span class="token list punctuation">-</span> Mandatory: boolean 是否強制要成功路由
+
+// Content Header Frame Payload
+<span class="token list punctuation">-</span> Body size: 55 bytes，告訴 RabbitMQ 接下來要收多少 body 資料（不算在 properties 裡）
+<span class="token list punctuation">-</span> Flags: 144,200 是 bitmask，標記哪些 properties 有被設定
+<span class="token list punctuation">-</span> content-type: "application/json"，訊息的 MIME 類型
+<span class="token list punctuation">-</span> app-id: "Test"，發送這則訊息的應用程式名稱
+<span class="token list punctuation">-</span> timestamp: 1014206880，Unix timestamp（binary packed 格式）
+<span class="token list punctuation">-</span> delivery-mode: 1，訊息持久化設定（1=記憶體，2=寫入磁碟）
+
+// Body Frame Payload
+<span class="token list punctuation">-</span> 內容: 原始資料，完全不處理
+<span class="token list punctuation">-</span> 格式: 任意（JSON、XML、圖片、Protobuf、純文字...）
+<span class="token list punctuation">-</span> 特性: RabbitMQ 不解碼、不檢查、不評估，純粹轉發</code><!----></pre> <h3>核心流程</h3> <pre class="language-md"><!----><code class="language-md">Producer（生產者）
+    ↓ publish
+Exchange（交換機）
+    ↓ routing key + binding rules
+Queue（佇列）
+    ↓ consume
+Consumer（消費者）
+    ↓
+  處理成功?
+(Yes)      (No)
+ ack       nack
+           ↓
+      Dead Letter Queue</code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1pdhsmv = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.D68lVCjg.js"),
+						import("../_app/immutable/entry/app.CeoZ7EMX.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

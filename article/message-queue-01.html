@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D68lVCjg.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C9ZK7KVb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D2OF2XlI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CeoZ7EMX.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.B6HYvPes.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B4cR0-bw.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.s5EzUrz3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bs23mmE4.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DI2kH_7n.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Message Queue 01 - Publishing</h1> <p class="svelte-mdkbyj">2026-03-11</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>透過 RabbitMQ 學習 Message Queue</h6> <hr/> <h3>Publishing</h3> <p>Publishing 發送是單向且預設不等回應：</p> <pre class="language-md"><!----><code class="language-md">Client → [Method + Header + Body] → RabbitMQ
+                                      │
+                                      └─ 沒有回應（預設）</code><!----></pre> <p>RabbitMQ 收到後：解析 exchange name + routing key → 查找匹配的 queues → 訊息入列（FIFO）。如果 exchange 不存在，訊息靜默丟棄。</p> <h3>保證層級</h3> <p>和資料庫交易隔離一樣，不同場景需要不同的<strong>保證層級</strong>來平衡效能：</p> <h4>1. 無保證 - Fire-and-forget</h4> <p>發完就走不管成功與否，適合監控數據、日誌收集等非關鍵任務</p> <h4>2. 強制路由 - Mandatory Flag</h4> <p>設定 <code>mandatory=true</code> 後，如果訊息無法路由到任何 queue，RabbitMQ 會回傳 <code>Basic.Return</code>，只能檢測「路由失敗」 不保證訊息已寫入 queue 或持久化。</p> <pre class="language-md"><!----><code class="language-md">Publisher ──▶ Exchange ──✗──▶ (無匹配 queue)
+                    │
+                    └── Basic.Return ──▶ Publisher</code><!----></pre> <h4>3. 發布者確認 - Publisher Confirms</h4> <p>這是 RabbitMQ 擴充，不是標準 AMQP，但會是多數場景的選擇:</p> <ul><li>Ack 時機: 訊息被所有匹配的 queue 接收、已持久化、或已被 consumer 消費</li> <li>非同步回傳，不保證何時收到</li> <li>與 Transaction 互斥（不能同時用）</li> <li>比 Transaction 快很多（Transaction 會讓吞吐量下降 250 倍）</li></ul> <h4>4. 交易 - Transactions</h4> <p>需要批次 all-or-nothing 的情況:</p> <ul><li>只有當所有訊息都送到「同一個 queue」時才是原子的</li> <li>效能很差，每則訊息都要等 commit</li> <li>與 <code>delivery-mode=2</code> 一起用更慢（要等磁碟 I/O）</li></ul> <p><em>優先使用 Publisher Confirms，Transaction 只在特殊需求時使用</em></p> <h3>錯誤處理</h3> <h4>備用交換機 - Alternate Exchange</h4> <p>用來處理無法路由的訊息，設定主要 exchange 的 <code>alternate-exchange</code> 參數，無法路由的訊息會轉發到備用 exchange。備用 exchange 通常設為 <code>fanout</code> 類型，綁定一個專門收集無法路由訊息的 queue。</p> <pre class="language-md"><!----><code class="language-md">Publisher ──▶ Exchange ──✗──▶ (不匹配)
+                    │
+                    └──▶ Alternate Exchange ──▶ unroutable-messages queue</code><!----></pre> <h4>高可用佇列 - HA Queues</h4> <p>讓 queue 資料複製到多個節點，防止單點故障。</p> <pre class="language-undefined"><!----><code class="language-undefined">訊息寫入 → 同步到所有節點
+節點掛掉 → 副本自動升級為主節點</code><!----></pre> <p><strong>設定方式</strong>：</p> <ul><li><code>x-ha-policy: all</code>（複製到所有節點）</li> <li><code>x-ha-policy: nodes</code> + <code>x-ha-nodes: [...]</code>（指定節點）</li></ul> <p><strong>注意</strong>：HA Queue 保證的是「儲存層」可用性，不保證 publisher 發送成功（還是要用 confirms）。</p> <h4>持久化 - Persistence</h4> <p><code>delivery-mode=2</code> 讓訊息寫入磁碟，RabbitMQ 重啟後訊息還在，但非常消耗效能，完整持久化需要兩個條件:</p> <ol><li><code>delivery-mode = 2</code>（訊息持久化）</li> <li>Queue 宣告為 <code>durable = true</code>（Queue 持久化）</li></ol> <h4>背壓機制 - TCP Backpressure</h4> <p>當 Publisher 發太快，RabbitMQ 處理不過來時發生，RabbitMQ 使用 <strong>Credit 機制</strong> 類似連線池概念，如果經常觸發代表系統需要擴容。：</p> <ol><li>連線建立時分配 credits，每個請求消耗一個處理完歸還</li> <li>Credit 用完就停止讀取，Publisher 的 <code>send()</code> 會卡住。</li></ol> <h3>最高可靠性組合</h3> <pre class="language-md"><!----><code class="language-md">Publisher Confirms + delivery-mode=2 + HA Queue + Durable Queue
+        │                  │              │            │
+        │                  │              │            └── Queue 重啟後還在
+        │                  │              └── 節點故障不丟訊息
+        │                  └── 訊息寫入磁碟
+        └── 確認 RabbitMQ 收到
+
+四者結合 = 最高可靠性（但效能最低）</code><!----></pre> <h3>比對其他 MQ 框架</h3> <table><thead><tr><th>概念</th><th>RabbitMQ</th><th>Kafka</th><th>Redis Streams</th></tr></thead><tbody><tr><td>發送確認</td><td>Publisher Confirms</td><td>acks=all</td><td>XADD 回傳 ID</td></tr><tr><td>持久化</td><td>delivery-mode=2</td><td>replication + flush</td><td>AOF/RDB</td></tr><tr><td>消費確認</td><td>Basic.Ack</td><td>commit offset</td><td>XACK</td></tr><tr><td>交易</td><td>TX (慢)</td><td>Transactions</td><td>MULTI/EXEC</td></tr></tbody></table><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1pdhsmv = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.D68lVCjg.js"),
+						import("../_app/immutable/entry/app.CeoZ7EMX.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
