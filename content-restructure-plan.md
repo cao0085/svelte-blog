@@ -68,65 +68,14 @@ content/
 
 ---
 
-### Frontend/（原 Fronted/）— 修正拼字
-
-| 原檔名 | 現有標題 | 建議新標題 | 備註 |
-|--------|----------|-----------|------|
-| css.md | Html Element & CSS 參考標準 | HTML & CSS Reference | 簡化標題 |
-| design_token.md | Design Token | Design Token | OK |
-| ThreeJS.md | 插入 3D 影像 | Three.js - 插入 3D 場景 | 加框架名 |
-| Electron_01.md | Electron With WebContentsView | Electron - WebContentsView | OK |
-| Kotlin_01.md | Android with Kotlin2.0 | Android with Kotlin 2.0 | OK（加空格） |
-
----
-
 ### Golang/（保留不動）
 
 | 原檔名 | 現有標題 | 建議新標題 | 備註 |
 |--------|----------|-----------|------|
 | Redis.md | Redis | Redis with Go | 加 "with Go" |
 | summary.md | Golang High Concurrency Summary | Golang - High Concurrency Summary | 加連字號 |
-
 ---
 
-### Http/（保留不動）
-
-| 原檔名 | 現有標題 | 建議新標題 | 備註 |
-|--------|----------|-----------|------|
-| CORS.md | CORS & SOP | CORS & Same-Origin Policy | 展開縮寫更友善 |
-| http_connect.md | Http Connect | HTTP Connection Lifecycle | 更有描述性 |
-| http_secretKey.md | Http 加密 | HTTP - 請求加密與簽章 | 更具體 |
-| nginx.md | Nginx | Nginx - 基本設定 | 加副標 |
-| filestream.md | HTTP & FileStream | HTTP - File Streaming | OK |
-
----
-
-### How-To/（新建）
-
-#### 來自 Devlop-Note/（全部移入）
-
-| 原檔名 | 現有標題 | 建議新標題 | 備註 |
-|--------|----------|-----------|------|
-| cashflow.md | POS機台金流串接處理 | How to Integrate POS Payment Gateway | |
-| reconcile.md | 會計對帳檔案處理 | How to Handle Payment Reconciliation | |
-| jsPDF.md | Download PDF | How to Generate PDF with jsPDF | |
-| pdfMerge.md | 多個 PDF 檔案合併 | How to Merge PDF Files | |
-| xlsx_excel.md | XLSL Excel 套件 | How to Handle Excel Files with xlsx | 修正拼字 XLSL → XLSX |
-| sftp_ftps.md | SFTP、FTPS C# 連線測試 | How to Connect SFTP / FTPS in C# | |
-| structurizr.md | Structurizr C4Model | How to Use Structurizr C4 Model | |
-| summary_2025.md | 2025 軟體開發 | 2025 Software Development Reflection | 暫放 How-To |
-
----
-
-### Project/（保留不動）
-
-| 原檔名 | 現有標題 | 建議新標題 | 備註 |
-|--------|----------|-----------|------|
-| blog.md | Svelte Blog | Svelte Blog | OK |
-| webpreviewer.md | Website Previewer | Website Previewer | OK |
-| websiteeditor.md | Website Editor | Website Editor | OK |
-
----
 
 ## 關鍵問題（執行前需處理）
 
@@ -141,10 +90,6 @@ content/
 1. ~~移動 `Golang/DDD_01.md` → `Backend/`，更新 frontmatter~~ ✅
 2. ~~修改 DDD 系列文章 frontmatter（title、slug ddd_01~05、date 遞增）、檔名改為 DDD_01~05.md~~ ✅
 3. 修改其他 Backend 文章 frontmatter（BackgroudService.md 改名）
-3. 建立 `How-To/` 目錄
-4. 移動 `Devlop-Note/` 全部 → `How-To/`，刪除 `Devlop-Note/`
-5. 重命名 `Angular20/` → `Angular/`
-6. 重命名 `Fronted/` → `Frontend/`
 7. 修改其餘文章 frontmatter（title、category）
 
 ---
