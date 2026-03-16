@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.D68lVCjg.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C9ZK7KVb.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.7KO9c6ev.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DBjdBF1k.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D2OF2XlI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BeUYb2fj.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.CeoZ7EMX.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BJ0XwmyT.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,19 +22,159 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.B6HYvPes.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.ou-CZSdi.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B4cR0-bw.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.s5EzUrz3.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cm2mvOG-.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.5pb-RIRh.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Bs23mmE4.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.DI2kH_7n.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/JrhlHq7J.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CH_NNKjg.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Message Queue 01 - Publishing</h1> <p class="svelte-mdkbyj">2026-03-11</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>透過 RabbitMQ 學習 Message Queue</h6> <hr/> <h3>Publishing</h3> <p>Publishing 發送是單向且預設不等回應：</p> <pre class="language-md"><!----><code class="language-md">Client → [Method + Header + Body] → RabbitMQ
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Message Queue 01 - Publishing</h1> <p class="svelte-mdkbyj">2026-03-11</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>透過 RabbitMQ 學習 Message Queue</h6> <hr/> <h3>基本流程</h3> <p>通常套件會提供常見的參數轉成 AMQP 通訊協議格式</p> <pre class="language-go"><!----><code class="language-go">
+<span class="token comment">// 1. 建立 Exchange</span>
+ch<span class="token punctuation">.</span><span class="token function">ExchangeDeclare</span><span class="token punctuation">(</span>
+    <span class="token string">"logs"</span><span class="token punctuation">,</span>    <span class="token comment">// name: Exchange 名稱</span>
+    <span class="token string">"direct"</span><span class="token punctuation">,</span>  <span class="token comment">// type: 路由類型（direct/fanout/topic/headers）</span>
+    <span class="token boolean">true</span><span class="token punctuation">,</span>      <span class="token comment">// durable: 持久化，Server 重啟後還在</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>     <span class="token comment">// autoDelete: 沒有 Queue 綁定時是否自動刪除</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>     <span class="token comment">// internal: 是否為內部 Exchange（只能被其他 Exchange 路由）</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>     <span class="token comment">// noWait: 是否等待 Server 確認</span>
+    <span class="token boolean">nil</span><span class="token punctuation">,</span>       <span class="token comment">// arguments: 額外參數</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment">// 2. 建立 Queue</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueDeclare</span><span class="token punctuation">(</span>
+    <span class="token string">"error-queue"</span><span class="token punctuation">,</span>  <span class="token comment">// name: Queue 名稱</span>
+    <span class="token boolean">true</span><span class="token punctuation">,</span>           <span class="token comment">// durable: 持久化</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>          <span class="token comment">// autoDelete: 自動刪除</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>          <span class="token comment">// exclusive: 專屬 Queue</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>          <span class="token comment">// noWait: 不等待確認</span>
+    <span class="token boolean">nil</span><span class="token punctuation">,</span>            <span class="token comment">// arguments: 額外參數</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment">// 3. 綁定</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueBind</span><span class="token punctuation">(</span>
+    <span class="token string">"error-queue"</span><span class="token punctuation">,</span>  <span class="token comment">// queue: 要綁定的 Queue 名稱</span>
+    <span class="token string">"error"</span><span class="token punctuation">,</span>        <span class="token comment">// binding key: 綁定的路由鍵</span>
+    <span class="token string">"logs"</span><span class="token punctuation">,</span>         <span class="token comment">// exchange: 綁定到哪個 Exchange</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>          <span class="token comment">// noWait: 不等待確認</span>
+    <span class="token boolean">nil</span><span class="token punctuation">,</span>            <span class="token comment">// arguments: 額外參數</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment">// 4. 現在才能正常發送</span>
+ch<span class="token punctuation">.</span><span class="token function">Publish</span><span class="token punctuation">(</span>
+    <span class="token string">"logs"</span><span class="token punctuation">,</span>    <span class="token comment">// exchange: 發送到哪個 Exchange</span>
+    <span class="token string">"error"</span><span class="token punctuation">,</span>   <span class="token comment">// routing key: 路由鍵，決定送到哪些 Queue</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>     <span class="token comment">// mandatory: 找不到 Queue 時是否回傳錯誤</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>     <span class="token comment">// immediate: 已棄用，保持 false</span>
+    amqp<span class="token punctuation">.</span>Publishing<span class="token punctuation">&#123;</span>
+        Body<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span><span class="token string">"這是錯誤訊息"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span></code><!----></pre> <p>也就是說只要有連線 MQ Server 的主機，都可以宣告 Exchange / Queue，而當 Producer 和 Consumer 在不同伺服器上的時候。通常預設先啟動 Consumer 並宣告 Exchange 與 Queue 的關係，再由 Producer 去發佈事件。</p> <h3>Publishing</h3> <p>Publishing 發送是單向且預設不等回應：</p> <pre class="language-md"><!----><code class="language-md">Client → [Method + Header + Body] → RabbitMQ
                                       │
-                                      └─ 沒有回應（預設）</code><!----></pre> <p>RabbitMQ 收到後：解析 exchange name + routing key → 查找匹配的 queues → 訊息入列（FIFO）。如果 exchange 不存在，訊息靜默丟棄。</p> <h3>保證層級</h3> <p>和資料庫交易隔離一樣，不同場景需要不同的<strong>保證層級</strong>來平衡效能：</p> <h4>1. 無保證 - Fire-and-forget</h4> <p>發完就走不管成功與否，適合監控數據、日誌收集等非關鍵任務</p> <h4>2. 強制路由 - Mandatory Flag</h4> <p>設定 <code>mandatory=true</code> 後，如果訊息無法路由到任何 queue，RabbitMQ 會回傳 <code>Basic.Return</code>，只能檢測「路由失敗」 不保證訊息已寫入 queue 或持久化。</p> <pre class="language-md"><!----><code class="language-md">Publisher ──▶ Exchange ──✗──▶ (無匹配 queue)
+                                      └─ 沒有回應（預設）</code><!----></pre> <p>RabbitMQ 收到後：解析 exchange name + routing key → 查找匹配的 queues → 訊息入列（FIFO）。如果 exchange 不存在，訊息靜默丟棄。</p> <h4>Direct Exchange</h4> <pre class="language-go"><!----><code class="language-go">ch<span class="token punctuation">.</span><span class="token function">ExchangeDeclare</span><span class="token punctuation">(</span>
+    <span class="token string">"logs"</span><span class="token punctuation">,</span>    <span class="token comment">// name: Exchange 名稱</span>
+    <span class="token string">"direct"</span><span class="token punctuation">,</span>  <span class="token comment">// type: 路由類型（direct/fanout/topic/headers）</span>
+    <span class="token boolean">true</span><span class="token punctuation">,</span>      <span class="token comment">// durable: 持久化，Server 重啟後還在</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>     <span class="token comment">// autoDelete: 沒有 Queue 綁定時是否自動刪除</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>     <span class="token comment">// internal: 是否為內部 Exchange（只能被其他 Exchange 路由）</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>     <span class="token comment">// noWait: 是否等待 Server 確認</span>
+    <span class="token boolean">nil</span><span class="token punctuation">,</span>       <span class="token comment">// arguments: 額外參數</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment">// ... Consumer 綁定</span>
+
+ch<span class="token punctuation">.</span><span class="token function">Publish</span><span class="token punctuation">(</span><span class="token string">"logs"</span><span class="token punctuation">,</span> <span class="token string">"info"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> amqp<span class="token punctuation">.</span>Publishing<span class="token punctuation">&#123;</span>
+    Body<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span><span class="token string">"這是一般訊息"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token function">Publish</span><span class="token punctuation">(</span><span class="token string">"logs"</span><span class="token punctuation">,</span> <span class="token string">"warning"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> amqp<span class="token punctuation">.</span>Publishing<span class="token punctuation">&#123;</span>
+    Body<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span><span class="token string">"這是警告訊息"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+<span class="token comment">// === Consumer ===</span>
+<span class="token comment">// 只收 error</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueDeclare</span><span class="token punctuation">(</span><span class="token string">"error-queue"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueBind</span><span class="token punctuation">(</span><span class="token string">"error-queue"</span><span class="token punctuation">,</span> <span class="token string">"error"</span><span class="token punctuation">,</span> <span class="token string">"logs"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 收 error + warning</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueDeclare</span><span class="token punctuation">(</span><span class="token string">"alert-queue"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueBind</span><span class="token punctuation">(</span><span class="token string">"alert-queue"</span><span class="token punctuation">,</span> <span class="token string">"error"</span><span class="token punctuation">,</span> <span class="token string">"logs"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueBind</span><span class="token punctuation">(</span><span class="token string">"alert-queue"</span><span class="token punctuation">,</span> <span class="token string">"warning"</span><span class="token punctuation">,</span> <span class="token string">"logs"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span></code><!----></pre> <h4>Fanout Exchange</h4> <pre class="language-go"><!----><code class="language-go">ch<span class="token punctuation">.</span><span class="token function">ExchangeDeclare</span><span class="token punctuation">(</span><span class="token string">"notifications"</span><span class="token punctuation">,</span> <span class="token string">"fanout"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+
+ch<span class="token punctuation">.</span><span class="token function">Publish</span><span class="token punctuation">(</span><span class="token string">"notifications"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> amqp<span class="token punctuation">.</span>Publishing<span class="token punctuation">&#123;</span>
+    Body<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span><span class="token string">"新訂單 #12345"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+<span class="token comment">// === Consumer ===</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueDeclare</span><span class="token punctuation">(</span><span class="token string">"email-queue"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueBind</span><span class="token punctuation">(</span><span class="token string">"email-queue"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">,</span> <span class="token string">"notifications"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+
+ch<span class="token punctuation">.</span><span class="token function">QueueDeclare</span><span class="token punctuation">(</span><span class="token string">"sms-queue"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueBind</span><span class="token punctuation">(</span><span class="token string">"sms-queue"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">,</span> <span class="token string">"notifications"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+
+ch<span class="token punctuation">.</span><span class="token function">QueueDeclare</span><span class="token punctuation">(</span><span class="token string">"push-queue"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token function">QueueBind</span><span class="token punctuation">(</span><span class="token string">"push-queue"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">,</span> <span class="token string">"notifications"</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span></code><!----></pre> <h4>Topic Exchange</h4> <pre class="language-golang"><!----><code class="language-golang">ch.ExchangeDeclare(&quot;events&quot;, &quot;topic&quot;, true, false, false, false, nil)
+
+ch.Publish(&quot;events&quot;, &quot;order.created&quot;, false, false, amqp.Publishing&#123;
+    Body: []byte(&quot;訂單建立&quot;),
+&#125;)
+ch.Publish(&quot;events&quot;, &quot;order.paid&quot;, false, false, amqp.Publishing&#123;
+    Body: []byte(&quot;訂單付款&quot;),
+&#125;)
+ch.Publish(&quot;events&quot;, &quot;order.shipped&quot;, false, false, amqp.Publishing&#123;
+    Body: []byte(&quot;訂單出貨&quot;),
+&#125;)
+ch.Publish(&quot;events&quot;, &quot;user.registered&quot;, false, false, amqp.Publishing&#123;
+    Body: []byte(&quot;用戶註冊&quot;),
+&#125;)
+
+// === Consumer ===
+// 訂單服務：收所有 order.* 事件
+ch.QueueDeclare(&quot;order-service&quot;, true, false, false, false, nil)
+ch.QueueBind(&quot;order-service&quot;, &quot;order.*&quot;, &quot;events&quot;, false, nil)
+
+// 通知服務：只收建立和註冊
+ch.QueueDeclare(&quot;notification-service&quot;, true, false, false, false, nil)
+ch.QueueBind(&quot;notification-service&quot;, &quot;order.created&quot;, &quot;events&quot;, false, nil)
+ch.QueueBind(&quot;notification-service&quot;, &quot;user.registered&quot;, &quot;events&quot;, false, nil)
+
+// Log 服務：收全部
+ch.QueueDeclare(&quot;log-service&quot;, true, false, false, false, nil)
+ch.QueueBind(&quot;log-service&quot;, &quot;#&quot;, &quot;events&quot;, false, nil)</code><!----></pre> <h4>Headers Exchange</h4> <pre class="language-golang"><!----><code class="language-golang">ch.ExchangeDeclare(&quot;tasks&quot;, &quot;headers&quot;, true, false, false, false, nil)
+
+// 發送帶 header 的訊息
+ch.Publish(&quot;tasks&quot;, &quot;&quot;, false, false, amqp.Publishing&#123;
+    Headers: amqp.Table&#123;
+        &quot;format&quot;: &quot;pdf&quot;,
+        &quot;type&quot;:   &quot;report&quot;,
+    &#125;,
+    Body: []byte(&quot;產生 PDF 報表&quot;),
+&#125;)
+
+ch.Publish(&quot;tasks&quot;, &quot;&quot;, false, false, amqp.Publishing&#123;
+    Headers: amqp.Table&#123;
+        &quot;format&quot;: &quot;excel&quot;,
+        &quot;type&quot;:   &quot;report&quot;,
+    &#125;,
+    Body: []byte(&quot;產生 Excel 報表&quot;),
+&#125;)
+
+// === Consumer ===
+// PDF 處理器：只收 format=pdf
+ch.QueueDeclare(&quot;pdf-processor&quot;, true, false, false, false, nil)
+ch.QueueBind(&quot;pdf-processor&quot;, &quot;&quot;, &quot;tasks&quot;, false, amqp.Table&#123;
+    &quot;x-match&quot;: &quot;any&quot;,      // any = 任一符合, all = 全部符合
+    &quot;format&quot;:  &quot;pdf&quot;,
+&#125;)
+
+// 報表處理器：收所有 type=report
+ch.QueueDeclare(&quot;report-processor&quot;, true, false, false, false, nil)
+ch.QueueBind(&quot;report-processor&quot;, &quot;&quot;, &quot;tasks&quot;, false, amqp.Table&#123;
+    &quot;x-match&quot;: &quot;all&quot;,
+    &quot;type&quot;:    &quot;report&quot;,
+&#125;)</code><!----></pre> <h3>保證層級</h3> <p>和資料庫交易隔離一樣，不同場景需要不同的<strong>保證層級</strong>來平衡效能：</p> <h4>1. 無保證 - Fire-and-forget</h4> <p>發完就走不管成功與否，適合監控數據、日誌收集等非關鍵任務</p> <h4>2. 強制路由 - Mandatory Flag</h4> <p>設定 <code>mandatory=true</code> 後，如果訊息無法路由到任何 queue，RabbitMQ 會回傳 <code>Basic.Return</code>，只能檢測「路由失敗」 不保證訊息已寫入 queue 或持久化。</p> <pre class="language-md"><!----><code class="language-md">Publisher ──▶ Exchange ──✗──▶ (無匹配 queue)
                     │
                     └── Basic.Return ──▶ Publisher</code><!----></pre> <h4>3. 發布者確認 - Publisher Confirms</h4> <p>這是 RabbitMQ 擴充，不是標準 AMQP，但會是多數場景的選擇:</p> <ul><li>Ack 時機: 訊息被所有匹配的 queue 接收、已持久化、或已被 consumer 消費</li> <li>非同步回傳，不保證何時收到</li> <li>與 Transaction 互斥（不能同時用）</li> <li>比 Transaction 快很多（Transaction 會讓吞吐量下降 250 倍）</li></ul> <h4>4. 交易 - Transactions</h4> <p>需要批次 all-or-nothing 的情況:</p> <ul><li>只有當所有訊息都送到「同一個 queue」時才是原子的</li> <li>效能很差，每則訊息都要等 commit</li> <li>與 <code>delivery-mode=2</code> 一起用更慢（要等磁碟 I/O）</li></ul> <p><em>優先使用 Publisher Confirms，Transaction 只在特殊需求時使用</em></p> <h3>錯誤處理</h3> <h4>備用交換機 - Alternate Exchange</h4> <p>用來處理無法路由的訊息，設定主要 exchange 的 <code>alternate-exchange</code> 參數，無法路由的訊息會轉發到備用 exchange。備用 exchange 通常設為 <code>fanout</code> 類型，綁定一個專門收集無法路由訊息的 queue。</p> <pre class="language-md"><!----><code class="language-md">Publisher ──▶ Exchange ──✗──▶ (不匹配)
                     │
@@ -50,7 +190,7 @@
 			
 			<script>
 				{
-					__sveltekit_1pdhsmv = {
+					__sveltekit_1oh3lw8 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -58,8 +198,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.D68lVCjg.js"),
-						import("../_app/immutable/entry/app.CeoZ7EMX.js")
+						import("../_app/immutable/entry/start.7KO9c6ev.js"),
+						import("../_app/immutable/entry/app.BJ0XwmyT.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.7KO9c6ev.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DBjdBF1k.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BeUYb2fj.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BJ0XwmyT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.ou-CZSdi.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cm2mvOG-.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.5pb-RIRh.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/JrhlHq7J.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CH_NNKjg.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Message Queue 03 - Setup</h1> <p class="svelte-mdkbyj">2026-03-14</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>透過 RabbitMQ 學習 Message Queue</h6> <hr/> <h3>Single Node</h3> <p>所有資源（Exchange、Queue、訊息）集中在單一節點，雖然可透過 durable/persistent 設定讓資料在重啟後恢復，但節點硬體故障時資料將永久消失，無法容許硬體上的錯誤。</p> <h3>Cluster</h3> <p>首先每台機器都需要安裝 RabbitMQ，並確保所有節點共享相同的 Erlang Cookie（節點間認證用）。</p> <h4>1. 確認 Erlang Cookie 一致</h4> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 查看 Cookie</span>
+<span class="token function">cat</span> /var/lib/rabbitmq/.erlang.cookie
+
+<span class="token comment"># 所有節點的 Cookie 必須相同</span>
+<span class="token comment"># 若不同，手動複製機器 A 的 Cookie 到 B、C</span></code><!----></pre> <h4>2. 機器 A 作為主節點，保持運行</h4> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 機器 A 正常啟動即可，作為叢集的第一個節點</span>
+rabbitmq-server <span class="token parameter variable">-detached</span></code><!----></pre> <h4>3. 機器 B、C 加入叢集</h4> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 在機器 B 上執行</span>
+rabbitmqctl stop_app <span class="token comment"># 停止 RabbitMQ 應用程式（不是整個服務）</span>
+rabbitmqctl reset <span class="token comment"># 清除該節點原本的狀態，準備加入新叢集</span>
+rabbitmqctl join_cluster rabbit@machineA
+rabbitmqctl start_app
+
+<span class="token comment"># 在機器 C 上執行</span>
+rabbitmqctl stop_app
+rabbitmqctl reset
+rabbitmqctl join_cluster rabbit@machineA
+rabbitmqctl start_app</code><!----></pre> <h4>4. 確認叢集狀態</h4> <pre class="language-bash"><!----><code class="language-bash">rabbitmqctl cluster_status</code><!----></pre> <p>加入成功後，節點間的訊息路由由 RabbitMQ 內建處理，
+Application 只需連線到任意節點即可，不需要額外設定。</p> <h3>Cluster Node Types</h3> <p>Rabbit MQ 提供 3 種節點型態用於不同場景</p> <h4>Disk Node（磁碟節點）</h4> <ul><li>執行期狀態同時儲存於 RAM 與磁碟（Exchange、Queue、Binding 等結構）</li> <li>重啟後可自行從磁碟還原叢集結構，不依賴其他節點</li> <li>叢集中至少需要一個 Disk Node</li></ul> <h4>RAM Node（記憶體節點）</h4> <ul><li>執行期狀態僅存於 RAM，不寫入磁碟</li> <li>重啟後結構清空，需重新加入叢集並從 Disk Node 取得結構</li> <li>適合結構變動頻繁的場景，一般情況 Disk Node 即可</li></ul> <blockquote><p>注意：節點類型只影響「叢集結構」的儲存方式
+訊息是否持久化由 durable / persistent 參數決定，與節點類型無關</p></blockquote> <p>若多個 Disk Node 對叢集狀態產生分歧，建議關閉整個叢集
+先啟動狀態最正確的 Disk Node，再依序加入其他節點</p> <h4>Stats Node</h4> <ul><li>需啟用 rabbitmq-management plugin 才有此節點類型</li> <li>負責收集叢集中所有節點的統計與狀態資料</li> <li>整個叢集同時只能有一個 Stats Node，通常由主要 Disk Node 擔任</li></ul> <h3>Queue 類型</h3> <p>RabbitMQ 隨著分散式系統對需求的演進過程也發展出不同的 Queue 種類</p> <h3>1. Classic Queue</h3> <p>以下以 <strong>1 Disk Node + 2 RAM Node</strong> 的叢集為例說明。</p> <h4>durable: false + persistent: false（預設）</h4> <p>訊息與 Queue 結構僅存於 RAM，任一節點重啟，
+該節點上的 Queue 與訊息永久消失。</p> <p>適合日誌、即時通知等可丟失的場景，速度最快。</p> <h4>durable: true + persistent: true</h4> <ul><li>Queue 宣告在 Disk Node: 節點重啟後，結構與訊息皆可恢復，硬碟故障時資料永久消失</li> <li>Queue 宣告在 RAM Node: 訊息雖然寫入磁碟，但 Queue 結構本身重啟後消失，訊息也因此拿不到</li></ul> <blockquote><p><code>persistent: true</code> 只保證訊息寫入磁碟 <code>durable: true</code> 只有在 Disk Node 上才能完整保證 Queue 結構重啟後還在</p></blockquote> <h4>正確的規劃方式</h4> <ul><li>重要的 Queue → 連線到 Disk Node 宣告，搭配 durable: true + persistent: true</li> <li>可丟失的 Queue → 連線到 RAM Node 宣告，搭配 durable: false + persistent: false</li></ul> <p>RabbitMQ 不會自動幫你選節點，Queue 建立在哪個節點需要開發者自行規劃。訊息可以跨節點路由，但 Queue 的資料不會自動複製到其他節點。</p> <hr/> <h3>2. Mirrored Queue</h3> <p>Classic Queue 的高可用方案，Queue 會有一個 Master 節點和多個 Mirror 節點。
+Master 掛掉後 Mirror 自動升為新 Master。</p> <p>但存在<strong>腦裂（Split-brain）</strong>問題：
+網路短暫中斷時，Mirror 可能誤判 Master 已掛掉並自行升級，
+網路恢復後出現兩個 Master，導致訊息不一致甚至丟失。</p> <p>RabbitMQ 官方已不推薦使用，新系統應改用 Quorum Queue。</p> <hr/> <h3>3. Quorum Queue</h3> <p>以 <strong>Raft 共識演算法</strong>為基礎的現代 Queue 類型，解決了 Classic Queue 和 Mirrored Queue 的根本問題。</p> <ul><li>Queue 資料自動複製到多個節點，不需要開發者決定放哪個節點</li> <li>少數節點故障時自動選出新的 Leader，不需要人工介入</li> <li>透過 Raft 演算法保證資料一致性，從根本解決腦裂問題</li></ul> <pre class="language-javascript"><!----><code class="language-javascript">channel<span class="token punctuation">.</span><span class="token function">assertQueue</span><span class="token punctuation">(</span><span class="token string">'my-queue'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  durable<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  arguments<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">'x-queue-type'</span><span class="token operator">:</span> <span class="token string">'quorum'</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span></code><!----></pre> <p>RabbitMQ 官方現在建議優先使用 Quorum Queue 處理重要訊息，Classic Queue 僅適用於可丟失的場景。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1oh3lw8 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.7KO9c6ev.js"),
+						import("../_app/immutable/entry/app.BJ0XwmyT.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
