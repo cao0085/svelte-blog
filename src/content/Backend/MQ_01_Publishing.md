@@ -10,6 +10,56 @@ slug: "message-queue-01"
 
 ---
 
+### 基本流程
+
+通常套件會提供常見的參數轉成 AMQP 通訊協議格式
+
+```go
+
+// 1. 建立 Exchange
+ch.ExchangeDeclare(
+    "logs",    // name: Exchange 名稱
+    "direct",  // type: 路由類型（direct/fanout/topic/headers）
+    true,      // durable: 持久化，Server 重啟後還在
+    false,     // autoDelete: 沒有 Queue 綁定時是否自動刪除
+    false,     // internal: 是否為內部 Exchange（只能被其他 Exchange 路由）
+    false,     // noWait: 是否等待 Server 確認
+    nil,       // arguments: 額外參數
+)
+
+// 2. 建立 Queue
+ch.QueueDeclare(
+    "error-queue",  // name: Queue 名稱
+    true,           // durable: 持久化
+    false,          // autoDelete: 自動刪除
+    false,          // exclusive: 專屬 Queue
+    false,          // noWait: 不等待確認
+    nil,            // arguments: 額外參數
+)
+
+// 3. 綁定
+ch.QueueBind(
+    "error-queue",  // queue: 要綁定的 Queue 名稱
+    "error",        // binding key: 綁定的路由鍵
+    "logs",         // exchange: 綁定到哪個 Exchange
+    false,          // noWait: 不等待確認
+    nil,            // arguments: 額外參數
+)
+
+// 4. 現在才能正常發送
+ch.Publish(
+    "logs",    // exchange: 發送到哪個 Exchange
+    "error",   // routing key: 路由鍵，決定送到哪些 Queue
+    false,     // mandatory: 找不到 Queue 時是否回傳錯誤
+    false,     // immediate: 已棄用，保持 false
+    amqp.Publishing{
+        Body: []byte("這是錯誤訊息"),
+    },
+)
+```
+
+也就是說只要有連線 MQ Server 的主機，都可以宣告 Exchange / Queue，而當 Producer 和 Consumer 在不同伺服器上的時候。通常預設先啟動 Consumer 並宣告 Exchange 與 Queue 的關係，再由 Producer 去發佈事件。
+
 ### Publishing
 
 Publishing 發送是單向且預設不等回應：
@@ -21,6 +71,130 @@ Client → [Method + Header + Body] → RabbitMQ
 ```
 
 RabbitMQ 收到後：解析 exchange name + routing key → 查找匹配的 queues → 訊息入列（FIFO）。如果 exchange 不存在，訊息靜默丟棄。
+
+#### Direct Exchange
+
+```go
+ch.ExchangeDeclare(
+    "logs",    // name: Exchange 名稱
+    "direct",  // type: 路由類型（direct/fanout/topic/headers）
+    true,      // durable: 持久化，Server 重啟後還在
+    false,     // autoDelete: 沒有 Queue 綁定時是否自動刪除
+    false,     // internal: 是否為內部 Exchange（只能被其他 Exchange 路由）
+    false,     // noWait: 是否等待 Server 確認
+    nil,       // arguments: 額外參數
+)
+
+// ... Consumer 綁定
+
+ch.Publish("logs", "info", false, false, amqp.Publishing{
+    Body: []byte("這是一般訊息"),
+})
+ch.Publish("logs", "warning", false, false, amqp.Publishing{
+    Body: []byte("這是警告訊息"),
+})
+
+// === Consumer ===
+// 只收 error
+ch.QueueDeclare("error-queue", true, false, false, false, nil)
+ch.QueueBind("error-queue", "error", "logs", false, nil)
+
+// 收 error + warning
+ch.QueueDeclare("alert-queue", true, false, false, false, nil)
+ch.QueueBind("alert-queue", "error", "logs", false, nil)
+ch.QueueBind("alert-queue", "warning", "logs", false, nil)
+```
+
+#### Fanout Exchange
+
+```go
+ch.ExchangeDeclare("notifications", "fanout", true, false, false, false, nil)
+
+ch.Publish("notifications", "", false, false, amqp.Publishing{
+    Body: []byte("新訂單 #12345"),
+})
+
+// === Consumer ===
+ch.QueueDeclare("email-queue", true, false, false, false, nil)
+ch.QueueBind("email-queue", "", "notifications", false, nil)
+
+ch.QueueDeclare("sms-queue", true, false, false, false, nil)
+ch.QueueBind("sms-queue", "", "notifications", false, nil)
+
+ch.QueueDeclare("push-queue", true, false, false, false, nil)
+ch.QueueBind("push-queue", "", "notifications", false, nil)
+```
+
+#### Topic Exchange
+
+```golang
+ch.ExchangeDeclare("events", "topic", true, false, false, false, nil)
+
+ch.Publish("events", "order.created", false, false, amqp.Publishing{
+    Body: []byte("訂單建立"),
+})
+ch.Publish("events", "order.paid", false, false, amqp.Publishing{
+    Body: []byte("訂單付款"),
+})
+ch.Publish("events", "order.shipped", false, false, amqp.Publishing{
+    Body: []byte("訂單出貨"),
+})
+ch.Publish("events", "user.registered", false, false, amqp.Publishing{
+    Body: []byte("用戶註冊"),
+})
+
+// === Consumer ===
+// 訂單服務：收所有 order.* 事件
+ch.QueueDeclare("order-service", true, false, false, false, nil)
+ch.QueueBind("order-service", "order.*", "events", false, nil)
+
+// 通知服務：只收建立和註冊
+ch.QueueDeclare("notification-service", true, false, false, false, nil)
+ch.QueueBind("notification-service", "order.created", "events", false, nil)
+ch.QueueBind("notification-service", "user.registered", "events", false, nil)
+
+// Log 服務：收全部
+ch.QueueDeclare("log-service", true, false, false, false, nil)
+ch.QueueBind("log-service", "#", "events", false, nil)
+```
+
+#### Headers Exchange
+
+```golang
+ch.ExchangeDeclare("tasks", "headers", true, false, false, false, nil)
+
+// 發送帶 header 的訊息
+ch.Publish("tasks", "", false, false, amqp.Publishing{
+    Headers: amqp.Table{
+        "format": "pdf",
+        "type":   "report",
+    },
+    Body: []byte("產生 PDF 報表"),
+})
+
+ch.Publish("tasks", "", false, false, amqp.Publishing{
+    Headers: amqp.Table{
+        "format": "excel",
+        "type":   "report",
+    },
+    Body: []byte("產生 Excel 報表"),
+})
+
+// === Consumer ===
+// PDF 處理器：只收 format=pdf
+ch.QueueDeclare("pdf-processor", true, false, false, false, nil)
+ch.QueueBind("pdf-processor", "", "tasks", false, amqp.Table{
+    "x-match": "any",      // any = 任一符合, all = 全部符合
+    "format":  "pdf",
+})
+
+// 報表處理器：收所有 type=report
+ch.QueueDeclare("report-processor", true, false, false, false, nil)
+ch.QueueBind("report-processor", "", "tasks", false, amqp.Table{
+    "x-match": "all",
+    "type":    "report",
+})
+```
 
 ### 保證層級
 
