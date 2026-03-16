@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.7KO9c6ev.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DBjdBF1k.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BBC3_2Jk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D6Qm95Ve.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BeUYb2fj.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bkvu2rto.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BJ0XwmyT.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.Dlafm0HJ.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.ou-CZSdi.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DHdIrSBF.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Cm2mvOG-.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.5pb-RIRh.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/KvGGr7vt.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DB7Z-IEz.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/JrhlHq7J.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.CH_NNKjg.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/2AVOoN7p.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.D-1CFDmB.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">PostgreSQL 02 - 隔離與鎖</h1> <p class="svelte-mdkbyj">2026-02-04</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>PostgreSQL 的併發處理 — <a href="https://www.postgresql.org/docs" rel="nofollow">PostgreSQL Doc</a></h6> <hr/> <h3>交易隔離等級</h3> <p>交易並發執行時可能出現以下問題，不同隔離等級提供不同的保護程度：</p> <table><thead><tr><th>問題</th><th>說明</th></tr></thead><tbody><tr><td><strong>Dirty Read 髒讀</strong></td><td>讀到其他交易尚未 COMMIT 的資料</td></tr><tr><td><strong>Nonrepeatable Read 複讀</strong></td><td>同一交易內讀兩次同筆資料，值不同（被其他交易更新後 COMMIT）</td></tr><tr><td><strong>Phantom Read 幻讀</strong></td><td>同一交易內兩次查詢，結果集的「行數」不同（被插入或刪除）</td></tr><tr><td><strong>Serialization 序列化</strong></td><td>完全等同於序列執行，最嚴格的保證</td></tr></tbody></table> <p>PostgreSQL 預設隔離等級為 <strong>Read Committed</strong>（避免 Dirty Read）。</p> <hr/> <h3>鎖類型（由低到高限制性）</h3> <p>PostgreSQL 提供多種表鎖層級，根據鎖之間是否衝突決定交易是否等待。</p> <hr/> <h4>ACCESS SHARE（訪問共享鎖）</h4> <p>最寬鬆，只衝突 <code>ACCESS EXCLUSIVE</code>。普通 SELECT 自動取得。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">BEGIN</span><span class="token punctuation">;</span>
@@ -88,7 +88,7 @@ REFRESH MATERIALIZED <span class="token keyword">VIEW</span> mat_view<span class
 			
 			<script>
 				{
-					__sveltekit_1oh3lw8 = {
+					__sveltekit_o18ivu = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -96,8 +96,8 @@ REFRESH MATERIALIZED <span class="token keyword">VIEW</span> mat_view<span class
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.7KO9c6ev.js"),
-						import("../_app/immutable/entry/app.BJ0XwmyT.js")
+						import("../_app/immutable/entry/start.BBC3_2Jk.js"),
+						import("../_app/immutable/entry/app.Dlafm0HJ.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
