@@ -259,8 +259,32 @@ private bool ValidatePublicKey(string publicKey, string[] validPublicKeys)
 
 ---
 
-### 選擇
+### RSA 簽名驗證 (JWT)
 
-- 內部服務互相呼叫 → HMAC-SHA256，簡單快速
-- 對外開放 API、多個第三方接入 → RSA，每個第三方可以有自己的識別，不用共享同一把 Key
-- 更嚴謹的場景 → 可以考慮 JWT 或 OAuth 2.0，有更完整的標準規範
+與上方「加密/解密」不同，JWT 採用的是 RSA 的另一種用法：簽名/驗簽。
+
+JWT Token 結構
+
+```md
+eyJhbGciOi... . eyJ1c2VyIj... . SflKxwRJSM...
+    Header           Payload          Signature
+   (演算法)        (使用者資料)         (簽名)
+// Header 和 Payload 是 Base64 明文（任何人都能 decode 看到內容），安全性完全靠第三段 Signature 保證。
+```
+
+拿 Keycloak 的簽名流程當作例子
+    1. 組合內容    "Header.Payload"
+    2. 計算雜湊    SHA256("Header.Payload") → hash
+    3. 私鑰加密    RSA_Encrypt(私鑰, hash) → Signature
+    4. 組成 Token  "Header.Payload.Signature" → 回傳給前端
+
+驗簽流程（後端驗證）
+    1. 拆開 Token 取得三段: Header, Payload, Signature
+        - 公鑰解密 Signature → 取得 hash A
+        - 自己算 SHA256("Header.Payload") → 取得 hash B
+    2. 比對 hash A == hash B → 通過，代表確實是 Keycloak 簽的且內容未被竄改
+    3. 檢查 Payload 中的 exp（過期時間）、iss（簽發者）、roles（角色權限）
+
+多一層 SHA256 的原因是 RSA 能加密的資料長度有限，經過 SHA256 後能變成固定長度（32 bytes）。
+
+***可以用公鑰解私鑰是因為RSA本來就有成對的特質，只是習慣上我們稱呼公私鑰***
