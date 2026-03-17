@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CTCaPHLx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BMtzsL5o.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DhZdCenv.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CrYAflc7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D6JCh6Ur.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLwmTORZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DDIi9gQz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C1R-qLse.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.GWfT4KMB.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">PostgreSQL - Queue</h1> <p class="svelte-mdkbyj">2026-03-17</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>PostgreSQL 有支援可以實作 Queue</h6> <hr/> <h3>SKIP LOCKED</h3> <p>當多個 Worker 同時競搶任務時，傳統 <code>FOR UPDATE</code> 會讓後面的 Worker 等待。<code>SKIP LOCKED</code> 改為跳過被鎖定的 row，直接拿下一筆可用的任務：</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> job_queue
+<span class="token keyword">WHERE</span> <span class="token keyword">status</span> <span class="token operator">=</span> <span class="token string">'pending'</span>
+  <span class="token operator">AND</span> run_at <span class="token operator">&lt;=</span> <span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> run_at
+<span class="token keyword">FOR</span> <span class="token keyword">UPDATE</span> SKIP LOCKED
+<span class="token keyword">LIMIT</span> <span class="token number">1</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>LISTEN / NOTIFY</h3> <p>PostgreSQL 原生的 <strong>pub/sub 機制</strong>，讓 Worker 只在收到通知時才去撈任務，不需要背景輪詢（polling）DB，大幅減少不必要的 DB 查詢。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- Worker 訂閱頻道</span>
+LISTEN job_created<span class="token punctuation">;</span>
+
+<span class="token comment">-- 有新任務時，由 application 發送通知</span>
+NOTIFY job_created<span class="token punctuation">,</span> <span class="token string">'&#123;"job_id": 123&#125;'</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>JSONB</h3> <p>Job 的 payload 通常是結構不固定的資料，<code>JSONB</code> 讓 payload 存起來之後仍然可以查詢與過濾：</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- 建立 Queue table</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> job_queue <span class="token punctuation">(</span>
+  id        BIGSERIAL <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+  <span class="token keyword">type</span>      <span class="token keyword">TEXT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  payload   JSONB<span class="token punctuation">,</span>                        <span class="token comment">-- 彈性 payload</span>
+  <span class="token keyword">status</span>    <span class="token keyword">TEXT</span> <span class="token keyword">DEFAULT</span> <span class="token string">'pending'</span><span class="token punctuation">,</span>
+  run_at    TIMESTAMPTZ <span class="token keyword">DEFAULT</span> <span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  created_at TIMESTAMPTZ <span class="token keyword">DEFAULT</span> <span class="token function">NOW</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 查詢特定 payload 條件的任務</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> job_queue
+<span class="token keyword">WHERE</span> payload<span class="token operator">-</span><span class="token operator">>></span><span class="token string">'user_id'</span> <span class="token operator">=</span> <span class="token string">'42'</span>
+  <span class="token operator">AND</span> <span class="token keyword">status</span> <span class="token operator">=</span> <span class="token string">'failed'</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>生態系支援</h3> <p>社群直接把 PostgreSQL 包裝成完整的 Job Queue Library，代表「PostgreSQL 當 Queue」已被認可為合理且推薦的做法：</p> <table><thead><tr><th>Library</th><th>語言</th><th>特點</th></tr></thead><tbody><tr><td><code>pg_boss</code></td><td>Node.js</td><td>功能完整，支援 delay、retry、cron</td></tr><tr><td><code>river</code></td><td>Go</td><td>高效能，官方推薦架構</td></tr><tr><td><code>good_job</code></td><td>Ruby</td><td>Rails 生態整合</td></tr><tr><td><code>procrastinate</code></td><td>Python</td><td>async 支援</td></tr></tbody></table> <p>這些 Library 都建立在 <code>SKIP LOCKED</code> + <code>LISTEN / NOTIFY</code> 之上。</p> <hr/> <h3>何時換掉 PostgreSQL Queue</h3> <p>PostgreSQL 作為 Queue 的限制：</p> <ul><li>Job 量達到每秒數千筆以上，DB I/O 成為瓶頸</li> <li>需要跨服務、跨語言的訊息傳遞（考慮 Kafka / RabbitMQ）</li> <li>需要嚴格的 exactly-once 語意</li> <li>需要複雜的 routing、fanout、topic 管理</li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_7r0tvf = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CTCaPHLx.js"),
+						import("../_app/immutable/entry/app.CrYAflc7.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

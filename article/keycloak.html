@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CTCaPHLx.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BMtzsL5o.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DhZdCenv.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.CrYAflc7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.D6JCh6Ur.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLwmTORZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DDIi9gQz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C1R-qLse.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.GWfT4KMB.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">整合身份認證</h1> <p class="svelte-mdkbyj">2026-03-16</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>自架身份認證伺服器 — <a href="https://www.keycloak.org/documentation" rel="nofollow">Keycloak Doc</a></h6> <hr/> <p>Keycloak 是開源的身份認證與授權管理平台（Identity and Access Management），讓自己架設一個類似 Google OAuth 2.0 的 Token 發行商，統一管理使用者登入、Token 簽發與權限控制。</p> <h3>整體架構</h3> <pre class="language-md"><!----><code class="language-md">┌───────────────────────────────────────────────────┐
+│                   Keycloak Server                  │
+│                 (基於 Quarkus / Java)               │
+│                                                    │
+│  ┌──────────────┐  ┌───────────────────────────┐  │
+│  │  Admin UI     │  │  Login / Account Pages    │  │
+│  │  (React SPA)  │  │  (Server-side templates)  │  │
+│  └──────┬────────┘  └─────────────┬─────────────┘  │
+│         │                         │                │
+│  ┌──────▼─────────────────────────▼─────────────┐  │
+│  │            REST API Layer                     │  │
+│  │  (Admin API / Account API / OIDC endpoints)   │  │
+│  └───────────────────┬──────────────────────────┘  │
+│                      │                             │
+│  ┌───────────────────▼──────────────────────────┐  │
+│  │          Core Engine (SPI 插件架構)            │  │
+│  │  Authentication / Authorization / Sessions    │  │
+│  └──────┬───────────────────────┬───────────────┘  │
+│         │                       │                  │
+│  ┌──────▼───────┐    ┌─────────▼─────────┐        │
+│  │  Infinispan   │    │  Hibernate ORM    │        │
+│  │ (快取/Session) │    │  (資料存取)        │        │
+│  └──────────────┘    └─────────┬─────────┘        │
+└────────────────────────────────┼───────────────────┘
+                                 │
+                     ┌───────────▼────────────┐
+                     │        Database         │
+                     │   Dev: H2（內嵌）        │
+                     │   Prod: PostgreSQL 等    │
+                     └────────────────────────┘</code><!----></pre> <p>Keycloak 的核心設計是 <strong>SPI（Service Provider Interface）</strong>，功能設計成可插拔的模組：</p> <table><thead><tr><th>SPI</th><th>作用</th></tr></thead><tbody><tr><td><code>AuthenticatorSPI</code></td><td>登入流程</td></tr><tr><td><code>UserStorageSPI</code></td><td>使用者儲存（可接 LDAP、外部 DB）</td></tr><tr><td><code>ProtocolMapperSPI</code></td><td>Token 處理</td></tr></tbody></table> <p>資料庫方面，Keycloak 自己不帶資料庫引擎：</p> <table><thead><tr><th>模式</th><th>資料庫</th></tr></thead><tbody><tr><td><code>start-dev</code></td><td>內嵌 H2（開發用，重啟可能遺失）</td></tr><tr><td><code>start</code>（正式）</td><td>自行接 PostgreSQL / MySQL / MariaDB</td></tr></tbody></table> <hr/> <h3>核心概念</h3> <h4>Realm、Client、User、Role 的關係</h4> <pre class="language-md"><!----><code class="language-md">Keycloak Instance
+├── master（系統管理用的 Realm）
+└── company-realm（你的業務 Realm）
+    ├── Clients（代表每個接入的應用）
+    │   ├── erp-finance
+    │   ├── erp-warehouse
+    │   └── erp-hr
+    │
+    ├── Users（使用者）
+    │   ├── 小明
+    │   ├── 小華
+    │   └── 小美
+    │
+    ├── Roles（每個 Client 各自定義）
+    │   ├── erp-finance:   [viewer, accountant, finance-admin]
+    │   ├── erp-warehouse: [viewer, operator, warehouse-admin]
+    │   └── erp-hr:        [viewer, hr-staff, hr-admin]
+    │
+    └── Identity Providers（選配，第三方登入）
+        ├── Google
+        ├── GitHub
+        └── 企業 SAML / LDAP</code><!----></pre> <ul><li>Realm：領域空間，彼此完全隔離。同一批使用者放同一個 Realm，不同客戶放不同 Realm</li> <li>Client：代表一個接入的應用程式</li> <li>User：使用者帳號</li> <li>Role：權限角色，分為 Realm Role（全域）和 Client Role（各系統獨立）</li></ul> <hr/> <h3>架構範例（3 套 ERP）</h3> <h4>情境一：使用者是同一批人 → 同一個 Realm</h4> <pre class="language-md"><!----><code class="language-md">Keycloak
+└── company-realm
+    ├── 密鑰（一對，綁在 Realm 上）
+    │   ├── 私鑰（只有 Keycloak 持有）
+    │   └── 公鑰（公開給所有 ERP）
+    │
+    ├── Client: erp-finance    ── Token 用同一把私鑰簽
+    ├── Client: erp-warehouse  ── Token 用同一把私鑰簽
+    └── Client: erp-hr         ── Token 用同一把私鑰簽</code><!----></pre> <p>三套 ERP 都去同一個 endpoint 拿公鑰：</p> <pre class="language-bash"><!----><code class="language-bash">GET http://localhost:6752/realms/company-realm/.well-known/openid-configuration</code><!----></pre> <h4>情境二：使用者完全不同 → 各自 Realm</h4> <pre class="language-md"><!----><code class="language-md">Keycloak
+├── Realm: customer-a（A 公司）
+│   ├── Client: erp
+│   └── Users: A 公司的人
+│
+├── Realm: customer-b（B 公司）
+│   ├── Client: erp
+│   └── Users: B 公司的人
+│
+└── Realm: customer-c（C 公司）
+    ├── Client: erp
+    └── Users: C 公司的人</code><!----></pre> <p><em>密鑰解決的是信任問題（這個 Token 是不是 Keycloak 簽的？），權限解決的是授權問題（這個人能不能用這套系統？）</em></p> <hr/> <h3>與 Google OAuth 2.0 的對比</h3> <table><thead><tr><th></th><th>Google OAuth</th><th>Keycloak</th></tr></thead><tbody><tr><td><strong>誰是發行商</strong></td><td>Google</td><td>自己</td></tr><tr><td><strong>使用者帳號在哪</strong></td><td>Google 管</td><td>KeyCloak DB</td></tr><tr><td><strong>權限控制單位</strong></td><td>scope（mail, calendar）</td><td>role / scope</td></tr><tr><td><strong>能打什麼 API</strong></td><td>Google 的 API</td><td>Application API</td></tr><tr><td><strong>同意畫面</strong></td><td>Google 的授權頁</td><td>可自訂的授權頁</td></tr></tbody></table> <hr/> <h3>Quick Start（Docker Compose）</h3> <pre class="language-yml"><!----><code class="language-yml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.9"</span>
+
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">keycloak</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> quay.io/keycloak/keycloak<span class="token punctuation">:</span><span class="token number">26.1</span>
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> keycloak
+    <span class="token key atrule">command</span><span class="token punctuation">:</span> start<span class="token punctuation">-</span>dev
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token key atrule">KC_BOOTSTRAP_ADMIN_USERNAME</span><span class="token punctuation">:</span> admin
+      <span class="token key atrule">KC_BOOTSTRAP_ADMIN_PASSWORD</span><span class="token punctuation">:</span> admin
+      <span class="token key atrule">KC_HTTP_PORT</span><span class="token punctuation">:</span> <span class="token string">"6752"</span>
+      <span class="token key atrule">KC_HTTP_MANAGEMENT_PORT</span><span class="token punctuation">:</span> <span class="token string">"9000"</span>
+      <span class="token key atrule">KC_HEALTH_ENABLED</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+      <span class="token key atrule">KC_METRICS_ENABLED</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"6752:6752"</span>   <span class="token comment"># Keycloak main UI &amp; API</span>
+      <span class="token punctuation">-</span> <span class="token string">"9000:9000"</span>   <span class="token comment"># Management interface (health, metrics)</span>
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> unless<span class="token punctuation">-</span>stopped</code><!----></pre> <pre class="language-bash"><!----><code class="language-bash"><span class="token function">docker</span> compose up <span class="token parameter variable">-d</span>
+
+<span class="token comment"># Admin Console: http://localhost:6752</span>
+<span class="token comment"># Health Check: http://localhost:9000/health</span>
+<span class="token comment"># Metrics: http://localhost:9000/metrics</span>
+<span class="token comment"># 登入帳密：&#96;admin&#96; / &#96;admin&#96;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_7r0tvf = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CTCaPHLx.js"),
+						import("../_app/immutable/entry/app.CrYAflc7.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
