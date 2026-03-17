@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DuwTRQrL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B9LvpYRw.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DQU9vq7Z.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B-SrA95R.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DZFkKhTE.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D6mMY-mn.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CNDcq089.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DNcdPDu2.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.t0SkDog4.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">實作 Priority Job Queue</h1> <p class="svelte-mdkbyj">2026-03-17</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>用 PostgreSQL 實作 Priority Job Queue 會遇到的 <a href="https://www.postgresql.org/message-id/90ee725f-d003-4838-97ec-e7e4149ac75b%40mailbox.org" rel="nofollow">問題</a></h6> <hr/> <h3>問題背景</h3> <p>多個 worker 並發從多個 queue 取 job，queue 有優先權，高優先權先處理，且優先權重會是動態改變的。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> queues <span class="token punctuation">(</span>
+  id       <span class="token keyword">integer</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+  priority <span class="token keyword">integer</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token number">0</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> jobs <span class="token punctuation">(</span>
+  id       <span class="token keyword">serial</span>  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+  queue_id <span class="token keyword">integer</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">REFERENCES</span> queues<span class="token punctuation">(</span>id<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> queues <span class="token punctuation">(</span>id<span class="token punctuation">,</span> priority<span class="token punctuation">)</span> <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> jobs <span class="token punctuation">(</span>queue_id<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> <span class="token number">1</span> <span class="token keyword">FROM</span> generate_series<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1000000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> jobs <span class="token punctuation">(</span>queue_id<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> <span class="token number">2</span> <span class="token keyword">FROM</span> generate_series<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1000000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> jobs <span class="token punctuation">(</span>queue_id<span class="token punctuation">)</span> <span class="token keyword">SELECT</span> <span class="token number">3</span> <span class="token keyword">FROM</span> generate_series<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1000000</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>為什麼 naive query 很慢</h3> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- 快，但無視 priority（2ms）</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> jobs <span class="token keyword">LIMIT</span> <span class="token number">1</span> <span class="token keyword">FOR</span> <span class="token keyword">UPDATE</span> SKIP LOCKED<span class="token punctuation">;</span>
+
+<span class="token comment">-- 有 priority，但慢（1100ms）</span>
+<span class="token comment">-- 原因是 FOR UPDATE SKIP LOCKED 會讓 PostgreSQL 必須先排好所有資料，再逐筆嘗試加鎖。</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span>
+<span class="token keyword">FROM</span> jobs
+<span class="token keyword">JOIN</span> queues <span class="token keyword">ON</span> queues<span class="token punctuation">.</span>id <span class="token operator">=</span> jobs<span class="token punctuation">.</span>queue_id
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> priority <span class="token keyword">DESC</span>
+<span class="token keyword">LIMIT</span> <span class="token number">1</span>
+<span class="token keyword">FOR</span> <span class="token keyword">UPDATE</span> <span class="token keyword">OF</span> jobs SKIP LOCKED<span class="token punctuation">;</span></code><!----></pre> <pre class="language-md"><!----><code class="language-md">Sort (rows=3000000)
+  Sort Method: external merge Disk: 111568kB   ← 300萬筆溢出到磁碟排序
+  → Hash Join 300萬筆 jobs × 3筆 queues</code><!----></pre> <hr/> <h4>解法一：正確建 Index</h4> <p>讓 B-Tree Index 維護整體排序，讀取時從第一筆逐筆嘗試；缺點是會提高寫入成本(須維護 B-Tree)，適合寫少讀多的場景。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token comment">-- queues 上的 priority index</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> queues_priority_idx <span class="token keyword">ON</span> queues<span class="token punctuation">(</span>priority<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- jobs 上的複合 index</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">INDEX</span> jobs_queue_id_id_idx <span class="token keyword">ON</span> jobs<span class="token punctuation">(</span>queue_id<span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <p>加上 index 後，planner 改走：</p> <pre class="language-md"><!----><code class="language-md">Incremental Sort → Nested Loop
+  → Index Scan Backward on queues_priority_idx   ← 直接按 priority 順序
+  → Index Only Scan on jobs_queue_id_id_idx       ← 不碰 heap
+
+執行時間：9ms（vs 原本 1347ms）</code><!----></pre> <hr/> <h4>解法二：分兩步驟查詢</h4> <p>先找 queue，再取 job 拆開 ORDER BY 和 FOR UPDATE SKIP LOCKED；但就有機會讀不到東西需要應用層 retry。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">WITH</span> best_queue <span class="token keyword">AS</span> <span class="token punctuation">(</span>
+  <span class="token keyword">SELECT</span> q<span class="token punctuation">.</span>id
+  <span class="token keyword">FROM</span> queues q
+  <span class="token keyword">WHERE</span> <span class="token keyword">EXISTS</span> <span class="token punctuation">(</span><span class="token keyword">SELECT</span> <span class="token number">1</span> <span class="token keyword">FROM</span> jobs j <span class="token keyword">WHERE</span> j<span class="token punctuation">.</span>queue_id <span class="token operator">=</span> q<span class="token punctuation">.</span>id<span class="token punctuation">)</span>
+  <span class="token keyword">ORDER</span> <span class="token keyword">BY</span> q<span class="token punctuation">.</span>priority <span class="token keyword">DESC</span>
+  <span class="token keyword">LIMIT</span> <span class="token number">1</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">SELECT</span> j<span class="token punctuation">.</span><span class="token operator">*</span>
+<span class="token keyword">FROM</span> jobs j
+<span class="token keyword">JOIN</span> best_queue bq <span class="token keyword">ON</span> j<span class="token punctuation">.</span>queue_id <span class="token operator">=</span> bq<span class="token punctuation">.</span>id
+<span class="token keyword">LIMIT</span> <span class="token number">1</span>
+<span class="token keyword">FOR</span> <span class="token keyword">UPDATE</span> <span class="token keyword">OF</span> j SKIP LOCKED<span class="token punctuation">;</span></code><!----></pre> <hr/> <h4>解法三：Loop 逐 Queue 嘗試</h4> <p>和解法二差不多，但重試邏輯直接在 SQL 處理好</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token operator">OR</span> <span class="token keyword">REPLACE</span> <span class="token keyword">FUNCTION</span> dequeue_job<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">RETURNS</span> jobs <span class="token keyword">AS</span> $$
+<span class="token keyword">DECLARE</span>
+  result jobs<span class="token punctuation">;</span>
+  q      RECORD<span class="token punctuation">;</span>
+<span class="token keyword">BEGIN</span>
+  <span class="token comment">-- 外層：依 priority 高到低排好 queue 順序</span>
+  <span class="token keyword">FOR</span> q <span class="token operator">IN</span>
+    <span class="token keyword">SELECT</span> id <span class="token keyword">FROM</span> queues <span class="token keyword">ORDER</span> <span class="token keyword">BY</span> priority <span class="token keyword">DESC</span>
+  <span class="token keyword">LOOP</span>
+    <span class="token comment">-- 內層：只針對這個 queue 取一筆，走窄 index</span>
+    <span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">INTO</span> result
+    <span class="token keyword">FROM</span> jobs
+    <span class="token keyword">WHERE</span> queue_id <span class="token operator">=</span> q<span class="token punctuation">.</span>id
+    <span class="token keyword">LIMIT</span> <span class="token number">1</span>
+    <span class="token keyword">FOR</span> <span class="token keyword">UPDATE</span> SKIP LOCKED<span class="token punctuation">;</span>
+
+    <span class="token keyword">IF</span> FOUND <span class="token keyword">THEN</span>
+      <span class="token keyword">RETURN</span> result<span class="token punctuation">;</span>   <span class="token comment">-- 取到就立刻回傳</span>
+    <span class="token keyword">END</span> <span class="token keyword">IF</span><span class="token punctuation">;</span>
+    <span class="token comment">-- 取不到（空的 or 全被鎖）→ 繼續下一個 queue</span>
+  <span class="token keyword">END</span> <span class="token keyword">LOOP</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">RETURN</span> <span class="token boolean">NULL</span><span class="token punctuation">;</span>         <span class="token comment">-- 全部 queue 都沒號可叫</span>
+<span class="token keyword">END</span><span class="token punctuation">;</span>
+$$ <span class="token keyword">LANGUAGE</span> plpgsql<span class="token punctuation">;</span></code><!----></pre> <p>執行邏輯：</p> <pre class="language-md"><!----><code class="language-md">queues（依 priority DESC）
+  │
+  ├─ priority=10 → 找 job → 找到！→ RETURN
+  │
+  ├─ priority=5  → 找 job → 全被鎖（SKIP LOCKED）→ 繼續
+  │
+  ├─ priority=1  → 找 job → queue 是空的 → 繼續
+  │
+  └─ （沒了）→ RETURN NULL</code><!----></pre> <hr/> <h4>小結論</h4> <p>推薦一或三!</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1vrpuhf = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DuwTRQrL.js"),
+						import("../_app/immutable/entry/app.B-SrA95R.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

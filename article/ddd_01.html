@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.CTCaPHLx.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BMtzsL5o.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DuwTRQrL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B9LvpYRw.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DhZdCenv.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DQU9vq7Z.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.CrYAflc7.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.B-SrA95R.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.D6JCh6Ur.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DZFkKhTE.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BLwmTORZ.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.DDIi9gQz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D6mMY-mn.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.CNDcq089.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/C1R-qLse.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.GWfT4KMB.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DNcdPDu2.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.t0SkDog4.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Domain-Driven 01 - Concepts</h1> <p class="svelte-mdkbyj">2026-02-11</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>核心概念就是自定義超多規則保護資料</h6> <hr/> <h3>資料驗證</h3> <p>修正已儲存的錯誤資料，成本遠高於在寫入前就將它攔下。系統會透過多層次的防護機制，從源頭降低錯誤發生的機率：</p> <ul><li><code>UI Input Rule</code>: 即時回饋，引導使用者輸入符合基本格式的資料</li> <li><code>Strongly Typed Language</code>: 在編譯期間就提醒開發人員型別錯誤</li> <li><code>DB Column Type</code>: 利用資料庫本身的約束來防止不合法的資料寫入</li></ul> <p>上述這些技術層面的限制，都無法處理業務邏輯（Business Logic），例如一個庫存管理系統要求 「庫存數量不可為負」：</p> <ul><li><code>UI Input Rule</code>: 無法防止程式邏輯計算後產生的負值</li> <li><code>Strongly Typed Language</code>: 能確保 Quantity 是整數，卻無法約束減法運算的結果</li> <li><code>DB Column Type</code>: 將欄位設為無符號整數，但仍可能因運算而寫入負值（或需額外使用觸發器）</li></ul> <p>這些技術都無法表達「庫存不得為負」這條業務規則，因此需要這樣處理：</p> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">type</span> Stock <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
@@ -177,7 +177,7 @@ d1 <span class="token operator">==</span> d2 <span class="token comment">// true
 			
 			<script>
 				{
-					__sveltekit_7r0tvf = {
+					__sveltekit_1vrpuhf = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -185,8 +185,8 @@ d1 <span class="token operator">==</span> d2 <span class="token comment">// true
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.CTCaPHLx.js"),
-						import("../_app/immutable/entry/app.CrYAflc7.js")
+						import("../_app/immutable/entry/start.DuwTRQrL.js"),
+						import("../_app/immutable/entry/app.B-SrA95R.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
