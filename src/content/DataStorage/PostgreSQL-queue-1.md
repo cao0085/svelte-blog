@@ -1,6 +1,6 @@
 ---
 title: "PostgreSQL - Queue"
-date: "2026-03-17"
+date: "2026-03-16"
 category: "software"
 subCategory: "DataStorage"
 tags: ["database", "postgresql", "message-queue"]
@@ -13,7 +13,7 @@ slug: "db-postgresql-queue"
 
 ### SKIP LOCKED
 
-當多個 Worker 同時競搶任務時，傳統 `FOR UPDATE` 會讓後面的 Worker 等待。`SKIP LOCKED` 改為跳過被鎖定的 row，直接拿下一筆可用的任務：
+```SKIP LOCKED```的概念是在一個範圍內找出可被上鎖的資料，而當多個 Worker 同時競搶任務時，傳統 `FOR UPDATE` 會讓後面的 Worker 等待。`SKIP LOCKED` 改為跳過被鎖定的 row，直接拿下一筆可用的任務：
 
 ```sql
 SELECT * FROM job_queue
@@ -22,7 +22,16 @@ WHERE status = 'pending'
 ORDER BY run_at
 FOR UPDATE SKIP LOCKED
 LIMIT 1;
+
+-- 執行流程：
+-- 1. 依條件過濾、排序出候選資料
+-- 2. 從第一筆開始嘗試加鎖
+--    - 成功 → 回傳這筆，停止
+--    - 失敗（被其他 Worker 鎖住）→ 跳過，試下一筆
+-- 3. `LIMIT 1` 的意思是「找到第一筆可鎖的就停」，不是「只看前 1 筆」
 ```
+
+*```SKIP LOCKED` 故意違反 Repeatable Read，結果取決於當下誰鎖了哪些 row，專門為 queue dispatch 場景設計，不適合用在需要一致性保證的查詢。*
 
 ---
 
