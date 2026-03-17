@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DuwTRQrL.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B9LvpYRw.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D62bdaNr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DRENc71v.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DQU9vq7Z.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BoRoFmZ4.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B-SrA95R.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DUpuWCGL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DZFkKhTE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.CnO2xM05.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D6mMY-mn.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CNDcq089.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BqCaeCOx.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BEEw7Wu6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DNcdPDu2.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.t0SkDog4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjoI89FZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DO0xuw94.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">實作 Priority Job Queue</h1> <p class="svelte-mdkbyj">2026-03-17</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>用 PostgreSQL 實作 Priority Job Queue 會遇到的 <a href="https://www.postgresql.org/message-id/90ee725f-d003-4838-97ec-e7e4149ac75b%40mailbox.org" rel="nofollow">問題</a></h6> <hr/> <h3>問題背景</h3> <p>多個 worker 並發從多個 queue 取 job，queue 有優先權，高優先權先處理，且優先權重會是動態改變的。</p> <pre class="language-sql"><!----><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> queues <span class="token punctuation">(</span>
@@ -113,7 +113,7 @@ $$ <span class="token keyword">LANGUAGE</span> plpgsql<span class="token punctua
 			
 			<script>
 				{
-					__sveltekit_1vrpuhf = {
+					__sveltekit_uoti6p = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -121,8 +121,8 @@ $$ <span class="token keyword">LANGUAGE</span> plpgsql<span class="token punctua
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DuwTRQrL.js"),
-						import("../_app/immutable/entry/app.B-SrA95R.js")
+						import("../_app/immutable/entry/start.D62bdaNr.js"),
+						import("../_app/immutable/entry/app.DUpuWCGL.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DuwTRQrL.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B9LvpYRw.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D62bdaNr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DRENc71v.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DQU9vq7Z.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BoRoFmZ4.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B-SrA95R.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DUpuWCGL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DZFkKhTE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.CnO2xM05.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D6mMY-mn.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CNDcq089.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BqCaeCOx.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BEEw7Wu6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DNcdPDu2.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.t0SkDog4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjoI89FZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DO0xuw94.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Multi-Tab Management</h1> <p class="svelte-mdkbyj">2026-01-05</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>企業內部系統常用到的分頁顯示管理，管理分頁列的狀態與切換，記錄當前開啟的路由分頁</h6> <hr/> <h3>TabService</h3> <p>通常可以搭配 RouteReuseStrategy 控制元件顯示和復用</p> <ul><li><strong>RouteReuseStrategy</strong>：攔截路由切換，快取 Component 實例</li> <li><strong>TabService</strong>：記錄哪些分頁存在、哪個是 active、呼叫 <code>router.navigate()</code> 切換路由 <ol><li>存放（已 Instance）當前的分頁（Component）</li> <li>選擇該分頁替換內容</li> <li>銷毀分頁</li></ol></li></ul> <p>至少要建立兩個資料模型</p> <pre class="language-ts"><!----><code class="language-ts"><span class="token comment">// 每個目錄的基本資料結構，用 id 當作唯一識別</span>
@@ -201,7 +201,7 @@
 			
 			<script>
 				{
-					__sveltekit_1vrpuhf = {
+					__sveltekit_uoti6p = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -209,8 +209,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DuwTRQrL.js"),
-						import("../_app/immutable/entry/app.B-SrA95R.js")
+						import("../_app/immutable/entry/start.D62bdaNr.js"),
+						import("../_app/immutable/entry/app.DUpuWCGL.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

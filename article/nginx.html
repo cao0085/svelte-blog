@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.DuwTRQrL.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/B9LvpYRw.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D62bdaNr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DRENc71v.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DQU9vq7Z.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BoRoFmZ4.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.B-SrA95R.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DUpuWCGL.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.DZFkKhTE.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.CnO2xM05.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D6mMY-mn.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CNDcq089.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BqCaeCOx.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BEEw7Wu6.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DNcdPDu2.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.t0SkDog4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjoI89FZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DO0xuw94.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Nginx</h1> <p class="svelte-mdkbyj">2025-11-27</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>用 Nginx + Docker 建立本地反向代理，方便非技術人員測試和預覽</h6> <hr/> <h3>使用場景</h3> <ul><li>本地開發時，讓非技術人員透過區網 IP 預覽網站</li> <li>模擬正式環境的反向代理結構</li> <li>解決前後端分離開發時的 CORS 問題</li></ul> <hr/> <h3>環境配置步驟</h3> <ol><li>本地啟動要被代理的 Server（假設跑在 <code>localhost:4041</code>）</li> <li>編寫 <code>nginx.conf</code> 設定反向代理</li> <li>用 Docker 跑 Nginx container</li> <li>測試 <code>localhost</code> 是否連到 Nginx 預設頁面</li> <li>測試區網內其他裝置能否連線（用 <code>ipconfig</code> 查 IPv4 位址）</li> <li>測試反向代理是否正確轉發</li></ol> <pre class="language-dockerfile"><!----><code class="language-dockerfile"><span class="token comment"># Use the specific Ubuntu 22.04 image</span>
@@ -71,7 +71,7 @@ http &#123;
 			
 			<script>
 				{
-					__sveltekit_1vrpuhf = {
+					__sveltekit_uoti6p = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -79,8 +79,8 @@ http &#123;
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.DuwTRQrL.js"),
-						import("../_app/immutable/entry/app.B-SrA95R.js")
+						import("../_app/immutable/entry/start.D62bdaNr.js"),
+						import("../_app/immutable/entry/app.DUpuWCGL.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

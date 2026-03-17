@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D62bdaNr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DRENc71v.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BoRoFmZ4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DUpuWCGL.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.CnO2xM05.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BqCaeCOx.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BEEw7Wu6.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BjoI89FZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DO0xuw94.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">Metrics Monitoring 01 - Prometheus</h1> <p class="svelte-mdkbyj">2026-03-17</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>監控應用層主要由 Communications、Scraper、TSDB、Rule Engine 組成，透過 Prometheus 學習 Metrics Monitoring</h6> <hr/> <p>Prometheus 是用 Go 編譯的單一 binary（可執行檔），不需要額外的 runtime（JVM、Node.js 等）</p> <pre class="language-md"><!----><code class="language-md"><span class="token comment">&lt;!-- IN CONTAINER --></span>
+┌─────────────────────────────────┐
+│  Docker Container               │
+│  ┌───────────────────────────┐  │
+│  │  Prometheus Server (Go)   │  │
+│  │                           │  │
+│  │  - HTTP Server (:9090)    │  │
+│  │  - Scraper (抓取器)       │  │
+│  │  - TSDB (時序資料庫)       │  │
+│  │  - Rule Engine (規則引擎)  │  │
+│  └───────────────────────────┘  │
+│                                 │
+│  Volume: /prometheus (存資料)    │
+│  Config: /etc/prometheus/       │
+└────────────┬────────────────────┘
+             │ port 9090
+             ▼
+        瀏覽器 / Grafana / API</code><!----></pre> <hr/> <h3>HTTP Server</h3> <p>Prometheus 溝通全部走 HTTP，唯一的變化是 Remote Write / Remote Read（送資料到遠端儲存時），body 格式從純文字變成 Protobuf（二進位編碼，更省空間），但傳輸協定仍然是 HTTP。</p> <pre class="language-md"><!----><code class="language-md"><span class="token table"><span class="token table-header-row"><span class="token punctuation">|</span><span class="token table-header important"> 場景                          </span><span class="token punctuation">|</span><span class="token table-header important"> 方式              </span><span class="token punctuation">|</span>
+</span><span class="token table-line"><span class="token punctuation">|</span><span class="token punctuation">-------------------------------</span><span class="token punctuation">|</span><span class="token punctuation">-------------------</span><span class="token punctuation">|</span>
+</span><span class="token table-data-rows"><span class="token punctuation">|</span><span class="token table-data"> Prometheus 抓 metrics         </span><span class="token punctuation">|</span><span class="token table-data"> GET /metrics      </span><span class="token punctuation">|</span>
+<span class="token punctuation">|</span><span class="token table-data"> 瀏覽器看 Web UI               </span><span class="token punctuation">|</span><span class="token table-data"> HTTP :9090        </span><span class="token punctuation">|</span>
+<span class="token punctuation">|</span><span class="token table-data"> Grafana 查資料                </span><span class="token punctuation">|</span><span class="token table-data"> HTTP API          </span><span class="token punctuation">|</span>
+<span class="token punctuation">|</span><span class="token table-data"> 程式透過 API 查詢              </span><span class="token punctuation">|</span><span class="token table-data"> HTTP API          </span><span class="token punctuation">|</span>
+<span class="token punctuation">|</span><span class="token table-data"> 遠端儲存（Thanos / Cortex）    </span><span class="token punctuation">|</span><span class="token table-data"> HTTP + Protobuf   </span><span class="token punctuation">|</span>
+</span></span>
+<span class="token title important"><span class="token punctuation">#</span> 直接用 curl 就能看到 metrics（純文字）</span>
+curl http://localhost:9090/metrics
+
+<span class="token title important"><span class="token punctuation">#</span> 直接用 curl 就能查詢資料</span>
+curl http://localhost:9090/api/v1/query?query=up</code><!----></pre> <hr/> <h3>Scraper</h3> <p>Prometheus 採主動拉取（pull）metrics，不是被監控的服務推（push）過來：</p> <pre class="language-md"><!----><code class="language-md">Prometheus              Target（被監控的服務）
+    │                        │
+    │  GET /metrics          │
+    │───────────────────────>│
+    │                        │
+    │  回傳純文字 metrics      │
+    │&lt;───────────────────────│
+    │                        │
+  存進 TSDB</code><!----></pre> <p>被監控的服務怎麼提供 <code>/metrics</code>？</p> <ul><li>應用程式暴露</li></ul> <pre class="language-bash"><!----><code class="language-bash">GET http://your-app:8080/metrics
+──────────────────────────────
+http_requests_total<span class="token punctuation">&#123;</span>method<span class="token operator">=</span><span class="token string">"GET"</span>, <span class="token assign-left variable">path</span><span class="token operator">=</span><span class="token string">"/api/users"</span><span class="token punctuation">&#125;</span> <span class="token number">1027</span>
+http_requests_total<span class="token punctuation">&#123;</span>method<span class="token operator">=</span><span class="token string">"POST"</span>, <span class="token assign-left variable">path</span><span class="token operator">=</span><span class="token string">"/api/users"</span><span class="token punctuation">&#125;</span> <span class="token number">53</span>
+app_memory_usage_bytes <span class="token number">125829120</span></code><!----></pre> <ul><li>用 Exporter 當中間人</li></ul> <pre class="language-md"><!----><code class="language-md">Prometheus ──GET /metrics──> Node Exporter  ──讀系統資訊──> Linux OS
+Prometheus ──GET /metrics──> MySQL Exporter ──SQL 查詢──>  MySQL
+Prometheus ──GET /metrics──> Redis Exporter ──連線取資料──> Redis</code><!----></pre> <p>但是不管哪種方式 Prometheus 看到的永遠是一個 HTTP endpoint。差別只是這個 endpoint 是 app 自己開的，還是中間放一個 exporter 幫忙翻譯。</p> <hr/> <h3>Time Series Database</h3> <p>Prometheus 內建 TSDB 針對時序資料優化（append-only、自動壓縮、自動過期）</p> <pre class="language-md"><!----><code class="language-md"><span class="token table"><span class="token table-header-row"><span class="token punctuation">|</span><span class="token table-header important"> 特性     </span><span class="token punctuation">|</span><span class="token table-header important"> 一般 DB          </span><span class="token punctuation">|</span><span class="token table-header important"> TSDB                              </span><span class="token punctuation">|</span>
+</span><span class="token table-line"><span class="token punctuation">|</span><span class="token punctuation">----------</span><span class="token punctuation">|</span><span class="token punctuation">------------------</span><span class="token punctuation">|</span><span class="token punctuation">-----------------------------------</span><span class="token punctuation">|</span>
+</span><span class="token table-data-rows"><span class="token punctuation">|</span><span class="token table-data"> 寫入模式  </span><span class="token punctuation">|</span><span class="token table-data"> 隨機讀寫          </span><span class="token punctuation">|</span><span class="token table-data"> 只追加（append-only）               </span><span class="token punctuation">|</span>
+<span class="token punctuation">|</span><span class="token table-data"> 資料量   </span><span class="token punctuation">|</span><span class="token table-data"> 看業務            </span><span class="token punctuation">|</span><span class="token table-data"> 極大，每 15 秒一筆 × 上千個指標       </span><span class="token punctuation">|</span>
+<span class="token punctuation">|</span><span class="token table-data"> 查詢方式  </span><span class="token punctuation">|</span><span class="token table-data"> WHERE id = 1     </span><span class="token punctuation">|</span><span class="token table-data"> WHERE 時間區間（最近 1 小時）        </span><span class="token punctuation">|</span>
+<span class="token punctuation">|</span><span class="token table-data"> 舊資料   </span><span class="token punctuation">|</span><span class="token table-data"> 通常要保留         </span><span class="token punctuation">|</span><span class="token table-data"> 可自動過期刪除（預設 15 天）          </span><span class="token punctuation">|</span></span></span></code><!----></pre> <p>磁碟結構</p> <ul><li>資料每 N 小時壓縮成一個 block</li> <li>用 WAL 確保 crash 不丟資料</li> <li>預設保留 N 天，超過自動刪除</li></ul> <pre class="language-md"><!----><code class="language-md">/prometheus/data/
+├── 01HXXXXXX/          ← Block（2 小時一個區塊）
+│   ├── chunks/         ← 壓縮過的時序資料
+│   ├── index           ← 索引（快速查找用）
+│   └── meta.json       ← 這個 block 的時間範圍
+├── 01HYYYYYY/
+│   ├── chunks/
+│   ├── index
+│   └── meta.json
+└── wal/                ← Write-Ahead Log（防止 crash 丟資料）</code><!----></pre> <hr/> <h3>Rule Engine</h3> <h4>Recording Rules</h4> <p>把複雜查詢的結果提前算好，存成新指標，避免每次查詢都即時運算：</p> <pre class="language-yaml"><!----><code class="language-yaml"><span class="token key atrule">groups</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> cpu_rules
+    <span class="token key atrule">rules</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">record</span><span class="token punctuation">:</span> job<span class="token punctuation">:</span>cpu_usage<span class="token punctuation">:</span>avg_5m           <span class="token comment"># 新指標名稱</span>
+        <span class="token key atrule">expr</span><span class="token punctuation">:</span> avg(rate(cpu_usage_seconds_total<span class="token punctuation">[</span>5m<span class="token punctuation">]</span>))  <span class="token comment"># 計算公式</span></code><!----></pre> <p>Prometheus 每 15 秒自動算一次，查詢時直接讀 <code>job:cpu_usage:avg_5m</code>，不用再從原始資料計算。</p> <h4>Alerting Rules</h4> <p>設定條件，持續符合就觸發告警：</p> <pre class="language-yaml"><!----><code class="language-yaml"><span class="token key atrule">groups</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> alerts
+    <span class="token key atrule">rules</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">alert</span><span class="token punctuation">:</span> HighCpuUsage
+        <span class="token key atrule">expr</span><span class="token punctuation">:</span> cpu_usage <span class="token punctuation">></span> 90          <span class="token comment"># 條件</span>
+        <span class="token key atrule">for</span><span class="token punctuation">:</span> 5m                       <span class="token comment"># 持續 5 分鐘才觸發</span>
+        <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+          <span class="token key atrule">severity</span><span class="token punctuation">:</span> critical
+        <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+          <span class="token key atrule">summary</span><span class="token punctuation">:</span> <span class="token string">"CPU 過高！"</span></code><!----></pre> <pre class="language-md"><!----><code class="language-md">Rule Engine 每 15 秒檢查
+        │
+        ▼
+  cpu_usage > 90？
+        │
+    YES │  持續 5 分鐘了？
+        │       │
+        │   YES ▼
+        │   發送到 Alertmanager
+        │       │
+        │       ▼
+        │   Alertmanager 決定怎麼通知
+        │   ├── Slack
+        │   ├── Email
+        │   └── PagerDuty
+        │
+    NO  ▼
+    什麼都不做</code><!----></pre> <p><em>Prometheus 本身不發通知，它只負責判斷條件。實際發 Slack、Email 是另一個獨立元件 Alertmanager</em></p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_uoti6p = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.D62bdaNr.js"),
+						import("../_app/immutable/entry/app.DUpuWCGL.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
