@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.CHj3aW7x.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/ZT0ckq54.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dwylqdei.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DSH2OeGv.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xsVDlqqI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.BCC50Tb1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DUCgrYkc.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.agP1RL-g.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D6312qDi.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CknjugM5.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">High Concurrency System 02</h1> <p class="svelte-mdkbyj">2026-03-21</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>訂單流程、RabbitMQ Consumer、壓測驗證</h6> <hr/> <p>一個訂單從 HTTP 進來到最終寫入 DB，會經過以下步驟：</p> <pre class="language-text"><!----><code class="language-text">1. 收到請求（POST /api/v1/orders）
+2. Redis Lua Script 原子預扣庫存
+3. Snowflake 生成訂單 ID，建立 Order Aggregate
+4. 發佈 OrderMessage 到 RabbitMQ
+5. 立刻回 202 Accepted（含 order_id）
+     ↓（非同步）
+6. Consumer 消費訊息，INSERT order 到 PostgreSQL
+7. Redis ConfirmReservation（清掉 reserved 數字）
+8. UPDATE products.available_stock（DB 跟上 Redis）
+9. Ack message，訊息從佇列移除</code><!----></pre> <p>HTTP 層只做2, 3, 4，不碰 DB，回應時間基本上就是 Redis 一次 Lua Script 的耗時。</p> <h3>PlaceOrder Handler</h3> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>h <span class="token operator">*</span>PlaceOrderHandler<span class="token punctuation">)</span> <span class="token function">Handle</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">,</span> cmd PlaceOrderCommand<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token builtin">int64</span><span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// ① 原子預扣</span>
+    ok<span class="token punctuation">,</span> err <span class="token operator">:=</span> h<span class="token punctuation">.</span>stockCache<span class="token punctuation">.</span><span class="token function">Reserve</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> cmd<span class="token punctuation">.</span>ProductID<span class="token punctuation">,</span> cmd<span class="token punctuation">.</span>Quantity<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">,</span> err
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token operator">!</span>ok <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">,</span> ErrInsufficientStock
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// ② 建立訂單</span>
+    orderID<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> h<span class="token punctuation">.</span>idGen<span class="token punctuation">.</span><span class="token function">Generate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    userID<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> strconv<span class="token punctuation">.</span><span class="token function">ParseInt</span><span class="token punctuation">(</span>cmd<span class="token punctuation">.</span>UserID<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+    order <span class="token operator">:=</span> domain<span class="token punctuation">.</span><span class="token function">NewOrder</span><span class="token punctuation">(</span>orderID<span class="token punctuation">,</span> userID<span class="token punctuation">,</span> cmd<span class="token punctuation">.</span>ProductID<span class="token punctuation">,</span> cmd<span class="token punctuation">.</span>Quantity<span class="token punctuation">,</span> cmd<span class="token punctuation">.</span>Price<span class="token punctuation">)</span>
+
+    <span class="token comment">// ③ 發佈到 RabbitMQ</span>
+    msg <span class="token operator">:=</span> rabbitmq<span class="token punctuation">.</span>OrderMessage<span class="token punctuation">&#123;</span>OrderID<span class="token punctuation">:</span> order<span class="token punctuation">.</span>ID<span class="token punctuation">,</span> <span class="token operator">...</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> err <span class="token operator">:=</span> h<span class="token punctuation">.</span>producer<span class="token punctuation">.</span><span class="token function">Publish</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 發佈失敗 → Rollback Redis</span>
+        h<span class="token punctuation">.</span>stockCache<span class="token punctuation">.</span><span class="token function">CancelReservation</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> cmd<span class="token punctuation">.</span>ProductID<span class="token punctuation">,</span> cmd<span class="token punctuation">.</span>Quantity<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">,</span> err
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> orderID<span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>HTTP Handler 的回應：</p> <pre class="language-go"><!----><code class="language-go"><span class="token comment">// 成功</span>
+c<span class="token punctuation">.</span><span class="token function">JSON</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusAccepted<span class="token punctuation">,</span> gin<span class="token punctuation">.</span>H<span class="token punctuation">&#123;</span>
+    <span class="token string">"order_id"</span><span class="token punctuation">:</span> orderID<span class="token punctuation">,</span>
+    <span class="token string">"status"</span><span class="token punctuation">:</span>   <span class="token string">"queued"</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 庫存不足</span>
+c<span class="token punctuation">.</span><span class="token function">JSON</span><span class="token punctuation">(</span>http<span class="token punctuation">.</span>StatusConflict<span class="token punctuation">,</span> gin<span class="token punctuation">.</span>H<span class="token punctuation">&#123;</span>
+    <span class="token string">"error"</span><span class="token punctuation">:</span> <span class="token string">"insufficient stock for product 1"</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span></code><!----></pre> <h3>RabbitMQ 設定</h3> <p>Producer 和 Consumer 用獨立的 Channel，避免互相阻塞：</p> <pre class="language-go"><!----><code class="language-go"><span class="token comment">// main.go 裡分開建立</span>
+conn<span class="token punctuation">,</span> mainCh<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> rabbitmq<span class="token punctuation">.</span><span class="token function">NewConnection</span><span class="token punctuation">(</span>rabbitmqURL<span class="token punctuation">)</span>
+
+producerCh<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> conn<span class="token punctuation">.</span><span class="token function">Channel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   <span class="token comment">// 給 producer 用</span>
+consumerCh<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> conn<span class="token punctuation">.</span><span class="token function">Channel</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   <span class="token comment">// 給 consumer 用</span></code><!----></pre> <p>Queue 宣告為 <strong>durable</strong>，訊息 delivery mode 為 <strong>Persistent</strong>，broker 重啟後訊息不會消失：</p> <pre class="language-go"><!----><code class="language-go">q<span class="token punctuation">,</span> err <span class="token operator">:=</span> ch<span class="token punctuation">.</span><span class="token function">QueueDeclare</span><span class="token punctuation">(</span>
+    OrderQueue<span class="token punctuation">,</span> <span class="token comment">// name</span>
+    <span class="token boolean">true</span><span class="token punctuation">,</span>       <span class="token comment">// durable ← 重啟不消失</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>      <span class="token comment">// auto-delete</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>      <span class="token comment">// exclusive</span>
+    <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token boolean">nil</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span></code><!----></pre> <p>Consumer 用 手動 Ack（<code>auto-ack=false</code>），這樣處理失敗可以 Nack + requeue 讓訊息重試：</p> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>c <span class="token operator">*</span>OrderConsumer<span class="token punctuation">)</span> <span class="token function">Start</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">,</span> handler <span class="token keyword">func</span><span class="token punctuation">(</span>OrderMessage<span class="token punctuation">)</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">&#123;</span>
+    msgs<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> c<span class="token punctuation">.</span>ch<span class="token punctuation">.</span><span class="token function">Consume</span><span class="token punctuation">(</span>OrderQueue<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token operator">...</span><span class="token punctuation">)</span> <span class="token comment">// auto-ack=false</span>
+
+    <span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">for</span> msg <span class="token operator">:=</span> <span class="token keyword">range</span> msgs <span class="token punctuation">&#123;</span>
+            <span class="token keyword">var</span> orderMsg OrderMessage
+            json<span class="token punctuation">.</span><span class="token function">Unmarshal</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>Body<span class="token punctuation">,</span> <span class="token operator">&amp;</span>orderMsg<span class="token punctuation">)</span>
+
+            <span class="token keyword">if</span> err <span class="token operator">:=</span> <span class="token function">handler</span><span class="token punctuation">(</span>orderMsg<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+                msg<span class="token punctuation">.</span><span class="token function">Nack</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token comment">// requeue=true，稍後重試</span>
+                <span class="token keyword">continue</span>
+            <span class="token punctuation">&#125;</span>
+            msg<span class="token punctuation">.</span><span class="token function">Ack</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token comment">// 確認消費完成，移出佇列</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h3>SaveOrder Consumer</h3> <p>Consumer 收到訊息後做三件事：</p> <pre class="language-go"><!----><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>h <span class="token operator">*</span>SaveOrderHandler<span class="token punctuation">)</span> <span class="token function">Handle</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">,</span> msg rabbitmq<span class="token punctuation">.</span>OrderMessage<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 1. 寫訂單到 DB</span>
+    <span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">:=</span> h<span class="token punctuation">.</span>db<span class="token punctuation">.</span><span class="token function">ExecContext</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&#96;
+        INSERT INTO orders (order_id, user_id, product_id, quantity, total_price, status)
+        VALUES ($1, $2, $3, $4, $5, 'pending')
+    &#96;</span><span class="token punctuation">,</span> msg<span class="token punctuation">.</span>OrderID<span class="token punctuation">,</span> userID<span class="token punctuation">,</span> productID<span class="token punctuation">,</span> msg<span class="token punctuation">.</span>Quantity<span class="token punctuation">,</span> totalPrice<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> err <span class="token comment">// 失敗 → Nack，訊息 requeue 重試</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 2. 清除 Redis reserved（確認預扣完成）</span>
+    h<span class="token punctuation">.</span>stockCache<span class="token punctuation">.</span><span class="token function">ConfirmReservation</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> productID<span class="token punctuation">,</span> <span class="token function">int32</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span>Quantity<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token comment">// 3. 更新 DB 的 available_stock（讓 DB 跟上 Redis）</span>
+    h<span class="token punctuation">.</span>db<span class="token punctuation">.</span><span class="token function">ExecContext</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> <span class="token string">&#96;
+        UPDATE products
+        SET available_stock = available_stock - $1, updated_at = NOW()
+        WHERE id = $2
+    &#96;</span><span class="token punctuation">,</span> msg<span class="token punctuation">.</span>Quantity<span class="token punctuation">,</span> productID<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>這邊第 2 步很重要，沒有 ConfirmReservation 的話，Redis 的 reserved 永遠不會歸零，長時間跑下來會讓 available + reserved ≠ 實際庫存。</p> <h3>庫存狀態追蹤</h3> <p>用一個具體例子說明整個過程中，Redis 跟 DB 的數字怎麼變：</p> <pre class="language-text"><!----><code class="language-text">初始狀態
+  Redis: available=100, reserved=0
+  DB: available_stock=100, reserved_stock=0
+
+→ 訂單 A 下單 50 個
+  Redis Lua Reserve: available=50, reserved=50
+  DB: 不動
+
+→ 訂單 B 嘗試下單 60 個
+  Redis Lua 檢查: available=50 &lt; 60 → return 0
+  HTTP 回 409 Conflict
+
+→ Consumer 處理訂單 A
+  DB: INSERT order
+  Redis ConfirmReservation: reserved=0
+  DB: UPDATE available_stock=50
+
+最終
+  Redis: available=50, reserved=0
+  DB: available_stock=50, reserved_stock=0</code><!----></pre> <h3>高並發壓測</h3> <p>用 <code>hey</code> 工具打 10,000 個請求，200 concurrent：</p> <pre class="language-bash"><!----><code class="language-bash">hey <span class="token parameter variable">-n</span> <span class="token number">10000</span> <span class="token parameter variable">-c</span> <span class="token number">200</span> <span class="token punctuation"></span>
+  <span class="token parameter variable">-m</span> POST <span class="token punctuation"></span>
+  <span class="token parameter variable">-H</span> <span class="token string">"Content-Type: application/json"</span> <span class="token punctuation"></span>
+  <span class="token parameter variable">-d</span> <span class="token string">'&#123;"user_id":"1","product_id":1,"quantity":1,"price":99.99&#125;'</span> <span class="token punctuation"></span>
+  http://localhost:8080/api/v1/orders</code><!----></pre> <p>結果：</p> <pre class="language-text"><!----><code class="language-text">Summary:
+  Total:        0.7717 secs
+  Requests/sec: 12,958.08
+
+Response time histogram:
+  0.001 [1]    |
+  0.008 [7028] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.015 [2178] |■■■■■■■■■■■
+  0.057 [704]  |■■■■
+
+Status code distribution:
+  [202] 9952 responses   ← 成功下單
+  [409] 43 responses     ← 庫存不足（正常）
+  [500] 5 responses      ← 極少數錯誤</code><!----></pre> <p>~13,000 req/sec，P99 在 57ms 以內，成功率 99.5%。</p> <p>壓測完驗證沒有超賣：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># Redis 剩餘庫存</span>
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> flashsale-redis redis-cli GET <span class="token string">"stock:product:1:available"</span>
+
+<span class="token comment"># DB 訂單數</span>
+<span class="token function">docker</span> <span class="token builtin class-name">exec</span> flashsale-postgres psql <span class="token parameter variable">-U</span> flashsale <span class="token parameter variable">-d</span> flashsale_db <span class="token punctuation"></span>
+  <span class="token parameter variable">-c</span> <span class="token string">"SELECT COUNT(*) FROM orders;"</span></code><!----></pre> <h3>監控</h3> <p>這部分比較不熟，先串起來看儀表板有在跑而已：</p> <pre class="language-go"><!----><code class="language-go"><span class="token comment">// Prometheus metrics server（port 9100）</span>
+<span class="token keyword">go</span> metrics<span class="token punctuation">.</span><span class="token function">StartServer</span><span class="token punctuation">(</span><span class="token string">":9100"</span><span class="token punctuation">)</span></code><!----></pre> <p>加一個 redis-exporter sidecar，讓 Prometheus 可以抓 Redis 的指標（連線數、命令耗時、記憶體使用量等）：</p> <pre class="language-yaml"><!----><code class="language-yaml"><span class="token key atrule">redis-exporter</span><span class="token punctuation">:</span>
+  <span class="token key atrule">image</span><span class="token punctuation">:</span> oliver006/redis_exporter<span class="token punctuation">:</span>latest
+  <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+    <span class="token key atrule">REDIS_ADDR</span><span class="token punctuation">:</span> redis<span class="token punctuation">:</span>//redis<span class="token punctuation">:</span><span class="token number">6379</span>
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token string">"9121:9121"</span></code><!----></pre> <h3>心得</h3> <p>因為沒處理伺服器異常的補償機制，整個專案實作下來難度還行。有趣的是過程中可以感受到軟體工程的演進，從手動控制物件鎖、到語言/框架層封裝、再到 Redis Server 端的原子操作；從同步直寫 DB、到非同步 thread 處理、再到 MQ 讓服務分離同時保證訊息不丟。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1128eal = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CHj3aW7x.js"),
+						import("../_app/immutable/entry/app.DSH2OeGv.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
