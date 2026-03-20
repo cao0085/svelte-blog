@@ -2,7 +2,7 @@
 title: "Metrics Monitoring 01 - Prometheus"
 date: "2026-03-17"
 category: "software"
-subCategory: "Monitoring"
+subCategory: "Backend"
 tags: ["monitoring", "prometheus", "tsdb", "alerting"]
 slug: "prometheus-core"
 ---
