@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.CHj3aW7x.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/ZT0ckq54.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D9KnBl71.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Mt1Y7gXD.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Dwylqdei.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DwbbwJ-D.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.DSH2OeGv.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DdnkNBlR.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BCC50Tb1.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.v_ANvDTe.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DUCgrYkc.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.agP1RL-g.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CFqJBa0Q.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BCRe9t4n.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D6312qDi.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.CknjugM5.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BESS5EHP.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BD9VuBFF.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">RBAC 01 - Data Design</h1> <p class="svelte-mdkbyj">2025-12-08</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>以三張核心 DB TABLE 設計 RBAC 權限系統，從最小實踐到角色擴充</h6> <hr/> <p>需求是登入後才可使用的 ERP 系統，其他一律導向 login / 401 / 403 / 404，設計重點：</p> <ol><li><strong>顆粒度</strong>：除了 admin / manager / user 層級外，還要能控制到單一使用者的行為</li> <li><strong>限制後行為</strong>：目錄無權限就不顯示；操作無權限彈出提醒框</li> <li><strong>前後端同步</strong>：阻斷 UI 入口的同時，後端仍需獨立驗證，兩端共用一組權限常數定義</li></ol> <hr/> <h3>資料表設計</h3> <p>最小實踐 3 張表：人員表 / 聲明行為表 / 連結表（多對多）</p> <pre class="language-json"><!----><code class="language-json"><span class="token comment">// 人員表</span>
@@ -110,7 +110,7 @@
 			
 			<script>
 				{
-					__sveltekit_1128eal = {
+					__sveltekit_dtznp3 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -118,8 +118,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.CHj3aW7x.js"),
-						import("../_app/immutable/entry/app.DSH2OeGv.js")
+						import("../_app/immutable/entry/start.D9KnBl71.js"),
+						import("../_app/immutable/entry/app.DdnkNBlR.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

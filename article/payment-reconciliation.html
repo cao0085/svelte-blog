@@ -8,13 +8,13 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.CzhWGdCx.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.D87DJdk2.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.CHj3aW7x.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/ZT0ckq54.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.D9KnBl71.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Mt1Y7gXD.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/n9CujY7_.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BP3rl4Hc.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Dwylqdei.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DwbbwJ-D.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Z6cp3h9-.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.DSH2OeGv.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DdnkNBlR.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/oXeaZXhI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/YtJmKh14.js">
@@ -22,14 +22,14 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CgBhAJqo.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/B7Qc7Rs7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CqQaArfp.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.BCC50Tb1.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.v_ANvDTe.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/0GNeBg98.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/DUCgrYkc.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.agP1RL-g.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CFqJBa0Q.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.BCRe9t4n.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dgv3LvGf.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BLR-JKVV.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/D6312qDi.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.CknjugM5.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BESS5EHP.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.BD9VuBFF.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="article-layout svelte-10kcmdg"><aside class="svelte-10kcmdg"><nav class="svelte-h5mjvk"><h2 class="svelte-h5mjvk"><a href="../article" class="nav-heading-link">文章列表</a></h2> <!--[--><section><button class="category-toggle">Software</button> <!--[!--><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-10kcmdg"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-mdkbyj"><h1 class="svelte-mdkbyj">處理對帳檔案</h1> <p class="svelte-mdkbyj">2025-09-30</p></div> <section class="article-body svelte-mdkbyj"><!----><h6>金流商通常在 N 個工作日後，提供一份撥款檔案作為實際金流的核實依據</h6> <hr/> <p>這個流程通常是每日定時自動執行，但實務上會遇到：網路中斷、金流商未按時提供、資料格式錯誤等異常，因此流程中需要設計 <strong>Checkpoint</strong>（重試斷點），讓人工介入後能從中斷點繼續節省資源。常見流程：</p> <pre class="language-undefined"><!----><code class="language-undefined">1. 取得遠端檔案 → 2. 讀入記憶體 → 3. 解析 &amp; 儲存 → 4. 產出靜態檔案備份</code><!----></pre> <hr/> <h3>1. 取得遠端檔案</h3> <p>透過 SFTP 下載指定日期範圍的 CSV 檔案，寫入本地路徑後回傳檔案清單。若發生異常，可從 Error Log 取得原始參數直接重試此步驟。</p> <pre class="language-csharp"><!----><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task<span class="token punctuation">&lt;</span>List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token function">DownloadRemoteFileAsync</span><span class="token punctuation">(</span>
@@ -130,7 +130,7 @@ FileName <span class="token operator">=</span> <span class="token keyword">null<
 			
 			<script>
 				{
-					__sveltekit_1128eal = {
+					__sveltekit_dtznp3 = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -138,8 +138,8 @@ FileName <span class="token operator">=</span> <span class="token keyword">null<
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.CHj3aW7x.js"),
-						import("../_app/immutable/entry/app.DSH2OeGv.js")
+						import("../_app/immutable/entry/start.D9KnBl71.js"),
+						import("../_app/immutable/entry/app.DdnkNBlR.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],
