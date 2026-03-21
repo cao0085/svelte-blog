@@ -1,7 +1,7 @@
 ---
 title: "Domain-Driven 03 - Domain Object Design"
 date: "2026-02-13"
-category: "software"
+category: ""
 subCategory: "Backend"
 tags: ["DDD", "backend", "design", "csharp"]
 slug: "ddd_03"

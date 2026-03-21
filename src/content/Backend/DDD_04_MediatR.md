@@ -1,7 +1,7 @@
 ---
 title: "Domain-Driven 04 - MediatR & MassTransit"
 date: "2026-02-14"
-category: "software"
+category: ""
 subCategory: "Backend"
 tags: ["DDD", "backend", "design", "csharp", "mediator"]
 slug: "ddd_04"

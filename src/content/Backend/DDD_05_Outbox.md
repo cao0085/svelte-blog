@@ -1,7 +1,7 @@
 ---
 title: "Domain-Driven 05 - Outbox Pattern"
 date: "2026-02-15"
-category: "software"
+category: ""
 subCategory: "Backend"
 tags: ["DDD", "backend", "design", "csharp", "outbox"]
 slug: "ddd_05"

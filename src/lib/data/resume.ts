@@ -59,7 +59,7 @@ export const resumeData: ResumeData = {
       highlights: [
         'Architected scalable services using Gin and Domain-Driven Design principles.',
         'Optimized data management and caching with PostgreSQL and Redis.',
-        'Implemented Kafka for high-concurrency messaging and Prometheus for system monitoring.',
+        'Implemented RabbitMQ for messaging and Prometheus for system monitoring.',
       ],
     },
     {
