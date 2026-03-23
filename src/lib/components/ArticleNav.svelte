@@ -1,6 +1,6 @@
 <script lang="ts">
   import { articles } from "$lib/stores/articles";
-  import { base } from '$app/paths';
+  import { base } from "$app/paths";
   import type { Article, Category } from "$lib/types";
   console.log(base);
   type GroupedArticles = {
@@ -14,7 +14,7 @@
     music: "測試",
     read: "閱讀心得",
   };
-  let openSections: Record<string, boolean> = {};
+  let openSections: Record<string, boolean> = { software: true };
   let openSubSections: Record<string, boolean> = {};
 
   $: grouped = (() => {
@@ -45,7 +45,7 @@
 
 <nav>
   <h2>
-    <a href={`${base}/article`} class="nav-heading-link">文章列表</a>
+    <!-- <a href={`${base}/article`} class="nav-heading-link">文章列表</a> -->
   </h2>
 
   {#each Object.entries(grouped) as [category, subGroups]}
@@ -55,6 +55,7 @@
         on:click={() => (openSections[category] = !openSections[category])}
         aria-expanded={openSections[category]}
       >
+        <span class="arrow" class:open={openSections[category]}>›</span>
         {CATEGORY_LABELS[category] ?? category}
       </button>
 
@@ -63,7 +64,10 @@
           {#if sub === "__uncategorized__"}
             <ul>
               {#each items as article}
-                <li><a href={`${base}/article/${article.slug}`}>{article.title}</a></li>
+                <li>
+                  <a href={`${base}/article/${article.slug}`}>{article.title}</a
+                  >
+                </li>
               {/each}
             </ul>
           {:else}
@@ -71,7 +75,11 @@
               <summary>{sub}</summary>
               <ul>
                 {#each items as article}
-                  <li><a href={`${base}/article/${article.slug}`}>{article.title}</a></li>
+                  <li>
+                    <a href={`${base}/article/${article.slug}`}
+                      >{article.title}</a
+                    >
+                  </li>
                 {/each}
               </ul>
             </details>
@@ -82,39 +90,105 @@
   {/each}
 </nav>
 
-
 <style>
+  nav {
+    font-size: 1.025rem;
+  }
 
-nav h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
+  nav h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+  }
 
-nav ul {
-  margin-top: 0.5em;
-  margin-bottom: 1em;
-  padding-left: 1.25em; /* 保留縮排，視覺層級清楚 */
-}
+  .nav-heading-link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
 
-/* 調整 li 間距更緊湊，減少垂直空白 */
-nav li {
-  margin-bottom: 0.4em;
-  line-height: 1.5;
-  --color-text-subtle: rgba(0, 0, 0, 0.5);
-}
+  .nav-heading-link:hover {
+    color: var(--color-theme-2);
+  }
 
-/* 可選：讓 link 更符合清單樣式 */
-nav li a {
-  color: var(--color-text);
-  text-decoration: none;
-}
+  section {
+    margin-bottom: 0.25rem;
+  }
 
-nav li a:hover {
-  color: var(--color-theme-1);
-}
+  .category-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.3rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    text-align: left;
+    letter-spacing: 0.02em;
+  }
 
-details summary {
-  cursor: pointer;
-  margin-top: 0.75em;
-}
+  .category-toggle:hover {
+    color: #111;
+  }
+
+  .arrow {
+    display: inline-block;
+    font-style: normal;
+    transition: transform 0.15s ease;
+    color: #888;
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+
+  .arrow.open {
+    transform: rotate(90deg);
+  }
+
+  nav ul {
+    list-style: none;
+    margin: 0.25rem 0 0.5rem 0;
+    padding-left: 1rem;
+  }
+
+  nav li {
+    margin-bottom: 0.25rem;
+    line-height: 1.5;
+  }
+
+  nav li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+
+  nav li a:hover {
+    color: var(--color-theme-2);
+  }
+
+  details summary {
+    cursor: pointer;
+    padding: 0.25rem 0;
+    font-size: 1rem;
+    color: #444;
+    list-style: none;
+  }
+
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details summary::before {
+    content: "›";
+    display: inline-block;
+    margin-right: 0.3rem;
+    color: #888;
+    transition: transform 0.15s ease;
+  }
+
+  details[open] summary::before {
+    transform: rotate(90deg);
+  }
 </style>
