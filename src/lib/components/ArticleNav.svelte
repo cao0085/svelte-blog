@@ -92,11 +92,11 @@
 
 <style>
   nav {
-    font-size: 1.025rem;
+    font-size: 0.9rem;
   }
 
   nav h2 {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
     margin: 0 0 1rem 0;
   }
@@ -122,7 +122,7 @@
     background: none;
     border: none;
     padding: 0.3rem 0;
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: #333;
     cursor: pointer;
@@ -139,7 +139,7 @@
     font-style: normal;
     transition: transform 0.15s ease;
     color: #888;
-    font-size: 1.125rem;
+    font-size: 1rem;
     line-height: 1;
   }
 
@@ -161,7 +161,7 @@
   nav li a {
     color: #333;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.875rem;
   }
 
   nav li a:hover {
@@ -171,7 +171,7 @@
   details summary {
     cursor: pointer;
     padding: 0.25rem 0;
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: #444;
     list-style: none;
   }
