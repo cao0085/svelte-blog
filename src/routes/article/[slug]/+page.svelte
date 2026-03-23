@@ -26,26 +26,34 @@
 <style>
   .article-header {
     display: flex;
-    gap: 0.75rem;
+    justify-content: space-between;
     align-items: flex-end;
   }
 
   .article-header h1 {
-    color: rgb(61, 61, 60);
+    color: #111;
     font-weight: 700;
     font-size: 2rem;
+    font-weight: 600;
     margin: 0;
   }
 
   .article-header p {
-    font-size: 1rem;
-    color: rgb(111, 110, 110);
+    font-size: 0.75rem;
+    color: #555;
     margin: 0;
     white-space: nowrap;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #222;
   }
 
   .article-body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+    font-size: 0.9rem;
     line-height: 1.8;
   }
 
@@ -56,7 +64,7 @@
   }
 
   :global(.article-body h2) {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
     margin: 2.5em 0 1.25em 0;
     padding-bottom: 0.625em;
@@ -65,13 +73,19 @@
 
   :global(.article-body h6) {
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 300;
     color: #666;
     margin: 10px 0;
   }
 
+  :global(.article-body h6::before) {
+    content: "▎";
+    margin-right: 0.3em;
+    color: #aaa;
+  }
+
   :global(.article-body p) {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 400;
     line-height: 1.8;
     margin-bottom: 15px;
@@ -84,7 +98,7 @@
   }
 
   :global(.article-body li) {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 400;
     line-height: 1.8;
     margin-bottom: 10px;
