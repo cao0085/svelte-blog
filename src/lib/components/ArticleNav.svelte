@@ -1,6 +1,7 @@
 <script lang="ts">
   import { articles } from "$lib/stores/articles";
   import { base } from "$app/paths";
+  import { slide } from "svelte/transition";
   import type { Article, Category } from "$lib/types";
   console.log(base);
   type GroupedArticles = {
@@ -60,31 +61,38 @@
       </button>
 
       {#if openSections[category]}
-        {#each Object.entries(subGroups) as [sub, items]}
-          {#if sub === "__uncategorized__"}
-            <ul>
-              {#each items as article}
-                <li>
-                  <a href={`${base}/article/${article.slug}`}>{article.title}</a
-                  >
-                </li>
-              {/each}
-            </ul>
-          {:else}
-            <details bind:open={openSubSections[`${category}_${sub}`]}>
-              <summary>{sub}</summary>
+        <div class="slide-content" transition:slide={{ duration: 250 }}>
+          {#each Object.entries(subGroups) as [sub, items]}
+            {#if sub === "__uncategorized__"}
               <ul>
                 {#each items as article}
                   <li>
-                    <a href={`${base}/article/${article.slug}`}
-                      >{article.title}</a
-                    >
+                    <a href={`${base}/article/${article.slug}`}>{article.title}</a>
                   </li>
                 {/each}
               </ul>
-            </details>
-          {/if}
-        {/each}
+            {:else}
+              <button
+                class="sub-toggle"
+                on:click={() => (openSubSections[`${category}_${sub}`] = !openSubSections[`${category}_${sub}`])}
+              >
+                <span class="arrow" class:open={openSubSections[`${category}_${sub}`]}>›</span>
+                {sub}
+              </button>
+              {#if openSubSections[`${category}_${sub}`]}
+                <div class="slide-content" transition:slide={{ duration: 200 }}>
+                  <ul>
+                    {#each items as article}
+                      <li>
+                        <a href={`${base}/article/${article.slug}`}>{article.title}</a>
+                      </li>
+                    {/each}
+                  </ul>
+                </div>
+              {/if}
+            {/if}
+          {/each}
+        </div>
       {/if}
     </section>
   {/each}
@@ -147,10 +155,14 @@
     transform: rotate(90deg);
   }
 
+  .slide-content {
+    /* 不放 padding/margin，避免 slide 動畫推擠 */
+  }
+
   nav ul {
     list-style: none;
-    margin: 0.25rem 0 0.5rem 0;
-    padding-left: 1rem;
+    margin: 0;
+    padding: 0.25rem 0 0.5rem 1.8rem;
   }
 
   nav li {
@@ -168,27 +180,21 @@
     color: var(--color-theme-2);
   }
 
-  details summary {
-    cursor: pointer;
-    padding: 0.25rem 0;
+  .sub-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.25rem 0 0.25rem 1rem;
     font-size: 0.875rem;
     color: #444;
-    list-style: none;
+    cursor: pointer;
+    text-align: left;
   }
 
-  details summary::-webkit-details-marker {
-    display: none;
-  }
-
-  details summary::before {
-    content: "›";
-    display: inline-block;
-    margin-right: 0.3rem;
-    color: #888;
-    transition: transform 0.15s ease;
-  }
-
-  details[open] summary::before {
-    transform: rotate(90deg);
+  .sub-toggle:hover {
+    color: #222;
   }
 </style>
