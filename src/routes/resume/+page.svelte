@@ -14,11 +14,10 @@
     let y = 18;
 
     // Colors
-    const primaryColor: [number, number, number] = [44, 62, 80]; // #2c3e50
-    const textColor: [number, number, number] = [68, 68, 68]; // #444
-    const subtitleColor: [number, number, number] = [85, 85, 85]; // #555
+    const primaryColor: [number, number, number] = [44, 62, 80];
+    const textColor: [number, number, number] = [68, 68, 68];
+    const subtitleColor: [number, number, number] = [85, 85, 85];
 
-    // Helper: Draw section header with underline
     const drawSectionHeader = (title: string) => {
       doc.setFontSize(11);
       doc.setFont("helvetica", "bold");
@@ -31,7 +30,6 @@
       y += 7;
     };
 
-    // Name - centered, uppercase
     doc.setFontSize(20);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...primaryColor);
@@ -40,36 +38,27 @@
     doc.text(nameText, (pageWidth - nameWidth) / 2, y);
     y += 8;
 
-    // Contact info - centered
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...subtitleColor);
     const contactParts = [];
-    if (resumeData.contact.location)
+    if (resumeData.contact.location) {
       contactParts.push(resumeData.contact.location);
-    if (resumeData.contact.phone) contactParts.push(resumeData.contact.phone);
-    if (resumeData.contact.email) contactParts.push(resumeData.contact.email);
-    if (resumeData.contact.github) contactParts.push(resumeData.contact.github);
+    }
+    if (resumeData.contact.phone) {
+      contactParts.push(resumeData.contact.phone);
+    }
+    if (resumeData.contact.email) {
+      contactParts.push(resumeData.contact.email);
+    }
+    if (resumeData.contact.github) {
+      contactParts.push(resumeData.contact.github);
+    }
     const contactText = contactParts.join("  |  ");
     const contactWidth = doc.getTextWidth(contactText);
     doc.text(contactText, (pageWidth - contactWidth) / 2, y);
     y += 12;
 
-    // Career Objective
-    // if (resumeData.objective) {
-    //   drawSectionHeader("Career Objective");
-    //   doc.setFontSize(10);
-    //   doc.setFont("helvetica", "normal");
-    //   doc.setTextColor(...textColor);
-    //   const objectiveLines = doc.splitTextToSize(
-    //     resumeData.objective,
-    //     contentWidth,
-    //   );
-    //   doc.text(objectiveLines, margin, y);
-    //   y += objectiveLines.length * 5 + 6;
-    // }
-
-    // Professional Summary
     if (resumeData.summary) {
       drawSectionHeader("Professional Summary");
       doc.setFontSize(10);
@@ -83,11 +72,31 @@
       y += summaryLines.length * 5 + 6;
     }
 
-    // Work History
+    if (resumeData.skills.length > 0) {
+      drawSectionHeader("Technical Skills");
+      doc.setFontSize(10);
+      doc.setTextColor(...textColor);
+      resumeData.skills.forEach((group) => {
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(...primaryColor);
+        doc.text(`${group.category}:`, margin, y);
+        const labelWidth = doc.getTextWidth(`${group.category}:  `);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(...textColor);
+        const itemsText = group.items.join(", ");
+        const itemLines = doc.splitTextToSize(
+          itemsText,
+          contentWidth - labelWidth,
+        );
+        doc.text(itemLines, margin + labelWidth, y);
+        y += itemLines.length * 5.5;
+      });
+      y += 4;
+    }
+
     if (resumeData.sideprojects.length > 0) {
       drawSectionHeader("Side Projects");
       resumeData.sideprojects.forEach((exp) => {
-        // Title and date on same line
         doc.setFontSize(10);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(...primaryColor);
@@ -99,11 +108,10 @@
         doc.text(exp.link, margin + contentWidth - dateWidth, y);
         y += 5;
 
-        // Highlights
         doc.setTextColor(...textColor);
         exp.highlights.forEach((highlight) => {
           const bulletLines = doc.splitTextToSize(
-            `• ${highlight}`,
+            `- ${highlight}`,
             contentWidth - 4,
           );
           doc.text(bulletLines, margin + 2, y);
@@ -113,11 +121,9 @@
       });
     }
 
-    // Work History
     if (resumeData.experience.length > 0) {
       drawSectionHeader("Work Experience");
       resumeData.experience.forEach((exp) => {
-        // Title and date on same line
         doc.setFontSize(10);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(...primaryColor);
@@ -129,17 +135,15 @@
         doc.text(exp.period, margin + contentWidth - dateWidth, y);
         y += 5;
 
-        // Company
         doc.setFont("helvetica", "normal");
         doc.setTextColor(...subtitleColor);
         doc.text(exp.company, margin, y);
         y += 5;
 
-        // Highlights
         doc.setTextColor(...textColor);
         exp.highlights.forEach((highlight) => {
           const bulletLines = doc.splitTextToSize(
-            `• ${highlight}`,
+            `- ${highlight}`,
             contentWidth - 4,
           );
           doc.text(bulletLines, margin + 2, y);
@@ -149,31 +153,6 @@
       });
     }
 
-    // Education
-    if (resumeData.education.length > 0) {
-      drawSectionHeader("Education");
-      resumeData.education.forEach((edu) => {
-        // Degree and date on same line
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(...primaryColor);
-        doc.text(edu.degree, margin, y);
-
-        doc.setFont("helvetica", "italic");
-        doc.setTextColor(...subtitleColor);
-        const dateWidth = doc.getTextWidth(edu.date);
-        doc.text(edu.date, margin + contentWidth - dateWidth, y);
-        y += 5;
-
-        // School
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(...subtitleColor);
-        doc.text(edu.school, margin, y);
-        y += 7;
-      });
-    }
-
-    // Last Update watermark at bottom
     const pageHeight = 297;
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
@@ -182,7 +161,7 @@
     const updateWidth = doc.getTextWidth(updateText);
     doc.text(updateText, (pageWidth - updateWidth) / 2, pageHeight - 10);
 
-    doc.save("resume.pdf");
+    doc.save("fullstack_tonyko_resume.pdf");
   }
 </script>
 
@@ -199,29 +178,31 @@
     <section class="header-section">
       <h1>{resumeData.name}</h1>
       <div class="contact">
-        {#if resumeData.contact.location}<span
-            >{resumeData.contact.location}</span
-          >{/if}
-        {#if resumeData.contact.phone}<span>{resumeData.contact.phone}</span
-          >{/if}
-        {#if resumeData.contact.email}<span>{resumeData.contact.email}</span
-          >{/if}
-        {#if resumeData.contact.github}<span>{resumeData.contact.github}</span
-          >{/if}
+        {#if resumeData.contact.location}<span>{resumeData.contact.location}</span>{/if}
+        {#if resumeData.contact.phone}<span>{resumeData.contact.phone}</span>{/if}
+        {#if resumeData.contact.email}<span>{resumeData.contact.email}</span>{/if}
+        {#if resumeData.contact.github}<span>{resumeData.contact.github}</span>{/if}
       </div>
     </section>
-
-    <!-- {#if resumeData.objective}
-      <section>
-        <h2>Career Objective</h2>
-        <p>{resumeData.objective}</p>
-      </section>
-    {/if} -->
 
     {#if resumeData.summary}
       <section>
         <h2>Professional Summary</h2>
         <p>{resumeData.summary}</p>
+      </section>
+    {/if}
+
+    {#if resumeData.skills.length > 0}
+      <section>
+        <h2>Technical Skills</h2>
+        <div class="skills-list">
+          {#each resumeData.skills as group}
+            <div class="skill-row">
+              <span class="skill-category">{group.category}</span>
+              <span class="skill-items">{group.items.join(", ")}</span>
+            </div>
+          {/each}
+        </div>
       </section>
     {/if}
 
@@ -234,7 +215,6 @@
               <div class="entry-title">{exp.title}</div>
               <div class="entry-date">{exp.link}</div>
             </div>
-            <!-- <div class="entry-subtitle">{exp.company}</div> -->
             <ul>
               {#each exp.highlights as highlight}
                 <li>{highlight}</li>
@@ -264,32 +244,6 @@
         {/each}
       </section>
     {/if}
-
-    {#if resumeData.education.length > 0}
-      <section>
-        <h2>Education</h2>
-        {#each resumeData.education as edu}
-          <div class="entry">
-            <div class="entry-header">
-              <div class="entry-title">{edu.degree}</div>
-              <div class="entry-date">{edu.date}</div>
-            </div>
-            <div class="entry-subtitle">{edu.school}</div>
-          </div>
-        {/each}
-      </section>
-    {/if}
-
-    <!-- {#if resumeData.skills.length > 0}
-      <section>
-        <h2>Skills</h2>
-        <div class="skills-grid">
-          {#each resumeData.skills as skill}
-            <span class="skill">• {skill}</span>
-          {/each}
-        </div>
-      </section>
-    {/if} -->
 
     <div class="last-update">Last Update: {resumeData.lastUpdate}</div>
   </div>
@@ -440,21 +394,32 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.35rem 2rem;
+  .skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 
-  .skill {
+  .skill-row {
+    display: flex;
+    gap: 1rem;
     font-size: 0.9rem;
+  }
+
+  .skill-category {
+    font-weight: 600;
+    color: #2c3e50;
+    min-width: 110px;
+  }
+
+  .skill-items {
     color: #444;
   }
 
   @media (max-width: 780px) {
     .resume-container {
-      padding: 0 0;
+      padding: 0;
     }
 
     .resume {
