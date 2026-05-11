@@ -2,7 +2,7 @@
 title: "Lec02"
 date: "2026-03-04"
 category: "software"
-subCategory: "NYCU Algorithm"
+subCategory: "Algorithm"
 tags: ["algorithm", "NYCU"]
 slug: "NYCU_02"
 ---
