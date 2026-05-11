@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.BJ2Spu6U.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.B8RFDSjp.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.B9CVOhHf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/J3958GOb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BxOgAoW7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAnqEhCS.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ4AuZAW.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BB_PTa5j.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ5ZXmzn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/TMkMnSgz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DiyS51Ys.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BE2FaABz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CtMZXga1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0sOZT90.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CnCFSxla.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.-F-ssVmI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3tIL2OQ4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dx5yADwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DdfEJBHd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CL3wCAOT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/edu4luwr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D_4ReTud.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DJnwFL1n.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DevOps</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">tmux </h1> <p class="svelte-e5b4xr">2026-03-29</p></div> <section class="article-body svelte-e5b4xr"><!----><h6>Mac M1 tmux 設定筆記</h6> <hr/> <h3>為什麼要設定 tmux config</h3> <p>tmux 預設的快捷鍵不夠直覺，分割視窗要用 <code>%</code> 和 <code>"</code>，也不支援滑鼠操作。透過 <code>~/.tmux.conf</code> 可以讓操作更接近一般終端機習慣。</p> <hr/> <h3>建立設定檔</h3> <pre class="language-bash"><!----><code class="language-bash"><span class="token function">nano</span> ~/.tmux.conf</code><!----></pre> <hr/> <h3>設定內容</h3> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 開啟滑鼠支援（點擊切換 pane、拖曳調整大小）</span>
+<span class="token builtin class-name">set</span> <span class="token parameter variable">-g</span> mouse on
+
+<span class="token comment"># 更直覺的分割快捷鍵（類似 | 和 - 的形狀）</span>
+<span class="token builtin class-name">bind</span> <span class="token operator">|</span> split-window <span class="token parameter variable">-h</span> <span class="token parameter variable">-c</span> <span class="token string">"#&#123;pane_current_path&#125;"</span>
+<span class="token builtin class-name">bind</span> - split-window <span class="token parameter variable">-v</span> <span class="token parameter variable">-c</span> <span class="token string">"#&#123;pane_current_path&#125;"</span>
+
+<span class="token comment"># 用 Alt + 方向鍵切換 pane（不需要先按 prefix）</span>
+<span class="token builtin class-name">bind</span> <span class="token parameter variable">-n</span> M-Left select-pane <span class="token parameter variable">-L</span>
+<span class="token builtin class-name">bind</span> <span class="token parameter variable">-n</span> M-Right select-pane <span class="token parameter variable">-R</span>
+<span class="token builtin class-name">bind</span> <span class="token parameter variable">-n</span> M-Up select-pane <span class="token parameter variable">-U</span>
+<span class="token builtin class-name">bind</span> <span class="token parameter variable">-n</span> M-Down select-pane <span class="token parameter variable">-D</span>
+
+<span class="token comment"># 複製模式使用 vi 操作</span>
+setw <span class="token parameter variable">-g</span> mode-keys <span class="token function">vi</span>
+
+<span class="token comment"># 在複製模式按 y 複製到系統剪貼簿</span>
+bind-key <span class="token parameter variable">-T</span> copy-mode-vi y send-keys <span class="token parameter variable">-X</span> copy-pipe-and-cancel <span class="token string">"pbcopy"</span>
+
+<span class="token comment"># 重新載入設定檔的快捷鍵</span>
+<span class="token builtin class-name">bind</span> r source-file ~/.tmux.conf <span class="token punctuation"></span><span class="token punctuation">;</span> display <span class="token string">"Config reloaded!"</span></code><!----></pre> <hr/> <h3>儲存並套用</h3> <p>在 nano 裡：</p> <ul><li><code>Ctrl + o</code> → Enter　← 儲存</li> <li><code>Ctrl + x</code>　← 離開</li></ul> <p>套用設定（不需要重啟 tmux）：</p> <pre class="language-bash"><!----><code class="language-bash">tmux source-file ~/.tmux.conf</code><!----></pre> <p>或在 tmux 裡按 <code>Ctrl+b</code> 然後 <code>r</code>（設定好快捷鍵之後）。</p> <hr/> <h3>設定後的操作方式</h3> <table><thead><tr><th>操作</th><th>方式</th></tr></thead><tbody><tr><td>左右分割（垂直）</td><td><code>Ctrl+b</code> 然後 <code>\|</code></td></tr><tr><td>上下分割（水平）</td><td><code>Ctrl+b</code> 然後 <code>-</code></td></tr><tr><td>切換 pane</td><td>滑鼠點擊 或 <code>Alt + 方向鍵</code></td></tr><tr><td>調整 pane 大小</td><td>滑鼠拖曳邊框</td></tr><tr><td>重新載入設定</td><td><code>Ctrl+b</code> 然後 <code>r</code></td></tr></tbody></table> <blockquote><p><code>#{pane_current_path}</code> 讓新分割的 pane 繼承目前目錄，不會跳回 home。</p></blockquote> <hr/> <h3>開啟滑鼠後的複製貼上</h3> <p>開啟 <code>set -g mouse on</code> 後，滑鼠事件被 tmux 攔截，無法直接用滑鼠選取複製。解法：</p> <p><strong>方法 1：按住 Shift 繞過 tmux</strong></p> <p>按住 <code>Shift</code> + 滑鼠拖曳選取文字，再用 <code>Cmd+C</code> 複製。</p> <p><strong>方法 2：使用 tmux 複製模式 + pbcopy</strong></p> <p>上面設定已加入 <code>copy-mode-vi</code> 和 <code>pbcopy</code> 整合：</p> <ol><li><code>Ctrl+b</code> 然後 <code>[</code> → 進入複製模式</li> <li>用方向鍵移動、按 <code>Space</code> 開始選取、按 <code>y</code> 複製到系統剪貼簿</li> <li><code>Cmd+V</code> 即可貼上</li></ol> <table><thead><tr><th>操作</th><th>方式</th></tr></thead><tbody><tr><td>進入複製模式</td><td><code>Ctrl+b</code> 然後 <code>[</code></td></tr><tr><td>開始選取</td><td><code>Space</code></td></tr><tr><td>複製到剪貼簿</td><td><code>y</code></td></tr><tr><td>貼上</td><td><code>Cmd+V</code></td></tr><tr><td>快速選取（繞過 tmux）</td><td><code>Shift</code> + 滑鼠拖曳 → <code>Cmd+C</code></td></tr></tbody></table><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1jqahzl = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.B9CVOhHf.js"),
+						import("../_app/immutable/entry/app.BB_PTa5j.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

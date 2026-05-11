@@ -8,12 +8,12 @@
 		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/2.BJ2Spu6U.css" rel="stylesheet">
 		<link href="../_app/immutable/assets/4.B8RFDSjp.css" rel="stylesheet">
-		<link rel="modulepreload" href="../_app/immutable/entry/start.CTkXq6Dx.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/CU6OLQYW.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.B9CVOhHf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/J3958GOb.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BxOgAoW7.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/DAnqEhCS.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/Cp5hnGw4.js">
-		<link rel="modulepreload" href="../_app/immutable/entry/app.BKhOFKSz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ4AuZAW.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BB_PTa5j.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/BQ5ZXmzn.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/TMkMnSgz.js">
@@ -22,21 +22,21 @@
 		<link rel="modulepreload" href="../_app/immutable/chunks/CtMZXga1.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/C0sOZT90.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CnCFSxla.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/0.C-drdpKZ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.-F-ssVmI.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/3tIL2OQ4.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/BjmcLlYn.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/2.CrzI8hsk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dx5yADwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DdfEJBHd.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/CL3wCAOT.js">
 		<link rel="modulepreload" href="../_app/immutable/chunks/edu4luwr.js">
-		<link rel="modulepreload" href="../_app/immutable/chunks/yykuBn3s.js">
-		<link rel="modulepreload" href="../_app/immutable/nodes/4.COY3SgnP.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D_4ReTud.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DJnwFL1n.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">Golang High Concurrency Summary</h1> <p class="svelte-e5b4xr">2026-02-04</p></div> <section class="article-body svelte-e5b4xr"><!----><h6><a href="https://github.com/cao0085/go-ddd-high-concurrency" rel="nofollow">github repo</a></h6> <hr/> <p>實務上比較沒有處理高併發的需求，一直想看看流程是甚麼，紀錄一下實作</p> <h3>目標</h3> <ul><li>超賣問題 — 100 件商品，1000 人搶購，如何保證不超賣？</li> <li>高並發寫 — 多個 goroutine 同時扣庫存，如何避免死鎖和性能下降？</li> <li>消息隊列 — 用 Kafka 解耦請求和處理，學習背壓控制</li> <li>一致性 — 訂單、支付、庫存的數據一致性</li> <li>監控 — 觀察 goroutine 數量、數據庫連接、吞吐量</li></ul> <h3>架構選擇</h3> <ul><li><strong>Backend</strong>: Go 1.24.0</li> <li><strong>Database</strong>: PostgreSQL 17.2</li> <li><strong>Cache</strong>: Redis 7.4.1</li> <li><strong>Message Queue</strong>: Kafka 3.8.1 (KRaft mode)</li> <li><strong>Monitoring</strong>: Prometheus 3.1.0 + Grafana 11.4.0</li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DevOps</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">Golang High Concurrency Summary</h1> <p class="svelte-e5b4xr">2026-02-04</p></div> <section class="article-body svelte-e5b4xr"><!----><h6><a href="https://github.com/cao0085/go-ddd-high-concurrency" rel="nofollow">github repo</a></h6> <hr/> <p>實務上比較沒有處理高併發的需求，一直想看看流程是甚麼，紀錄一下實作</p> <h3>目標</h3> <ul><li>超賣問題 — 100 件商品，1000 人搶購，如何保證不超賣？</li> <li>高並發寫 — 多個 goroutine 同時扣庫存，如何避免死鎖和性能下降？</li> <li>消息隊列 — 用 Kafka 解耦請求和處理，學習背壓控制</li> <li>一致性 — 訂單、支付、庫存的數據一致性</li> <li>監控 — 觀察 goroutine 數量、數據庫連接、吞吐量</li></ul> <h3>架構選擇</h3> <ul><li><strong>Backend</strong>: Go 1.24.0</li> <li><strong>Database</strong>: PostgreSQL 17.2</li> <li><strong>Cache</strong>: Redis 7.4.1</li> <li><strong>Message Queue</strong>: Kafka 3.8.1 (KRaft mode)</li> <li><strong>Monitoring</strong>: Prometheus 3.1.0 + Grafana 11.4.0</li></ul><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_1qzjgts = {
+					__sveltekit_1jqahzl = {
 						base: new URL("..", location).pathname.slice(0, -1),
 						assets: "/svelte-blog"
 					};
@@ -44,8 +44,8 @@
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("../_app/immutable/entry/start.CTkXq6Dx.js"),
-						import("../_app/immutable/entry/app.BKhOFKSz.js")
+						import("../_app/immutable/entry/start.B9CVOhHf.js"),
+						import("../_app/immutable/entry/app.BB_PTa5j.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2, 4],

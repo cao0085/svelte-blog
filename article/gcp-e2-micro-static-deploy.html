@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.BJ2Spu6U.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.B8RFDSjp.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.B9CVOhHf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/J3958GOb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BxOgAoW7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAnqEhCS.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ4AuZAW.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BB_PTa5j.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ5ZXmzn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/TMkMnSgz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DiyS51Ys.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BE2FaABz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CtMZXga1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0sOZT90.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CnCFSxla.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.-F-ssVmI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3tIL2OQ4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dx5yADwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DdfEJBHd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CL3wCAOT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/edu4luwr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D_4ReTud.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DJnwFL1n.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DevOps</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">GCP E2 Micro &amp; CI/CD</h1> <p class="svelte-e5b4xr">2026-03-28</p></div> <section class="article-body svelte-e5b4xr"><!----><h6>GCP E2 Micro 部署記錄一下</h6> <hr/> <h3>整體架構</h3> <pre class="language-undefined"><!----><code class="language-undefined">git push (main)
+  → GitHub Actions 觸發
+  → SSH 進 GCP VM
+  → git pull + npm ci + npm run build
+  → nginx serve build/
+  → Cloudflare Proxy
+  → blog.yoshikagehub.com (HTTPS)</code><!----></pre> <p>build 失敗時 Actions 標紅，舊的 <code>build/</code> 不會被覆蓋，網站不會掛掉。</p> <hr/> <h3>一、VM 初始設定</h3> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># nginx</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> nginx <span class="token parameter variable">-y</span>
+<span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> nginx
+
+<span class="token comment"># Node.js 20（Ubuntu 預設版本太舊，要先加 source）</span>
+<span class="token function">curl</span> <span class="token parameter variable">-fsSL</span> https://deb.nodesource.com/setup_20.x <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token parameter variable">-E</span> <span class="token function">bash</span> -
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> nodejs
+
+<span class="token comment"># 建立專案目錄</span>
+<span class="token function">sudo</span> <span class="token function">mkdir</span> /var/www/yoshikage-blog</code><!----></pre> <hr/> <h3>二、SSH Key 設定</h3> <p>GitHub Actions 要 SSH 進 VM 執行部署指令，需要產生一組專用 key。</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 在 VM 上產生</span>
+ssh-keygen <span class="token parameter variable">-t</span> ed25519 <span class="token parameter variable">-C</span> <span class="token string">"github-actions-yoshikage-blog"</span> <span class="token punctuation"></span>
+  <span class="token parameter variable">-f</span> ~/.ssh/github_actions_yoshikage_blog <span class="token parameter variable">-N</span> <span class="token string">""</span>
+
+<span class="token comment"># 加入 authorized_keys（讓這組 key 有權限 SSH 進來）</span>
+<span class="token function">cat</span> ~/.ssh/github_actions_yoshikage_blog.pub <span class="token operator">>></span> ~/.ssh/authorized_keys
+
+<span class="token comment"># 複製私鑰內容，等一下貼到 GitHub Secrets</span>
+<span class="token function">cat</span> ~/.ssh/github_actions_yoshikage_blog</code><!----></pre> <p><strong>GitHub Secrets 設定</strong></p> <p>GitHub repo → Settings → Secrets and variables → Actions</p> <table><thead><tr><th>名稱</th><th>內容</th></tr></thead><tbody><tr><td><code>VM_SSH_KEY</code></td><td>私鑰內容（從 <code>-----BEGIN</code> 到 <code>-----END</code> 整段）</td></tr><tr><td><code>VM_HOST</code></td><td>VM 的 External IP</td></tr><tr><td><code>VM_USER</code></td><td>VM 的使用者名稱</td></tr></tbody></table> <hr/> <h3>三、Private Repo Clone 設定</h3> <p>Repo 是 private，VM clone 需要另外設定 Deploy Key（比 PAT 好，不會過期）。</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 取得公鑰</span>
+<span class="token function">cat</span> ~/.ssh/github_actions_yoshikage_blog.pub</code><!----></pre> <p><strong>GitHub Deploy Key 設定</strong></p> <p>GitHub repo → Settings → Deploy keys → Add deploy key</p> <ul><li>Title：<code>vm-yoshikage-blog</code></li> <li>Key：貼上公鑰</li> <li>Allow write access：不勾（只需要 read）</li></ul> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># Clone（指定用哪組 SSH key）</span>
+<span class="token function">sudo</span> <span class="token function">git</span> clone git@github.com:cao0085/yoshikage-blog.git /var/www/yoshikage-blog <span class="token punctuation"></span>
+  <span class="token parameter variable">--config</span> <span class="token assign-left variable">core.sshCommand</span><span class="token operator">=</span><span class="token string">"ssh -i /home/<span class="token variable">$&#123;<span class="token environment constant">USER</span>&#125;</span>/.ssh/github_actions_yoshikage_blog"</span>
+
+<span class="token comment"># 修正目錄 owner（sudo clone 的 owner 是 root，npm 會沒權限）</span>
+<span class="token function">sudo</span> <span class="token function">chown</span> <span class="token parameter variable">-R</span> <span class="token variable">$&#123;<span class="token environment constant">USER</span>&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$&#123;<span class="token environment constant">USER</span>&#125;</span> /var/www/yoshikage-blog
+
+<span class="token comment"># 讓 git 信任這個目錄</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> <span class="token parameter variable">--add</span> safe.directory /var/www/yoshikage-blog</code><!----></pre> <hr/> <h3>四、GitHub Actions Workflow</h3> <p><code>.github/workflows/deploy.yml</code></p> <pre class="language-yaml"><!----><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy
+
+<span class="token key atrule">on</span><span class="token punctuation">:</span>
+  <span class="token key atrule">push</span><span class="token punctuation">:</span>
+    <span class="token key atrule">branches</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> main
+
+<span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+  <span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">runs-on</span><span class="token punctuation">:</span> ubuntu<span class="token punctuation">-</span>latest
+    <span class="token key atrule">steps</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> Deploy to VM
+        <span class="token key atrule">uses</span><span class="token punctuation">:</span> appleboy/ssh<span class="token punctuation">-</span>action@v1
+        <span class="token key atrule">with</span><span class="token punctuation">:</span>
+          <span class="token key atrule">host</span><span class="token punctuation">:</span> $<span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> secrets.VM_HOST <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span>
+          <span class="token key atrule">username</span><span class="token punctuation">:</span> $<span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> secrets.VM_USER <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span>
+          <span class="token key atrule">key</span><span class="token punctuation">:</span> $<span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> secrets.VM_SSH_KEY <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span>
+          <span class="token key atrule">script</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+            cd /var/www/yoshikage-blog
+            git pull origin main
+            npm ci
+            npm run build</span></code><!----></pre> <p>四行指令依序執行，任何一行失敗後面就不跑，<code>build/</code> 不會被新內容覆蓋。</p> <hr/> <h3>五、Nginx 設定</h3> <p>SvelteKit adapter-static 輸出的是 <code>article.html</code>，但瀏覽器打的是 <code>/article</code>，需要 <code>$uri.html</code> 才能對應到。</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token function">sudo</span> <span class="token function">nano</span> /etc/nginx/sites-enabled/default</code><!----></pre> <pre class="language-nginx"><!----><code class="language-nginx"><span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token directive"><span class="token keyword">listen</span> <span class="token number">80</span> default_server</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">listen</span> [::]:80 default_server</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">server_name</span> blog.yoshikagehub.com</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">return</span> <span class="token number">301</span> https://<span class="token variable">$host</span><span class="token variable">$request_uri</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token directive"><span class="token keyword">listen</span> <span class="token number">443</span> ssl default_server</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">listen</span> [::]:443 ssl default_server</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">server_name</span> blog.yoshikagehub.com</span><span class="token punctuation">;</span>
+
+    <span class="token directive"><span class="token keyword">ssl_certificate</span> /etc/ssl/cloudflare/cert.pem</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">ssl_certificate_key</span> /etc/ssl/cloudflare/key.pem</span><span class="token punctuation">;</span>
+
+    <span class="token directive"><span class="token keyword">root</span> /var/www/yoshikage-blog/build</span><span class="token punctuation">;</span>
+    <span class="token directive"><span class="token keyword">index</span> index.html index.htm</span><span class="token punctuation">;</span>
+
+    <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
+        <span class="token directive"><span class="token keyword">try_files</span> <span class="token variable">$uri</span> <span class="token variable">$uri</span>.html <span class="token variable">$uri</span>/ =404</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <pre class="language-bash"><!----><code class="language-bash"><span class="token function">sudo</span> nginx <span class="token parameter variable">-t</span> <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> systemctl reload nginx</code><!----></pre> <hr/> <h3>六、Cloudflare HTTPS 設定</h3> <p>Cloudflare Proxy（橘色雲）預設用 <strong>HTTPS</strong> 連 origin server。VM 只有開 port 80 → Error 521。解法是建立 Cloudflare Origin Certificate，讓 VM 也能接受 443。</p> <p><strong>建立 Origin Certificate</strong></p> <p>Cloudflare Dashboard → SSL/TLS → Origin Server → Create Certificate</p> <p>離開頁面後 Private Key 就看不到，建立時要馬上複製存好。</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /etc/ssl/cloudflare
+<span class="token function">sudo</span> <span class="token function">nano</span> /etc/ssl/cloudflare/cert.pem   <span class="token comment"># 貼上 Certificate</span>
+<span class="token function">sudo</span> <span class="token function">nano</span> /etc/ssl/cloudflare/key.pem    <span class="token comment"># 貼上 Private Key</span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">600</span> /etc/ssl/cloudflare/key.pem</code><!----></pre> <p><strong>SSL 模式</strong></p> <p>SSL/TLS → Overview → 設為 <strong>Full</strong></p> <p><strong>DNS 設定</strong></p> <table><thead><tr><th>Type</th><th>Name</th><th>Content</th><th>Proxy status</th></tr></thead><tbody><tr><td>A</td><td>blog</td><td>VM External IP</td><td>Proxied（橘色）</td></tr></tbody></table> <hr/> <h3>目錄結構</h3> <pre class="language-undefined"><!----><code class="language-undefined">/var/www/
+├── html/                      # nginx 預設目錄，保留不動
+└── yoshikage-blog/
+    ├── .git/
+    ├── .github/workflows/
+    ├── src/
+    ├── static/
+    ├── package.json
+    ├── svelte.config.js
+    └── build/                 # nginx 實際 serve 的位置
+        ├── article.html
+        ├── resume.html
+        ├── skills.html
+        └── _app/</code><!----></pre> <hr/> <h3>SSL 模式比較</h3> <table><thead><tr><th>模式</th><th>Cloudflare ↔ VM</th><th>需要憑證</th><th>安全性</th></tr></thead><tbody><tr><td>Flexible</td><td>HTTP</td><td>不需要</td><td>低（VM 到 CF 明文）</td></tr><tr><td>Full</td><td>HTTPS</td><td>自簽憑證即可</td><td>中</td></tr><tr><td>Full (strict)</td><td>HTTPS</td><td>有效憑證</td><td>高</td></tr></tbody></table> <blockquote><p>個人 blog 用 <strong>Full</strong> 搭配 Origin Certificate 即可。有登入或金流的網站建議 <strong>Full (strict)</strong>。</p></blockquote> <hr/> <h3>常用指令</h3> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># nginx 狀態</span>
+<span class="token function">sudo</span> systemctl status nginx
+
+<span class="token comment"># 重啟</span>
+<span class="token function">sudo</span> systemctl restart nginx
+
+<span class="token comment"># 查看錯誤</span>
+<span class="token function">sudo</span> <span class="token function">tail</span> /var/log/nginx/error.log
+
+<span class="token comment"># 確認 port 監聽</span>
+<span class="token function">sudo</span> ss <span class="token parameter variable">-tlnp</span> <span class="token operator">|</span> <span class="token function">grep</span> nginx</code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1jqahzl = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.B9CVOhHf.js"),
+						import("../_app/immutable/entry/app.BB_PTa5j.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>

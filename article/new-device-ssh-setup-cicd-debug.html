@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.BJ2Spu6U.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.B8RFDSjp.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.B9CVOhHf.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/J3958GOb.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BxOgAoW7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAnqEhCS.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ4AuZAW.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BB_PTa5j.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ5ZXmzn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/TMkMnSgz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DiyS51Ys.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BE2FaABz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CtMZXga1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0sOZT90.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CnCFSxla.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.-F-ssVmI.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3tIL2OQ4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dx5yADwQ.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DdfEJBHd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CL3wCAOT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/edu4luwr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D_4ReTud.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.DJnwFL1n.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DevOps</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">新設備 SSH 環境建立 &amp; CI/CD 排錯：git pull 靜默失敗</h1> <p class="svelte-e5b4xr">2026-03-30</p></div> <section class="article-body svelte-e5b4xr"><!----><h6>新 VM 環境設定 &amp; CI/CD 排錯筆記</h6> <hr/> <h3>問題背景</h3> <p>新開一台 VM，需要：</p> <ol><li>設定 GitHub SSH 認證（push/pull private repo）</li> <li>設定連線到 GCP 部署 VM</li> <li>排查 GitHub Actions 顯示成功，但網站實際沒有更新的問題</li></ol> <hr/> <h3>一、新 VM 設定 GitHub SSH</h3> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 設定 git 基本資訊</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"cao0085"</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"cao0085@users.noreply.github.com"</span>
+
+<span class="token comment"># 產生 SSH key</span>
+ssh-keygen <span class="token parameter variable">-t</span> ed25519 <span class="token parameter variable">-C</span> <span class="token string">"cao0085@users.noreply.github.com"</span> <span class="token parameter variable">-f</span> ~/.ssh/id_ed25519 <span class="token parameter variable">-N</span> <span class="token string">""</span>
+
+<span class="token comment"># 加入 GitHub known_hosts（避免第一次連線要手動確認）</span>
+ssh-keyscan github.com <span class="token operator">>></span> ~/.ssh/known_hosts
+
+<span class="token comment"># 顯示公鑰，複製後加到 GitHub Settings → SSH and GPG keys</span>
+<span class="token function">cat</span> ~/.ssh/id_ed25519.pub
+
+<span class="token comment"># 測試</span>
+<span class="token function">ssh</span> <span class="token parameter variable">-T</span> git@github.com</code><!----></pre> <p>之後 clone private repo 用 SSH 格式：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token function">git</span> clone git@github.com:cao0085/repo-name.git</code><!----></pre> <hr/> <h3>二、設定連線 GCP VM</h3> <p>在新 VM 上產生一組專用 key，加到 GCP VM 的 <code>authorized_keys</code>。</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 在新 VM 上產生 key</span>
+ssh-keygen <span class="token parameter variable">-t</span> ed25519 <span class="token parameter variable">-C</span> <span class="token string">"gcp_vm"</span> <span class="token parameter variable">-f</span> ~/.ssh/gcp_vmvm_key <span class="token parameter variable">-N</span> <span class="token string">""</span>
+
+<span class="token comment"># 顯示公鑰</span>
+<span class="token function">cat</span> ~/.ssh/gcp_vmvm_key.pub</code><!----></pre> <p>在 GCP VM 上加入公鑰：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># GCP VM 上執行（需要 sudo 因為 home_mac_m1 目錄權限問題）</span>
+<span class="token function">sudo</span> <span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /home/home_mac_m1/.ssh
+<span class="token builtin class-name">echo</span> <span class="token string">"公鑰內容"</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /home/home_mac_m1/.ssh/authorized_keys
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">700</span> /home/home_mac_m1/.ssh
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">600</span> /home/home_mac_m1/.ssh/authorized_keys
+<span class="token function">sudo</span> <span class="token function">chown</span> <span class="token parameter variable">-R</span> home_mac_m1:home_mac_m1 /home/home_mac_m1/.ssh</code><!----></pre> <p>設定 SSH config 簡化連線指令：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># ~/.ssh/config</span>
+Host gcp_vmvm
+    HostName <span class="token number">35.212</span>.188.123
+    User home_mac_m1
+    IdentityFile ~/.ssh/gcp_vmvm_key</code><!----></pre> <p>之後直接 <code>ssh gcp_vmvm</code> 即可。</p> <hr/> <h3>三、CI/CD 排錯：Actions 顯示成功但網站沒更新</h3> <p><strong>症狀</strong>：GitHub Actions 每次跑都是綠色，但 GCP VM 上的網站內容沒有變化。</p> <p><strong>排查過程</strong>：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 在 GCP VM 上檢查 git 狀態</span>
+<span class="token builtin class-name">cd</span> /var/www/yoshikage-blog <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">-5</span>
+<span class="token comment"># 結果：只有一個 init commit，origin/main 也停在這裡</span></code><!----></pre> <p><strong>根本原因：兩個問題疊加</strong></p> <ol><li><p><strong>GCP VM 沒有 GitHub SSH 認證</strong></p> <p><code>git pull origin main</code> 在 VM 上失敗（permission denied），但 deploy.yml 沒有 <code>set -e</code>，後面的 <code>npm ci</code> 和 <code>npm run build</code> 繼續跑舊程式碼，整個 Action 顯示成功。</p></li> <li><p><strong>deploy.yml 缺少 <code>set -e</code></strong></p> <p>任何指令失敗後腳本應該要立刻中止，否則失敗會被吞掉。</p></li></ol> <p><strong>修法一：設定 GCP VM 的 GitHub SSH</strong></p> <p>VM 上已有 deploy key（<code>github_actions_yoshikage_blog</code>），但缺少 SSH config：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 在 GCP VM 上加入</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/github_actions_yoshikage_blog"</span> <span class="token operator">>></span> ~/.ssh/config
+
+<span class="token comment"># 測試</span>
+<span class="token function">ssh</span> <span class="token parameter variable">-T</span> git@github.com
+<span class="token comment"># Hi cao0085/yoshikage-blog! You've successfully authenticated...</span></code><!----></pre> <p><strong>修法二：deploy.yml 加上 <code>set -e</code></strong></p> <pre class="language-yaml"><!----><code class="language-yaml"><span class="token key atrule">script</span><span class="token punctuation">:</span> <span class="token punctuation">|</span><span class="token scalar string">
+  set -e
+  cd /var/www/yoshikage-blog
+  git pull origin main
+  npm ci
+  npm run build</span></code><!----></pre> <p><code>set -e</code> 讓任何指令失敗時整個 script 立刻中止，Actions 才會正確標紅。</p> <hr/> <h3>四、更新 GitHub Secrets（VM_SSH_KEY）</h3> <p>舊的 <code>VM_SSH_KEY</code> secret 對應的是舊設備的私鑰，需要更新為新 VM 的 key。</p> <p>用 GitHub CLI 直接從檔案讀取，避免手動貼上時格式跑掉：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 安裝 gh CLI</span>
+<span class="token function">apt</span> <span class="token function">install</span> gh <span class="token parameter variable">-y</span>
+
+<span class="token comment"># 登入（需要 Classic PAT，勾選 repo + read:org 權限）</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"your_token"</span> <span class="token operator">|</span> gh auth login --with-token
+
+<span class="token comment"># 更新 secret</span>
+gh secret <span class="token builtin class-name">set</span> VM_SSH_KEY <span class="token parameter variable">--repo</span> cao0085/yoshikage-blog <span class="token operator">&lt;</span> ~/.ssh/gcp_vmvm_key</code><!----></pre> <hr/> <h3>常見陷阱整理</h3> <table><thead><tr><th>問題</th><th>症狀</th><th>解法</th></tr></thead><tbody><tr><td>deploy.yml 沒有 <code>set -e</code></td><td>中間指令失敗但 Action 顯示綠色</td><td>第一行加 <code>set -e</code></td></tr><tr><td>VM 沒有 GitHub SSH 認證</td><td><code>git pull</code> 靜默失敗</td><td>設定 <code>~/.ssh/config</code> 指向 deploy key</td></tr><tr><td>SSH 連線 permission denied</td><td>Actions SSH 進不去 VM</td><td>更新 <code>VM_SSH_KEY</code> secret</td></tr><tr><td><code>flea0085</code> 沒有 sudo 權限</td><td><code>sudo: command not found</code></td><td>改用有權限的帳號操作</td></tr><tr><td>多個 VM 使用者</td><td>資料不共用</td><td>確認連線的 username 是否一致</td></tr></tbody></table><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1jqahzl = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.B9CVOhHf.js"),
+						import("../_app/immutable/entry/app.BB_PTa5j.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
