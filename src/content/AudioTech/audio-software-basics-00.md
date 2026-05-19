@@ -1,0 +1,139 @@
+---
+title: "Audio Digitization Concepts"
+date: "2026-05-18"
+category: "software"
+subCategory: "AudioTech"
+tags: ["audio", "dsp", "signal", "digital-audio"]
+slug: "audio-software-basic-concepts"
+---
+
+###### 補一些聲音數位化的概念
+
+---
+
+### 訊號
+
+聲音在物理上是空氣壓力的變化。
+
+如果要在電子設備裡處理聲音，可以先把它想成一條隨時間變化的訊號：
+
+```text
+signal = 某個數值隨時間變化
+```
+
+例如麥克風會把空氣壓力的變化轉成電壓變化。
+
+這種連續變化的電壓訊號，就是類比訊號：
+
+```text
+analog signal = 連續時間 + 連續數值
+```
+
+也就是說在類比世界裡，時間、數值都是連續的，是一條連續變化的波形。
+
+---
+
+### 數位音訊
+
+電腦不能直接處理連續的類比訊號，所以需要把類比訊號轉成`(ADC 全名 Analog to Digital Converter)`數位資料，可以先理解成每隔一段時間，量一次類比訊號當下的數值，每個數值就是一個 sample。假設 sample rate 是 `48000 Hz`，意思就是：
+
+```text
+每秒紀錄 48000 次 sample
+```
+
+所以數位音訊就是把類比訊號(連續波形)取樣成很多個離散的數字。
+
+#### sample & buffer
+
+一堆 sample 按照時間順序連起來，才會形成一段聲音。
+sample 常見範圍可以先想成：
+
+```text
+-1.0 到 +1.0
+x =  0.0   中心點
+x =  0.5   正方向一半
+x = -0.5   負方向一半
+x =  1.0   正方向很大
+x = -1.0   負方向很大
+```
+
+而 buffer 則是一小包 sample，如果 sample rate 是 `48000 Hz`，代表一秒有 `48000` 個 sample。假設一個 buffer 裡有 `512` 個 sample，那這個 buffer 大約代表 `512 / 48000 = 0.0106 秒` 的聲音資料。
+
+#### Bit depth
+
+Bit depth 決定*每次量到的數值可以多細*，越高可以表示的動態範圍通常越大。例如 CD 常見音質為 `16-bit`動態範圍大約是 96 DB，標榜高解析則為`24-bit` 大約是 144 DB。
+
+#### Channel
+
+Channel 可以先理解成一條獨立的 sample 序列。Mono 是一條，Stereo 是兩條，所以 stereo 音訊不是一條資料最後才分左右，而是本來就有兩條 sample 序列：
+
+```text
+// Mono
+channel 0
+
+// Stereo
+channel 0 = Left
+channel 1 = Right
+
+            sample 0   sample 1   sample 2
+channel 0      L0         L1         L2
+channel 1      R0         R1         R2
+```
+
+---
+
+### Effect
+
+#### Gain & Mix
+
+最基本的音量控制就是單純的乘法，所以很多聲音處理可以先從這個角度看：
+
+```cpp
+<!-- 輸入 sample x
+乘上一個比例
+得到輸出 sample y -->
+y = x * gain;
+```
+
+而在數位音訊裡兩個聲音要混在一起，最基本就是相加，例如兩個波形同時播放，本質上就是把同一個時間點的 sample 加起來，但加太多會讓音量過大，所以混音後常需要再調整音量。
+
+```cpp
+y = a + b;
+```
+
+#### Clipping & Saturation
+
+如果 sample 超過系統能表示或允許的範圍，波形就可能被切掉。可以簡單限制在 `-1.0` 到 `1.0`，這種直接切掉的行為可以先理解成 hard clipping。
+
+```text
+ 1.20 ->  1.00
+-1.30 -> -1.00
+ 0.50 ->  0.50
+```
+
+而 Saturation 可以先理解成比較圓滑的 clipping，小訊號時接近原本的形狀，大訊號時會慢慢被壓圓，這種非線性會產生額外諧波，所以聽起來可能變成破音`(warm、thick、hair、grain、drive、distortion)`，很多類比感、磁帶感、破音、飽和感，都是在設計這種非線性曲線。
+
+#### EQ & Filter
+
+單純的 EQ & Filter 可以理解成改變不同頻率的音量比例，例如：
+
+```text
+低頻 +3 dB    -> 聲音更厚、更重
+中頻 -2 dB    -> 聲音可能比較不擠
+高頻 +4 dB    -> 聲音更亮、更有空氣感
+lowpass  = 讓低頻通過，削弱高頻
+highpass = 讓高頻通過，削弱低頻
+tilt     = 一邊變亮、一邊變暗的整體傾斜
+EQ       = 針對某些頻段加大或減小
+```
+
+#### Time & State
+
+有些聲音處理不能只看「現在這一刻」，還需要知道「之前發生過什麼」，拿回音來舉例`『現在聽到的聲音 = 你現在發出的聲音 + 之前反射回來的聲音』`，如果系統完全不記得過去聲音(上個 sample)，就不可能模擬回音效果。
+
+```text
+  parameter = 外部設定，例如音量、速度、深度
+  state     = 計算過程裡需要保留的記憶
+  x         = 目前 sample
+  y         = 輸出 sample
+```
