@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.BJ2Spu6U.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.B8RFDSjp.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BF81i0Rc.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/4hbqw52M.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BxOgAoW7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAnqEhCS.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/xSIkvQd0.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.BiMsp5_U.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ5ZXmzn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/TMkMnSgz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DiyS51Ys.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BE2FaABz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CtMZXga1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0sOZT90.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CnCFSxla.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.DPHxZLUd.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3tIL2OQ4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Zjy8Eae3.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.uRsbQzEh.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CL3wCAOT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/edu4luwr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DBYE-EUb.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.Ia6UGIZq.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> AudioTech</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DevOps</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">Audio Plugin 01 - Runtime</h1> <p class="svelte-e5b4xr">2026-05-19</p></div> <section class="article-body svelte-e5b4xr"><!----><h6>用 JUCE plugin 出發看 audio plugin 如何處理即時處理聲音</h6> <hr/> <p>不管太複雜的函式邏輯先從 <code>sample</code> 去理解，在 JUCE 裡 host 會定期呼叫 <code>processBlock()</code>，並丟進來一小包 audio buffer：</p> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token keyword">void</span> <span class="token class-name">ExampleAudioProcessor</span><span class="token double-colon punctuation">::</span><span class="token function">processBlock</span><span class="token punctuation">(</span>juce<span class="token double-colon punctuation">::</span>AudioBuffer<span class="token operator">&lt;</span><span class="token keyword">float</span><span class="token operator">></span><span class="token operator">&amp;</span> buffer<span class="token punctuation">,</span> juce<span class="token double-colon punctuation">::</span>MidiBuffer<span class="token operator">&amp;</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    juce<span class="token double-colon punctuation">::</span>ScopedNoDenormals noDenormals<span class="token punctuation">;</span>
+
+    <span class="token comment">// 取得此批 buffer 單位訊息</span>
+    <span class="token keyword">const</span> <span class="token keyword">int</span> numSamples <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">getNumSamples</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token keyword">int</span> numChannels <span class="token operator">=</span> juce<span class="token double-colon punctuation">::</span><span class="token function">jmin</span><span class="token punctuation">(</span>buffer<span class="token punctuation">.</span><span class="token function">getNumChannels</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">getTotalNumOutputChannels</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>numSamples <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">||</span> numChannels <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> ch <span class="token operator">=</span> <span class="token function">getTotalNumInputChannels</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> ch <span class="token operator">&lt;</span> <span class="token function">getTotalNumOutputChannels</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token operator">++</span>ch<span class="token punctuation">)</span>
+        buffer<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span>ch<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> numSamples<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token comment">// 開始自訂義每個 sample 如何處理</span>
+    <span class="token keyword">const</span> <span class="token keyword">auto</span> params <span class="token operator">=</span> <span class="token function">readParams</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> n <span class="token operator">&lt;</span> numSamples<span class="token punctuation">;</span> <span class="token operator">++</span>n<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>   
+        dsp<span class="token double-colon punctuation">::</span><span class="token function">beginEffectChainFrame</span><span class="token punctuation">(</span>chainState<span class="token punctuation">,</span> params<span class="token punctuation">,</span> currentSampleRate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> ch <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> ch <span class="token operator">&lt;</span> numChannels<span class="token punctuation">;</span> <span class="token operator">++</span>ch<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token keyword">const</span> <span class="token keyword">float</span> x <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">getSample</span><span class="token punctuation">(</span>ch<span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">const</span> <span class="token keyword">float</span> y <span class="token operator">=</span> dsp<span class="token double-colon punctuation">::</span><span class="token function">processEffectChainSample</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> ch<span class="token punctuation">,</span> chainState<span class="token punctuation">,</span> params<span class="token punctuation">,</span> currentSampleRate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            buffer<span class="token punctuation">.</span><span class="token function">setSample</span><span class="token punctuation">(</span>ch<span class="token punctuation">,</span> n<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <h4>buffer</h4> <p>假設傳入 stereo audio 那麼在拿到 buffer 時就會是兩條 channel 資料：</p> <pre class="language-text"><!----><code class="language-text">            sample 0   sample 1   sample 2   sample 3
+channel 0      L0         L1         L2         L3
+channel 1      R0         R1         R2         R3</code><!----></pre> <p>所以：</p> <pre class="language-cpp"><!----><code class="language-cpp">buffer<span class="token punctuation">.</span><span class="token function">getSample</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Left channel 的第 100 個 sample</span>
+buffer<span class="token punctuation">.</span><span class="token function">getSample</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Right channel 的第 100 個 sample</span></code><!----></pre> <hr/> <h3>Sample Process</h3> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token comment">// 取一個時間點(numSamples是有序排列的)</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> n <span class="token operator">&lt;</span> numSamples<span class="token punctuation">;</span> <span class="token operator">++</span>n<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>   
+    <span class="token comment">// 每個時間點只推進一次 state，避免各 channel 重複消費。</span>
+    dsp<span class="token double-colon punctuation">::</span><span class="token function">beginEffectChainFrame</span><span class="token punctuation">(</span>chainState<span class="token punctuation">,</span> params<span class="token punctuation">,</span> currentSampleRate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 同時間點的每條 channel 都執行</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> ch <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> ch <span class="token operator">&lt;</span> numChannels<span class="token punctuation">;</span> <span class="token operator">++</span>ch<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> <span class="token keyword">float</span> x <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">getSample</span><span class="token punctuation">(</span>ch<span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 每個 Sample 都執行</span>
+        <span class="token keyword">const</span> <span class="token keyword">float</span> y <span class="token operator">=</span> dsp<span class="token double-colon punctuation">::</span><span class="token function">processEffectChainSample</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> ch<span class="token punctuation">,</span> chainState<span class="token punctuation">,</span> params<span class="token punctuation">,</span> currentSampleRate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 回寫該 channel 的 sample</span>
+        buffer<span class="token punctuation">.</span><span class="token function">setSample</span><span class="token punctuation">(</span>ch<span class="token punctuation">,</span> n<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>設計模式不多，實踐上就是從哪個分類開始 <code>for loop</code>，狀態在不同模組間有無需要共用等等</p> <h4>Sample-by-sample</h4> <p>如上面範例，適合需要跨 channel 同步 state 的效果，例如 mid/side processing、stereo imager。</p> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> n <span class="token operator">&lt;</span> numSamples<span class="token punctuation">;</span> <span class="token operator">++</span>n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> ch <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> ch <span class="token operator">&lt;</span> numChannels<span class="token punctuation">;</span> <span class="token operator">++</span>ch<span class="token punctuation">)</span></code><!----></pre> <h4>Channel-first</h4> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> ch <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> ch <span class="token operator">&lt;</span> numChannels<span class="token punctuation">;</span> <span class="token operator">++</span>ch<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> n <span class="token operator">&lt;</span> numSamples<span class="token punctuation">;</span> <span class="token operator">++</span>n<span class="token punctuation">)</span></code><!----></pre> <p>適合每個 channel 完全獨立的效果，例如 per-channel EQ、compressor（mono link 關閉時）。Cache 友好，pointer 連續讀取：</p> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token keyword">auto</span><span class="token operator">*</span> channelData <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">getWritePointer</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> n <span class="token operator">&lt;</span> numSamples<span class="token punctuation">;</span> <span class="token operator">++</span>n<span class="token punctuation">)</span>
+    channelData<span class="token punctuation">[</span>n<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">process</span><span class="token punctuation">(</span>channelData<span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h4>Block-level</h4> <p>JUCE 的 ProcessorChain 底層就是一次把整個 block 傳給每個 processor。串接多個效果時不用手寫巢狀 loop，但 state 管理被封裝進各 processor 裡。</p> <pre class="language-cpp"><!----><code class="language-cpp">juce<span class="token double-colon punctuation">::</span>dsp<span class="token double-colon punctuation">::</span>AudioBlock<span class="token operator">&lt;</span><span class="token keyword">float</span><span class="token operator">></span> <span class="token function">block</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+juce<span class="token double-colon punctuation">::</span>dsp<span class="token double-colon punctuation">::</span>ProcessContextReplacing<span class="token operator">&lt;</span><span class="token keyword">float</span><span class="token operator">></span> <span class="token function">context</span><span class="token punctuation">(</span>block<span class="token punctuation">)</span><span class="token punctuation">;</span>
+chain<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h4>SIMD / 向量化</h4> <p>gain、filter coefficient 套用這類 stateless 或可向量化的運算才適合。有 state dependency（例如 IIR filter 的 feedback）就不能直接向量化。</p> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token comment">// 手動一次處理 4 個 sample（SSE）</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> n <span class="token operator">&lt;</span> numSamples<span class="token punctuation">;</span> n <span class="token operator">+=</span> <span class="token number">4</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    __m128 x <span class="token operator">=</span> <span class="token function">_mm_loadu_ps</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>channelData<span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    __m128 y <span class="token operator">=</span> <span class="token function">process_simd</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">_mm_storeu_ps</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>channelData<span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code><!----></pre><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_x5jfw0 = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BF81i0Rc.js"),
+						import("../_app/immutable/entry/app.BiMsp5_U.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
