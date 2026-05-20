@@ -228,3 +228,41 @@ state 很輕——一個 float（prevFiltered）、兩個 bool、加上濾波器
 
 - **Clean mode**：加強 pre-filter + 振幅門檻，追蹤穩定但少了類比味
 - **Vintage mode**：刻意放寬追蹤容忍度，保留 glitch 和不穩定感
+
+---
+
+### Review 註解（待確認）
+
+以下幾點不是整篇方向錯誤，而是目前寫法有點過度簡化；如果要寫成「OC-2 的實際原理」或「DSP 如何重現 OC-2」，建議再核對：
+
+1. **「低通 → 硬削波 → 方波」這段可能太簡化**
+   目前文中把分析級描述成先低通，再硬削波得到方波，接著做頻率除法。這樣有助理解，但 OC-2 的 analyser stage 實際上更接近濾波、peak detection / comparator，再去驅動 flip-flop。若直接寫成單純零交叉或硬削波，讀者容易以為任何 zero-cross based octave-down 都等同於 OC-2。
+   參考：
+   - https://docs.architolk.nl/subwave/oc-2
+   - https://thermionic-studios.com/wiki/index.php?title=OC-2
+
+2. **「半波整流」這段建議改成更保守的說法**
+   文中第三步把 sub-octave creator 寫成「鍺二極體半波整流，只留正半週，再交替翻轉極性」。這在概念上接近，但 OC-2 真正的 sub-octave creator 更像是把訊號 clamp / level shift 到虛地附近，再由控制訊號決定極性翻轉；不是教科書式的單純 half-wave rectifier。
+   參考：
+   - https://docs.architolk.nl/subwave/oc-2
+
+3. **「零延遲」這個詞太絕對**
+   說 OC-2 沒有 FFT / buffer 型 pitch shifter 的演算法延遲，這點成立；但若直接寫成「整個過程零延遲」就太滿。更嚴謹的說法應該是：沒有需要 lookahead 的數位 pitch detection 延遲，但仍有濾波與類比級造成的極小群延遲 / 相位延遲，而且控制訊號與原訊號的相位對齊本身就會影響結果。
+   參考：
+   - https://docs.architolk.nl/subwave/oc-2
+
+4. **DSP 段落把 rising zero-cross 寫成等同於 OC-2 flip-flop edge，建議降一級語氣**
+   文中的 DSP 骨架如果目標是「做出可用的 monophonic analog-style octave down」，這樣寫沒有問題；但如果說它「等同於」OC-2 的原理，會過度武斷。比較精確的說法應該是：這是數位版的近似做法，用上升零交叉來模擬類比除頻器的控制事件。
+   參考：
+   - https://docs.architolk.nl/subwave/oc-2
+
+5. **程式碼範例少了一個 state 成員**
+   `processOctaveDown()` 內呼叫了 `state.lpfState`，但 `OctaveDownState` 結構裡沒有宣告它。這不是理論錯誤，但讀者如果直接照抄會無法編譯。
+   參考：
+   - 文內程式碼需自行補上 `lpfState`
+
+6. **歷史資訊目前看起來大致正確，但可以附官方資料**
+   「1982 推出、2003 左右停產、後續由 OC-3 接手」這條線目前沒看到明顯問題；如果想補強可信度，可以直接掛官方 manual / support 頁。
+   參考：
+   - https://www.boss.info/us/support/by_product/oc-2/?lang=en-US
+   - https://cdn.roland.com/assets/media/pdf/OC-2_PSA_OM.pdf
