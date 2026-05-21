@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.BJ2Spu6U.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.B8RFDSjp.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.BkwgRg1-.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DYC0exxj.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BxOgAoW7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAnqEhCS.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Cb6mpu7A.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.DppNzAFr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ5ZXmzn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/TMkMnSgz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DiyS51Ys.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BE2FaABz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CtMZXga1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0sOZT90.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CnCFSxla.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.OBtFTDYk.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3tIL2OQ4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BKHKU97N.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DcQ3YmXF.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CL3wCAOT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/edu4luwr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DBLLx9iL.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.kvC6XspM.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> AudioTech</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DevOps</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">Audio Plugin - OC-2 Analyser</h1> <p class="svelte-e5b4xr">2026-05-21</p></div> <section class="article-body svelte-e5b4xr"><!----><h6>電路解析參考 <a href="https://docs.architolk.nl/subwave/oc-2" rel="nofollow">architolk 的 OC-2 文件</a></h6> <hr/> <pre class="language-text"><!----><code class="language-text">Input → [Buffer] → [Analyser] → [Sub Octave Creator ×2] → [Output Mix]
+</code><!----></pre> <ul><li><strong>Buffer</strong>：單電源設計，用 virtual ground（4.5V）撐起 AC 訊號，放大約 ×5</li> <li><strong>Analyser</strong>：抓出基頻，產生兩個方波 <code>stage2</code> / <code>stage2inv</code></li> <li><strong>Sub Octave Creator</strong>：flip-flop ÷2、÷2，再用控制訊號做極性翻轉</li> <li><strong>Output</strong>：Dry / Oct-1 / Oct-2 三路混音</li></ul> <h3>Buffer</h3> <pre class="language-text"><!----><code class="language-text">Signal → [AC Coupling (擋 DC)] → [×5 放大] → [Soft Clip (撞軌)] → Analyser</code><!----></pre> <p>這段是拿來做訊號放大和 DC 隔離(AC coupling)，對目標音頻範圍幾乎沒有影響，值得注意的是類比電路有自然的 clip 限制。數位模擬時重點反而不用放在濾波，而是 op-amp 在訊號夠大時會 <strong>soft clip</strong> 可用 <code>tanh</code> 模擬這個軟削波特性：</p> <pre class="language-python"><!----><code class="language-python"><span class="token keyword">def</span> <span class="token function">tl072_soft_clip</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> rail<span class="token operator">=</span><span class="token number">3.5</span><span class="token operator">/</span><span class="token number">4.5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>   <span class="token comment"># 正規化後的 rail</span>
+    <span class="token keyword">return</span> np<span class="token punctuation">.</span>tanh<span class="token punctuation">(</span>x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">*</span> rail <span class="token comment"># tanh 模擬 op-amp 撞軌的軟削波</span>
+
+input_buffered <span class="token operator">=</span> tl072_soft_clip<span class="token punctuation">(</span>input_signal <span class="token operator">*</span> <span class="token number">4.7</span><span class="token punctuation">)</span>   <span class="token comment"># gain ≈ 1 + R5/R6</span></code><!----></pre> <h3>Analyser</h3> <p>此段目的是要濾出需處理的訊號</p> <pre class="language-text"><!----><code class="language-text">Signal → [Lowpass Filter] → [Peak Detector ×2] → [Comparator ×2] → stage2 / stage2inv</code><!----></pre> <h4>Lowpass Filter</h4> <p>對應電路是 R3(22k)、R4(330k)、C2(220p)、C3 加上 TL072，作用是濾掉高次諧波留基音。如果直接拿訊號去偵測頻率，後面的 flip-flop 會被泛音的小波峰誤觸發、八度音就跑掉了。所以這邊先把訊號「平滑化」，盡量只讓後級看到基頻那個大波形。</p> <pre class="language-text"><!----><code class="language-text">基音 (fundamental)：整條弦振動
+~~~~~~~~~~~~~~~~~~~  → C3 (約 130Hz)
+
+二次諧波：弦分成兩段振動
+~~~~~~~~~|~~~~~~~~~  → C4 (260Hz，高八度)
+
+三次諧波：弦分成三段
+~~~~~~|~~~~~~|~~~~~~  → G4 (390Hz)
+
+四次諧波：
+~~~~|~~~~|~~~~|~~~~  → C5 (520Hz)</code><!----></pre> <p>而這類前處理在 DSP 裡叫 <strong>fundamental tracking</strong>，是 pitch detection 的 pre-conditioning。類比用低通是因為電路簡單便宜；數位則還可以改用 autocorrelation 直接從訊號找週期，精度更高。</p> <p>數位最簡單的對應就是一階低通（one-pole LPF），逐 sample 處理：</p> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">OnePoleLPF</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">void</span> <span class="token function">setCutoff</span><span class="token punctuation">(</span><span class="token keyword">float</span> cutoff<span class="token punctuation">,</span> <span class="token keyword">float</span> sr<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// a = 平滑係數，cutoff 越低 a 越小、越平滑</span>
+        <span class="token keyword">float</span> x <span class="token operator">=</span> std<span class="token double-colon punctuation">::</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">2.0f</span> <span class="token operator">*</span> <span class="token keyword">float</span><span class="token punctuation">(</span>M_PI<span class="token punctuation">)</span> <span class="token operator">*</span> cutoff <span class="token operator">/</span> sr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        a <span class="token operator">=</span> <span class="token number">1.0f</span> <span class="token operator">-</span> x<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">float</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token keyword">float</span> sample<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        z <span class="token operator">+=</span> a <span class="token operator">*</span> <span class="token punctuation">(</span>sample <span class="token operator">-</span> z<span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// 朝新樣本靠近一點</span>
+        <span class="token keyword">return</span> z<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">void</span> <span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> z <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+<span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token keyword">float</span> a <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>   <span class="token comment">// 平滑係數</span>
+    <span class="token keyword">float</span> z <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>   <span class="token comment">// 上一個輸出</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+OnePoleLPF lpf<span class="token punctuation">;</span>
+lpf<span class="token punctuation">.</span><span class="token function">setCutoff</span><span class="token punctuation">(</span><span class="token number">800.0f</span><span class="token punctuation">,</span> <span class="token number">44100.0f</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">float</span> filtered <span class="token operator">=</span> lpf<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span>input_buffered<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <h4>Peak Detector * 2</h4> <p>Peak Detector 是一個「記住最大值」的電路，特性是這個最大值會隨時間慢慢衰減。它的用途是替後面的 Comparator 提供一條穩定的門檻。若直接拿原始訊號當門檻，比較結果容易亂跳、觸發時機完全不可預測。Peak Detector 的工作就是把抖動的訊號變成一條穩定、緩慢下滑的線：</p> <pre class="language-text"><!----><code class="language-text">原始訊號：  ╭╮  ╭╮  ╭╮
+           ╯╰──╯╰──╯╰──
+
+Peak 輸出：  ╭────────╮
+            ╯         ╰─   ← 穩定的門檻</code><!----></pre> <p>充放電的行為很直覺：訊號比目前的 peak 大就立刻跟上（充電），比較小就慢慢衰減（放電）。OC-2 用了兩個 Peak Detector，一個追正峰、一個追負峰。</p> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">PeakDetector</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token function">PeakDetector</span><span class="token punctuation">(</span><span class="token keyword">float</span> decay <span class="token operator">=</span> <span class="token number">0.9999f</span><span class="token punctuation">)</span>
+        <span class="token operator">:</span> <span class="token function">peak</span><span class="token punctuation">(</span><span class="token number">0.0f</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">decay</span><span class="token punctuation">(</span>decay<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">float</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token keyword">float</span> sample<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sample <span class="token operator">></span> peak<span class="token punctuation">)</span>
+            peak <span class="token operator">=</span> sample<span class="token punctuation">;</span>        <span class="token comment">// 充電：立刻跟上</span>
+        <span class="token keyword">else</span>
+            peak <span class="token operator">*=</span> decay<span class="token punctuation">;</span>        <span class="token comment">// 放電：慢慢衰減</span>
+        <span class="token keyword">return</span> peak<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">void</span> <span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> peak <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+<span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token keyword">float</span> peak<span class="token punctuation">;</span>
+    <span class="token keyword">float</span> decay<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span></code><!----></pre> <p><em>peak detector 也用在 compressor 裡先偵測音量，再依此計算要壓多少增益。</em></p> <h4>Comparator</h4> <p>把訊號跟門檻比大小，大於門檻就輸出「高」、否則「低」。它<strong>不改變週期/頻率</strong>，只是把連續的波形整理成乾淨的開/關訊號。</p> <p>關鍵在於門檻不是 0，而是 Peak Detector 給的「接近峰值」的那條線。所以訊號只有在<strong>最靠近波峰的那一小段</strong>才會超過門檻，其餘時間都在門檻下面。結果就是：每個週期會冒出一個窄脈衝，對齊在波峰上。</p> <pre class="language-text"><!----><code class="language-text">輸入訊號（藍）與門檻（紅，正包絡）：
+
+ 1.0        ╭───╮           ╭───╮
+ 0.7  ───────────────────────────  ← 門檻（Peak Detector 輸出）
+ 0.0       ╯   ╰───────────╯   ╰
+
+Comparator 輸出：每個正峰冒一個脈衝
+      ╭───╮           ╭───╮
+──────╯   ╰───────────╯   ╰────</code><!----></pre> <p>OC-2 用兩個 Comparator 各做一次，但門檻分別來自正、負兩個包絡：</p> <ul><li>stage2：跟正包絡比，脈衝對齊正峰</li> <li>stage2inv：跟負包絡比，脈衝對齊負峰</li></ul> <p>正峰和負峰剛好差半個週期，所以這兩路脈衝的時機錯開半個週期——<code>stage2inv</code> 等於 <code>stage2</code> 反相。兩路的脈衝頻率都還是基頻，只是把每個週期的「波峰時刻」和「波谷時刻」分別標記出來，交給後面的 flip-flop 去數。實踐上類比數位差別只在「高/低」用什麼表示；類比電路的高電平是電源（9V，virtual ground 4V）、數位就直接用 <code>0</code> / <code>1</code>。</p> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">Comparator</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">float</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token keyword">float</span> signal<span class="token punctuation">,</span> <span class="token keyword">float</span> threshold<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>signal <span class="token operator">></span> threshold<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1.0f</span> <span class="token operator">:</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+Comparator compPos<span class="token punctuation">,</span> compNeg<span class="token punctuation">;</span>
+
+<span class="token keyword">float</span> stage2    <span class="token operator">=</span> compPos<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span> signal<span class="token punctuation">,</span> posEnvelope<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">float</span> stage2inv <span class="token operator">=</span> compNeg<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span><span class="token operator">-</span>signal<span class="token punctuation">,</span> negEnvelope<span class="token punctuation">)</span><span class="token punctuation">;</span></code><!----></pre> <hr/> <h3>小結</h3> <p>目前為止拿<strong>原始訊號</strong>搓出 2 顆方波 (stage2, stage2inv)，接著就是利用方波的特性，當作<code>Sub Creator</code>的觸發開關。</p> <p>也補充一下，實作八度音效果就是需要控制<strong>頻率</strong>，而當訊號源的泛音列較為複雜，都會需要整理成適合電路處理的格式。OC-2 的 peak-tracking comparator 設計主要是為了讓 flip-flop 的觸發更準確、減少諧波造成的 false trigger，在其他 flip-flop 類的下八度設計中也有類似變體，但純粹做上八度的電路就不需要這個機制。</p> <table><thead><tr><th>效果器類型</th><th>核心技術</th><th>上/下八度</th></tr></thead><tbody><tr><td>OC-2</td><td>Peak-tracking comparator → flip-flop 除頻</td><td>下</td></tr><tr><td>Octavia、SuperFuzz</td><td>Full-wave rectification</td><td>上</td></tr><tr><td>EHX Micro Synth</td><td>FWR + SR flip-flop</td><td>下</td></tr><tr><td>POG、Whammy</td><td>DSP pitch shifting</td><td>上下都能</td></tr><tr><td>Ring mod 類</td><td>Gilbert cell / 類比乘法器</td><td>上</td></tr></tbody></table><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_ox7aqn = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.BkwgRg1-.js"),
+						import("../_app/immutable/entry/app.DppNzAFr.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
