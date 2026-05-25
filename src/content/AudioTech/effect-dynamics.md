@@ -1,0 +1,87 @@
+---
+title: "Effect - Dynamics"
+date: "2026-05-09"
+category: "software"
+subCategory: "AudioTech"
+tags: ["audio", "cpp", "dsp", "plugin", "juce"]
+slug: "audio-effect-dynamics"
+---
+
+###### 從《 Designing Audio Effect Plug-Ins in C++ 》了解一下基礎特性
+
+---
+
+核心概念很單純就是控制訊號的大小，讓訊號在門檻（Threshold）上下，分別受到不同的增益處理。
+
+- Compressor : 訊號超過 Threshold 之後，音量增加的幅度被縮小。Ratio 決定壓縮程度：4:1 表示輸入多 4dB、輸出才多 1dB。
+
+- Limiter : Compressor 的極端版，Ratio 設為 ∞:1，超過 Threshold 之後音量完全不再增加，像一道牆。母帶最後防止削波（clipping）用的就是它。
+
+- Expander : 與 Compressor 方向相反，訊號低於 Threshold 之後讓它衰減得更快，擴大動態範圍，讓安靜的部分更安靜。
+
+- Gate : Expander 的極端版，低於 Threshold 就直接靜音。錄鼓時消除其他樂器漏音最常用。
+
+#### Side-Chain 與訊號流
+
+主路徑是聲音流過去的地方，最後乘以增益值 G(n) 輸出。Side-Chain 是偵測電路，分析輸入音量後計算應套多少增益，再送給主路徑。Attack 和 Release 是偵測器的充放電速度，Attack 太快會壓掉瞬態、鼓聲失去衝擊感；Release 太快則產生幫浦聲（pumping）。
+
+```text
+x(n) ──────┬──── [Look-Ahead 延遲] ────────────► DCA × G(n) ──► y(n)
+           │                                          ▲
+           └─ [RMS 偵測器]                            │
+                   │                              G(n)│
+              [Attack / Release]                      │
+                   │                                  │
+              [Threshold / Ratio] ────────────────────┘
+              Side-Chain（旁鏈）
+```
+
+數位模擬很單純就是訊號複製一份去偵測，物理電路上則須做一個包絡偵測電路，主要由三個元件構成：
+
+- 整流器（Rectifier）: 把交流的音頻訊號轉成單向的直流電壓。因為音量是正負波動的，你沒辦法直接用它控制什麼，先把它「拉平」成一個只往正方向走的電壓值，代表當下的音量大小。
+
+- 電容（Capacitor）: 整流後的電壓充電到電容上。電容的充電速度就是 Attack，放電速度就是 Release。
+
+- 比較器 / 門檻電路 : 電容上的電壓代表「現在的音量包絡」拿這個電壓去和一個固定的參考電壓（Threshold）比較。超過 Threshold 的差值，就轉換成對 DCA 的控制訊號。
+
+#### Soft Knee
+
+訊號一超過 Threshold 就立即全比例壓縮，容易聽起來突兀。Soft Knee 在 Threshold ±W/2 的範圍內將壓縮比例從 1:1 漸進插值到設定比例，過渡更自然。
+
+#### Look-Ahead
+
+RMS 偵測器有 Attack 時間，訊號瞬間暴衝時會無法反應。解法是把主訊號故意延遲一小段（如 20ms），讓 Side-Chain 提早看到即將到來的音量，偵測器計算完成時主訊號剛好抵達，是類比電路做不到的數位優勢。
+
+#### Spectral Dynamics
+
+用 Linkwitz-Riley LPF + HPF 把訊號切成低頻帶與高頻帶，各自獨立壓縮後合回來。只壓縮高頻可消除齒音，低頻保留衝擊感。現代母帶工具如 Waves C6、iZotope Ozone 將頻率切成 4～6 段各自處理。
+
+```text
+         ┌─ [LPF] ─ [Compressor L] ─┐
+x(n) ────┤                          ├──► + ──► y(n)
+         └─ [HPF] ─ [Compressor H] ─┘
+```
+
+#### Parallel Compression
+
+把乾訊號與完全壓縮後的濕訊號並聯混合。乾訊號保留原始瞬態與動態，濕訊號（Ratio 極高、Threshold 極低）把所有細節推到前面，兩者疊加後既有衝擊感又有厚度，是鼓組混音的經典手法。
+
+```text
+                    ┌─ [Dry] ──────────────────┐
+x(n) ── Split ──────┤                          ├──► Mix ──► y(n)
+                    └─ [Compressor 重壓] ───────┘
+```
+
+### 1176
+
+1967 年 Universal Audio 推出，由 Bill Putnam Sr. 以當時剛發明的 FET（場效電晶體）技術設計，是第一台使用 FET 的壓縮器，也是第一台有連續可調 Attack / Release 的壓縮器，1176 幾乎每一個特性都和「標準 Compressor」有所不同。
+
+- FET 作為 DCA : 1176 的 DCA 是一顆 FET，有非線性的轉移函數，會為訊號增加少量諧波失真，被人耳感知為溫暖感與存在感。
+
+- 極快的 Attack : Attack 時間可設到 20 微秒（μs）, Release 從 50ms 到 1.1 秒。讓它能精準捕捉鼓的瞬態，或讓 Attack 稍慢讓瞬態通過，製造 punch 感。
+
+- Program-Dependent : 它的 Attack、Release 和 Ratio 會跟著輸入訊號的內容動態改變，對瞬態忠實壓縮，瞬態之後 Ratio 會自動微微提升，是數位模擬最難複製的特性。
+
+- Input 兼具 Threshold : 旋鈕同時決定壓縮閾值和進入電路的訊號電平。轉大 Input 更容易觸發壓縮，設計更直覺但難以精確計算 dB 值。
+
+- All Buttons In : 面板上有 4:1、8:1、12:1、20:1 四個 Ratio 按鈕，照理說只能按一個。工程師發現同時把全部按下去，電路各處的偏壓點全部改變，Attack 和 Release 也跟著改變，產生一條持續移動的壓縮曲線，加上 FET 非線性失真被推到極端，低頻產生額外質感與力道。

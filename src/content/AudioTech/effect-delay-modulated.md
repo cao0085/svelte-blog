@@ -1,0 +1,62 @@
+---
+title: "Effect - Modulated Delay"
+date: "2026-05-10"
+category: "software"
+subCategory: "AudioTech"
+tags: ["audio", "cpp", "dsp", "plugin", "juce"]
+slug: "audio-effect-delay"
+---
+
+###### 從《 Designing Audio Effect Plug-Ins in C++ 》了解一下基礎特性
+
+---
+
+核心機制是讓延遲時間持續變化，延遲縮短時讀取速度加快，音高上升；延遲拉長時讀取速度減慢，音高下降。這種音高偏移與 Doppler 效應在物理是相同原理。
+
+物理實作上透過單體實際旋轉製造真實的 Doppler 頻率變化；數位模擬則是由 LFO（Low Frequency Oscillator） 驅動讀取指標，用來週期性地調變某個參數，讓它隨 LFO 波形持續浮動，決定音高偏移的方向與幅度。
+
+#### Leslie Cabinet
+
+物理世界最經典的 Modulated Delay 實體。原理是將喇叭單體裝在旋轉的木箱內，單體持續旋轉，對聆聽者而言聲源距離不斷改變，真實產生 Doppler 音高偏移，同時旋轉也帶來自然的聲像掃移與音量起伏。最常見於 Hammond 風琴的標配音色。Vibrato、Chorus、Flanger 本質上都是在模擬這個物理行為的不同側面。
+
+```text
+Input -> [旋轉單體] -> 距離持續變化 -> Doppler 音高偏移 + 聲像掃移 -> Output
+```
+
+#### Vibrato
+
+最純粹的 Modulated Delay，只輸出 Wet 訊號不混入 Dry，常與 Tremolo 混淆； Vibrato 抖的是音高，Tremolo 抖的是音量。透過 LFO 持續推動讀取指標前後浮動，音高隨之上下起伏，產生如人聲或提琴的顫音（vibrato）效果。由於沒有 Dry 訊號參考，聽者感受到的完全是音高的搖擺，而非空間感或厚度。
+
+```text
+Input -> [Buffer + LFO] -> Output
+```
+
+#### Chorus
+
+在 Vibrato 的基礎上加回 Dry 訊號混合。延遲時間通常設在 10～25ms，LFO 速率較慢。Wet 訊號的音高持續微幅飄移，與穩定的 Dry 訊號疊加，模擬出多位演奏者同時演奏但音準略有差異的合奏厚度，目的是讓聲音變厚、變寬。
+
+```text
+                    ┌-> Wet (Buffer + LFO) ─┐
+Input -> Split ─────┤                        ├-> Mix -> Output
+                    └-> Dry ────────────────┘
+```
+
+#### Flanger
+
+結構與 Chorus 相似，但延遲時間極短（0～15ms），且通常加入回授。Dry 與 Wet 混合後，兩者的時間差在頻域上產生梳狀濾波；LFO 讓延遲時間持續變化，梳齒隨之掃移，形成標誌性的「噴射機」掃頻音色。回授量越高，梳齒越深、音色越極端。
+
+Phaser 的聽感與 Flanger 相似，同樣是掃頻音色，Phaser 是串聯多個 All-Pass Filter，利用相位偏移製造凹陷，凹陷頻率不等間距，音色比較柔和。
+
+```text
+                    ┌-> Wet (Buffer + LFO) <─ Feedback ─┐
+Input -> Split ─────┤                                    ├-> Mix -> Output
+                    └-> Dry ─────────────────────────────┘
+```
+
+### 分數延遲插值
+
+LFO 驅動讀取指標時，指標位置是浮點數（如 buffer[1024.73]），但緩衝區只有整數索引。若直接取最近的整數樣本，指標每次跳格時會產生細微的量化雜訊，在音高變化明顯時聽起來有「顆粒感」。現代插件（如 Valhalla Ubermod、Eventide H3000）因此在讀取時進行插值：
+
+- Linear 最簡單但高頻略有衰減
+- Hermite 三次曲線兼顧平滑度與計算量，業界最常用
+- Sinc 理論上最精確但計算量大，多用於離線渲染
