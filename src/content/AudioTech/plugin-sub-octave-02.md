@@ -1,10 +1,10 @@
 ---
-title: "Audio Plugin - OC-2 Analyser"
-date: "2026-05-21"
+title: "Plugin - Sub Octave 02"
+date: "2026-05-22"
 category: "software"
 subCategory: "AudioTech"
 tags: ["audio", "dsp", "octave", "pitch", "analog", "oc-2"]
-slug: "audio-oc2-analyser"
+slug: "audio-sub-octave-02"
 ---
 
 ###### 電路解析參考 [architolk 的 OC-2 文件](https://docs.architolk.nl/subwave/oc-2)

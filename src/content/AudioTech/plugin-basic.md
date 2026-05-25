@@ -1,5 +1,5 @@
 ---
-title: "Audio Plugin 01 - Runtime"
+title: "Plugin - Basic"
 date: "2026-05-19"
 category: "software"
 subCategory: "AudioTech"

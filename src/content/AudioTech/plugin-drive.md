@@ -1,10 +1,10 @@
 ---
-title: "Audio Plugin 02 - Single Sample"
+title: "Plugin - Drive"
 date: "2026-05-20"
 category: "software"
 subCategory: "AudioTech"
 tags: ["audio", "cpp", "dsp", "drive", "saturation"]
-slug: "audio-plugin-single-sample"
+slug: "audio-plugin-drive"
 ---
 
 ###### 實作 Drive Effect 了解一個 sample 是怎麼被修改

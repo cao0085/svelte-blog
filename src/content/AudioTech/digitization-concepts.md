@@ -1,10 +1,10 @@
 ---
 title: "Audio Digitization Concepts"
-date: "2026-05-18"
+date: "2026-05-02"
 category: "software"
 subCategory: "AudioTech"
 tags: ["audio", "dsp", "signal", "digital-audio"]
-slug: "audio-software-basic-concepts"
+slug: "audio-basic-concepts"
 ---
 
 ###### 補一些聲音數位化的概念

@@ -1,10 +1,10 @@
 ---
-title: "Audio Plugin 03 - Octave Down"
-date: "2026-05-20"
+title: "Plugin - Sub Octave 01"
+date: "2026-05-21"
 category: "software"
 subCategory: "AudioTech"
 tags: ["audio", "dsp", "octave", "pitch", "analog"]
-slug: "audio-octave-down"
+slug: "audio-sub-octave-01"
 ---
 
 ###### 從 BOSS OC-2 理解類比降八度的原理，以及怎麼用 DSP 重現
