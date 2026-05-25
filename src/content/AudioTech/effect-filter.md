@@ -7,7 +7,7 @@ tags: ["audio", "cpp", "dsp", "plugin", "juce"]
 slug: "audio-effect-filter"
 ---
 
-###### 先了解一下基礎特性
+###### 從《 Designing Audio Effect Plug-Ins in C++ 》了解一下基礎特性
 
 ---
 
