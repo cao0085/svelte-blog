@@ -1,0 +1,194 @@
+# 銅市場分析：庫存與價格的背離（2024–2026）
+
+<!-- > 整理日期：2026-06-01
+> 用途：個人 review。本文為市場結構分析，非投資建議；實際進出請自行判斷。 -->
+
+---
+
+## 核心結論
+
+這兩年（2024–2026）銅價是由 **上游精礦赤字 ＋ 關稅造成的庫存錯置 ＋ 宏觀／結構性買盤** 三者共同定價。
+交易所的精煉銅可見庫存已退化成「落後且被汙染」的指標，因此用「高庫存壓抑價格」這套傳統邏輯去看 2026 會完全失準。
+
+定價權已往供應上游（礦端／精礦）移動——是精礦的稀缺性在定價，而不是冶煉端的精煉庫存水位。
+
+---
+
+## 一、2025 年的 LME 庫存波動，多為「關稅造成的搬家」，非供需訊號
+
+- 2025 上半年市場預期美國對銅課 50% 關稅，全球銅被轉運至美國 COMEX 倉庫卡位，抽乾 LME 庫存。這是 2025 Q2 LME 掉到約 9 萬噸低點的主因，而非真實缺貨。
+- 7 月 30 日美國宣布精煉銅豁免關稅後，原本一度擴大到 >28% 的 COMEX–LME 溢價幾乎一夜蒸發，COMEX 銅價在不到四週內重挫約 20%。
+- 這波分流把庫存從 LME 移到 COMEX，美國交易所庫存一度突破 40 萬短噸。
+
+**重點**：這兩年的可見庫存被政策流向汙染，已非乾淨的供需指標。
+
+---
+
+## 二、2026 Q1–Q2「庫存高、價格也漲」並不矛盾
+
+- 2026 年 LME 庫存從年初約 14 萬暴增到 Q1 季底 36 萬，部分原因是上述流向的「回吐」——關稅豁免後金屬重新回到 LME 系統。
+- 有 LME 高層直言，CME 約 2–3% 的溢價可能已是結構性、會維持一段時間。
+- 庫存回流 LME 像是「累積」，但屬地理重分配，不是需求轉弱；同時真正的緊俏在上游，故價格照漲。
+- 盤面對照：LME 三個月銅 2026 年開年在每噸 12,469.50 美元，1 月 29 日衝到 13,952 美元紀錄高點——與「2025 Q4～2026 Q2 三個月期銅持續向上」吻合。
+
+---
+
+## 三、價格發現往上游「精礦」移動（＝「供應商變成 price discoverer」）
+
+判斷銅鬆緊，最靈敏的指標已不是交易所精煉銅庫存，而是冶煉加工費（TC/RC）。
+
+- Grasberg（印尼）、Kamoa-Kakula（剛果）等大礦停產，把精礦供應壓到現貨加工費轉負，等於冶煉廠倒貼錢搶精礦。
+- 2026 年 1 月初，CIF 中國乾淨精礦 TC 已被評在約每噸 −47 美元。
+- 連最早談年度長約的江西銅業，都與 Antofagasta 談成 2026 年「零加工費」。
+
+**結構性涵義**：瓶頸從「精煉銅夠不夠」變成「精礦夠不夠」。於是出現違反直覺的現象——
+冶煉廠虧錢也拚命開工 → 精煉銅（LME/SHFE 可見庫存）反而堆高，但這不是過剩訊號，
+而是「冶煉產能 > 礦供應」的擠壓表現：**精煉銅在累積，上游卻在赤字**。
+
+- Grasberg、Kamoa-Kakula、智利 El Teniente 的中斷一路拖，部分礦要到 2027 年或更晚才回得到 2024 年產量。
+
+> 修正你的命題：是「礦端／精礦的稀缺性」在定價，而非冶煉端的精煉庫存——定價權確實往供應上游移動。
+
+---
+
+## 三之延伸：精礦為什麼不夠？「急性中斷」vs「結構性短缺」
+
+直接結論：主要是 **產出真的跟不上**，而非「前幾年低價停工、之後會回來」的週期性故事。
+關鍵反證——銅價這兩年是高的，不是低的。正常高價會引出供給，這次卻引不出來，代表瓶頸在地質與專案結構，不在價格誘因。
+有分析師形容這是「機制性失靈」：當 2026 基準加工費被定在 0 美元，透露的不只是庫存緊，而是精礦稀缺、冶煉失能、一條對價格再也反應不過來的供應鏈。
+
+把成因分三層：
+
+### A. 結構性供給天花板（主因，與價格無關）
+- **品位下滑**：全球礦石品位從過去 1–2% 跌到 0.7% 以下；每噸產能資本投入翻倍到 15,000–20,000 美元。挖更多石頭、花更多錢才出一樣的銅。
+- **新發現枯竭**：過去十年重大銅礦發現不到 10 個，開發就緒專案嚴重不足，大型礦商只能延長舊礦壽命而非開新礦。新礦從發現到投產 5–7 年，還要過環評、許可、資源民族主義——遠水救不了近火。
+- **需求同時加速**：BloombergNEF 認為銅是能源轉型金屬中壓力最大者，受資料中心、電網、EV 帶動，能源轉型用銅到 2045 年可能變三倍，推向持續性赤字。
+
+### B. 急性中斷（2025–26 的點火近因，是意外、與價格無關）
+- Grasberg、Kamoa-Kakula、智利 El Teniente 長期停產拖過整年，部分礦要 2027 年或更晚才回到 2024 產量。
+- ICSG 因此把礦產成長砍到 2025 年僅 +1.4%，精煉產出成長從 3.4% 崩到 2026 年的 0.9%（精礦變瓶頸）；市場由 2025 年約 +17.8 萬噸過剩，翻成 2026 年約 −15 萬噸赤字。
+- 這些是事故減產，不是企業主動因低價停工。
+
+### C. 冶煉端「太多」的轉折（常被忽略，但很關鍵）
+- TC/RC 轉負不只是「礦不夠」，也是「冶煉產能過剩」。中國等地冶煉廠大幅擴張，精礦不足時加工費崩到歷史低點，主要冶煉中心（尤其中國）祭出減產保利潤，形成「隱性瓶頸」：就算未來有新礦，把它煉成銅錠的產能也在滿載或被刻意限制。
+- 這是「太多冶煉廠搶太少精礦」的雙向擠壓——也解釋了精煉銅（LME 庫存）為何能一邊堆高、上游卻一邊赤字。
+
+### 持平的反面意見
+- Wood Mackenzie：「礦業公司在推一個有說服力的長期短缺敘事，市場也信了——但相信和基本面不是同一回事」；很多被轉走的金屬其實躺在倉庫、押在 CME 遠期曲線上做套利，未被消費，真正赤字可能還在前方。
+- Goldman 仍預估 2026 年約 16 萬噸過剩，認為上檔被壓在 10,000–11,000 美元。
+
+> **兩層框架**：2025–26 的「急性」緊俏主要來自礦災中斷，有機會隨 Grasberg 等復產在 2027 前後部分緩解；
+> 底下那層「結構性」赤字（品位下滑 ＋ 專案枯竭 ＋ 需求加速 ＋ 冶煉錯配）才是真正在逼近、且價格短期解不了的部分。
+> 「供給跟不上」這個直覺抓的是後面這層；但眼前盤面同時混了一層會回來的急性中斷。
+
+---
+
+## 四、另外兩條可納入框架的線索
+
+### 4-1 市場結構雙軌化（COMEX vs LME）
+- 2025 年 COMEX 期銅波動極大（3 月、7 月兩度創高，4 月與 7 月底兩度急殺）；LME 三個月遠期平穩得多，甚至未突破 2024 年高點。
+- 同一金屬、兩個價格、兩種波動性。「哪一邊在做價格發現」在 2025 成為真問題——COMEX 一度被政策劫持、與基本面脫鉤。
+
+### 4-2 宏觀與結構性買盤
+- 推手包括：供應限制、需求結構轉變、投資資金流入、美元走弱、Fed 降息。
+- 銅越來越是 AI 資料中心、電網與 EV 這條長線需求的核心金屬。這些力量凌駕短期庫存。
+
+---
+
+## 五、反面觀點（風險）
+
+- Goldman 在 Grasberg 事件後雖下修供給，仍預期 2026 年是「小幅過剩」。
+- 意涵：價格高檔有相當比例是風險溢價與部位堆出來的，而非實體極度緊俏。
+- 一旦 COMEX 溢價收斂、或中國需求轉弱，回檔風險不低。
+
+---
+
+## 附錄：LME 銅庫存季底值（公噸）
+
+| 季度 | 季底日期 | 庫存 |
+|------|----------|------|
+| 2024 Q1 | 3/31 | 112,475 |
+| 2024 Q2 | 6/28 | 180,125 |
+| 2024 Q3 | 9/30 | 300,600 |
+| 2024 Q4 | 12/31 | 271,400 |
+| 2025 Q1 | 3/31 | 211,375 |
+| 2025 Q2 | 6/30 | 90,625 |
+| 2025 Q3 | 9/30 | 143,400 |
+| 2025 Q4 | 12/31 | 147,425 |
+| 2026 Q1 | 3/31 | 362,425 |
+| 2026 Q2＊ | 5/29（季中） | 389,425 |
+
+＊2026 Q2 尚未結束，為目前最新值。
+資料來源：Westmetall（引用 LME 官方數據）。為 LME 總庫存（在保稅倉單 ＋ 已註銷倉單），不含 SHFE、COMEX 與保稅倉。
+
+---
+
+## 來源清單
+
+1. FOREX.com — Trade to watch 2026: Copper's time to shine?（2025-12-28）
+   https://www.forex.com/en-us/news-and-analysis/trade-to-watch-2026-copper-s-time-to-shine/
+   （精煉銅豁免 50% 關稅、宏觀與 AI/EV 結構需求）
+
+2. Investing News Network — Copper Price Update: Q1 2026 in Review（2026-03-30）
+   https://investingnews.com/daily/resource-investing/base-metals-investing/copper-investing/copper-forecast/
+   （2026 開年 LME 3M 12,469.50；1/29 創高 13,952）
+
+3. Crux Investor — COMEX–LME Premium Decline Ends Policy Distortions
+   https://www.cruxinvestor.com/posts/comex-lme-premium-decline-ends-policy-distortions-re-anchors-copper-pricing-to-supply-and-demand
+   （7/30 豁免後溢價蒸發、COMEX 四週內跌約 20%、>28% 溢價）
+
+4. MINING.COM — Comex copper premium here to stay, LME executive says（2025-11-27）
+   https://www.mining.com/web/comex-copper-premium-here-to-stay-lme-executive-says/
+   （CME 2–3% 溢價恐結構性；美國庫存破 40 萬短噸）
+
+5. MINING.COM — Antofagasta agrees zero copper processing charges for 2026（2025-12-20）
+   https://www.mining.com/web/antofagasta-agrees-zero-copper-processing-charges-for-2026-with-chinese-smelter/
+   （TC/RC 轉負、冶煉廠倒貼；Grasberg、Kamoa-Kakula 中斷）
+
+6. IndexBox — Copper TC/RCs Under Pressure in Q1 2026（2026-01-13）
+   https://www.indexbox.io/blog/copper-concentrate-charges-under-pressure-in-early-2026/
+   （2026/1/8 CIF 中國乾淨精礦 TC 約 −47.40/mt）
+
+7. MINING.COM — Copper's tight supply and tariff risks set for a volatile 2026（2025-12-22）
+   https://www.mining.com/coppers-tight-supply-and-tariff-risks-set-for-a-volatile-2026/
+   （Grasberg、Kamoa-Kakula、El Teniente 中斷拖至 2027+）
+
+8. Yahoo Finance / Barchart — Copper reach $5 end 2025
+   https://finance.yahoo.com/news/copper-reach-5-end-2025-190002399.html
+   （2025 COMEX 高波動 vs LME 3M 平穩、雙軌分歧）
+
+9. Yahoo Finance / Reuters — Goldman Sachs downgrades copper supply forecast after Grasberg
+   https://finance.yahoo.com/news/goldman-sachs-downgrades-copper-supply-034647511.html
+   （2025 由過剩轉赤字、2026 仍預期小幅過剩）
+
+10. Benchmark Mineral Intelligence — Grasberg supply shock（2025-09-26）
+    https://source.benchmarkminerals.com/article/grasberg-supply-shock-to-plunge-refined-copper-market-into-deficit-in-2026-benchmark-analysis-shows
+    （Grasberg 力場停產、精煉市場赤字）
+
+11. Westmetall — LME 銅現貨/3M/庫存逐日資料（2024–2026）
+    https://www.westmetall.com/en/markdaten.php?action=table&field=LME_Cu_cash
+    （附錄庫存數據來源）
+
+12. Crux Investor — From Surplus to Scarcity: structural copper deficit by 2026
+    https://www.cruxinvestor.com/posts/from-surplus-to-scarcity-how-slower-production-growth-is-driving-a-structural-copper-deficit-by-2026
+    （品位 1–2%→<0.7%、資本投入翻倍至 15–20k/t、十年內 <10 個重大發現）
+
+13. The Oregon Group — ICSG warns of 150,000t deficit in 2026（2025-10-28）
+    https://theoregongroup.com/commodities/copper/international-copper-study-group-warns-of-150000t-deficit-in-2026/
+    （ICSG：礦產 +1.4%、精煉成長 3.4%→0.9%、2025 +17.8 萬噸過剩翻 2026 −15 萬噸赤字）
+
+14. MINING.COM — Copper's next shortage is structural, not hype（2026-03-16）
+    https://www.mining.com/coppers-next-shortage-is-structural-not-hype-analyst/
+    （BloombergNEF：能源轉型用銅 2045 三倍、資料中心/電網/EV、產能添加最慢）
+
+15. Skillings — Copper Price Forecast 2026: Deficits, Smelting
+    https://skillings.net/copper-price-forecast-2026-5/
+    （冶煉產能過剩、中國減產保利、隱性瓶頸）
+
+16. Pinnacle Digest — Copper's Breaking Point（2026-01-13）
+    https://pinnacledigest.com/blog/coppers-breaking-point-why-americas-next-copper-mines-wont-arrive-in-time
+    （0 美元加工費＝機制性失靈、供應鏈對價格無反應）
+
+17. MINING.COM — Copper's tight supply and tariff risks set for a volatile 2026（2025-12-22）
+    https://www.mining.com/coppers-tight-supply-and-tariff-risks-set-for-a-volatile-2026/
+    （Wood Mackenzie：「相信≠基本面」、轉走金屬多躺倉庫做套利、赤字仍在前方）

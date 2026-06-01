@@ -1,0 +1,143 @@
+# 銅的上市標的與 ETF 整理（2025–2026 Q1）
+
+<!-- > 整理日期：2026-06-01
+> 用途：個人 review。本文為事實性資料整理，**非投資建議**；數字會隨行情變動，實際進出請自行查證判斷。 -->
+
+---
+
+## 一、追蹤「全球銅」的 ETF：COPX
+
+- **名稱**：Global X Copper Miners ETF，代碼 **COPX**（NYSE Arca）。
+- **追蹤標的**：Solactive Global Copper Miners 全收益指數；至少把 80% 資產投在全球銅礦業公司股票（含 ADR/GDR）。
+- **買的是「礦商股票」，不是銅期貨**。若要追「銅價本身」是另一檔 **CPER**（追期貨），性質完全不同，勿混淆。
+- **規模/費用**：AUM 約 73 億美元、費用率 0.65%、約 47 檔成分股、96.8% 屬基礎材料。
+- 成立於 2010 年，發行商 Global X（Mirae Asset）。
+
+### 2025 表現（驚人，但要會拆）
+- 過去一年總報酬約 **+112%**，而**銅金屬本身 2025 年只漲約 +27%**。
+- 以截至年底/年初的滾動區間看：一年約 +128%、近六個月約 +101%、近三個月約 +40%。
+- 礦商漲幅遠大於金屬 ＝ **營運槓桿**（銅價漲一成，低成本礦商利潤可能漲好幾成）。
+- 代價是波動大：最差三個月曾 −33%，最好三個月 +49%；52 週區間約 $32.6–$100。
+
+---
+
+## 二、主要上市個股：股價與獲利（2025～2026 Q1）
+
+> 重點：BHP、Rio Tinto **不是純銅股**，是多元礦業，股價被鐵礦砂等一起拉扯；真正純銅權值股是 Freeport。
+
+| 公司 | 屬性 | 2025 股價總報酬 | 2025 獲利 | 2026 Q1 |
+|---|---|---|---|---|
+| Freeport (FCX) | 純銅為主 | +35% 以上，2021 來最佳 | 營收 259 億、淨利 22 億美元（+16.7%）；2025 產銅 34 億磅，佔美國精煉銅約 70% | 營收 62.3 億、淨利 8.81 億（去年同期 3.52 億，逾倍增），EPS 0.61／調整後 0.57 勝預期；單位現金成本降到 1.91 美元/磅 |
+| Rio Tinto (RIO) | 多元礦業 | +44.5%（2024 為 −15.4%） | 營收 576 億美元 | 當季營收 306 億、淨利 54 億美元；目標 2030 產量 +20% |
+| BHP | 多元礦業（鐵礦為主） | （多地掛牌，無乾淨單一數字） | 營運利潤 195 億、營運現金流 187 億美元；銅產量首破 2.0 Mt、+8%，Escondida +16% | 半年報（至 2025/12）2 月發布 |
+
+### 兩個關鍵觀察
+- **FCX：財報好、股價卻跌的典型**。Q1 2026 淨利翻倍、EPS 大勝預期，但財報當天股價重挫約 12–13%，因公司下修 Grasberg 產量指引（復產進度砍到 2026 下半年約 60,000 噸/日；ramp 約 65% 於 2026 下半、80% 於 2027 中）。純銅股給你最高「銅 beta」，但也把單一資產（Grasberg）風險集中暴露。
+- **BHP：銅創紀錄、集團獲利反而縮**。銅產量破兩百萬噸創高，但每股基本盈餘從 269.5 美分降到 200.2、股息從 146 砍到 110 美分——被鐵礦砂等業務拖累。所以買 BHP/RIO ≠ 純押銅（不過 BHP 自評在多元礦業同業中對銅價槓桿最高）。
+
+### 上市表達方式的光譜
+**純銅高 beta、單一礦風險（FCX）→ 銅被其他金屬稀釋的多元礦業（BHP/RIO）→ 一籃子、營運槓桿最大、波動最大（COPX ETF）。**
+
+---
+
+## 三、COPX 成分股：業務與獲利「實際有沒有漲」
+
+### 前十大持股（約佔 53%，截至 2026/04）
+Sumitomo Metal Mining 6.2%、Lundin Mining 6.2%、Glencore 5.6%、KGHM 5.6%、Freeport 5.4%、Southern Copper 5.0%、Antofagasta 4.9%、Hudbay 4.9%、BHP 4.7%、Boliden 4.6%。
+
+> 顛覆印象：COPX 並非「純銅股」籃子，較準確的描述是「**帶銅傾向的全球基本金屬／多元礦業籃子**」。
+
+### 獲利數字（純銅股確實大漲，多元礦業則分歧）
+
+| 公司 | 屬性 | 2025 全年獲利 | 2026 Q1 |
+|---|---|---|---|
+| Southern Copper | 純銅 | 淨利 43.3 億（+28%）；EPS 5.20（前 4.14）；營收 134 億（+17%）；EBITDA 創高 78 億（+22%） | 淨利 15.8 億（+67%）；EPS 1.92（前 1.15）；營收 +36% |
+| Antofagasta | 純銅 | EBITDA 創高 52 億（+52%）；營收 +30% 至 86 億；基本盈餘 +106%；EBITDA 利潤率擴至 60% | — |
+| Freeport | 銅為主 | 淨利 22 億（+16.7%） | 淨利逾倍增至 8.81 億 |
+| BHP | 多元（鐵礦為主） | 每股基本盈餘反而降（269.5→200.2 美分）、股息砍 | — |
+
+純銅股獲利**真的大漲**（Antofagasta EBITDA +52%、基本盈餘 +106%，遠超銅價漲幅，營運槓桿成立）；多元礦業 BHP 因鐵礦拖累反而縮——印證「不是每檔都是純銅 beta」。
+
+### 但書一：漲的不全是銅，副產品（金/銀/鉬）幫很大
+- Southern Copper 單位現金成本從 1.07 美元/磅 降到 0.77（−28%），靠鉬、銀、鋅副產收入大增；當季貴金屬價約 +38%。
+- Antofagasta 亦明言獲利受惠「高副產品抵減」。
+- 2025 是整個金屬複合體（金 +60%、銀更兇）齊噴的一年，財報裡混了不少「不是銅」的功勞。
+
+### 但書二：股價漲得比獲利快——有「重新評價」成分
+- Southern Copper 過去三年 EPS 年增約 21%，股價卻年漲約 35%，跑在獲利前面。
+- ETF 那 ~112% 報酬裡，一部分是實質獲利成長，一部分是市場把「結構性赤字」用更高本益比定價進去。
+- 佐證：好消息多已 price in——SCCO 財報超預期當天仍跌約 4%、Antofagasta 因 EBITDA 僅「符合預期」開盤跌逾 3%、FCX 因下修指引重挫。
+
+**濃縮**：獲利是真的漲、營運槓桿是真的（尤其純銅股），但 COPX 的漲幅同時被「副產品金銀行情」與「估值重新評價」墊高，~112% 不能單純當成『銅的營運槓桿』解讀。要看乾淨的銅獲利槓桿，盯 Southern Copper、Antofagasta 這種純銅、低成本個股比看整檔 ETF 清楚。
+
+---
+
+## 四、這些是「實物貿易商」還是「礦業集團」？
+
+直接結論：**十家裡九家本質都是「礦業集團」，只有 Glencore 同時是「礦業集團 ＋ 全球最大實物貿易商之一」。**
+真正純粹的實物貿易商（Trafigura、Vitol、Mercuria）多未上市、也不在這檔 ETF 裡。
+
+礦業集團內部再依獲利結構分三型（對「銅價槓桿」有差）：
+
+### ① 純／近純採礦（對銅價槓桿最乾淨）
+- Southern Copper、Antofagasta、Freeport、Lundin Mining、Hudbay
+- 「挖礦賣銅（精礦或銅錠）」，銅價漲、利潤放大最直接。要看乾淨銅槓桿就盯這群。
+
+### ② 採礦 ＋ 冶煉一體（多賺/少賺一段「冶煉加工費」）
+- Sumitomo Metal Mining（礦＋冶煉＋鎳/電池材料）、KGHM（銅＋頂級產銀）、Boliden（礦＋冶煉，鋅佔比高）
+- 重點：有冶煉端，會吃到 **TC/RC**。當 TC/RC 轉負時，冶煉部門是**受傷**的一方——對「銅價」與對「精礦鬆緊」的曝險方向不完全一致。
+
+### ③ 採礦 ＋ 實物貿易（混血，唯一一家）
+- **Glencore**：龐大 marketing／trading 部門，買賣全球各地實物大宗商品（銅、鈷、鋅、煤、石油等），不只賣自家礦。
+- 貿易部門靠**價差、套利、物流、波動度與期現結構（contango/backwardation）**賺錢，相對不那麼依賴銅價漲跌「方向」；行情大跌時，貿易部門有時反因波動放大、套利機會變多而賺。對銅價的 beta 比純礦商低、也更分散（煤與交易佔比大）。
+
+### 分類提醒
+- **BHP**：歸礦業集團，但最大宗是鐵礦砂、銅其次——既非貿易商、也非「銅純玩家」，是「以鐵礦為主的多元礦業集團」。
+
+### 接回投資邏輯
+若想用上市標的「賭銅價／賭結構性赤字」：第①類純礦商訊號最乾淨；第②類混了冶煉、會被 TC/RC 反向拉扯；第③類 Glencore 是「礦＋貿易」混血，價格方向曝險被稀釋。COPX 把三型混在一起，是「帶銅傾向、但摻了冶煉與貿易」的籃子，而非純粹的銅價槓桿工具。
+
+---
+
+## 來源清單
+
+1. stockanalysis.com — COPX 概覽（過去一年約 +112%、銅 2025 約 +27%）
+   https://stockanalysis.com/etf/copx/
+2. Schwab/Wallst — COPX 績效（+128% 1Y、+101% 6M、+40% 3M；最差/最佳三個月）
+   https://www.schwab.wallst.com/Prospect/Research/etfs/performance.asp?symbol=copx
+3. Robinhood — COPX 前十大持股、產業占比、規模/費用、47 檔
+   https://robinhood.com/us/en/stocks/COPX/
+4. stockanalysis.com — COPX 持股（KGHM/Teck/Antofagasta/BHP/Hudbay 等）
+   https://stockanalysis.com/etf/copx/holdings/
+5. Global X — COPX 基金頁（追蹤指數、定位）
+   https://www.globalxetfs.com/funds/copx
+6. etfdb — COPX（買股票而非期貨、槓桿型自然資源曝險）
+   https://etfdb.com/etf/COPX/
+7. stockanalysis.com — FCX（2025 報酬 >35%、營收 259 億、淨利 22 億 +16.7%）
+   https://stockanalysis.com/stocks/fcx/
+8. Motley Fool — FCX 2025 產銅 34 億磅、佔美國精煉銅 70%
+   https://www.fool.com/investing/stock-market/market-sectors/materials/metal-stocks/copper-stocks/
+9. StockTitan — FCX Q1 2026（營收 62.3 億、淨利 8.81 億、單位成本 1.91/磅、Grasberg ramp）
+   https://www.stocktitan.net/sec-filings/FCX/8-k-freeport-mcmoran-inc-reports-material-event-b4190619f630.html
+10. Investing.com — FCX Q1 2026 股價當天 −12~13%、下修指引
+    https://www.investing.com/equities/freeport-mcm-earnings
+11. financecharts — RIO 年度總報酬（2025 +44.46%、2024 −15.36%）
+    https://www.financecharts.com/stocks/RIO/performance
+12. stockanalysis.com — RIO 2025 營收 576 億
+    https://stockanalysis.com/stocks/rio/
+13. PortfoliosLab — BHP/RIO 2026 Q1 營收與淨利對比
+    https://portfolioslab.com/tools/stock-comparison/BHP/RIO
+14. SEC 6-K — BHP FY25（營運利潤 195 億、營運現金流 187 億、EPS 200.2c、股息 110c）
+    https://www.sec.gov/Archives/edgar/data/0000811809/000119312525183071/d35528d6k.htm
+15. SEC 6-K — BHP FY25 銅產量破 2.0 Mt、+8%、Escondida +16%
+    https://www.sec.gov/Archives/edgar/data/0000811809/000119312525160800/d938594d6k.htm
+16. SimplyWall.st — Southern Copper FY2025 與 Q1 2026 獲利、股價跑贏 EPS
+    https://simplywall.st/stocks/us/materials/nyse-scco/southern-copper/future
+17. SEC 8-K — Southern Copper 1Q25 成本 1.07→0.77/磅、副產品貢獻
+    https://www.sec.gov/Archives/edgar/data/0001001838/000155837025005526/scco-20250424xex99d1.htm
+18. Investing.com — Southern Copper Q4 2025／全年（EBITDA 78 億 +22%、財報超預期股價仍跌約 4%）
+    https://www.investing.com/equities/southern-copper-corp.-earnings
+19. Antofagasta — 2025 全年業績（EBITDA 52 億 +52%、基本盈餘 +106%、利潤率 60%）
+    https://www.antofagasta.co.uk/investors/news/2026/2025-full-year-results/
+20. Investing.com — Antofagasta 財報「符合預期」開盤跌逾 3%、成本 1.19/磅 −27%
+    https://www.investing.com/news/earnings/antofagasta-reports-record-ebitda-keeps-2026-output-outlook-4507912
