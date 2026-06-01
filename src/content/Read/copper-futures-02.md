@@ -1,135 +1,158 @@
 ---
-title: "銅 - 衍伸性金融商品"
-date: "2026-06-01"
+title: "銅 - 礦供給"
+date: "2026-06-02"
 category: ""
 subCategory:  "Finance"
 tags: ["read", "blog", "Money"]
 slug: "copperFutures02"
 ---
-###### 參考 [ING 分析：高庫存壓垮反彈希望](https://www.mexc.com/news/751574)
+###### 買銅前先做功課
 
 ---
 
-全球銅市場在 2026 年初面臨重大阻力，居高不下的庫存水準持續壓抑價格回升。儘管再生能源與電動車產業的需求不斷成長，先前生產週期累積下來的大量庫存，對價格的持續上揚形成強勁阻力。
+礦產量 vs 礦產能
 
-### 庫存達到關鍵水準
+| 年 | 礦產量(kt) | 礦產能(kt) | 利用率 |
+|----|-----------|-----------|--------|
+| 2022 | 21,906 | 26,415 | 82.9% |
+| 2023 | 22,362 | 27,223 | 82.1% |
+| 2024 | 22,973 | 27,979 | 82.1% |
+| 2025 | 23,189 | 28,812 | 80.5% |
 
-目前各交易所銅庫存處於多年高點：
+- 全球礦產量（Mine Production）：一年內全球礦場「實際生產」的銅金屬量，含銅精礦（concentrate）＋濕法銅（SX-EW），都換算成「銅金屬含量」。
+- 全球礦產能（Mine Capacity）：理論上滿載運轉「最多能生產」多少，是上限與潛力。
 
-- LME 倉庫庫存超過 200,000 公噸，較 2024 年水準增加 45%
-- 上海期貨交易所（SHFE）庫存上月達到 300,000 公噸
+#### 急性短缺
 
-庫存累積的主要成因：
+2025 是自 2011 年來供給最弱的一年，主因為事故、地質、機械問題:
 
-- 智利與秘魯礦業產量年增 8%
-- 中國冶煉產能擴張，每年精煉銅產量增加約 120 萬噸
-- 全球經濟不確定性促使製造商**減少遠期採購**，更多金屬留在交易所倉庫
+- Grasberg: 濕泥潰流，損失約 59.1 萬噸，2026 產量砍 35% 
+- El Teniente: 地震崩塌，全年產量 37 萬 → 31.6 萬噸
+- Kamoa-Kakula: 地震湧水，52–58 萬 → 37–42 萬噸
+- 其他累加數十萬噸
 
-### ING 分析
+這些前十大礦的復工（Restarts）時程基本決定「急性緊俏」何時緩解
 
-ING 大宗商品策略師指出可見庫存與銅價的直接關係：
+- Grasberg：分階段復產，目標 2026/7 恢復大規模生產，完全復原 2027
+- Kamoa-Kakula：已分階段重啟東西兩側，受抽水進度拖累
+- El Teniente：逐步復工，但本身在轉地下深部、品位下滑的長期挑戰中
 
-- 可見庫存每增加 50,000 噸，銅價約面臨 3–5% 的下行壓力
-- 目前庫存水準暗示價格較理論均衡受到 12–15% 的壓抑
+#### 中長期將供給不足
 
-分析納入的數據範圍：交易所倉庫（LME、COMEX、SHFE）、中國保稅倉庫、生產商與消費端庫存、在途貨運庫存。ING 維持短期中性偏空看法，同時承認結構性短缺可能在本十年稍晚出現。
+需求遠超出預期，而近年探勘投入較為保守，也因礦場不足的循環要 5–7 年才會反轉，中期缺口將成必然
 
-### 歷史對照
+1. 品位下滑資本投入翻倍至 15,000–20,000 美元/噸產能
+2. 過去十年發現不到 10 個大礦場；新礦投產至少 5–7 年，還要過環評、許可、資源民族主義
+3. 實際需求增加：能源轉型用銅到 2045 年可能變三倍(資料中心、電網、EV)。
 
-當前狀況與 2013–2016 年及 2019–2020 年的庫存週期相似：
+#### 國際政策
 
-| 期間 | 庫存水準 | 價格反應 | 復甦時程 |
-|------|---------|---------|---------|
-| 2013–2016 | 高 | 下跌 28% | 24 個月 |
-| 2019–2020 | 中高 | 下跌 15% | 18 個月 |
-| 2023–2024 | 累積中 | 下跌 12% | 持續中 |
+大方向確實轉向支持，雖仍有分歧，但背後是代表拉美整體右傾的趨勢。
 
-歷史顯示庫存去化通常需要 12–24 個月，才會出現有意義的價格復甦。
+- 智利: 明確轉向支持。
+    - Kast 2026/3/11 就任（皮諾契時代以來最右翼），簽美國關鍵礦物備忘錄、整併經濟與礦業部會、推企業稅 27%→23%、許可改革。
+    - 探勘誘因參考加拿大、澳洲模式。
+    - 為 2026 備好 13 個銅專案；Cochilco 估產量可升至約 560 萬噸。
 
-### 供應鏈因素
+- 祕魯: 方向未定，卡在政治。
+    - 全球第三大產銅國（年約 277 萬噸、約 12%），但三年產量在高價下停滯，瓶頸在政治非地質。
+    - 2026/6/7 決選：左派 Sánchez 主張改革礦業稅、逐步淘汰露天、修憲；右派傾向延續框架。全國約 70 億美元銅專案停擺。
+    - Tía María 一個月內「撤銷又重核」，凸顯政策連續性風險。
+    - 持平觀點：Jefferies 認為衝擊有限，因銅開發是國家優先事項。
 
-南美洲礦業產量大幅增加：智利年增 6%、秘魯年增 9%，非洲銅礦帶（剛果、尚比亞）也貢獻額外供應。亞洲冶煉產能同步擴張，中國 2024 年新增約 800,000 噸冶煉產能，另有 400,000 噸預計於 2025 年投產。物流改善進一步助長庫存累積，南美至亞洲運費年減 15%，倉儲處理能力擴張、儲存成本降低。
+- 阿根廷: 強力轉向支持。
+    - Milei 政府 RIGI 框架：已核准 10 個專案、255 億美元；提供 30 年稅務/關稅/外匯穩定（超越智利祕魯澳洲的 10–15 年）。
+    - RIGI 礦業承諾資本中銅佔近四分之三。
+    - 但書：審批塞車（73% 待核）、2026/7 報名截止、總體經濟不穩。
 
-### 需求面
+### 煉製端
 
-長期銅需求因電氣化趨勢保持強勁：
+近年 TC（加工費）走低，根源是中國冶煉產能過度擴張：產能自 2021 年 +25%，但同期國際精礦供應僅 +1.2%、冶煉產能卻 +11%，爐子遠多過料，形成結構性過剩，加工費被搶到負值。
 
-- 全球電動車生產每年約需 220 萬噸銅
-- 再生能源基礎設施每年再增加 180 萬噸需求
+中國動機有四：補供應鏈唯一缺口（精礦僅佔全球 8%、冶煉卻佔 48%）、政策補貼（雙碳加速審批）、搶定價權（握全球前 20 大冶煉廠中 12 座），並用副產品（硫酸、稀有元素）收入補貼虧損硬撐。
 
-但傳統建築與製造業呈現疲弱，尤其在歐洲與北美市場。中國需求格外關鍵（佔全球約 55%），近期房地產調整與製造業放緩使中國銅消費成長率從 5% 降至每年 2.5%，其他新興市場成長無法完全抵銷。
+- 2026/1 初 CIF 中國乾淨精礦 TC 約 −47 美元/噸、現貨一度 −60 美元/噸
+- 江西銅業與 Antofagasta 談成 2026 年「零加工費」
 
-### 交易型態
+但產能過剩終究到盡頭，中國主要冶煉廠（CSPT）已同意 2026 年減產 10%＋、約 200 萬噸計畫產能被暫停；全球冶煉廠也普遍受傷，歐洲老廠最脆弱，只有日本那種「有自有礦」的冶煉廠才撐得久。
 
-遠期曲線持續呈現 Contango（正價差）結構，近月合約相對遠月折價，各月份價差約每噸 20–40 美元，為倉儲融資交易提供足夠誘因，進一步增加可見庫存並壓抑近月價格。
+### 小結
 
-礦業公司增加價格保護操作，製造商降低遠期覆蓋比率。選擇權市場顯示低履約價賣權買進增加，反映市場預期價格壓力持續。
+礦端受地質與探勘週期綁住和中國補助虧損冶煉廠，可以預期近 3~5 年 TC 價格持續開低；而實際供給量政策即使轉向友善，也只能改善 2030 年代展望，補不上 2030 前的缺口。
 
-### 庫存地理分布
+### 來源清單
 
-| 地區 | 比例 | 主要地點 |
-|------|------|---------|
-| 亞洲 | 60% | 主要在中國 |
-| 歐洲 | 25% | 荷蘭、德國 |
-| 北美 | 15% | 紐奧良、長堤 |
-
-亞洲溢價的下滑比歐洲或美洲更為劇烈。
-
-### 價格展望
-
-ING 基本情境：銅價在 2025 年年中前介於每噸 8,200–8,800 美元。
-
-- 空頭情境：需求進一步走弱，價格可能跌至 7,800 美元
-- 多頭情境：LME 庫存需降至 150,000 噸以下
-
-長期而言，ICSG 估計年度供應短缺將自 2026 年開始，到 2028 年可能達到 500,000 噸。但新礦業專案開發時程漫長，從發現到投產通常需要 5–7 年。
-
-### FAQ
-
-**Q：為什麼高庫存會限制銅價上漲？**
-高庫存代表當前供應超過即時需求，買家較無採購急迫性，削弱競爭並限制價格上漲潛力。
-
-**Q：庫存可能維持高檔多久？**
-歷史型態顯示去化通常需要 12–24 個月。目前預測指出，除非需求意外加速，可見庫存可能在 2025 年內仍維持高檔。
-
-**Q：什麼樣的庫存水準會發出復甦訊號？**
-分析師普遍認為 LME 庫存低於 150,000 公噸有利於價格復甦，且需要全球庫存連續數月一致下降。
-
-**Q：ING 的分析與其他銀行有何不同？**
-ING 較著重可見庫存數據與倉儲經濟，部分同業則更聚焦於遠期需求預測，使 ING 對近期價格的展望更為謹慎。
-
-**Q：銅價能否在高庫存下上漲？**
-投機活動或供應中斷可能造成暫時性上漲，但持續性漲勢通常需要庫存去化，否則漲幅會面臨已儲存金屬進入市場的賣壓。
-
-### LME 銅庫存 2024–2026
-
-各季季底（該季最後交易日）LME 銅庫存：
-
-| 季度 | 季底日期 | 庫存（公噸）|
-|------|---------|------------|
-| 2024 Q1 | 3/31 | 112,475 |
-| 2024 Q2 | 6/28 | 180,125 |
-| 2024 Q3 | 9/30 | 300,600 |
-| 2024 Q4 | 12/31 | 271,400 |
-| 2025 Q1 | 3/31 | 211,375 |
-| 2025 Q2 | 6/30 | 90,625 |
-| 2025 Q3 | 9/30 | 143,400 |
-| 2025 Q4 | 12/31 | 147,425 |
-| 2026 Q1 | 3/31 | 362,425 |
-| 2026 Q2＊ | 5/29 | 389,425 |
-
-＊2026 Q2 尚未結束，為目前最新值。
-
-從走勢可以看出明顯的庫存循環：2024 年下半年庫存堆到約 30 萬噸高點，到 2025 Q2 急速去化至約 9 萬噸低點（這段期間正是金屬大量流向美國、現貨吃緊的時候）。2025 全年大致維持在 9–15 萬噸相對低檔，幾度貼近甚至低於 150,000 的復甦門檻。
-
-進入 2026 年後庫存再度暴增，Q1 季底已達 36 萬噸、Q2 目前約 39 萬噸，回到 2024 年高點以上。若純看 LME 庫存訊號，目前是 2024 年以來最偏空的庫存水位。
-
-注意這裡只是 LME 總庫存，不含 SHFE、COMEX 與保稅倉；判斷全球供需通常會把三大交易所庫存合計來看。
-
-### 後續發展（2026 年）
-
-2026 年初的數據走勢與上文論述完全相反。
-
-LME 庫存在 1 月中一度跌至約 137,000 公噸，短暫低於 150,000 的復甦門檻，觸發文中所謂的利多訊號。但自 2 月起庫存一路暴增，4 月中觸及約 402,600 公噸高點，較年初幾乎翻了三倍。5 月小幅回落至約 389,000 公噸，仍遠高於門檻約 2.6 倍。
-
-依照原文 Q&A 的判準，目前數據呈現的是反向訊號——庫存大量累積而非去化。值得注意的是，同期銅價（現貨結算價）反而從年初約 12,500 美元升至 5 月約 13,500 美元，與「高庫存壓抑價格」的論述出現明顯背離。這顯示 2026 年的價格動能可能受庫存以外的因素驅動，例如關稅、地緣政治、或美國市場大量吸納金屬。
+1. ICSG Table 1 / Selected Copper Statistics — 礦產量、產能、利用率、精煉產量
+   https://icsg.org/selected-copper-statistics/
+2. ICSG World Copper Factbook
+   https://icsg.org/copper-factbook/
+3. USGS Copper Statistics and Information — 逐國礦產量、長序列
+   https://www.usgs.gov/centers/national-minerals-information-center/copper-statistics-and-information
+4. Crux Investor — 結構性赤字、品位下滑、資本投入翻倍
+   https://www.cruxinvestor.com/posts/copper-supply-crisis-deepens-as-ore-grades-plummet-and-exploration-spending-remains-at-peak-levels
+5. The Oregon Group — ICSG 2026 缺口 15 萬噸、礦產/精煉成長率
+   https://theoregongroup.com/commodities/copper/international-copper-study-group-warns-of-150000t-deficit-in-2026/
+6. MINING.COM — BloombergNEF：能源轉型用銅 2045 三倍
+   https://www.mining.com/coppers-next-shortage-is-structural-not-hype-analyst/
+7. Sprott — 2025 為 2011 來最弱供給年、Kamoa-Kakula
+   https://sprott.com/insights/catalyzing-copper-supply-shocks-and-betting-billions/
+8. MINING.COM — Grasberg/Kamoa/El Teniente 拖至 2027+
+   https://www.mining.com/coppers-tight-supply-and-tariff-risks-set-for-a-volatile-2026/
+9. MINING.COM — Grasberg 礦災損失 59.1 萬噸、佔全球 2.6%
+   https://www.mining.com/web/graphic-grasberg-mine-accident-tightens-global-copper-supply-estimates/
+10. Shanghai Metal Market — 各礦停產明細（El Teniente 31.6 萬、Kamoa 砍 28%）
+    https://www.metal.com/en/newscontent/103566538
+11. Economies.com / Reuters — El Teniente 崩塌、Caletones 維護
+    https://www.economies.com/commodities/copper-news/the-crisis-facing-copper-markets-after-a-year-of-disruptions-47535
+12. agmetalminer — Grasberg 2026 砍 35%、復原 2027
+    https://agmetalminer.com/2025/10/06/copper-market-deficit-grasberg/
+13. TradingView / Reuters — Freeport 目標 2026/7 復產
+    https://www.tradingview.com/news/reuters.com%2C2025%3Anewsml_L4N3WU0XC%3A0-freeport-to-restore-large-scale-output-at-indonesia-s-grasberg-mine-in-2026
+14. geomechanics.io — QB2/Cobre Panamá、Morenci、Anglo–Teck、Escondida 1.28 Mt
+    https://www.geomechanics.io/news/article/copper-price-2025-surge-supply-shocks-and-project-signals-for-mine-planners
+15. S&P Global — 礦產 2029 見頂、2032 缺口 220 萬噸
+    https://www.spglobal.com/market-intelligence/en/news-insights/research/new-major-copper-discoveries-sparse-amid-shift-away-from-early-stage-exploration
+16. miningvisuals — 2025 全球探勘預算分布（銅 26%/33 億、草根 21% 新低）
+    https://www.miningvisuals.com/post/2025-global-exploration-budget-by-commodity
+17. The Northern Miner — BC 探勘創 7.51 億加幣（+36%）、初級 +47%
+    https://www.northernminer.com/news/bc-exploration-spending-sets-record-on-copper-appetite/1003890095/
+18. investingnews — 美國 27 個銅專案、Antler/Copper Flat 時程
+    https://investingnews.com/next-us-copper-mine/
+19. bigmint — 中國冶煉產能 +25%（自 2021）、精煉近 1,500 萬噸
+    https://www.bigmint.co/events/bigmint-india-non-ferrous-week-2026/blog/chinas-copper-story-in-2025-from-feedstock-tightness-to-export-dominance
+20. ainvest — 中國 53% 冶煉產能、精礦 +1.2% vs 產能 +11%
+    https://www.ainvest.com/news/china-copper-smelting-dominance-strategic-edge-global-supply-constraints-2508/
+21. Columbia CGEP — 中國冶煉 48%、精礦僅 8%、前 20 大握 12 座
+    https://www.energypolicy.columbia.edu/publications/protecting-existing-us-and-allied-copper-smelting-capacity/
+22. discoveryalert — 金川 +40 萬噸、江西 50 萬噸新廠、雙碳加速審批
+    https://discoveryalert.com.au/chinas-copper-smelting-output-2025/
+23. tradingpedia — CSPT 2026 減產 10%+、200 萬噸暫停
+    https://www.tradingpedia.com/2025/12/01/chinas-top-copper-smelters-plan-major-output-cuts-for-2026/
+24. miningdoc — 中國吸走精礦、其他地區無料可煉
+    https://www.miningdoc.tech/2025/08/01/china-2025-copper-output-set-to-hit-record-high-despite-feedstock-shortages/
+25. carboncredits — 現貨 TC −60 美元/噸、歐日冶煉存亡
+    https://carboncredits.com/copper-demand-set-to-hit-37m-tonnes-by-2050-can-supply-keep-up/
+26. RioTimes — 智利 Kast 政策方向、稅改、IPSA
+    https://www.riotimesonline.com/chile-economy-2026-outlook/
+27. MINING.COM — 智利新政府加速擴產、許可改革、探勘誘因
+    https://www.mining.com/web/chiles-new-government-looks-to-speed-up-copper-expansion-amid-tight-supply/
+28. miningreporters — 智利許可改革、Codelco 轉型
+    https://www.miningreporters.com/noticia/news/2026/04/chile-copper-expansion-permitting-reform-investment
+29. MINING.COM — 智利 13 個專案、Cochilco 560 萬噸、Kast 親投資
+    https://www.mining.com/chile-fast-tracks-13-copper-projects-in-bullish-2026-market/
+30. discoveryalert — 智利擴產策略、DL600、產量目標對照
+    https://discoveryalert.com.au/chile-copper-expansion-strategy-2026-global-demand/
+31. UNCTAD — 智利 2023 新礦業權利金法（加稅）
+    https://investmentpolicy.unctad.org/investment-policy-monitor/measures/4538/
+32. MINING.COM — 祕魯重新核准 Tía María
+    https://www.mining.com/peru-reauthorizes-southern-coppers-1-8b-project-amid-election-chaos/
+33. mexicobusiness — 祕魯左派政綱、Tía María 3 月撤照、70 億停擺
+    https://mexicobusiness.news/mining/news/peru-election-puts-mining-contracts-copper-projects-risk
+34. miningsee — 祕魯產量停滯 277 萬噸、瓶頸在政治
+    https://www.miningsee.eu/peru-mining-politics-create-2026-investment-uncertainty-as-copper-sector-faces-electoral-risk-premium/
+35. discoveryalert — Jefferies：選舉衝擊有限、銅是國家優先
+    https://discoveryalert.com.au/global-mining-capital-allocation-political-transitions-2026/
+36. MINING.COM — 阿根廷 RIGI 255 億、30 年穩定
+    https://www.mining.com/argentina-mining-revival-fuels-40b-copper-push/
+37. discoveryalert — 阿根廷 RIGI 銅佔近 3/4、審批塞車
+    https://discoveryalert.com.au/argentina-rigi-mining-investment-copper-lithium-2026/
