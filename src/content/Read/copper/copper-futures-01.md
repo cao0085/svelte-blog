@@ -1,5 +1,5 @@
 ---
-title: "銅"
+title: "銅 - 基礎"
 date: "2026-06-01"
 category: ""
 subCategory:  "Finance"
