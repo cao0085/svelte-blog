@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.BJ2Spu6U.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.B8RFDSjp.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.DnaGL2Zz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dmrvceps.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BxOgAoW7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAnqEhCS.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CycWK5Vw.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.Db5eRZtE.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ5ZXmzn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/TMkMnSgz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DiyS51Ys.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BE2FaABz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CtMZXga1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0sOZT90.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CnCFSxla.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.-EC813fy.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3tIL2OQ4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BWtemq_0.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DNyCzN5M.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CL3wCAOT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/edu4luwr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/B5kUczeX.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.CcaaOTv9.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> AudioTech</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DevOps</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">LINE Bot 架構筆記</h1> <p class="svelte-e5b4xr">2026-07-23</p></div> <section class="article-body svelte-e5b4xr"><!----><h6>第一次做 Line Bot 紀錄一下實作。</h6> <hr/> <p>這次 Data 和 Endpoint 都跑在 Cloudflare 上。</p> <h3>Webhook</h3> <p>Bot 對 LINE 平台來說<strong>只有一個 URL</strong>。</p> <pre class="language-markdown"><!----><code class="language-markdown">POST https://your-domain/callback</code><!----></pre> <p>不管使用者傳什麼字，LINE 全部 POST 到這<strong>同一個</strong> <code>/callback</code>。所以「關鍵字」不是 endpoint、也不會改變 URL——它只是 request body 裡的一個欄位值：</p> <pre class="language-json"><!----><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"events"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"message"</span><span class="token punctuation">,</span>
+    <span class="token property">"replyToken"</span><span class="token operator">:</span> <span class="token string">"abcd1234..."</span><span class="token punctuation">,</span>
+    <span class="token property">"source"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token property">"userId"</span><span class="token operator">:</span> <span class="token string">"U..."</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token property">"message"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"text"</span><span class="token punctuation">,</span> <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"使用者輸入的字"</span> <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span></code><!----></pre> <p>就是把分流（routing）變成在程式內部實作，讀 <code>events[].message.text</code> 用 if/else/switch 來處理不同 case。</p> <h3>反向的 API</h3> <p>webhook 跟一般 API 用的東西完全一樣（HTTP、JSON、POST），差別只在誰是發起者：</p> <table><thead><tr><th></th><th>一般 API</th><th>Webhook</th></tr></thead><tbody><tr><td>誰發起</td><td>你的程式打別人</td><td>別人（LINE）打你的程式</td></tr><tr><td>你的角色</td><td>client</td><td>server</td></tr><tr><td>說法</td><td>我去 call API</td><td>我提供 endpoint 等被 call</td></tr></tbody></table> <p>所以 webhook 常被講成 “reverse API” 或 “don’t call us, we’ll call you”。使用者跟 LINE 之間的長連線、收訊息、判斷該通知哪個帳號，這些「監聽」由 LINE 處理，開發者只要準備好一個 endpoint。這也是為什麼 webhook 特別適合 serverless 架構。</p> <h3>Reply &amp; Push</h3> <p>Bot 回訊息有兩種主要方式：</p> <table><thead><tr><th>方式</th><th>觸發條件</th><th>計費</th></tr></thead><tbody><tr><td><strong>Reply</strong></td><td>使用者剛傳訊息（帶 <code>replyToken</code>）</td><td><strong>免費</strong></td></tr><tr><td><strong>Push</strong></td><td>你主動推給使用者</td><td>計費（按則）</td></tr></tbody></table> <p>查詢型 Bot（使用者問一句、你答一句）幾乎都能靠 reply 完成，可以完全落在免費方案裡。只有「非同步通知」（例如事件發生後主動告知）才非用 push 不可，而 push 是按人頭按則計費，量大時要想辦法合併（例如每日彙整成一則）來壓成本。</p> <h3>實作注意</h3> <p><strong>1. <code>replyToken</code> 是一次性且有時效</strong></p> <p>每則使用者訊息給你的 <code>replyToken</code> 只能用一次、且要在短時間內（約 1 分鐘）用掉。過期或重複使用就會失敗，所以要回應的訊息要在這一輪內組好送出。</p> <p><strong>2. webhook 要「快速回 200」</strong></p> <p>收到 POST 後要盡快回 <code>200 OK</code> 給 LINE，代表「我收到了」。實際要回覆內容是另一件事 —— 拿 <code>replyToken</code> 去打 LINE 的 reply API 送出。這兩件事是分開的：HTTP response 只是簽收，訊息是回打。如果在 handler 裡做太久才回 200，LINE 會判定逾時甚至重送。</p> <p><strong>3. 一定要驗簽章</strong></p> <p>因為 endpoint 是公開的，任何人都能對你的 <code>/callback</code> 亂打。LINE 每個請求都帶一個 <code>x-line-signature</code> header，要用 channel secret 做 HMAC 驗證，確認這個請求真的來自 LINE 才處理。</p> <p><strong>4. 官方帳號的「自動回應」會造成雙重回覆</strong></p> <p>LINE Official Account Manager 後台預設開著「自動回應訊息／歡迎訊息」，如果沒關掉，使用者傳一句話會同時收到 LINE 後台的罐頭回覆 + 你程式的回覆。</p> <p><strong>5. 不是所有事件都是文字</strong></p> <p>同一個 <code>/callback</code> 還會收到 <code>follow</code>（加好友）、<code>unfollow</code>（封鎖）、<code>postback</code>（按鈕）、<code>join</code>/<code>leave</code>（被拉進/踢出群組）、貼圖、圖片、位置……。用 <code>event.type</code> 先分類，別預設每個 event 都有 <code>message.text</code>。</p> <h3>小結</h3> <p>LINE Bot 了解文件後串接到 callback 後就滿好處理了，就是寫純粹的商業邏輯。</p><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1mwsy7l = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DnaGL2Zz.js"),
+						import("../_app/immutable/entry/app.Db5eRZtE.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
