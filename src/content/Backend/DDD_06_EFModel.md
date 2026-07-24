@@ -1,10 +1,10 @@
 ---
-title: "Domain-Driven 07 - ORM Model"
+title: "Domain-Driven 06 - EF Model"
 date: "2026-07-23"
-category: ""
+category: "software"
 subCategory: "Backend"
-tags: ["DDD", "backend", "design", "csharp", "ORM"]
-slug: "ddd_07"
+tags: ["DDD", "backend", "design", "EF", "ORM"]
+slug: "ddd_06"
 ---
 ###### Domain Aggregate 如何配合 EFCore 資料庫採用 PostgreSQL。
 
