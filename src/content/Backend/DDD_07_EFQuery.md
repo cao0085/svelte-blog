@@ -395,138 +395,170 @@ var blogDtos = await context.Blogs
 
 ### DDD Query
 
-在 DDD 架構下，常會將 Value Object 對應到 EF Core 的 Entity 屬性上藉此保護領域規則；但也正因為規則嚴謹，在需要查詢時反而會衍生出不同的問題。
+在 DDD 架構下，常會將 Value Object 對應到 EF Core 的 Entity 屬性上藉此保護領域規則；但也正因為規則嚴謹，在需要查詢時反而會衍生出不同的問題。查詢可分成 **精準查詢**(翻成 SQL 的 `=`) 與 **模糊查詢**(翻成 SQL 的 `LIKE`) ，都會遇到不同問題，而關鍵都取決於 VO 是用哪種方式映射。
 
-#### Value Object 在 EF 內的型別翻譯
+#### 兩種型別翻譯
 
-單一欄位包裝 - HasConversion
+- HasConversion: 只把整個 VO 登記成一欄不透明純量，model 裡沒有這個屬性。
+
+    ```csharp
+    public record GuiNumber
+    {
+        public string Value { get; }
+        private GuiNumber(string value) => Value = value;
+        public static GuiNumber Create(string value)
+        {
+            if (value.Length != 8) throw new DomainException("統一編號必須為 8 碼");
+            return new GuiNumber(value);
+        }
+    }
+
+    modelBuilder.Entity<Company>()
+        .Property(c => c.GuiNumber)
+        .HasColumnName("gui_number")
+        .HasConversion(g => g.Value, v => GuiNumber.Create(v));
+    ```
+
+    對 EF Core 來說 `Company.GuiNumber` 是「一個被轉換過的欄位」不是物件，整個 VO 被登記成一欄不透明純量，EF 不知道裡面有哪些成員。
+
+- OwnsOne / ComplexProperty: 把每個成員各自登記成獨立屬性、各自對應一欄，是一個有對應欄位的已知屬性。
+
+    ```csharp
+    public record BasicInfo(string Name, string? Owner, string? Address);
+
+    modelBuilder.Entity<Company>().OwnsOne(c => c.BasicInfo, b =>
+    {
+        b.Property(p => p.Name).HasColumnName("name");
+        b.Property(p => p.Owner).HasColumnName("owner");
+        b.Property(p => p.Address).HasColumnName("address");
+    });
+    // 或 EF Core 8+
+    modelBuilder.Entity<Company>().ComplexProperty(c => c.BasicInfo);
+    ```
+
+    因為 `BasicInfo.Name`、`BasicInfo.Owner`、`BasicInfo.Address` 各自對應到實際獨立的欄位，EF Core 可以直接翻譯進去存取每個屬性。
+
+這個差異會決定下面兩種查詢能不能翻譯成 SQL。
+
+#### 精準查詢
+
+核心原則是比較「整個 VO」，不要在 `Where` 裡把 EF 欄位取 `.Value`。
 
 ```csharp
-public record Email
-{
-    public string Value { get; }
-    private Email(string value) => Value = value;
-    public static Email Create(string value)
-    {
-        if (!value.Contains('@')) throw new DomainException("invalid email");
-        return new Email(value);
-    }
-}
-
-modelBuilder.Entity<Order>()
-    .Property(o => o.Email)
-    .HasConversion(e => e.Value, v => Email.Create(v));
+// 通常可以翻譯 —— EF Core 會去查 HasConversion 定義的轉換規則,把整個 VO 換成底層值:
+context.Companies.Where(c => c.GuiNumber == GuiNumber.Create("12345675"))
 ```
 
-對 EF Core 來說 `Order.Email` 是「一個被轉換過的欄位」不是物件。
+```sql
+-- 翻譯後:整個 VO 被 converter 換成底層值,比對 gui_number 欄
+SELECT c."Id", c."Type", c.gui_number, c.name, c.owner, c.address, c."CreatedAt", c."UpdatedAt"
+FROM companies AS c
+WHERE c.gui_number = '12345675'
+```
 
 ```csharp
-// 通常可以翻譯 —— EF Core 會去查 HasConversion 定義的轉換規則:
-context.Orders.Where(o => o.Email == Email.Create("test@test.com"))
+// ERROR: HasConversion 下深入存取 .Value 翻不出來會丟例外
+context.Companies.Where(c => c.GuiNumber.Value == "12345675")
+// → 直接丟 InvalidOperationException(could not be translated),連 SQL 都產不出來
+```
 
-// 背後查的就是這段 mapping 設定：
-modelBuilder.Entity<Order>()
-    .Property(o => o.Email)
+背後查的就是這段 mapping 設定：
+
+```csharp
+modelBuilder.Entity<Company>()
+    .Property(c => c.GuiNumber)
+    .HasColumnName("gui_number")
     .HasConversion(
-        e => e.Value,           // VO → 底層值(這裡用來把 Email.Create(...) 轉成底層值)
-        v => Email.Create(v));  // 底層值 → VO(讀出資料庫時用)
+        g => g.Value,               // VO → 底層值(把 GuiNumber.Create(...) 轉成底層值送進 WHERE)
+        v => GuiNumber.Create(v));  // 底層值 → VO(讀出資料庫時用)
 ```
 
-另一個常見錯誤是 `.Value` 這種比較方法，原因是前面提到的 `Where()` 裡的 lambda 要等 Runtime 才會被解析成 Expression Tree。而 `.Value` 這種 getter 對 EF 來說是一段不透明的 C# 邏輯；沒辦法保證它跟底層欄位是一對一對應，所以無法翻譯直接丟出例外。
+那這邊的問題會是 `c.GuiNumber == target` 需要先有一個 `GuiNumber` 實例，而 `Create()` 會跑領域驗證。如果使用者輸入的是不完整字串(例如只打了統編前幾碼)，`Create()` 會直接報錯，在查詢上會非常不便。
 
-```csharp
-// ERROR: 深入存取 .Value 常常翻不出來，會丟 client eval 例外
-context.Orders.Where(o => o.Email.Value == "test@test.com")
-```
+#### 模糊查詢
 
-所以可以的話就盡量比較整個 VO，不要在 `Where` 裡去存取 `.Value`
+核心限制是 `LIKE` 需要EF翻譯器最後能指到「一個真實的 text 欄位」。
 
-```csharp
-var target = Email.Create(searchEmail);
-context.Orders.Where(o => o.Email == target);   // 穩定可翻譯
-```
+1. HasConversion
 
-多欄位 - OwnsOne & Complex Type
+    這類欄位**沒辦法直接模糊查詢**——VO 被登記成一欄不透明純量，model 裡根本沒有可以 `LIKE` 的真實成員欄位。頂多只能提供一個「查詢專用、不驗證」的建構入口做**等值比對**(跳過 `Create()` 驗證，讓不完整輸入也能參與 `==`):
 
-```csharp
-public record Address(string City, string Street);
-
-modelBuilder.Entity<Order>().OwnsOne(o => o.Address);
-// 或 EF Core 8+
-modelBuilder.Entity<Order>().ComplexProperty(o => o.Address);
-```
-
-因為 `Address.City`、`Address.Street` 各自對應到實際獨立的欄位，不是靠不透明的轉換函式包起來的，EF Core 可以直接翻譯進去存取每個屬性：
-
-```csharp
-// 沒問題，因為 City 本身就是實際欄位，不是靠 converter 猜出來的
-context.Orders.Where(o => o.Address.City.Contains("台北"))
-```
-
----
-
-### 問題二:VO 的 `Create()` 驗證規則 vs. 模糊查詢
-
-**核心問題**:`Create()` 是為了保護「寫入時」的領域不變量(invariant),但查詢條件經常是不完整、不符合 VO 規則的片段字串——例如搜尋 email 包含 `"gmail"`,這個字串本身不是合法 email,丟進 `Email.Create("gmail")` 會直接炸掉領域驗證例外。
-
-**原則**:查詢條件(query criteria)跟領域物件(domain entity)的不變量,本來就是兩件不同的事,不該共用同一個建構入口。
-
-#### 解法一:查詢層直接用原生型別,不強迫走 VO
-
-```csharp
-// Repository / Query 方法參數就是 string,不是 Email VO
-public async Task<List<Order>> SearchByEmailFragmentAsync(string emailFragment)
-{
-    var pattern = $"%{emailFragment}%";
-    return await context.Orders
-        .Where(o => EF.Functions.Like(o.Email.Value, pattern))  // OwnsOne/Complex Type 下穩定可翻譯
-        .ToListAsync();
-}
-```
-
-如果 Email VO 用 Complex Type/OwnsOne 映射,`.Value`(或底層屬性)本身是真實欄位,`Contains`/`EF.Functions.Like` 可以正常翻譯,完全不需經過 `Create()`。
-
-#### 解法二:VO 提供「查詢專用、不驗證」的建構方式
-
-若 VO 必須維持 `HasConversion` 映射,又想在查詢層保留 VO 型別一致性,可額外提供繞過驗證的建構子:
-
-```csharp
-public record Email
-{
-    public string Value { get; }
-    private Email(string value) => Value = value;
-
-    // 寫入 / 建立 entity 時用,強制驗證領域規則
-    public static Email Create(string value)
+    ```csharp
+    public record GuiNumber
     {
-        if (!value.Contains('@')) throw new DomainException("invalid email");
-        return new Email(value);
+        public string Value { get; }
+        private GuiNumber(string value) => Value = value;
+
+        // 寫入 / 建立 entity 時用,強制驗證領域規則
+        public static GuiNumber Create(string value)
+        {
+            if (value.Length != 8) throw new DomainException("統一編號必須為 8 碼");
+            return new GuiNumber(value);
+        }
+
+        // 查詢時專用,不做完整驗證,只是包裝型別讓 EF 能做「等值比對」
+        internal static GuiNumber ForQuery(string raw) => new GuiNumber(raw);
     }
 
-    // 查詢時專用,不做完整驗證,只是包裝型別讓 EF 能比對
-    internal static Email ForQuery(string rawFragment) => new Email(rawFragment);
-}
-```
+    // 未驗證的輸入也能參與 == 比對
+    context.Companies.Where(c => c.GuiNumber == GuiNumber.ForQuery(userInput));
+    ```
 
-`Create()` 保護的是「這個物件被存進資料庫、代表真實業務實體」的正確性;查詢條件只是「使用者想找的一段文字」,兩者驗證責任本來就不該共用同一個入口。用 `internal` 限制這個繞過驗證的建構子只能在查詢/基礎設施層使用,避免被誤用去建立真正要寫入的 entity。
+    ```sql
+    -- 注意:仍是 = 不是 LIKE。ForQuery 只跳過驗證,運算子還是等值比對
+    SELECT c."Id", c."Type", c.gui_number, c.name, c.owner, c.address, c."CreatedAt", c."UpdatedAt"
+    FROM companies AS c
+    WHERE c.gui_number = '1234'   -- @p = 使用者輸入的片段
+    ```
 
-#### 解法三:退回原生 SQL
+    真的要對 HasConversion 欄位做模糊查詢，只能「攤出一個真實 text 欄位」再 `LIKE`：改成下面的 OwnsOne / Complex Type 映射，或加一個持久化計算欄位(computed column)把值攤成可查的欄，再不然就退回原生 SQL(見 3.)。
 
-當 VO 邏輯複雜到 LINQ 翻譯常踩到 Client Evaluation 邊界情況時,直接用 `FromSql`/`SqlQuery` 繞開 VO 型別系統的翻譯問題:
+2. OwnsOne / Complex Type
 
-```csharp
-var pattern = $"%{emailFragment}%";
-var orders = await context.Orders
-    .FromSql($"SELECT * FROM Orders WHERE Email LIKE {pattern}")
-    .ToListAsync();
-```
+    複合欄位在 EF 的 `Contains` / `EF.Functions.Like` 都能正常翻譯，且是純屬性欄位完全不需經過 `Create()`。而且查詢方法的參數直接收原生 `string`，不強迫走 VO，自然避開驗證問題:
 
-拿到的仍是完整的 `Order` entity(包含正確組裝、驗證過的 `Email` VO),只是查詢條件不經過 LINQ 翻譯層,自己控制 SQL 怎麼寫。
+    ```csharp
+    // 沒問題,Address 本身就是實際欄位
+    context.Companies.Where(c => c.BasicInfo.Address.Contains("台北"))
+    ```
 
----
+    ```sql
+    -- 翻譯後:Contains 在 Npgsql 通常翻成 strpos(...) > 0(部分版本為 LIKE '%台北%')
+    SELECT c."Id", c."Type", c.gui_number, c.name, c.owner, c.address, c."CreatedAt", c."UpdatedAt"
+    FROM companies AS c
+    WHERE strpos(c.address, '台北') > 0
+    ```
 
-### 一句話總結
+    ```csharp
+    // Repository / Query 方法參數就是 string,不是 VO
+    public async Task<List<Company>> SearchByAddressAsync(string addressFragment)
+    {
+        var pattern = $"%{addressFragment}%";
+        return await context.Companies
+            .Where(c => EF.Functions.Like(c.BasicInfo.Address, pattern))
+            .ToListAsync();
+    }
+    ```
 
-**VO 的驗證規則(`Create()`)屬於「寫入/領域不變量」的責任範圍,不該套用在「查詢條件」上**——查詢條件本質上是不完整、模糊、甚至不合法的片段,硬要它符合 VO 的建構規則,是把兩種不同性質的責任混在一起。實務分工建議:**查詢方法的參數盡量收原生型別(string/int),在 repository 內部才決定要不要包成 VO 去比對**,而不是要求呼叫端先建出一個合法的 VO 才能查詢。
+    ```sql
+    -- 翻譯後:EF.Functions.Like 直接翻成 LIKE
+    SELECT c."Id", c."Type", c.gui_number, c.name, c.owner, c.address, c."CreatedAt", c."UpdatedAt"
+    FROM companies AS c
+    WHERE c.address LIKE '%台北%' ESCAPE ''
+    ```
 
-Mapping 方式選擇上,若 VO 常需要被查詢(尤其是模糊查詢),**優先選 Complex Type(或 OwnsOne)而不是 `HasConversion`**——結構化欄位映射對 LINQ 翻譯友善很多,能避免大部分 `.Value` 存取翻不出來的窘境。
+3. SQL Row
+
+    其實不必執著 EF 提供的語法，現在有 AI 寫 SQL ROW 很快效能也好評估，退回原生語法也會是個選擇:
+
+    ```csharp
+    var pattern = $"%{addressFragment}%";
+    var companies = await context.Companies
+        .FromSql($"SELECT * FROM companies WHERE address LIKE {pattern}")  // {pattern} 會被參數化,非字串拼接
+        .ToListAsync();
+    ```
+
+    ```sql
+    -- 翻譯後:幾乎原樣送出,只有 {pattern} 被換成參數
+    SELECT * FROM companies WHERE address LIKE $1   -- $1 = '%台北%'
+    ```
