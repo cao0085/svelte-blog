@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="../favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link href="../_app/immutable/assets/0.BlKtvRjo.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/2.BJ2Spu6U.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/4.B8RFDSjp.css" rel="stylesheet">
+		<link rel="modulepreload" href="../_app/immutable/entry/start.ba3v7VMq.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Bh2nmOYY.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BxOgAoW7.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DAnqEhCS.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/D2rRESRJ.js">
+		<link rel="modulepreload" href="../_app/immutable/entry/app.fqVSJo35.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/Dp1pzeXC.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BQ5ZXmzn.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/TMkMnSgz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/DiyS51Ys.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/BE2FaABz.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CtMZXga1.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/C0sOZT90.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CnCFSxla.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/0.-dEdkACv.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/3tIL2OQ4.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/K-11HA0C.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/2.DV-3ulIA.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CL3wCAOT.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/edu4luwr.js">
+		<link rel="modulepreload" href="../_app/immutable/chunks/CA-4E5zD.js">
+		<link rel="modulepreload" href="../_app/immutable/nodes/4.B1N5IK0k.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[--><!----><div class="app svelte-1t5f27d"><header class="svelte-1wpzjs"><div class="title svelte-1wpzjs"></div></header><!----> <main class="svelte-1t5f27d"><!--[--><!----><div class="left-panel-bg svelte-erh8se"><canvas class="svelte-19079rx"></canvas><!----></div> <div class="article-layout svelte-erh8se"><aside class="svelte-erh8se"><nav class="svelte-fxo4lv"><h2 class="svelte-fxo4lv"></h2> <!--[--><section class="svelte-fxo4lv"><button class="category-toggle svelte-fxo4lv" aria-expanded="true"><span class="arrow svelte-fxo4lv open">›</span> Software</button> <!--[--><div class="slide-content svelte-fxo4lv"><!--[--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Communications</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Backend</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Side Project</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> How-To</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> AudioTech</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Angular20</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DevOps</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> DataStorage</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> NYCU Algorithm</button> <!--[!--><!--]--><!--]--><!--[!--><button class="sub-toggle svelte-fxo4lv"><span class="arrow svelte-fxo4lv">›</span> Frontend</button> <!--[!--><!--]--><!--]--><!--]--></div><!--]--></section><!--]--></nav><!----></aside> <main class="svelte-erh8se"><!----><!----><!--[--><article class="prose mx-auto"><div class="article-header svelte-e5b4xr"><h1 class="svelte-e5b4xr">拆解 OSI 七層</h1> <p class="svelte-e5b4xr">2026-07-28</p></div> <section class="article-body svelte-e5b4xr"><!----><h6>在 Docker container 裡用 tshark 抓一個真實封包，把 OSI 七層攤開</h6> <hr/> <h3>抓一次真實的 HTTP 交易</h3> <p>用 HTTP 而非 HTTPS，這樣應用層才會是明文。一邊背景側錄 <code>eth0</code>，一邊送出請求：</p> <pre class="language-bash"><!----><code class="language-bash"><span class="token comment"># 只抓 DNS(53) 與 HTTP(80)，最多側錄 10 秒</span>
+tshark <span class="token parameter variable">-i</span> eth0 <span class="token parameter variable">-a</span> duration:10 <span class="token parameter variable">-w</span> /tmp/osi.pcap <span class="token parameter variable">-f</span> <span class="token string">"udp port 53 or tcp port 80"</span> <span class="token operator">&amp;</span>
+<span class="token function">sleep</span> <span class="token number">2</span>
+<span class="token function">curl</span> <span class="token parameter variable">-H</span> <span class="token string">"Connection: close"</span> http://example.com <span class="token parameter variable">-o</span> /dev/null</code><!----></pre> <p>先看協定階層統計，分層的縮影一目了然：</p> <pre class="language-bash"><!----><code class="language-bash">tshark <span class="token parameter variable">-r</span> /tmp/osi.pcap <span class="token parameter variable">-q</span> <span class="token parameter variable">-z</span> io,phs</code><!----></pre> <pre class="language-text"><!----><code class="language-text">eth                    frames:14
+  ip                   frames:14
+    udp                frames:4
+      dns              frames:4      ← L7 名稱解析
+    tcp                frames:10
+      http             frames:2      ← L7 應用資料</code><!----></pre> <hr/> <h3>封裝</h3> <p>看任一個 HTTP 封包最關鍵的一行：</p> <pre class="language-bash"><!----><code class="language-bash">tshark <span class="token parameter variable">-r</span> /tmp/osi.pcap <span class="token parameter variable">-V</span> <span class="token parameter variable">-Y</span> <span class="token string">"http.request"</span></code><!----></pre> <pre class="language-text"><!----><code class="language-text">[Protocols in frame: eth : ip : tcp : http]</code><!----></pre> <p>由外到內層層包起來，這就是 encapsulation。對應到 OSI：</p> <pre class="language-text"><!----><code class="language-text">┌─ L7 應用層  HTTP  ─────────────────────────────────┐
+│  GET / HTTP/1.1   Host: example.com                │  你真正想做的事
+│  ┌─ L4 傳輸層  TCP ──────────────────────────────┐ │
+│  │  Src Port 53470 → Dst Port 80   Seq/Ack/Flags │ │  哪個程式對哪個服務
+│  │  ┌─ L3 網路層  IPv4 ───────────────────────┐  │ │
+│  │  │  172.17.0.2 → 104.20.23.154            │  │ │  跨網路找到主機
+│  │  │  ┌─ L2 資料連結層  Ethernet ─────────┐  │  │ │
+│  │  │  │  MAC fa:9c:3d.. → 1a:06:68..      │  │  │ │  同網段硬體定址
+│  │  │  │  ┌─ L1 實體層 ─────────────────┐  │  │  │ │
+│  │  │  │  │ 159 bytes (1272 bits) on wire│  │  │  │ │  位元 / 訊號
+│  │  │  │  └──────────────────────────────┘  │  │  │ │
+└──┴──┴──┴─────────────────────────────────────┴──┴──┴─┘</code><!----></pre> <table><thead><tr><th>OSI 層</th><th>封包裡實際看到的欄位</th><th>職責</th></tr></thead><tbody><tr><td>L7 應用層</td><td><code>GET / HTTP/1.1</code>、<code>Host:</code></td><td>應用協定（HTTP/DNS/FTP）</td></tr><tr><td>L6 表現層</td><td><em>(純 HTTP 無，見 TLS)</em></td><td>加密、編碼、壓縮</td></tr><tr><td>L5 會談層</td><td><em>(HTTP 合併於上層)</em></td><td>建立/管理會談</td></tr><tr><td>L4 傳輸層</td><td><code>TCP Port 53470 → 80</code>、Seq/Ack</td><td>埠號、可靠傳輸、切段</td></tr><tr><td>L3 網路層</td><td><code>IPv4 172.17.0.2 → 104.20.23.154</code></td><td>邏輯位址與繞送</td></tr><tr><td>L2 資料連結層</td><td><code>Ethernet MAC …f7:22 → …f6:24</code></td><td>同網段硬體定址</td></tr><tr><td>L1 實體層</td><td><code>159 bytes on wire (1272 bits)</code></td><td>位元、訊號、纜線</td></tr></tbody></table> <blockquote><p>實務抓包看到的其實是 <strong>TCP/IP 四層模型</strong>，OSI 的 L5/L6/L7 通常合併成「應用層」。想看到獨立的 L6（加密/表現層），就抓 HTTPS，會多出一層 <code>TLS</code>。</p></blockquote> <hr/> <h3>範例</h3> <p>把上面那個 <code>GET /</code> 封包用 <code>tshark -V</code> 完整攤開，由外到內一層一層看。可以把整趟傳輸想像成寄一封掛號信：</p> <h4>Frame — 信封上的郵戳（元資料，不屬於任何一層）</h4> <pre class="language-text"><!----><code class="language-text">Frame 8: 159 bytes on wire (1272 bits), 159 bytes captured on interface eth0
+    Arrival Time: Jul 28, 2026 06:41:22.669676868 UTC
+    [Time delta from previous captured frame: 0.000150860 seconds]
+    [Protocols in frame: eth:ethertype:ip:tcp:http]</code><!----></pre> <p>這一段是 Wireshark 自己貼上去的標籤，不是網路上真的傳的資料。</p> <ul><li><strong><code>159 bytes on wire (1272 bits)</code></strong>：這封包在網路線上實際佔了 159 byte（× 8 = 1272 個 bit）。這個「bit 數」對應的就是 <strong>L1 實體層</strong>——最後一切都化為電/光訊號的 0 與 1。</li> <li><strong><code>Arrival Time</code> / <code>Time delta</code></strong>：抵達時間、距上一個封包多久。分析延遲、卡頓時最先看這裡。</li> <li><strong><code>Protocols in frame: eth:ethertype:ip:tcp:http</code></strong>：整顆洋蔥由外到內包了哪幾層——<strong>這一行是全篇的地圖</strong>。</li></ul> <h4>L2 資料連結層 — 這一段路的郵差（MAC）</h4> <pre class="language-text"><!----><code class="language-text">Ethernet II, Src: fa:9c:3d:fa:f7:22, Dst: 1a:06:68:58:f6:24
+    Type: IPv4 (0x0800)</code><!----></pre> <p>負責把封包在<strong>同一段實體網路內</strong>，從一張網卡送到「下一跳」的網卡，靠的是 MAC 位址。</p> <ul><li><strong><code>Src</code> / <code>Dst</code> MAC</strong>：來源與目的的硬體位址（48 bit，出廠燒在網卡上）。注意 Dst 不是 example.com 的伺服器，而是你 container 的閘道 —— 就像社區郵差只負責把信送到轉運站，不是直接送到外縣市。<strong>每經過一個路由器，這對 MAC 就會被換掉一次。</strong></li> <li><strong><code>Type: IPv4 (0x0800)</code></strong>：告訴收件端「拆開我之後，裡面裝的是 IPv4」，下一層才知道要用 IP 規則來解。</li></ul> <h4>L3 網路層 — 信封上的地址（IP）</h4> <pre class="language-text"><!----><code class="language-text">Internet Protocol Version 4, Src: 172.17.0.2, Dst: 172.66.147.243
+    Total Length: 145
+    Flags: 0x2, Don&#39;t fragment
+    Time to Live: 64
+    Protocol: TCP (6)</code><!----></pre> <p>負責讓封包能<strong>跨越好幾個網段</strong>，一路繞送到目的主機，靠的是 IP 位址。</p> <ul><li><strong><code>Src</code> / <code>Dst</code> Address</strong>：<code>172.17.0.2</code>（你的 container）→ <code>172.66.147.243</code>（example.com）。</li> <li><strong><code>Time to Live: 64</code></strong>：TTL。每經過一個路由器就減 1，歸零就丟棄。這是防止封包在網路裡<strong>迷路繞圈</strong>的保險絲。</li> <li><strong><code>Flags: Don't fragment</code></strong>：這封信不准中途被拆成好幾片再重組。</li> <li><strong><code>Protocol: TCP (6)</code></strong>：表示裡面裝的是 TCP，下一層用 TCP 解。</li></ul> <h4>L4 傳輸層 — 掛號 + 收件人分機號碼（TCP）</h4> <pre class="language-text"><!----><code class="language-text">Transmission Control Protocol, Src Port: 52292, Dst Port: 80, Seq: 1, Ack: 1, Len: 93
+    Flags: 0x018 (PSH, ACK)
+    Window: 63  [Calculated window size: 64512]
+    [iRTT: 0.064108805 seconds]
+    TCP payload (93 bytes)</code><!----></pre> <p>負責兩件事：<strong>送到對的程式</strong>（靠 Port），以及<strong>保證可靠</strong>（不丟、不亂序）。</p> <ul><li><strong><code>Src Port: 52292</code> → <code>Dst Port: 80</code></strong>：同一台主機上跑很多程式，Port 就像<strong>公司總機後面的分機號碼</strong>。<code>80</code> 是 HTTP 服務的分機；<code>52292</code> 是你這端 curl 臨時分到的分機。</li> <li><strong><code>Seq</code> / <code>Ack</code>（序號 / 確認號）</strong>：TCP 給每個 byte 編號，收到就回報「我收到第幾號了」。這就是<strong>掛號信要簽收</strong>的機制——沒簽收就重寄。</li> <li><strong><code>Flags: PSH, ACK</code></strong>：<code>ACK</code>=同時在簽收對方的資料；<code>PSH</code>=「別在郵局囤著了，立刻把信交到收件人手上」（HTTP 請求要馬上送出）。沒有 <code>SYN</code>/<code>FIN</code>，代表這是連線<strong>建立完成後、傳資料</strong>的階段。</li> <li><strong><code>Window: 64512</code></strong>：流量控制——「我現在還收得下 64512 byte，別一次灌爆我」。</li> <li><strong><code>iRTT: 0.064 s</code></strong>：Wireshark 幫你算出的來回延遲，約 64 毫秒。</li> <li><strong><code>TCP payload (93 bytes)</code></strong>：這段 TCP 載了 93 byte 資料——<strong>就是下面那封 HTTP 信的全文</strong>。</li></ul> <h4>L7 應用層 — 信的內容（HTTP）</h4> <pre class="language-text"><!----><code class="language-text">Hypertext Transfer Protocol
+    GET / HTTP/1.1&#92;r&#92;n
+        Request Method: GET
+        Request URI: /
+        Request Version: HTTP/1.1
+    Host: example.com&#92;r&#92;n
+    User-Agent: curl/8.5.0&#92;r&#92;n
+    Accept: */*&#92;r&#92;n
+    Connection: close&#92;r&#92;n
+    &#92;r&#92;n</code><!----></pre> <p>這才是你<strong>真正想做的事</strong>。前面所有層都只是為了把這幾行字，安全準時地送到對方手上。HTTP 本質就是一段格式化的純文字：</p> <table><thead><tr><th>內容</th><th>意義</th></tr></thead><tbody><tr><td><code>GET / HTTP/1.1</code></td><td>請求行：方法 <code>GET</code>、路徑 <code>/</code>、版本 1.1</td></tr><tr><td><code>Host: example.com</code></td><td>要哪個網站（一個 IP 可掛多站，靠這行區分）</td></tr><tr><td><code>User-Agent: curl/8.5.0</code></td><td>我是誰（客戶端軟體）</td></tr><tr><td><code>Accept: */*</code></td><td>我能接受任何格式的回應</td></tr><tr><td><code>Connection: close</code></td><td>回應完就關連線</td></tr><tr><td><code>\r\n</code>（空行）</td><td>標頭結束的標記，之後才是 body（GET 無 body，到此結束）</td></tr></tbody></table> <h4>由上而下，一次讀懂</h4> <blockquote><p>curl 想送 <code>GET /</code>（<strong>L7</strong>）→ 交給 TCP 貼上「分機 80、掛號、序號」（<strong>L4</strong>）→ 交給 IP 寫上「寄到 172.66.147.243、TTL 64」（<strong>L3</strong>）→ 交給 Ethernet 填上「下一跳郵差的 MAC」（<strong>L2</strong>）→ 化成 1272 個 bit 送上線（<strong>L1</strong>）。對方收到後，反過來一層一層拆開，最後讀到那封信。</p></blockquote> <hr/> <h3>封包的三個主階段</h3> <p>看封包清單：</p> <pre class="language-bash"><!----><code class="language-bash">tshark <span class="token parameter variable">-r</span> /tmp/osi.pcap</code><!----></pre> <p><strong>1. TCP 三向交握（連線建立）</strong> — 封包 5、6、7：</p> <table><thead><tr><th>#</th><th>方向</th><th>旗標</th><th>意義</th></tr></thead><tbody><tr><td>5</td><td>53470 → 80</td><td><code>SYN</code></td><td>我想連線</td></tr><tr><td>6</td><td>80 → 53470</td><td><code>SYN, ACK</code></td><td>好，我也準備好</td></tr><tr><td>7</td><td>53470 → 80</td><td><code>ACK</code></td><td>確認，開始</td></tr></tbody></table> <p><strong>2. DNS 名稱解析（L7）</strong> — 封包 1~4：先問 <code>example.com 的 IP</code>，拿到 <code>104.20.23.154</code>，才有後面的連線。這解釋了「網址」怎麼變成 L3 的 IP。</p> <p><strong>3. 四向揮手（連線關閉）</strong> — 封包 12、13、14 的 <code>FIN, ACK</code>。</p> <hr/> <h3>DNS 與 CDN：網址怎麼變成 IP</h3> <p>L3 靠 IP 找主機，但你只記得住 <code>example.com</code>。<strong>把網域名稱翻成 IP 的查號服務，就是 DNS。</strong> 回頭看最早抓的 <code>/tmp/osi.pcap</code>，封包 1~4 就是完整過程：</p> <pre class="language-text"><!----><code class="language-text">封包 1  你 → DNS伺服器   「example.com 的 A 紀錄（IPv4）是多少？」   ← 查詢
+封包 3  DNS伺服器 → 你   「A: 104.20.23.154, 172.66.147.243」        ← 回答</code><!----></pre> <ul><li><strong>先 DNS、後連線</strong>：一定是先查到 IP，才有後面那條 TCP 連線——這就是為什麼抓包裡 DNS（1~4）永遠排在 HTTP 連線（5 起）前面。</li> <li><strong>答案有保存期限（DNS TTL）</strong>：每筆回應附一個存活秒數，這段時間內直接用快取、不重查。</li></ul> <p><strong>一個網域可以綁多個 IP</strong>（DNS 裡放多筆 A 紀錄），這就帶出 CDN：</p> <blockquote><p><strong>CDN（內容傳遞網路）</strong> 把同樣的內容複製到全球數百個節點，DNS 查詢時<strong>看你從哪來，回你最近的節點 IP</strong>。所以同一個 <code>example.com</code>，兩次抓包會拿到不同 IP（<code>104.20.23.154</code> / <code>172.66.147.243</code>）——它們是同一個網站的不同「分店」，都是 Cloudflare 這家 CDN 的位址。這也是為什麼「連同一個網站、走的路徑卻可能不同」。</p></blockquote> <hr/> <h3>HTTPS：中間多出來的 L6（TLS）</h3> <p>前面的 HTTP 看得到明文，是因為沒有加密層。把同樣的請求改抓 HTTPS，協定階層就會多一層 <code>tls</code>：</p> <pre class="language-bash"><!----><code class="language-bash">tshark <span class="token parameter variable">-i</span> eth0 <span class="token parameter variable">-a</span> duration:10 <span class="token parameter variable">-w</span> /tmp/tls.pcap <span class="token parameter variable">-f</span> <span class="token string">"tcp port 443"</span> <span class="token operator">&amp;</span>
+<span class="token function">sleep</span> <span class="token number">2</span>
+<span class="token function">curl</span> <span class="token parameter variable">-H</span> <span class="token string">"Connection: close"</span> https://example.com <span class="token parameter variable">-o</span> /dev/null
+tshark <span class="token parameter variable">-r</span> /tmp/tls.pcap <span class="token parameter variable">-q</span> <span class="token parameter variable">-z</span> io,phs</code><!----></pre> <pre class="language-text"><!----><code class="language-text">HTTP:   eth : ip : tcp : http           ← 應用資料明文可讀
+HTTPS:  eth : ip : tcp : tls : (http)    ← TCP 與 HTTP 之間插入 TLS，http 被藏進加密裡</code><!----></pre> <p>這層 <code>tls</code> 就是 OSI <strong>第 6 層表現層（Presentation）</strong> 的實作——負責加密、解密與編碼。信封（IP）、掛號分機（TCP）都沒變，只是<strong>把信的內容裝進了保險箱</strong>。</p> <h4>逐欄解讀：Client Hello（開箱前的暗號交換）</h4> <p>TLS 連線的頭幾個訊息是<strong>明文</strong>的——因為金鑰還沒協商出來，只能先亮出底牌。這也是抓 HTTPS 時唯一看得到明碼的地方：</p> <pre class="language-text"><!----><code class="language-text">Transmission Control Protocol, Src Port: 38896, Dst Port: 443, Seq: 1, Ack: 1, Len: 517
+Transport Layer Security
+    TLSv1 Record Layer: Handshake Protocol: Client Hello
+        Content Type: Handshake (22)
+        Version: TLS 1.0 (0x0301)
+        Handshake Protocol: Client Hello
+            Version: TLS 1.2 (0x0303)
+            Random: 51ce9d2eadd662e2...1a400810
+            Cipher Suites (31 suites)
+            Extension: server_name (len=16) name=example.com
+            Extension: supported_versions  TLS 1.3, TLS 1.2</code><!----></pre> <ul><li><strong><code>Dst Port: 443</code></strong>：對照 HTTP 的 80，HTTPS 走 443——分機號碼換了，但它仍然只是 L4 的欄位，TLS 是疊在 TCP 上面的。</li> <li><strong><code>Content Type: Handshake (22)</code></strong>：這是「握手」訊息，還沒進入加密。</li> <li><strong><code>Handshake Protocol: Client Hello</code></strong>：客戶端開場白——「我想跟你建立加密連線」。</li> <li><strong><code>Random</code></strong>：32 byte 亂數，是稍後<strong>衍生對稱金鑰</strong>的材料之一（雙方各出一份，湊起來算金鑰）。</li> <li><strong><code>Cipher Suites (31 suites)</code></strong>：我會的加密演算法清單，攤開讓伺服器挑一個雙方都會的——像<strong>先對暗號</strong>，確認彼此講同一種密語。</li> <li><strong><code>supported_versions: TLS 1.3, TLS 1.2</code></strong>：我支援的 TLS 版本，讓對方選最高的（這裡會協商到 1.3）。</li> <li><strong><code>server_name: example.com</code>（SNI）</strong>：告訴伺服器我要連哪個網站（一個 IP 掛多站時靠這個區分）。<strong>注意這欄仍是明文</strong>——所以旁觀者<strong>知道你連了哪個域名，但看不到你在上面做什麼</strong>。</li></ul> <h4>從明文切換到加密的那一刻</h4> <p>看同一條連線裡 <code>Content Type</code> 的變化，就是「保險箱上鎖」的完整過程：</p> <table><thead><tr><th>封包</th><th>Content Type</th><th>訊息</th><th>狀態</th></tr></thead><tbody><tr><td>72</td><td><code>22</code> Handshake</td><td>Client Hello（對暗號、換金鑰材料）</td><td>🔓 明文</td></tr><tr><td>74</td><td><code>22, 20</code></td><td>Server Hello + <strong>Change Cipher Spec</strong></td><td>🔑 切換點</td></tr><tr><td>80 起</td><td><code>23</code> Application Data</td><td>你的 <code>GET /</code>、伺服器的 HTML</td><td>🔒 全加密</td></tr></tbody></table> <p><code>Change Cipher Spec (20)</code> 就是那句「<strong>從下一個封包開始，全部上鎖</strong>」。之後所有 <code>Application Data (23)</code> 抓包只看得到密文長度，看不到內容。</p> <blockquote><p><strong>最直接的證據</strong>：對整個 HTTPS 抓包下 <code>-Y "http"</code> 過濾，符合的封包數是 <strong>0</strong>。HTTP 明明發生了，卻被 L6 完全藏起來——這就是表現層存在的意義。</p></blockquote> <h4>由上而下，一次讀懂（HTTPS 版）</h4> <blockquote><p>curl 想送 <code>GET /</code>（<strong>L7</strong>）→ 交給 <strong>TLS 加密成密文（L6）</strong> → 交給 TCP 貼上分機 443、掛號（<strong>L4</strong>）→ IP 繞送（<strong>L3</strong>）→ Ethernet 送到下一跳（<strong>L2</strong>）→ 位元上線（<strong>L1</strong>）。跟 HTTP 相比<strong>唯一的差別就是多插了 L6</strong>，其餘完全一樣——這正好印證分層精神：<strong>TCP 根本不在乎上面裝的是明文還是密文，照送不誤。</strong></p></blockquote><!----></section></article><!--]--><!----><!----></main></div><!----><!--]--><!----></main></div><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_r03t5c = {
+						base: new URL("..", location).pathname.slice(0, -1),
+						assets: "/svelte-blog"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.ba3v7VMq.js"),
+						import("../_app/immutable/entry/app.fqVSJo35.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2, 4],
+							data: [null,null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
