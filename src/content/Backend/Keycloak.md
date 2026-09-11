@@ -259,3 +259,116 @@ services:
 6. Keycloak 驗證 : 用 Body 傳入的 code & code_verifier 的雜湊值，去暫存 Mapping 資料，成功後就核發 token
 
 7. 後端驗證 : token 上面帶著 Keycloak 用私鑰做的簽章，後端只要有 Keycloak 的公鑰就能夠驗證
+
+### 簽章內容
+
+Keycloak 定義是依照 Realms 為單位隔離資料，User 預設能夠登入 Realms 內所有的 Client (取得 token)；所以 token 裡面會包含各 client 內的權限資料。例如可以從 ```resource_access``` 內得知此 User 在 A 權限是 ```writer,reader``` 在 B 內是 ```reader```。
+
+```json
+{
+  "exp": 1789018851,
+  "iat": 1789018551,
+  "auth_time": 1789018550,
+  "jti": "onrtac:192afefa-83ae-12b0-6974-a0dcebaeae74",
+  "iss": "http://localhost:20050/realms/{realmsName}",
+  "sub": "63b0ed3a-1cdd-418e-a38f-d257feb5091a",
+  "typ": "Bearer",
+  "azp": "CC", // 核發的 client_id，
+  "sid": "9029ba8f-c994-431b-bbc6-675c918dc7d8",
+  "acr": "1",
+  "allowed-origins": [
+    "http://localhost:4200"
+  ],
+  "resource_access": {
+    "Client_ID_A": {
+      "roles": [
+        "reader",
+        "writer"
+      ]
+    },
+    "Client_ID_B": {
+      "roles": [
+        "reader"
+      ]
+    }
+  },
+  "scope": "openid email profile",
+  "email_verified": false,
+  "name": "cc cc",
+  "preferred_username": "bothc",
+  "given_name": "cc",
+  "family_name": "cc",
+  "email": "bothc@23"
+}
+```
+
+### 系統架構
+
+以此需求作為範例:
+
+- 統一由主系統創建帳號、維護 Keycloak admin
+- 該帳號可以登入不同系統 (SSO)
+- 各自系統獨立維護操作權限
+- 新建帳號後須立即設定操作權限
+
+#### 設計原則
+
+- Keycloak 只處理帳號與能不能呼叫某支 keycloak API，不定義任何系統的業務職權
+- Keycloak admin 憑證僅存在主系統後端，子系統一律不持有
+- 跨系統的使用者外鍵一律使用 Keycloak `sub` (UUID)
+- 子系統須實作同步使用者清單功能，或改為每次即時查詢主系統
+
+#### Keycloak
+
+1. 單個 Realm 加上複數 Client
+   - `main-web` / `sub-web` (public, PKCE) — 各系統前端登入
+   - `main-backend` (confidential, service account) — 主系統 call keycloak admin API
+   - `sub-backend` (confidential, service account) — 子系統 call 主系統查詢 API
+   - `main-api` (資源伺服器識別，不參與 flow) — 承載 aud 與 client role
+2. Realm Role 僅需建立 `kc-admin` / `kc-user-admin`，負責 Keycloak 的 CRUD 權限
+3. Group / Attribute 僅宣告組織事實，子系統可參考作為**權限預設值或過濾條件**，不作為授權依據
+   - Group: `/company/finance` (部門)
+   - Attribute: `job_level` = `manager` | `staff`、`employee_no`
+4. Client Scopes 設定不同 Client 返回的 token 資訊 (aud / role)
+   - Client role 掛在 `main-api` 之下，例如 `employee:read`、`department:read`
+   - 子系統只取得所需的最小 role
+
+#### 主系統
+
+1. 前端提供自定義介面，後端維護一組 Keycloak admin env (client_id / client_secret)
+2. Keycloak 任何異動資料也都同步至主系統，作為整個企業的 SOT
+3. 設計一支唯讀查詢 API 提供子系統使用者資訊
+   - 僅回傳必要欄位 (`sub` / 姓名 / 部門 / `active`)，採白名單
+   - 需回傳 `active` 狀態，離職者標記停用而非從清單消失
+   - 資料直接取自主系統 DB，不即時打 Keycloak
+4. API 存取控制
+   - 本地 JWKS 離線驗簽，不使用 introspection endpoint
+   - 驗證 `iss` / `exp` / 簽章
+   - 檢查 `azp` 白名單 (或 `aud` 含 `main-api`)
+   - 檢查 `resource_access["main-api"].roles` 含對應 role
+   - 欄位與資料範圍限制由主系統本地 policy 維護，不放進 Keycloak
+
+#### 子系統
+
+1. 處理兩種 token，用途分離
+   - 使用者 token：OIDC 登入 (public client + PKCE)，取得 `sub` 作為使用者識別
+   - service account token：client_credentials，供後端呼叫主系統 API
+2. service account token 向主系統取得唯讀使用者資訊
+   - 需快取 token 至到期前，避免每次請求重換
+   - 使用者清單加短快取 (約 5 分鐘)，降低對主系統可用性依賴
+3. 子系統內存放一份業務操作權限資料，以 `sub` 為外鍵
+4. 權限設定頁面不從自己 DB 撈人，改以主系統回傳清單 left join 本地權限表
+   - 未設定者顯示為「未設定」，點選後才於本地建立 record
+   - 藉此滿足「帳號創建後立即可設定權限」，不需 provisioning 推送
+
+```text
+使用者   -> 各系統前端      -> Keycloak OIDC 登入 (不經過主系統)
+主系統   -> 使用者管理頁面  -> CRUD 使用者 -> Keycloak & 主系統 DB
+子系統   -> 操作權限頁面    -> API 取得主系統資料 + 子資料庫資料 -> 處理權限
+```
+
+#### 可用性
+
+1. 登入流程不經過主系統，主系統中斷不影響既有使用者登入與操作
+2. 主系統中斷時，子系統以快取清單降級運作，最壞情況為新進員工延遲出現於權限設定頁
+3. Keycloak 中斷時，各系統已簽發的 token 在有效期內仍可離線驗證通過
