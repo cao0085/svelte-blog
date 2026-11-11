@@ -38,7 +38,7 @@ export const resumeData: ResumeData = {
     github: 'github.com/cao0085',
   },
   summary:
-    'Full-stack engineer who ships, whether solo or embedded in a team. Built and maintained production systems across C#, Go, Angular, and Vue, picking up whatever the project demands. Now exploring system design and AI applications, looking for work that is interesting enough to keep me up.',
+    'Full-stack engineer who works well solo or in a team, with a solid grasp of business system logic, and enjoys connecting ideas across domains. Learns whatever the project needs.',
   objective:
     'Seeking a Full-Stack / Backend Developer role with opportunities to work on challenging technical problems and grow with the team.',
   education: [
@@ -55,37 +55,39 @@ export const resumeData: ResumeData = {
   ],
   sideprojects: [
     {
+      title: 'Audio Plugins',
+      link: 'https://qingtandsp.com',
+      highlights: [
+        'Combined music domain expertise with software engineering to create a commercial audio plugin line.',
+        'Defined and delivered one integrated product system spanning DSP, UI, licensing, payment, and release.',
+        'Directed AI to fill expertise gaps (e.g., 3D, mathematics) while owning final decisions.',
+      ],
+    },
+    {
       title: 'Claude Code Automation',
       link: '',
       highlights: [
-        'A personal Claude Code skill library for automating repetitive development workflows.',
-        'Includes project-specific DDD scaffolding chains and a phase-driven automation bot.',
+        'Built skill-driven Claude Code bots to automate and improve recurring development work.',
+        'Encoded team conventions into scaffolding skills for consistent code generation.',
         'Configured hooks for permission control, command blocking, and task notifications.',
       ],
     },
     {
-      title: 'Golang-high-concurrency',
+      title: 'Backend Service Integration',
       link: 'https://github.com/cao0085/go-ddd-high-concurrency',
       highlights: [
-        'Architected scalable services using Gin and Domain-Driven Design principles.',
-        'Optimized data management and caching with PostgreSQL and Redis.',
-        'Implemented RabbitMQ for messaging and Prometheus for system monitoring.',
+        'Built a Go backend service with PostgreSQL, Redis, RabbitMQ, and Prometheus.',
+        'Implemented asynchronous workflows with RabbitMQ to decouple services.',
+        'Added Prometheus metrics to track request latency, throughput, and error rates.',
       ],
     },
     {
-      title: 'Angular20 ERP System',
-      link: 'https://github.com/cao0085/angular-20',
-      highlights: [
-        'Developed an Angular 20 ERP system featuring Standalone Components and Signals-based reactivity.',
-        'Designed a comprehensive RBAC system for secure, granular permission management across enterprise workflows.',
-      ],
-    },
-    {
-      title: 'C#.NET Domain-Driven Design',
+      title: 'ERP Architecture & Domain Modeling',
       link: 'https://github.com/cao0085/CleanDDD',
       highlights: [
-        'Implemented Clean Architecture and DDD patterns with C#.NET to ensure system scalability.',
-        'Explored Bounded Contexts and Aggregates to define clear domain boundaries and business logic separation.',
+        'Built a full-stack ERP system (Angular, .NET) using Clean Architecture and DDD.',
+        'Split the system into bounded contexts with aggregates enforcing business rules.',
+        'Designed role-based access control (RBAC) to manage permissions across ERP workflows.'
       ],
     },
   ],
@@ -114,22 +116,16 @@ export const resumeData: ResumeData = {
   skills: [
     {
       category: 'Development',
-      items: [
-        'C#',
-        'Go',
-        'SQL Server',
-        'PostgreSQL',
-        'EF Core',
-        'Redis',
-        'RabbitMQ',
-        'Angular',
-        'Vue',
-      ],
+      items: ['C#', 'Go', 'Angular', 'Vue', 'React', 'EF Core', 'C++'],
     },
     {
-      category: 'Infrastructure',
-      items: ['GitLab CI/CD', 'Docker', 'GCP (Compute Engine)', 'Vim', 'tmux'],
+      category: 'Data & Messaging',
+      items: ['PostgreSQL', 'SQL Server', 'Redis', 'RabbitMQ'],
+    },
+    {
+      category: 'Infrastructure & Tools',
+      items: ['Docker', 'GitLab CI/CD', 'GCP', 'Prometheus', 'Vim', 'tmux'],
     },
   ],
-  lastUpdate: '2026-04-01',
+  lastUpdate: '2026-11-01',
 };
